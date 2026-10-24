@@ -20,7 +20,7 @@
     @apply h-full;
   }
   body {
-    @apply bg-app font-sans text-md text-primary antialiased select-none overflow-hidden cursor-default;
+    @apply cursor-default overflow-hidden bg-app font-sans text-md text-primary antialiased select-none;
   }
   button {
     @apply cursor-default;

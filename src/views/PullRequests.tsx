@@ -19,21 +19,40 @@ import {
   GitPullRequestDraft,
   ListChecks,
   LogIn,
+  type LucideIcon,
   MessageSquare,
   Plus,
   RefreshCcw,
   Search,
-  type LucideIcon,
 } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { DiffView } from '../components/Diff'
 import { Markdown } from '../components/Markdown'
 import { Resizer, usePanelSize } from '../components/Split'
-import { Avatar, Button, caps, Chip, Count, Empty, FilePath, fileRowClass, IconButton, LineStats, splitPath, StatusBadge } from '../components/ui'
+import { Avatar, Button, Chip, Count, caps, Empty, FilePath, fileRowClass, IconButton, LineStats, StatusBadge, splitPath } from '../components/ui'
 import { cx } from '../lib/cx'
 import { git } from '../lib/git'
-import { cachedPr, checkState, listPrs, openUrl, prActions, prDiff, relTime, repoInfo, viewerLogin, viewPr, type Check as CheckRun, type PrDetail, type PrFilter, type PrSummary, type RepoInfo } from '../lib/github'
+import {
+  type Check as CheckRun,
+  cachedDiff,
+  cachedList,
+  cachedPr,
+  checkState,
+  forgetPr,
+  listPrs,
+  openUrl,
+  type PrDetail,
+  type PrFilter,
+  type PrSummary,
+  prActions,
+  prDiff,
+  prefetchPr,
+  type RepoInfo,
+  relTime,
+  viewPr,
+} from '../lib/github'
+import { t } from '../lib/i18n'
 import { useApp } from '../state'
 import { listColumn, PaneHead } from './Changes'
 
@@ -55,66 +74,81 @@ function prIcon(pr: Pick<PrSummary, 'state' | 'isDraft'>): { icon: LucideIcon; c
 function ChecksIcon({ checks, size = 13 }: { checks: CheckRun[]; size?: number }) {
   const s = checkState(checks)
   if (s === 'none') return null
-  if (s === 'pass') return <CircleCheck size={size} className="shrink-0 text-status-added" aria-label="Checks passed" />
-  if (s === 'fail') return <CircleX size={size} className="shrink-0 text-status-deleted" aria-label="Checks failed" />
-  return <CircleDot size={size} className="shrink-0 text-status-modified" aria-label="Checks running" />
+  if (s === 'pass') return <CircleCheck size={size} className="shrink-0 text-status-added" aria-label={t('Checks passed')} />
+  if (s === 'fail') return <CircleX size={size} className="shrink-0 text-status-deleted" aria-label={t('Checks failed')} />
+  return <CircleDot size={size} className="shrink-0 text-status-modified" aria-label={t('Checks running')} />
 }
 
 function ReviewBadge({ decision }: { decision: string }) {
-  if (decision === 'APPROVED') return <span className="rounded-sm bg-ref-local-soft px-1.5 py-px text-xs font-semibold text-ref-local">Approved</span>
-  if (decision === 'CHANGES_REQUESTED') return <span className="rounded-sm bg-diff-del-bg px-1.5 py-px text-xs font-semibold text-status-deleted">Changes requested</span>
-  if (decision === 'REVIEW_REQUIRED') return <span className="rounded-sm bg-surface px-1.5 py-px text-xs font-semibold text-muted">Review required</span>
+  if (decision === 'APPROVED') return <span className="rounded-sm bg-ref-local-soft px-1.5 py-px text-xs font-semibold text-ref-local">{t('Approved')}</span>
+  if (decision === 'CHANGES_REQUESTED') return <span className="rounded-sm bg-diff-del-bg px-1.5 py-px text-xs font-semibold text-status-deleted">{t('Changes requested')}</span>
+  if (decision === 'REVIEW_REQUIRED') return <span className="rounded-sm bg-surface px-1.5 py-px text-xs font-semibold text-muted">{t('Review required')}</span>
   return null
 }
 
 export function PullRequestsView() {
   const { root, repo } = useApp()
   const [filter, setFilter] = useState<PrFilter>('open')
-  const [prs, setPrs] = useState<PrSummary[] | null>(null)
+  const [prs, setPrs] = useState<PrSummary[] | null>(() => cachedList(root, 'open')?.prs ?? null)
   const [error, setError] = useState<string | null>(null)
-  const [info, setInfo] = useState<RepoInfo | null>(null)
+  const [info, setInfo] = useState<RepoInfo | null>(() => cachedList(root, 'open')?.info ?? null)
+  const [me, setMe] = useState(() => cachedList(root, 'open')?.viewer ?? '')
   const [selected, setSelected] = useState<number | 'new' | null>(null)
   const [q, setQ] = useState('')
   const list = usePanelSize('pr-list', 400, 280, 900)
 
   const load = useCallback(async () => {
     try {
-      const [i, items] = await Promise.all([repoInfo(root), listPrs(root, filter)])
-      setInfo(i)
-      setPrs(items)
+      const data = await listPrs(root, filter)
+      setInfo(data.info)
+      setMe(data.viewer)
+      setPrs(data.prs)
       setError(null)
-      setSelected(s => (s === 'new' || items.some(p => p.number === s) ? s : (items[0]?.number ?? null)))
+      setSelected(s => (s === 'new' || data.prs.some(p => p.number === s) ? s : (data.prs[0]?.number ?? null)))
+      // The first few are the likeliest next clicks.
+      for (const p of data.prs.slice(0, 4)) prefetchPr(root, p.number)
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
-      setPrs([])
+      setPrs(p => p ?? [])
     }
   }, [root, filter])
 
+  // Show the cached page for this filter at once, then refresh it.
   useEffect(() => {
-    setPrs(null)
+    const hit = cachedList(root, filter)
+    setPrs(hit?.prs ?? null)
+    if (hit) setSelected(s => (s === 'new' || hit.prs.some(p => p.number === s) ? s : (hit.prs[0]?.number ?? null)))
     void load()
-  }, [load])
+  }, [root, filter, load])
   // Branch and push changes can open or update a PR; reload with the repo.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reload when HEAD moves or new commits are pushed, not on every list change
   useEffect(() => {
     if (prs) void load()
-  }, [repo?.head, repo?.ahead]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [repo?.head, repo?.ahead])
 
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase()
-    return (prs ?? []).filter(p => !needle || p.title.toLowerCase().includes(needle) || String(p.number).includes(needle) || p.headRefName.toLowerCase().includes(needle) || p.author.login.toLowerCase().includes(needle))
+    return (prs ?? []).filter(
+      p =>
+        !needle ||
+        p.title.toLowerCase().includes(needle) ||
+        String(p.number).includes(needle) ||
+        p.headRefName.toLowerCase().includes(needle) ||
+        p.author.login.toLowerCase().includes(needle),
+    )
   }, [prs, q])
 
   if (error && !info)
     return (
       <Empty>
         <GitPullRequest size={28} />
-        <div className="font-semibold text-primary">Pull requests need the GitHub CLI and a GitHub remote</div>
+        <div className="font-semibold text-primary">{t('Pull requests need a GitHub remote and the GitHub CLI signed in')}</div>
         <pre className="max-w-140 font-mono text-xs whitespace-pre-wrap">{error}</pre>
         <div className="text-sm">
           Install <code className="font-mono">gh</code>, run <code className="font-mono">gh auth login</code>, then refresh.
         </div>
         <Button icon={RefreshCcw} onClick={() => void load()}>
-          Try again
+          {t('Try again')}
         </Button>
       </Empty>
     )
@@ -124,16 +158,21 @@ export function PullRequestsView() {
   return (
     <>
       <div className={listColumn} style={{ width: list.size }}>
-        <PaneHead title="Pull requests" count={prs?.length ?? 0}>
-          <IconButton icon={RefreshCcw} title="Refresh" onClick={() => void load()} />
+        <PaneHead title={t('Pull requests')} count={prs?.length ?? 0}>
+          <IconButton icon={RefreshCcw} title={t('Refresh')} onClick={() => void load()} />
           <Button small kind="primary" icon={Plus} onClick={() => setSelected('new')}>
-            New
+            {t('New')}
           </Button>
         </PaneHead>
         <div className="flex flex-col gap-2 border-b border-subtle p-2">
           <div className="flex h-7 items-center gap-1.5 rounded-md bg-surface px-2 text-muted focus-within:ring-1 focus-within:ring-focus">
             <Search size={13} />
-            <input className="min-w-0 flex-1 bg-transparent text-primary outline-none placeholder:text-faint" placeholder="Filter by title, number, branch, author" value={q} onChange={e => setQ(e.target.value)} />
+            <input
+              className="min-w-0 flex-1 bg-transparent text-primary outline-none placeholder:text-faint"
+              placeholder={t('Filter by title, number, branch, author')}
+              value={q}
+              onChange={e => setQ(e.target.value)}
+            />
           </div>
           <div className="flex gap-1">
             {FILTERS.map(f => (
@@ -143,13 +182,17 @@ export function PullRequestsView() {
                 onClick={() => setFilter(f.value)}
                 className={cx('h-6 rounded-md px-2 text-sm', filter === f.value ? 'bg-selected font-semibold text-ref-head' : 'text-secondary hover:bg-hover')}
               >
-                {f.label}
+                {t(f.label)}
               </button>
             ))}
           </div>
         </div>
         {repo && info && prs && !current && filter === 'open' && repo.branch !== info.defaultBranchRef.name && !repo.branch.startsWith('HEAD') && (
-          <button type="button" className="m-2 mb-0 flex items-center gap-2 rounded-md border border-dashed border-strong px-2.5 py-2 text-left text-sm hover:bg-hover" onClick={() => setSelected('new')}>
+          <button
+            type="button"
+            className="m-2 mb-0 flex items-center gap-2 rounded-md border border-dashed border-strong px-2.5 py-2 text-left text-sm hover:bg-hover"
+            onClick={() => setSelected('new')}
+          >
             <GitPullRequest size={14} className="shrink-0 text-status-added" />
             <span className="min-w-0 flex-1 truncate">
               Open a pull request for <span className="font-semibold">{repo.branch}</span>
@@ -158,7 +201,7 @@ export function PullRequestsView() {
           </button>
         )}
         <div className="flex-1 overflow-y-auto p-1.5">
-          {prs === null && <Empty>Loading pull requests…</Empty>}
+          {prs === null && <Empty>{t('Loading pull requests…')}</Empty>}
           {prs && !shown.length && <Empty>No pull requests{q ? ' match' : ''}.</Empty>}
           {shown.map(pr => {
             const st = prIcon(pr)
@@ -167,6 +210,7 @@ export function PullRequestsView() {
                 key={pr.number}
                 type="button"
                 onClick={() => setSelected(pr.number)}
+                onMouseEnter={() => prefetchPr(root, pr.number)}
                 className={cx('flex w-full gap-2.5 rounded-md px-2.5 py-2 text-left', selected === pr.number ? 'bg-selected' : 'hover:bg-hover')}
               >
                 <st.icon size={15} color={st.color} className="mt-0.5 shrink-0" />
@@ -183,10 +227,10 @@ export function PullRequestsView() {
                     <span>{relTime(pr.updatedAt)}</span>
                     {pr.headRefName === repo?.branch && <Chip kind="head" name="current" />}
                     <ReviewBadge decision={pr.reviewDecision} />
-                    {pr.comments.length > 0 && (
+                    {pr.commentCount > 0 && (
                       <span className="flex items-center gap-0.5">
                         <MessageSquare size={11} />
-                        {pr.comments.length}
+                        {pr.commentCount}
                       </span>
                     )}
                   </span>
@@ -199,11 +243,16 @@ export function PullRequestsView() {
       <Resizer panel={list} />
       <div className="flex min-w-0 flex-1 flex-col">
         {selected === 'new' && info ? (
-          <CreatePr info={info} openHeads={new Map((prs ?? []).filter(p => p.state === 'OPEN').map(p => [p.headRefName, p.number]))} onCancel={() => setSelected(prs?.[0]?.number ?? null)} onCreated={() => void load()} />
+          <CreatePr
+            info={info}
+            openHeads={new Map((prs ?? []).filter(p => p.state === 'OPEN').map(p => [p.headRefName, p.number]))}
+            onCancel={() => setSelected(prs?.[0]?.number ?? null)}
+            onCreated={() => void load()}
+          />
         ) : typeof selected === 'number' ? (
-          <PrPane key={selected} number={selected} onChanged={() => void load()} />
+          <PrPane key={selected} number={selected} me={me} onChanged={() => void load()} />
         ) : (
-          <Empty>Select a pull request</Empty>
+          <Empty>{t('Select a pull request')}</Empty>
         )}
       </div>
     </>
@@ -214,22 +263,25 @@ type Tab = 'conversation' | 'commits' | 'files' | 'checks'
 
 function TabButton({ on, icon: Icon, children, onClick }: { on: boolean; icon: LucideIcon; children: ReactNode; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} className={cx('-mb-px flex items-center gap-1.25 border-b-2 py-2', on ? 'border-primary font-semibold text-primary' : 'border-transparent font-medium text-muted hover:text-secondary')}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={cx(
+        '-mb-px flex items-center gap-1.25 border-b-2 py-2',
+        on ? 'border-primary font-semibold text-primary' : 'border-transparent font-medium text-muted hover:text-secondary',
+      )}
+    >
       <Icon size={13} />
       {children}
     </button>
   )
 }
 
-function PrPane({ number, onChanged }: { number: number; onChanged: () => void }) {
+function PrPane({ number, me, onChanged }: { number: number; me: string; onChanged: () => void }) {
   const { root, repo, act, ask } = useApp()
   const [pr, setPr] = useState<PrDetail | null>(() => cachedPr(root, number) ?? null)
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('conversation')
-  const [me, setMe] = useState('')
-  useEffect(() => {
-    void viewerLogin(root).then(setMe)
-  }, [root])
 
   const load = useCallback(async () => {
     try {
@@ -241,15 +293,18 @@ function PrPane({ number, onChanged }: { number: number; onChanged: () => void }
   }, [root, number])
   useEffect(() => {
     void load()
-  }, [load])
+    // Start the diff now so the Files tab is ready when opened.
+    void prDiff(root, number).catch(() => {})
+  }, [load, root, number])
 
-  if (error) return <Empty>{error}</Empty>
+  if (error && !pr) return <Empty>{error}</Empty>
   if (!pr) return <Empty>Loading #{number}…</Empty>
 
   const st = prIcon(pr)
   const run = async (label: string, args: string[], opts: { stdin?: string; done?: string } = {}) => {
     const ok = await act(label, args, { ...opts, tool: 'gh' })
     if (ok) {
+      forgetPr(root, number)
       void load()
       onChanged()
     }
@@ -266,24 +321,25 @@ function PrPane({ number, onChanged }: { number: number; onChanged: () => void }
           </h2>
           <div className="flex shrink-0 gap-1.5">
             {!isCurrent && pr.state === 'OPEN' && (
-              <Button small icon={LogIn} onClick={() => void run('Checkout PR', prActions.checkout(pr.number), { done: `Checked out #${pr.number}` })}>
-                Check out
+              <Button small icon={LogIn} onClick={() => void run('Checkout PR', prActions.checkout(pr.number), { done: t('Checked out #{n}', { n: pr.number }) })}>
+                {t('Check out')}
               </Button>
             )}
             <Button small icon={ExternalLink} onClick={() => void openUrl(pr.url)}>
-              GitHub
+              {t('GitHub')}
             </Button>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
           <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold text-on-accent" style={{ background: st.color }}>
             <st.icon size={12} />
-            {st.label}
+            {t(st.label)}
           </span>
           <Avatar name={pr.author.login} />
           <span className="font-medium text-secondary">{pr.author.login}</span>
           <span>
-            {pr.state === 'MERGED' ? 'merged' : pr.state === 'CLOSED' ? 'proposed' : 'wants to merge'} {pr.commits.length} commit{pr.commits.length === 1 ? '' : 's'} · opened {relTime(pr.createdAt)}
+            {pr.state === 'MERGED' ? 'merged' : pr.state === 'CLOSED' ? 'proposed' : 'wants to merge'} {pr.commits.length} commit{pr.commits.length === 1 ? '' : 's'} · opened{' '}
+            {relTime(pr.createdAt)}
           </span>
           <span className="flex-1" />
           <LineStats added={pr.additions} deleted={pr.deletions} />
@@ -325,14 +381,16 @@ function Conversation({ pr, run, ask, own }: { pr: PrDetail; run: Run; ask: Retu
     () =>
       [
         ...pr.comments.map(c => ({ kind: 'comment' as const, author: c.author.login, body: c.body, at: c.createdAt, state: '' })),
-        ...pr.reviews.filter(r => r.body || r.state !== 'COMMENTED').map(r => ({ kind: 'review' as const, author: r.author.login, body: r.body, at: r.submittedAt, state: r.state })),
+        ...pr.reviews
+          .filter(r => r.body || r.state !== 'COMMENTED')
+          .map(r => ({ kind: 'review' as const, author: r.author.login, body: r.body, at: r.submittedAt, state: r.state })),
       ].sort((a, b) => a.at.localeCompare(b.at)),
     [pr],
   )
   const send = async (kind: 'comment' | 'approve' | 'request-changes') => {
     const args = kind === 'comment' ? prActions.comment(pr.number) : prActions.review(pr.number, kind)
-    const label = kind === 'comment' ? 'Comment' : kind === 'approve' ? 'Approve' : 'Request changes'
-    if (await run(label, args, { stdin: text, done: kind === 'comment' ? 'Comment posted' : 'Review submitted' })) setText('')
+    const label = kind === 'comment' ? t('Comment') : kind === 'approve' ? t('Approve') : t('Request changes')
+    if (await run(label, args, { stdin: text, done: kind === 'comment' ? t('Comment posted') : t('Review submitted') })) setText('')
   }
 
   return (
@@ -341,30 +399,30 @@ function Conversation({ pr, run, ask, own }: { pr: PrDetail; run: Run; ask: Retu
         <Bubble author={pr.author.login} at={pr.createdAt} label="opened this pull request">
           <Markdown text={pr.body} />
         </Bubble>
-        {timeline.map((t, i) => (
-          <Bubble key={i} author={t.author} at={t.at} label={t.kind === 'review' ? reviewLabel(t.state) : 'commented'} tone={t.state}>
-            {t.body ? <Markdown text={t.body} /> : null}
+        {timeline.map((item, i) => (
+          <Bubble key={i} author={item.author} at={item.at} label={item.kind === 'review' ? reviewLabel(item.state) : t('commented')} tone={item.state}>
+            {item.body ? <Markdown text={item.body} /> : null}
           </Bubble>
         ))}
         {pr.state === 'OPEN' && <MergeBox pr={pr} run={run} ask={ask} />}
         <div className="flex flex-col gap-2 rounded-lg border border-strong bg-app p-3">
           <textarea
             className="h-24 resize-y rounded-md border border-strong bg-app px-2.5 py-2 leading-normal outline-none focus:border-focus focus:ring-1 focus:ring-focus"
-            placeholder="Leave a comment (Markdown)"
+            placeholder={t('Leave a comment (Markdown)')}
             value={text}
             onChange={e => setText(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && (e.metaKey || e.ctrlKey) && text.trim() && void send('comment')}
           />
           <div className="flex flex-wrap justify-end gap-2">
             {pr.state === 'OPEN' ? (
-              <Button small onClick={() => void run('Close', prActions.close(pr.number), { done: `Closed #${pr.number}` })}>
+              <Button small onClick={() => void run('Close', prActions.close(pr.number), { done: t('Closed #{n}', { n: pr.number }) })}>
                 <GitPullRequestClosed size={14} className="text-status-deleted" />
-                Close pull request
+                {t('Close pull request')}
               </Button>
             ) : (
               pr.state === 'CLOSED' && (
-                <Button small onClick={() => void run('Reopen', prActions.reopen(pr.number), { done: `Reopened #${pr.number}` })}>
-                  Reopen
+                <Button small onClick={() => void run('Reopen', prActions.reopen(pr.number), { done: t('Reopened #{n}', { n: pr.number }) })}>
+                  {t('Reopen')}
                 </Button>
               )
             )}
@@ -373,15 +431,15 @@ function Conversation({ pr, run, ask, own }: { pr: PrDetail; run: Run; ask: Retu
             {!own && pr.state === 'OPEN' && (
               <>
                 <Button small disabled={!text.trim()} onClick={() => void send('request-changes')}>
-                  Request changes
+                  {t('Request changes')}
                 </Button>
                 <Button small icon={Check} onClick={() => void send('approve')}>
-                  Approve
+                  {t('Approve')}
                 </Button>
               </>
             )}
             <Button small kind="primary" icon={MessageSquare} disabled={!text.trim()} onClick={() => void send('comment')} title="⌘↩">
-              Comment
+              {t('Comment')}
             </Button>
           </div>
         </div>
@@ -390,13 +448,19 @@ function Conversation({ pr, run, ask, own }: { pr: PrDetail; run: Run; ask: Retu
   )
 }
 
-const reviewLabel = (state: string) => (state === 'APPROVED' ? 'approved these changes' : state === 'CHANGES_REQUESTED' ? 'requested changes' : state === 'DISMISSED' ? 'review dismissed' : 'reviewed')
+const reviewLabel = (state: string) =>
+  t(state === 'APPROVED' ? 'approved these changes' : state === 'CHANGES_REQUESTED' ? 'requested changes' : state === 'DISMISSED' ? 'review dismissed' : 'reviewed')
 
 function Bubble({ author, at, label, tone, children }: { author: string; at: string; label: string; tone?: string; children?: ReactNode }) {
   return (
     <div className="flex gap-3">
       <Avatar name={author} size={28} />
-      <div className={cx('min-w-0 flex-1 overflow-hidden rounded-lg border', tone === 'APPROVED' ? 'border-status-added' : tone === 'CHANGES_REQUESTED' ? 'border-status-deleted' : 'border-subtle')}>
+      <div
+        className={cx(
+          'min-w-0 flex-1 overflow-hidden rounded-lg border',
+          tone === 'APPROVED' ? 'border-status-added' : tone === 'CHANGES_REQUESTED' ? 'border-status-deleted' : 'border-subtle',
+        )}
+      >
         <div className="flex items-center gap-1.5 border-b border-subtle bg-surface px-3 py-1.5 text-sm">
           {tone === 'APPROVED' && <CircleCheck size={13} className="text-status-added" />}
           {tone === 'CHANGES_REQUESTED' && <CircleX size={13} className="text-status-deleted" />}
@@ -417,19 +481,25 @@ function MergeBox({ pr, run, ask }: { pr: PrDetail; run: Run; ask: ReturnType<ty
   const checks = checkState(pr.statusCheckRollup)
   const blocked = pr.mergeable === 'CONFLICTING'
   const status: { icon: LucideIcon; color: string; text: string } = blocked
-    ? { icon: CircleX, color: 'var(--status-deleted)', text: 'This branch has conflicts that must be resolved' }
+    ? { icon: CircleX, color: 'var(--status-deleted)', text: t('This branch has conflicts that must be resolved') }
     : checks === 'fail'
-      ? { icon: CircleX, color: 'var(--status-deleted)', text: 'Some checks were not successful' }
+      ? { icon: CircleX, color: 'var(--status-deleted)', text: t('Some checks were not successful') }
       : checks === 'pending'
-        ? { icon: Clock, color: 'var(--status-modified)', text: 'Some checks haven’t completed yet' }
+        ? { icon: Clock, color: 'var(--status-modified)', text: t('Some checks haven’t completed yet') }
         : pr.reviewDecision === 'CHANGES_REQUESTED'
-          ? { icon: CircleX, color: 'var(--status-deleted)', text: 'Changes requested' }
-          : { icon: CircleCheck, color: 'var(--status-added)', text: pr.reviewDecision === 'APPROVED' ? 'Approved — ready to merge' : 'No conflicts with the base branch' }
+          ? { icon: CircleX, color: 'var(--status-deleted)', text: t('Changes requested') }
+          : { icon: CircleCheck, color: 'var(--status-added)', text: pr.reviewDecision === 'APPROVED' ? t('Approved — ready to merge') : t('No conflicts with the base branch') }
   const merge = async () => {
     localStorage.setItem('pr:merge', how)
-    const word = { squash: 'Squash and merge', merge: 'Merge', rebase: 'Rebase and merge' }[how]
-    if (await ask({ title: `${word} #${pr.number}?`, text: `Into ${pr.baseRefName}${del ? `, then delete ${pr.headRefName}` : ''}.`, confirm: word }))
-      await run('Merge', prActions.merge(pr.number, how, del), { done: `Merged #${pr.number}` })
+    const word = t({ squash: t('Squash and merge'), merge: t('Merge'), rebase: t('Rebase and merge') }[how])
+    if (
+      await ask({
+        title: `${word} #${pr.number}?`,
+        text: del ? t('Into {base}, then delete {head}.', { base: pr.baseRefName, head: pr.headRefName }) : t('Into {base}.', { base: pr.baseRefName }),
+        confirm: word,
+      })
+    )
+      await run('Merge', prActions.merge(pr.number, how, del), { done: t('Merged #{n}', { n: pr.number }) })
   }
   return (
     <div className="flex flex-col gap-3 rounded-lg border border-strong bg-sidebar p-3">
@@ -439,30 +509,35 @@ function MergeBox({ pr, run, ask }: { pr: PrDetail; run: Run; ask: ReturnType<ty
       </div>
       {pr.isDraft ? (
         <div className="flex items-center gap-2">
-          <span className="flex-1 text-sm text-muted">This pull request is still a draft.</span>
-          <Button small kind="primary" onClick={() => void run('Ready for review', prActions.ready(pr.number), { done: 'Marked ready for review' })}>
-            Ready for review
+          <span className="flex-1 text-sm text-muted">{t('This pull request is still a draft.')}</span>
+          <Button small kind="primary" onClick={() => void run('Ready for review', prActions.ready(pr.number), { done: t('Marked ready for review') })}>
+            {t('Ready for review')}
           </Button>
         </div>
       ) : (
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex gap-0.5 rounded-md bg-surface p-0.5 text-sm">
             {(['squash', 'merge', 'rebase'] as const).map(h => (
-              <button key={h} type="button" onClick={() => setHow(h)} className={cx('h-6 rounded-sm px-2', how === h ? 'bg-elevated font-semibold text-primary shadow-[0_1px_2px_var(--shadow)]' : 'text-muted')}>
-                {{ squash: 'Squash', merge: 'Merge commit', rebase: 'Rebase' }[h]}
+              <button
+                key={h}
+                type="button"
+                onClick={() => setHow(h)}
+                className={cx('h-6 rounded-sm px-2', how === h ? 'bg-elevated font-semibold text-primary shadow-[0_1px_2px_var(--shadow)]' : 'text-muted')}
+              >
+                {{ squash: t('Squash'), merge: t('Merge commit'), rebase: t('Rebase') }[h]}
               </button>
             ))}
           </div>
           <label className="flex items-center gap-1.5 text-sm text-secondary">
             <input type="checkbox" className="m-0 accent-accent" checked={del} onChange={e => setDel(e.target.checked)} />
-            Delete branch
+            {t('Delete branch')}
           </label>
           <span className="flex-1" />
-          <Button small onClick={() => void run('Convert to draft', prActions.draft(pr.number), { done: 'Converted to draft' })}>
-            Convert to draft
+          <Button small onClick={() => void run('Convert to draft', prActions.draft(pr.number), { done: t('Converted to draft') })}>
+            {t('Convert to draft')}
           </Button>
           <Button kind="primary" icon={GitMerge} disabled={blocked} onClick={() => void merge()}>
-            {{ squash: 'Squash and merge', merge: 'Merge', rebase: 'Rebase and merge' }[how]}
+            {{ squash: t('Squash and merge'), merge: t('Merge'), rebase: t('Rebase and merge') }[how]}
           </Button>
         </div>
       )}
@@ -481,7 +556,7 @@ function Commits({ pr }: { pr: PrDetail }) {
             key={c.oid}
             type="button"
             disabled={!local}
-            title={local ? 'Show in History' : 'Not in the loaded history — fetch or check out the branch'}
+            title={local ? t('Show in History') : t('Not in the loaded history — fetch or check out the branch')}
             onClick={() => {
               setView('history')
               setSelected(c.oid)
@@ -501,7 +576,7 @@ function Commits({ pr }: { pr: PrDetail }) {
 }
 
 function Files({ pr, root }: { pr: PrDetail; root: string }) {
-  const [diffs, setDiffs] = useState<Map<string, string> | null>(null)
+  const [diffs, setDiffs] = useState<Map<string, string> | null>(() => cachedDiff(root, pr.number) ?? null)
   const [sel, setSel] = useState(pr.files[0]?.path ?? null)
   const panel = usePanelSize('pr-files', 300, 180, 700)
   useEffect(() => {
@@ -529,15 +604,13 @@ function Files({ pr, root }: { pr: PrDetail; root: string }) {
         })}
       </div>
       <Resizer panel={panel} />
-      <div className="flex min-w-0 flex-1 flex-col">
-        {sel ? <DiffView path={sel} text={diffs?.get(sel) ?? ''} loading={!diffs} /> : <Empty>No files</Empty>}
-      </div>
+      <div className="flex min-w-0 flex-1 flex-col">{sel ? <DiffView path={sel} text={diffs?.get(sel) ?? ''} loading={!diffs} /> : <Empty>{t('No files')}</Empty>}</div>
     </div>
   )
 }
 
 function Checks({ pr }: { pr: PrDetail }) {
-  if (!pr.statusCheckRollup.length) return <Empty>No checks on this pull request.</Empty>
+  if (!pr.statusCheckRollup.length) return <Empty>{t('No checks on this pull request.')}</Empty>
   return (
     <div className="flex-1 overflow-y-auto p-2">
       {pr.statusCheckRollup.map((c, i) => {
@@ -550,7 +623,7 @@ function Checks({ pr }: { pr: PrDetail }) {
               <span className="font-medium">{c.name || c.context}</span>
             </span>
             <span className="text-sm text-muted">{(c.conclusion || c.state || c.status || '').toLowerCase().replace('_', ' ')}</span>
-            {url?.startsWith('https://') && <IconButton icon={ExternalLink} small size={13} title="Open details" onClick={() => void openUrl(url)} />}
+            {url?.startsWith('https://') && <IconButton icon={ExternalLink} small size={13} title={t('Open details')} onClick={() => void openUrl(url)} />}
           </div>
         )
       })}
@@ -591,8 +664,8 @@ function CreatePr({ info, openHeads, onCancel, onCreated }: { info: RepoInfo; op
   const existing = openHeads.get(head)
   const create = async () => {
     // gh cannot push for us without a terminal; publish the branch first.
-    if (needsPush && !(await act('Push', ['push', '--set-upstream', 'origin', head], { done: `Pushed ${head}` }))) return
-    if (await act('Create pull request', prActions.create(title.trim(), base, head, draft), { stdin: body, done: 'Pull request opened', tool: 'gh' })) onCreated()
+    if (needsPush && !(await act('Push', ['push', '--set-upstream', 'origin', head], { done: t('Pushed {head}', { head }) }))) return
+    if (await act('Create pull request', prActions.create(title.trim(), base, head, draft), { stdin: body, done: t('Pull request opened'), tool: 'gh' })) onCreated()
   }
   const field = 'rounded-md border border-strong bg-app px-2.5 outline-none focus:border-focus focus:ring-1 focus:ring-focus'
   const branchSelect = (value: string, onChange: (v: string) => void, names: string[]) => (
@@ -610,26 +683,57 @@ function CreatePr({ info, openHeads, onCancel, onCreated }: { info: RepoInfo; op
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto flex max-w-215 flex-col gap-3 px-5 py-4">
         <div className="flex items-center gap-2">
-          <IconButton icon={ArrowLeft} onClick={onCancel} title="Back" />
-          <h2 className="m-0 text-xl font-semibold">Open a pull request</h2>
+          <IconButton icon={ArrowLeft} onClick={onCancel} title={t('Back')} />
+          <h2 className="m-0 text-xl font-semibold">{t('Open a pull request')}</h2>
         </div>
         <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
           <GitBranch size={14} />
-          <span>Merge</span>
-          {branchSelect(head, h => (setHead(h), setEdited(false)), locals.map(r => r.name).filter(n => n !== base))}
+          <span>{t('Merge')}</span>
+          {branchSelect(
+            head,
+            h => {
+              setHead(h)
+              setEdited(false)
+            },
+            locals.map(r => r.name).filter(n => n !== base),
+          )}
           <span>into</span>
-          {branchSelect(base, b => (setBase(b), setEdited(false)), [...new Set([defaultBase, ...locals.map(r => r.name)])].filter(n => n !== head))}
-          {needsPush && <span>· {ref?.upstream ? `${ahead} commit${ahead > 1 ? 's' : ''} will be pushed first` : 'the branch will be published first'}</span>}
+          {branchSelect(
+            base,
+            b => {
+              setBase(b)
+              setEdited(false)
+            },
+            [...new Set([defaultBase, ...locals.map(r => r.name)])].filter(n => n !== head),
+          )}
+          {needsPush && (
+            <span>
+              · {ref?.upstream ? t(ahead === 1 ? '{n} commit will be pushed first' : '{n} commits will be pushed first', { n: ahead }) : t('the branch will be published first')}
+            </span>
+          )}
         </div>
         {!head && <div className="text-sm text-status-modified">Create a branch first — there is no branch to propose besides {base}.</div>}
-        {existing !== undefined && <div className="text-sm text-status-modified">{head} already has an open pull request, #{existing}.</div>}
-        <input className={cx(field, 'h-9 text-lg font-medium')} placeholder="Title" value={title} onChange={e => (setTitle(e.target.value), setEdited(true))} autoFocus />
+        {existing !== undefined && (
+          <div className="text-sm text-status-modified">
+            {head} already has an open pull request, #{existing}.
+          </div>
+        )}
+        <input
+          className={cx(field, 'h-9 text-lg font-medium')}
+          placeholder={t('Title')}
+          value={title}
+          onChange={e => {
+            setTitle(e.target.value)
+            setEdited(true)
+          }}
+          autoFocus
+        />
         <div className="flex gap-3 text-sm">
           <button type="button" className={cx('border-b-2 pb-1', !preview ? 'border-primary font-semibold' : 'border-transparent text-muted')} onClick={() => setPreview(false)}>
-            Write
+            {t('Write')}
           </button>
           <button type="button" className={cx('border-b-2 pb-1', preview ? 'border-primary font-semibold' : 'border-transparent text-muted')} onClick={() => setPreview(true)}>
-            Preview
+            {t('Preview')}
           </button>
         </div>
         {preview ? (
@@ -637,17 +741,25 @@ function CreatePr({ info, openHeads, onCancel, onCreated }: { info: RepoInfo; op
             <Markdown text={body} />
           </div>
         ) : (
-          <textarea className={cx(field, 'h-60 resize-y py-2 leading-normal')} placeholder="Describe the change (Markdown)" value={body} onChange={e => (setBody(e.target.value), setEdited(true))} />
+          <textarea
+            className={cx(field, 'h-60 resize-y py-2 leading-normal')}
+            placeholder={t('Describe the change (Markdown)')}
+            value={body}
+            onChange={e => {
+              setBody(e.target.value)
+              setEdited(true)
+            }}
+          />
         )}
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-1.5 text-sm text-secondary">
             <input type="checkbox" className="m-0 accent-accent" checked={draft} onChange={e => setDraft(e.target.checked)} />
-            Create as draft
+            {t('Create as draft')}
           </label>
           <span className="flex-1" />
-          <Button onClick={onCancel}>Cancel</Button>
+          <Button onClick={onCancel}>{t('Cancel')}</Button>
           <Button kind="primary" icon={GitPullRequest} disabled={!title.trim() || !head || head === base || existing !== undefined} onClick={() => void create()}>
-            {draft ? 'Create draft' : 'Create pull request'}
+            {draft ? t('Create draft') : t('Create pull request')}
           </Button>
         </div>
         <div className={caps}>Opens on {info.nameWithOwner}</div>

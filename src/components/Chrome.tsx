@@ -17,30 +17,43 @@ import {
   GitPullRequest,
   House,
   Monitor,
+  Moon,
   PanelLeftClose,
   PanelLeftOpen,
-  Moon,
   Plus,
   RefreshCcw,
   Search,
+  Settings as SettingsIcon,
   SquareTerminal,
   Sun,
   Tag,
   TriangleAlert,
   X,
 } from 'lucide-react'
-import { useMemo, useState, type ReactNode } from 'react'
+import { type ReactNode, useMemo, useState } from 'react'
 
 import appIcon from '../../assets/icon/app-icon.svg'
 import { cx } from '../lib/cx'
 import { actions, openTerminal } from '../lib/git'
+import { t } from '../lib/i18n'
 import { isConflict } from '../lib/parse'
-import { applyTheme, readTheme, useApp, type ThemePref } from '../state'
-import { Button, caps, Chip, IconButton, Kbd, StageDot, ToolButton } from './ui'
+import { type Settings, updateSettings, useSettings } from '../lib/settings'
+import { useApp } from '../state'
+import { Button, Chip, caps, IconButton, Kbd, StageDot, ToolButton } from './ui'
 
 const Sep = () => <div className="h-6 w-px bg-strong" />
 
-export function TitleBar({ onSwitchRepo, sidebar, onToggleSidebar }: { onSwitchRepo: () => void; sidebar: boolean; onToggleSidebar: () => void }) {
+export function TitleBar({
+  onSwitchRepo,
+  sidebar,
+  onToggleSidebar,
+  onSettings,
+}: {
+  onSwitchRepo: () => void
+  sidebar: boolean
+  onToggleSidebar: () => void
+  onSettings: () => void
+}) {
   const app = useApp()
   const { repo, act, busy, prompt, setPaletteOpen } = app
   // Leaves room on the left for the native traffic lights.
@@ -50,32 +63,31 @@ export function TitleBar({ onSwitchRepo, sidebar, onToggleSidebar }: { onSwitchR
   const detached = repo.branch.startsWith('HEAD')
 
   const newBranch = async () => {
-    const name = await prompt({ title: 'New branch', placeholder: 'feature/name', confirm: 'Create and switch' })
-    if (name) await act('Create branch', actions.createBranch(name.trim()), { done: `Switched to ${name}` })
+    const name = await prompt({ title: t('New branch'), placeholder: 'feature/name', confirm: t('Create and switch') })
+    if (name) await act('Create branch', actions.createBranch(name.trim()), { done: t('Switched to {name}', { name }) })
   }
   const merge = async () => {
-    const name = await prompt({ title: `Merge into ${repo.branch}`, placeholder: 'Branch to merge, e.g. main', confirm: 'Merge' })
-    if (name) await act('Merge', actions.merge(name.trim()), { done: `Merged ${name}` })
+    const name = await prompt({ title: t('Merge into {branch}', { branch: repo.branch }), placeholder: t('Branch to merge, e.g. main'), confirm: t('Merge') })
+    if (name) await act('Merge', actions.merge(name.trim()), { done: t('Merged {name}', { name }) })
   }
   const stash = async () => {
-    const msg = await prompt({ title: 'Stash changes', placeholder: 'Message (optional)', confirm: 'Stash', optional: true })
-    if (msg !== null) await act('Stash', actions.stash(msg.trim() || undefined), { done: 'Changes stashed' })
+    const msg = await prompt({ title: t('Stash changes'), placeholder: t('Message (optional)'), confirm: t('Stash'), optional: true })
+    if (msg !== null) await act('Stash', actions.stash(msg.trim() || undefined), { done: t('Changes stashed') })
   }
 
   // The primary action follows the design's Stage axis.
   let primary: { label: string; icon: typeof Check; run: () => void; disabled?: boolean }
-  if (app.stage === 'Rebasing')
-    primary = { label: 'Continue', icon: Check, run: () => void act('Continue rebase', actions.continue('rebase')), disabled: conflicts > 0 }
-  else if (app.stage === 'Conflict') primary = { label: conflicts ? `Resolve ${conflicts}` : 'Commit merge', icon: Check, run: () => app.setView('changes') }
-  else if (app.stage === 'Working') primary = { label: `Commit ${repo.changes.length}`, icon: Check, run: () => app.setView('changes') }
-  else if (repo.ahead) primary = { label: `Push ${repo.ahead}`, icon: ArrowUp, run: () => void act('Push', actions.push(repo), { done: 'Pushed' }) }
-  else if (repo.behind) primary = { label: `Pull ${repo.behind}`, icon: ArrowDown, run: () => void act('Pull', actions.pull(), { done: 'Pulled' }) }
+  if (app.stage === 'Rebasing') primary = { label: t('Continue'), icon: Check, run: () => void act('Continue rebase', actions.continue('rebase')), disabled: conflicts > 0 }
+  else if (app.stage === 'Conflict') primary = { label: conflicts ? t('Resolve {n}', { n: conflicts }) : 'Commit merge', icon: Check, run: () => app.setView('changes') }
+  else if (app.stage === 'Working') primary = { label: t('Commit {n}', { n: repo.changes.length }), icon: Check, run: () => app.setView('changes') }
+  else if (repo.ahead) primary = { label: t('Push {n}', { n: repo.ahead }), icon: ArrowUp, run: () => void act('Push', actions.push(repo), { done: 'Pushed' }) }
+  else if (repo.behind) primary = { label: t('Pull {n}', { n: repo.behind }), icon: ArrowDown, run: () => void act('Pull', actions.pull(), { done: 'Pulled' }) }
   else primary = { label: 'Fetch', icon: RefreshCcw, run: () => void act('Fetch', actions.fetch(), { done: 'Fetched' }) }
 
   return (
     <div className={bar} data-tauri-drag-region>
-      <IconButton icon={sidebar ? PanelLeftClose : PanelLeftOpen} onClick={onToggleSidebar} title={`${sidebar ? 'Hide' : 'Show'} sidebar (⌘\\)`} />
-      <button type="button" className="flex items-center gap-1.75 rounded-md px-2 py-1 text-left hover:bg-hover" onClick={onSwitchRepo} title="Switch repository">
+      <IconButton icon={sidebar ? PanelLeftClose : PanelLeftOpen} onClick={onToggleSidebar} title={t(sidebar ? 'Hide sidebar (⌘\\)' : 'Show sidebar (⌘\\)')} />
+      <button type="button" className="flex items-center gap-1.75 rounded-md px-2 py-1 text-left hover:bg-hover" onClick={onSwitchRepo} title={t('Switch repository')}>
         <img className="size-5.5 rounded-[5.5px]" src={appIcon} alt="" />
         <div>
           <div className="leading-tight font-bold">{repo.name}</div>
@@ -83,28 +95,35 @@ export function TitleBar({ onSwitchRepo, sidebar, onToggleSidebar }: { onSwitchR
         </div>
         <ChevronsUpDown size={13} className="text-muted" />
       </button>
-      <button type="button" onClick={() => setPaletteOpen(true)} title="Switch branch (⌘K)">
-        <Chip kind="head" name={detached ? `detached ${repo.head.slice(0, 7)}` : repo.branch} large icon={GitBranch} synced={!!repo.upstream} />
+      <button type="button" onClick={() => setPaletteOpen(true)} title={t('Switch branch (⌘K)')}>
+        <Chip kind="head" name={detached ? t('detached {slice}', { slice: repo.head.slice(0, 7) }) : repo.branch} large icon={GitBranch} synced={!!repo.upstream} />
       </button>
       <div className="flex-1 self-stretch" data-tauri-drag-region />
       <div className="flex items-center gap-0.5">
-        <ToolButton icon={RefreshCcw} label="Fetch" busy={busy === 'Fetch'} onClick={() => void act('Fetch', actions.fetch(), { done: 'Fetched' })} />
-        <ToolButton icon={ArrowDown} label="Pull" badge={repo.behind} busy={busy === 'Pull'} onClick={() => void act('Pull', actions.pull(), { done: 'Pulled' })} />
-        <ToolButton icon={ArrowUp} label="Push" badge={repo.ahead} busy={busy === 'Push'} onClick={() => void act('Push', actions.push(repo), { done: 'Pushed' })} />
+        <ToolButton icon={RefreshCcw} label={t('Fetch')} busy={busy === 'Fetch'} onClick={() => void act('Fetch', actions.fetch(), { done: t('Fetched') })} />
+        <ToolButton icon={ArrowDown} label={t('Pull')} badge={repo.behind} busy={busy === 'Pull'} onClick={() => void act('Pull', actions.pull(), { done: t('Pulled') })} />
+        <ToolButton icon={ArrowUp} label={t('Push')} badge={repo.ahead} busy={busy === 'Push'} onClick={() => void act('Push', actions.push(repo), { done: t('Pushed') })} />
       </div>
       <Sep />
       <div className="flex items-center gap-0.5">
-        <ToolButton icon={GitBranch} label="Branch" onClick={() => void newBranch()} />
-        <ToolButton icon={GitMerge} label="Merge" onClick={() => void merge()} />
-        <ToolButton icon={Archive} label="Stash" disabled={!repo.changes.length} busy={busy === 'Stash'} onClick={() => void stash()} />
-        <ToolButton icon={ArchiveRestore} label="Pop" disabled={!repo.stashes.length} busy={busy === 'Pop'} onClick={() => void act('Pop', actions.stashPop(), { done: 'Stash applied' })} />
+        <ToolButton icon={GitBranch} label={t('Branch')} onClick={() => void newBranch()} />
+        <ToolButton icon={GitMerge} label={t('Merge')} onClick={() => void merge()} />
+        <ToolButton icon={Archive} label={t('Stash')} disabled={!repo.changes.length} busy={busy === 'Stash'} onClick={() => void stash()} />
+        <ToolButton
+          icon={ArchiveRestore}
+          label={t('Pop')}
+          disabled={!repo.stashes.length}
+          busy={busy === 'Pop'}
+          onClick={() => void act('Pop', actions.stashPop(), { done: t('Stash applied') })}
+        />
       </div>
       <Sep />
-      <ToolButton icon={SquareTerminal} label="Terminal" onClick={() => void openTerminal(repo.root)} />
+      <ToolButton icon={SquareTerminal} label={t('Terminal')} onClick={() => void openTerminal(repo.root)} />
       <div className="flex-1 self-stretch" data-tauri-drag-region />
+      <IconButton icon={SettingsIcon} onClick={onSettings} title={t('Settings (⌘,)')} />
       <button type="button" className="flex h-7 w-60 items-center gap-1.5 rounded-md bg-surface pr-1.5 pl-2 text-muted" onClick={() => setPaletteOpen(true)}>
         <Search size={13} />
-        <span className="flex-1 text-left text-faint">Search commits, branches</span>
+        <span className="flex-1 text-left text-faint">{t('Search commits, branches')}</span>
         <Kbd>⌘K</Kbd>
       </button>
       <Button kind="primary" icon={primary.icon} onClick={primary.run} disabled={primary.disabled || !!busy}>
@@ -119,10 +138,18 @@ export function Banner() {
   if (!repo?.operation) return null
   const op = repo.operation
   const conflicts = repo.changes.filter(isConflict).length
-  const text = `${repo.operationTitle ?? op}${conflicts ? ` — ${conflicts} file${conflicts > 1 ? 's' : ''} need${conflicts > 1 ? '' : 's'} resolving` : ''}`
+  const need = conflicts ? ` — ${t(conflicts === 1 ? '{n} file needs resolving' : '{n} files need resolving', { n: conflicts })}` : ''
+  const text = `${repo.operationTitle ?? t(op)}${need}`
   const abort = async () => {
-    if (await ask({ title: `Abort ${op}?`, text: 'Your work tree goes back to how it was before it started.', confirm: `Abort ${op}`, danger: true }))
-      await act(`Abort ${op}`, actions.abort(op), { done: `${op} aborted` })
+    if (
+      await ask({
+        title: t('Abort {op}?', { op: t(op) }),
+        text: t('Your work tree goes back to how it was before it started.'),
+        confirm: t('Abort {op}', { op: t(op) }),
+        danger: true,
+      })
+    )
+      await act(t('Abort {op}', { op: t(op) }), actions.abort(op), { done: t('{op} aborted', { op: t(op) }) })
   }
   return (
     <div className="flex h-9 shrink-0 items-center gap-2.5 border-b border-subtle bg-stage-banner-bg px-4 font-medium text-stage-banner-fg">
@@ -131,8 +158,8 @@ export function Banner() {
       <Button small icon={X} onClick={() => void abort()}>
         Abort {op}
       </Button>
-      <Button small kind="primary" icon={Check} disabled={conflicts > 0} onClick={() => void act(`Continue ${op}`, actions.continue(op))}>
-        Continue
+      <Button small kind="primary" icon={Check} disabled={conflicts > 0} onClick={() => void act(t('Continue {op}', { op: t(op) }), actions.continue(op))}>
+        {t('Continue')}
       </Button>
     </div>
   )
@@ -152,7 +179,19 @@ function Section({ label, children, onAdd, defaultOpen = true }: { label: string
   )
 }
 
-function Item({ icon: Icon, color, label, meta, metaColor, selected, strong, indent, title, onClick, onDoubleClick }: {
+function Item({
+  icon: Icon,
+  color,
+  label,
+  meta,
+  metaColor,
+  selected,
+  strong,
+  indent,
+  title,
+  onClick,
+  onDoubleClick,
+}: {
   icon: typeof GitBranch
   color: string
   label: string
@@ -209,10 +248,10 @@ export function Sidebar({ width }: { width: number }) {
     setView('history')
     setQuery({ branch })
   }
-  const checkout = (name: string) => void act('Checkout', actions.checkout(name), { done: `Switched to ${name}` })
+  const checkout = (name: string) => void act('Checkout', actions.checkout(name), { done: t('Switched to {name}', { name }) })
   const newBranch = async () => {
-    const name = await prompt({ title: 'New branch', placeholder: 'feature/name', confirm: 'Create and switch' })
-    if (name) await act('Create branch', actions.createBranch(name.trim()), { done: `Switched to ${name}` })
+    const name = await prompt({ title: t('New branch'), placeholder: 'feature/name', confirm: t('Create and switch') })
+    if (name) await act('Create branch', actions.createBranch(name.trim()), { done: t('Switched to {name}', { name }) })
   }
   const toggleRemote = (remote: string) =>
     setOpenRemotes(s => {
@@ -223,13 +262,36 @@ export function Sidebar({ width }: { width: number }) {
 
   return (
     <nav className={shell} style={{ width }}>
-      <Section label="WORKSPACE">
-        <Item icon={FileDiff} color="var(--status-modified)" label="Changes" meta={repo.changes.length} selected={view === 'changes'} onClick={() => setView('changes')} title="Changes (⌘2)" />
-        <Item icon={GitGraph} color="var(--ref-head)" label="History" selected={view === 'history'} onClick={() => setView('history')} title="History (⌘1)" />
-        <Item icon={Archive} color="var(--text-muted)" label="Stashes" meta={repo.stashes.length || ''} selected={view === 'stashes'} onClick={() => setView('stashes')} title="Stashes (⌘3)" />
-        <Item icon={GitPullRequest} color="var(--status-added)" label="Pull requests" selected={view === 'pulls'} onClick={() => setView('pulls')} title="Pull requests (⌘4)" />
+      <Section label={t('WORKSPACE')}>
+        <Item
+          icon={FileDiff}
+          color="var(--status-modified)"
+          label={t('Changes')}
+          meta={repo.changes.length}
+          selected={view === 'changes'}
+          onClick={() => setView('changes')}
+          title={t('Changes (⌘2)')}
+        />
+        <Item icon={GitGraph} color="var(--ref-head)" label={t('History')} selected={view === 'history'} onClick={() => setView('history')} title={t('History (⌘1)')} />
+        <Item
+          icon={Archive}
+          color="var(--text-muted)"
+          label={t('Stashes')}
+          meta={repo.stashes.length || ''}
+          selected={view === 'stashes'}
+          onClick={() => setView('stashes')}
+          title={t('Stashes (⌘3)')}
+        />
+        <Item
+          icon={GitPullRequest}
+          color="var(--status-added)"
+          label={t('Pull requests')}
+          selected={view === 'pulls'}
+          onClick={() => setView('pulls')}
+          title={t('Pull requests (⌘4)')}
+        />
       </Section>
-      <Section label="BRANCHES" onAdd={() => void newBranch()}>
+      <Section label={t('BRANCHES')} onAdd={() => void newBranch()}>
         {locals.map(b => {
           const { ahead, behind } = trackMeta(b.track)
           return (
@@ -242,7 +304,7 @@ export function Sidebar({ width }: { width: number }) {
               selected={view === 'history' && query.branch === b.name}
               meta={ahead ? `↑${ahead}` : behind ? `↓${behind}` : ''}
               metaColor={ahead ? 'var(--ref-head)' : behind ? 'var(--status-deleted)' : undefined}
-              title={`${b.name} — click to show its history, double-click to check out`}
+              title={t('{name} — click to show its history, double-click to check out', { name: b.name })}
               onClick={() => scopeTo(b.name)}
               onDoubleClick={() => !b.isHead && checkout(b.name)}
             />
@@ -250,10 +312,17 @@ export function Sidebar({ width }: { width: number }) {
         })}
       </Section>
       {remotes.size > 0 && (
-        <Section label="REMOTES">
+        <Section label={t('REMOTES')}>
           {[...remotes].map(([remote, names]) => (
             <div key={remote}>
-              <Item icon={openRemotes.has(remote) ? ChevronDown : ChevronRight} color="var(--text-muted)" label={remote} strong meta={names.length} onClick={() => toggleRemote(remote)} />
+              <Item
+                icon={openRemotes.has(remote) ? ChevronDown : ChevronRight}
+                color="var(--text-muted)"
+                label={remote}
+                strong
+                meta={names.length}
+                onClick={() => toggleRemote(remote)}
+              />
               {openRemotes.has(remote) &&
                 names.map(n => (
                   <Item
@@ -263,9 +332,9 @@ export function Sidebar({ width }: { width: number }) {
                     label={n}
                     indent
                     selected={view === 'history' && query.branch === `${remote}/${n}`}
-                    title={`${remote}/${n} — click to show its history, double-click to check out a tracking branch`}
+                    title={t('{remote}/{n} — click to show its history, double-click to check out a tracking branch', { remote, n })}
                     onClick={() => scopeTo(`${remote}/${n}`)}
-                    onDoubleClick={() => void act('Checkout', actions.checkoutRemote(`${remote}/${n}`), { done: `Tracking ${remote}/${n}` })}
+                    onDoubleClick={() => void act('Checkout', actions.checkoutRemote(`${remote}/${n}`), { done: t('Tracking {remote}/{n}', { remote, n }) })}
                   />
                 ))}
             </div>
@@ -273,14 +342,22 @@ export function Sidebar({ width }: { width: number }) {
         </Section>
       )}
       {tags.length > 0 && (
-        <Section label="TAGS" defaultOpen={tags.length <= 12}>
-          {tags.map(t => (
-            <Item key={t.name} icon={Tag} color="var(--ref-tag-text)" label={t.name} meta={t.date.replace(/ ago$/, '')} selected={query.branch === `refs/tags/${t.name}`} onClick={() => scopeTo(`refs/tags/${t.name}`)} />
+        <Section label={t('TAGS')} defaultOpen={tags.length <= 12}>
+          {tags.map(tag => (
+            <Item
+              key={tag.name}
+              icon={Tag}
+              color="var(--ref-tag-text)"
+              label={tag.name}
+              meta={tag.date.replace(/ ago$/, '')}
+              selected={query.branch === `refs/tags/${tag.name}`}
+              onClick={() => scopeTo(`refs/tags/${tag.name}`)}
+            />
           ))}
         </Section>
       )}
       {repo.worktrees.length > 1 && (
-        <Section label="WORKTREES">
+        <Section label={t('WORKTREES')}>
           {repo.worktrees.map(w => (
             <Item key={w.path} icon={FolderGit2} color="var(--text-muted)" label={w.path.split('/').pop() ?? w.path} meta={w.branch} strong={w.path === repo.root} title={w.path} />
           ))}
@@ -290,32 +367,33 @@ export function Sidebar({ width }: { width: number }) {
   )
 }
 
+type ThemePref = Settings['theme']
 const THEME_NEXT: Record<ThemePref, ThemePref> = { system: 'light', light: 'dark', dark: 'system' }
 const THEME_ICON = { system: Monitor, light: Sun, dark: Moon }
 
 function ago(ms: number) {
   const s = Math.round((Date.now() - ms) / 1000)
   if (s < 60) return 'just now'
-  if (s < 3600) return `${Math.round(s / 60)} min ago`
-  return `${Math.round(s / 3600)} h ago`
+  if (s < 3600) return t('{s} min ago', { s: Math.round(s / 60) })
+  return t('{s} h ago', { s: Math.round(s / 3600) })
 }
 
 export function StatusBar() {
   const { repo, stage, lastFetch, refresh } = useApp()
-  const [theme, setTheme] = useState<ThemePref>(readTheme)
+  const { theme } = useSettings()
   const shell = 'flex h-statusbar shrink-0 items-center gap-3.5 border-t border-subtle bg-titlebar px-3 text-sm text-muted'
   if (!repo) return <footer className={shell} />
   const conflicts = repo.changes.filter(isConflict).length
   const label =
     stage === 'Rebasing'
-      ? `Rebasing${repo.operationStep ? ` ${repo.operationStep}` : ''}`
+      ? t('Rebasing {step}', { step: repo.operationStep ?? '' }).trim()
       : stage === 'Conflict'
         ? conflicts
-          ? `${conflicts} conflict${conflicts > 1 ? 's' : ''}`
-          : `${repo.operation} in progress`
+          ? t(conflicts === 1 ? '{n} conflict' : '{n} conflicts', { n: conflicts })
+          : t('{operation} in progress', { operation: t(repo.operation ?? '') })
         : stage === 'Working'
-          ? `${repo.changes.length} uncommitted change${repo.changes.length > 1 ? 's' : ''}`
-          : 'Up to date'
+          ? t(repo.changes.length === 1 ? '{n} uncommitted change' : '{n} uncommitted changes', { n: repo.changes.length })
+          : t('Up to date')
   const ThemeIcon = THEME_ICON[theme]
   return (
     <footer className={shell}>
@@ -338,18 +416,14 @@ export function StatusBar() {
       )}
       {lastFetch && <span>Fetched {ago(lastFetch)}</span>}
       <span className="flex-1" />
-      <button type="button" className="hover:text-primary" onClick={() => void refresh()} title="Refresh (⌘R)">
+      <button type="button" className="hover:text-primary" onClick={() => void refresh()} title={t('Refresh (⌘R)')}>
         {repo.totalCommits.toLocaleString()} commits · {repo.refs.length} refs
       </button>
       <button
         type="button"
         className="flex items-center gap-1.25 hover:text-primary"
-        title={`Appearance: ${theme}`}
-        onClick={() => {
-          const next = THEME_NEXT[theme]
-          applyTheme(next)
-          setTheme(next)
-        }}
+        title={t('Appearance: {theme}', { theme })}
+        onClick={() => updateSettings({ theme: THEME_NEXT[theme] })}
       >
         <ThemeIcon size={12} />
         {theme[0]!.toUpperCase() + theme.slice(1)}

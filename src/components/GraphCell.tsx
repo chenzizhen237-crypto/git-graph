@@ -17,7 +17,7 @@ export function GraphCell({ g, laneCount, kind }: { g: GraphRow; laneCount: numb
   const w = graphWidth(laneCount)
   const line = { strokeWidth: 2, fill: 'none', strokeLinecap: 'round' as const }
   return (
-    <svg className="shrink-0 overflow-visible" width={w} height={ROW_H} viewBox={`0 0 ${w} ${ROW_H}`}>
+    <svg aria-hidden="true" className="shrink-0 overflow-visible" width={w} height={ROW_H} viewBox={`0 0 ${w} ${ROW_H}`}>
       {g.through.map(t => (
         <path key={`t${t.lane}`} d={`M${x(t.lane)} 0V${ROW_H}`} stroke={t.color} {...line} />
       ))}

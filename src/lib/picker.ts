@@ -24,12 +24,9 @@ export function pickSections(refs: BranchRef[]): PickSections {
   const folds = (r: BranchRef) => upstreams.has(r.name) || names.has(r.name.slice(r.name.indexOf('/') + 1))
   const remotes = refs.filter(r => r.kind === 'remote')
   const mirrored = new Set(remotes.filter(folds).map(r => r.name))
-  const synced = (r: BranchRef) =>
-    (!!r.upstream && mirrored.has(r.upstream)) || remotes.some(m => m.name.endsWith(`/${r.name}`))
+  const synced = (r: BranchRef) => (!!r.upstream && mirrored.has(r.upstream)) || remotes.some(m => m.name.endsWith(`/${r.name}`))
   return {
-    local: [...locals]
-      .sort((a, b) => Number(b.isHead) - Number(a.isHead))
-      .map(ref => ({ ref, value: ref.name, synced: synced(ref) })),
+    local: [...locals].sort((a, b) => Number(b.isHead) - Number(a.isHead)).map(ref => ({ ref, value: ref.name, synced: synced(ref) })),
     remote: remotes.filter(r => !folds(r)).map(ref => ({ ref, value: ref.name, synced: false })),
     tag: refs.filter(r => r.kind === 'tag').map(ref => ({ ref, value: `refs/tags/${ref.name}`, synced: false })),
   }

@@ -1,7 +1,6 @@
 import { expect, test } from 'vitest'
-
-import { branchPath, mergeNumstat } from '../parse'
 import { layoutGraph } from '../graph'
+import { branchPath, mergeNumstat } from '../parse'
 
 test('a merge gets two lanes that join again at the common parent', async () => {
   const { rows, laneCount } = layoutGraph(

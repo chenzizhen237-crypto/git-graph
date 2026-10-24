@@ -1,8 +1,8 @@
 /** Command palette (⌘K), the ask/prompt dialog, and toasts. */
 import {
+  Archive,
   ArrowDown,
   ArrowUp,
-  Archive,
   CircleAlert,
   CircleCheck,
   Cloud,
@@ -14,19 +14,23 @@ import {
   GitGraph,
   GitMerge,
   GitPullRequest,
+  Languages,
+  type LucideIcon,
   RefreshCcw,
   Search,
+  Settings as SettingsIcon,
   SquareTerminal,
   SunMoon,
   Tag,
   X,
-  type LucideIcon,
 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { cx } from '../lib/cx'
 import { actions, openTerminal } from '../lib/git'
-import { applyTheme, readTheme, useApp } from '../state'
+import { t } from '../lib/i18n'
+import { getSettings, updateSettings } from '../lib/settings'
+import { useApp } from '../state'
 import { Button, caps, Empty, Kbd } from './ui'
 
 const scrim = 'fixed inset-0 z-50 flex items-start justify-center bg-scrim pt-27.5'
@@ -46,7 +50,7 @@ function highlight(text: string, q: string) {
   )
 }
 
-export function CommandPalette({ onSwitchRepo }: { onSwitchRepo: () => void }) {
+export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () => void; onSettings: () => void }) {
   const app = useApp()
   const { repo, act, setPaletteOpen, setView, setSelected, setQuery, prompt } = app
   const [q, setQ] = useState('')
@@ -62,7 +66,7 @@ export function CommandPalette({ onSwitchRepo }: { onSwitchRepo: () => void }) {
       .filter(r => r.kind !== 'tag' && match(r.name))
       .slice(0, needle ? 12 : 6)
       .map(r => ({
-        id: 'b:' + r.name,
+        id: `b:${r.name}`,
         group: 'BRANCHES',
         icon: r.kind === 'remote' ? Cloud : GitBranch,
         color: r.kind === 'remote' ? 'var(--ref-remote)' : r.isHead ? 'var(--ref-head)' : 'var(--ref-local)',
@@ -71,63 +75,122 @@ export function CommandPalette({ onSwitchRepo }: { onSwitchRepo: () => void }) {
         kbd: '↩',
         run: () => {
           if (r.isHead) return
-          void act('Checkout', r.kind === 'remote' ? actions.checkoutRemote(r.name) : actions.checkout(r.name), { done: `Switched to ${r.name}` })
+          void act('Checkout', r.kind === 'remote' ? actions.checkoutRemote(r.name) : actions.checkout(r.name), { done: t('Switched to {name}', { name: r.name }) })
         },
       }))
     const tags: Item[] = needle
       ? repo.refs
           .filter(r => r.kind === 'tag' && match(r.name))
           .slice(0, 4)
-          .map(r => ({ id: 't:' + r.name, group: 'BRANCHES', icon: Tag, color: 'var(--ref-tag-text)', label: r.name, hint: 'tag', run: () => (setView('history'), setQuery({ branch: `refs/tags/${r.name}` })) }))
+          .map(r => ({
+            id: `t:${r.name}`,
+            group: 'BRANCHES',
+            icon: Tag,
+            color: 'var(--ref-tag-text)',
+            label: r.name,
+            hint: 'tag',
+            run: () => {
+              setView('history')
+              setQuery({ branch: `refs/tags/${r.name}` })
+            },
+          }))
       : []
     const commits: Item[] = needle
       ? repo.rows
           .filter(r => match(r.subject) || r.short.startsWith(needle) || match(r.author))
           .slice(0, 8)
-          .map(r => ({ id: 'c:' + r.hash, group: 'COMMITS', icon: GitCommitHorizontal, color: 'var(--text-muted)', label: r.subject, hint: `${r.short} · ${r.author}`, run: () => (setView('history'), setSelected(r.hash)) }))
+          .map(r => ({
+            id: `c:${r.hash}`,
+            group: 'COMMITS',
+            icon: GitCommitHorizontal,
+            color: 'var(--text-muted)',
+            label: r.subject,
+            hint: `${r.short} · ${r.author}`,
+            run: () => {
+              setView('history')
+              setSelected(r.hash)
+            },
+          }))
       : []
-    const all = ([
-      { id: 'a:fetch', group: 'ACTIONS', icon: RefreshCcw, color: 'var(--text-secondary)', label: 'Fetch all remotes', kbd: '⌘⇧F', run: () => void act('Fetch', actions.fetch(), { done: 'Fetched' }) },
-      { id: 'a:pull', group: 'ACTIONS', icon: ArrowDown, color: 'var(--text-secondary)', label: 'Pull', run: () => void act('Pull', actions.pull(), { done: 'Pulled' }) },
-      { id: 'a:push', group: 'ACTIONS', icon: ArrowUp, color: 'var(--text-secondary)', label: 'Push', kbd: '⌘⇧P', run: () => void act('Push', actions.push(repo), { done: 'Pushed' }) },
-      {
-        id: 'a:branch',
-        group: 'ACTIONS',
-        icon: GitBranchPlus,
-        color: 'var(--text-secondary)',
-        label: needle ? `Create branch “${q.trim()}”` : 'New branch…',
-        kbd: '⌘B',
-        run: async () => {
-          const name = needle ? q.trim() : await prompt({ title: 'New branch', placeholder: 'feature/name', confirm: 'Create and switch' })
-          if (name) void act('Create branch', actions.createBranch(name), { done: `Switched to ${name}` })
+    const all = (
+      [
+        {
+          id: 'a:fetch',
+          group: 'ACTIONS',
+          icon: RefreshCcw,
+          color: 'var(--text-secondary)',
+          label: t('Fetch all remotes'),
+          kbd: '⌘⇧F',
+          run: () => void act('Fetch', actions.fetch(), { done: t('Fetched') }),
         },
-      },
-      ...repo.refs
-        .filter(r => r.kind === 'local' && !r.isHead && needle && match(r.name))
-        .slice(0, 2)
-        .map<Item>(r => ({ id: 'm:' + r.name, group: 'ACTIONS', icon: GitMerge, color: 'var(--text-secondary)', label: `Merge ${r.name} into ${repo.branch}`, run: () => void act('Merge', actions.merge(r.name), { done: `Merged ${r.name}` }) })),
-      { id: 'a:history', group: 'ACTIONS', icon: GitGraph, color: 'var(--text-secondary)', label: 'Show History', kbd: '⌘1', run: () => setView('history') },
-      { id: 'a:changes', group: 'ACTIONS', icon: FileDiff, color: 'var(--text-secondary)', label: 'Show Changes', kbd: '⌘2', run: () => setView('changes') },
-      { id: 'a:stashes', group: 'ACTIONS', icon: Archive, color: 'var(--text-secondary)', label: 'Show Stashes', kbd: '⌘3', run: () => setView('stashes') },
-      { id: 'a:pulls', group: 'ACTIONS', icon: GitPullRequest, color: 'var(--text-secondary)', label: 'Show Pull requests', kbd: '⌘4', run: () => setView('pulls') },
-      { id: 'a:term', group: 'ACTIONS', icon: SquareTerminal, color: 'var(--text-secondary)', label: 'Open in Terminal', run: () => void openTerminal(repo.root) },
-      { id: 'a:repo', group: 'ACTIONS', icon: FolderOpen, color: 'var(--text-secondary)', label: 'Open another repository…', kbd: '⌘O', run: onSwitchRepo },
-      {
-        id: 'a:theme',
-        group: 'ACTIONS',
-        icon: SunMoon,
-        color: 'var(--text-secondary)',
-        label: 'Toggle dark appearance',
-        run: () => {
-          const dark = readTheme() === 'dark' || (readTheme() === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
-          applyTheme(dark ? 'light' : 'dark')
+        { id: 'a:pull', group: 'ACTIONS', icon: ArrowDown, color: 'var(--text-secondary)', label: t('Pull'), run: () => void act('Pull', actions.pull(), { done: t('Pulled') }) },
+        {
+          id: 'a:push',
+          group: 'ACTIONS',
+          icon: ArrowUp,
+          color: 'var(--text-secondary)',
+          label: t('Push'),
+          kbd: '⌘⇧P',
+          run: () => void act('Push', actions.push(repo), { done: t('Pushed') }),
         },
-      },
-    ] satisfies Item[]).filter(a => a.id === 'a:branch' || a.id.startsWith('m:') || match(a.label))
+        {
+          id: 'a:branch',
+          group: 'ACTIONS',
+          icon: GitBranchPlus,
+          color: 'var(--text-secondary)',
+          label: needle ? t('Create branch “{name}”', { name: q.trim() }) : 'New branch…',
+          kbd: '⌘B',
+          run: async () => {
+            const name = needle ? q.trim() : await prompt({ title: t('New branch'), placeholder: 'feature/name', confirm: t('Create and switch') })
+            if (name) void act('Create branch', actions.createBranch(name), { done: t('Switched to {name}', { name }) })
+          },
+        },
+        ...repo.refs
+          .filter(r => r.kind === 'local' && !r.isHead && needle && match(r.name))
+          .slice(0, 2)
+          .map<Item>(r => ({
+            id: `m:${r.name}`,
+            group: 'ACTIONS',
+            icon: GitMerge,
+            color: 'var(--text-secondary)',
+            label: t('Merge {name} into {branch}', { name: r.name, branch: repo.branch }),
+            run: () => void act('Merge', actions.merge(r.name), { done: t('Merged {name}', { name: r.name }) }),
+          })),
+        { id: 'a:history', group: 'ACTIONS', icon: GitGraph, color: 'var(--text-secondary)', label: t('Show History'), kbd: '⌘1', run: () => setView('history') },
+        { id: 'a:changes', group: 'ACTIONS', icon: FileDiff, color: 'var(--text-secondary)', label: t('Show Changes'), kbd: '⌘2', run: () => setView('changes') },
+        { id: 'a:stashes', group: 'ACTIONS', icon: Archive, color: 'var(--text-secondary)', label: t('Show Stashes'), kbd: '⌘3', run: () => setView('stashes') },
+        { id: 'a:pulls', group: 'ACTIONS', icon: GitPullRequest, color: 'var(--text-secondary)', label: t('Show Pull requests'), kbd: '⌘4', run: () => setView('pulls') },
+        { id: 'a:term', group: 'ACTIONS', icon: SquareTerminal, color: 'var(--text-secondary)', label: t('Open in Terminal'), run: () => void openTerminal(repo.root) },
+        { id: 'a:repo', group: 'ACTIONS', icon: FolderOpen, color: 'var(--text-secondary)', label: t('Open another repository…'), kbd: '⌘O', run: onSwitchRepo },
+        { id: 'a:settings', group: 'ACTIONS', icon: SettingsIcon, color: 'var(--text-secondary)', label: t('Settings…'), kbd: '⌘,', run: onSettings },
+        {
+          id: 'a:lang',
+          group: 'ACTIONS',
+          icon: Languages,
+          color: 'var(--text-secondary)',
+          label: getSettings().language === 'zh' ? 'Switch to English' : '切换到简体中文',
+          run: () => updateSettings({ language: getSettings().language === 'zh' ? 'en' : 'zh' }),
+        },
+        {
+          id: 'a:theme',
+          group: 'ACTIONS',
+          icon: SunMoon,
+          color: 'var(--text-secondary)',
+          label: t('Toggle dark appearance'),
+          run: () => {
+            const { theme } = getSettings()
+            const dark = theme === 'dark' || (theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
+            updateSettings({ theme: dark ? 'light' : 'dark' })
+          },
+        },
+      ] satisfies Item[]
+    ).filter(a => a.id === 'a:branch' || a.id.startsWith('m:') || match(a.label))
     return [...branches, ...tags, ...commits, ...all]
-  }, [repo, q, act, prompt, setQuery, setSelected, setView, onSwitchRepo])
+  }, [repo, q, act, prompt, setQuery, setSelected, setView, onSwitchRepo, onSettings])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: the query is the trigger: a new search selects the first result
   useEffect(() => setAt(0), [q])
+  // biome-ignore lint/correctness/useExhaustiveDependencies: scroll the newly highlighted item into view
   useEffect(() => {
     list.current?.querySelector('[data-on]')?.scrollIntoView({ block: 'nearest' })
   }, [at])
@@ -141,19 +204,28 @@ export function CommandPalette({ onSwitchRepo }: { onSwitchRepo: () => void }) {
   let lastGroup = ''
   return (
     <div className={scrim} onMouseDown={close}>
-      <div className="flex max-h-130 w-150 flex-col overflow-hidden rounded-xl border border-strong bg-elevated shadow-[0_20px_50px_var(--shadow),0_2px_6px_var(--shadow)]" onMouseDown={e => e.stopPropagation()}>
+      <div
+        className="flex max-h-130 w-150 flex-col overflow-hidden rounded-xl border border-strong bg-elevated shadow-[0_20px_50px_var(--shadow),0_2px_6px_var(--shadow)]"
+        onMouseDown={e => e.stopPropagation()}
+      >
         <div className="flex h-13 shrink-0 items-center gap-2.5 border-b border-subtle px-4 text-muted">
           <Search size={17} />
           <input
             autoFocus
             className="flex-1 bg-transparent text-lg font-medium text-primary outline-none placeholder:text-faint"
-            placeholder="Search branches, commits and actions"
+            placeholder={t('Search branches, commits and actions')}
             value={q}
             onChange={e => setQ(e.target.value)}
             onKeyDown={e => {
               if (e.key === 'Escape') close()
-              if (e.key === 'ArrowDown') (e.preventDefault(), setAt(a => Math.min(items.length - 1, a + 1)))
-              if (e.key === 'ArrowUp') (e.preventDefault(), setAt(a => Math.max(0, a - 1)))
+              if (e.key === 'ArrowDown') {
+                e.preventDefault()
+                setAt(a => Math.min(items.length - 1, a + 1))
+              }
+              if (e.key === 'ArrowUp') {
+                e.preventDefault()
+                setAt(a => Math.max(0, a - 1))
+              }
               if (e.key === 'Enter') run(items[at])
             }}
           />
@@ -166,7 +238,13 @@ export function CommandPalette({ onSwitchRepo }: { onSwitchRepo: () => void }) {
             return (
               <div key={item.id}>
                 {head}
-                <button type="button" data-on={i === at || undefined} className={cx('flex h-8 w-full items-center gap-2.5 rounded-md px-2.5 text-left', i === at && 'bg-selected')} onMouseMove={() => setAt(i)} onClick={() => run(item)}>
+                <button
+                  type="button"
+                  data-on={i === at || undefined}
+                  className={cx('flex h-8 w-full items-center gap-2.5 rounded-md px-2.5 text-left', i === at && 'bg-selected')}
+                  onMouseMove={() => setAt(i)}
+                  onClick={() => run(item)}
+                >
                   <Icon size={15} color={item.color} className="shrink-0" />
                   <span className="flex-1 truncate">{highlight(item.label, q.trim())}</span>
                   {item.hint && <span className="text-sm text-muted">{item.hint}</span>}
@@ -219,10 +297,16 @@ export function DialogHost() {
         <div className="text-lg font-semibold">{dialog.title}</div>
         {dialog.kind === 'ask' && dialog.text && <div className="leading-normal text-secondary">{dialog.text}</div>}
         {dialog.kind === 'prompt' && (
-          <input autoFocus className="h-8 rounded-md border border-focus bg-app px-2.5 ring-1 ring-focus outline-none" placeholder={dialog.placeholder} value={value} onChange={e => setValue(e.target.value)} />
+          <input
+            autoFocus
+            className="h-8 rounded-md border border-focus bg-app px-2.5 ring-1 ring-focus outline-none"
+            placeholder={dialog.placeholder}
+            value={value}
+            onChange={e => setValue(e.target.value)}
+          />
         )}
         <div className="flex justify-end gap-2">
-          <Button onClick={() => done(false)}>Cancel</Button>
+          <Button onClick={() => done(false)}>{t('Cancel')}</Button>
           <Button kind="primary" type="submit" danger={dialog.kind === 'ask' && dialog.danger} disabled={dialog.kind === 'prompt' && !dialog.optional && !value.trim()}>
             {dialog.confirm}
           </Button>

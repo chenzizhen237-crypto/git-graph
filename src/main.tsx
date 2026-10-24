@@ -7,9 +7,9 @@ import { createRoot } from 'react-dom/client'
 
 import { App } from './App'
 import { autoHideScrollbars } from './lib/scrollbars'
-import { applyTheme, readTheme } from './state'
+import { apply, getSettings } from './lib/settings'
 
-applyTheme(readTheme())
+apply(getSettings())
 autoHideScrollbars()
 document.documentElement.dataset.stage = 'Clean'
 

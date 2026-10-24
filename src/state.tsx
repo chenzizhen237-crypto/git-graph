@@ -3,11 +3,13 @@
  * and `act`, which runs a git action, reports failures and refreshes.
  */
 import { listen } from '@tauri-apps/api/event'
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import { GitError, git, loadRepo, watchRepo } from './lib/git'
 import { GhError, gh } from './lib/github'
+import { t } from './lib/i18n'
 import { isConflict } from './lib/parse'
+import { getSettings } from './lib/settings'
 import type { Stage } from './lib/tokens'
 import type { LogQuery, RepoData } from './lib/types'
 
@@ -19,9 +21,9 @@ type Ask = { title: string; text?: string; confirm: string; danger?: boolean }
 type Prompt = { title: string; placeholder?: string; initial?: string; confirm: string; /** An empty answer is allowed. */ optional?: boolean }
 export type Dialog = (Ask & { kind: 'ask'; resolve: (ok: boolean) => void }) | (Prompt & { kind: 'prompt'; resolve: (value: string | null) => void })
 
-const PAGE = 600
+const page = () => getSettings().pageSize
 
-export const DEFAULT_QUERY: LogQuery = { branch: '--all', query: '', author: '', since: '', limit: PAGE }
+export const defaultQuery = (): LogQuery => ({ branch: '--all', query: '', author: '', since: '', limit: page() })
 
 /** The design's Stage axis, read off the repository. */
 export function stageOf(repo: RepoData | null): Stage {
@@ -35,7 +37,7 @@ export function stageOf(repo: RepoData | null): Stage {
 function useAppState(root: string) {
   const [repo, setRepo] = useState<RepoData | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [query, setQueryState] = useState<LogQuery>(DEFAULT_QUERY)
+  const [query, setQueryState] = useState<LogQuery>(defaultQuery)
   const [view, setView] = useState<View>('history')
   const [selected, setSelected] = useState<string | undefined>()
   const [paletteOpen, setPaletteOpen] = useState(false)
@@ -53,7 +55,7 @@ function useAppState(root: string) {
     setTimeout(() => setToasts(ts => ts.filter(x => x.id !== id)), t.kind === 'error' ? 9000 : 3500)
   }, [])
 
-  const refresh = useCallback(async () => {
+  const refreshNow = useCallback(async () => {
     const ticket = ++loading.current
     try {
       const data = await loadRepo(root, queryRef.current)
@@ -66,14 +68,35 @@ function useAppState(root: string) {
     }
   }, [root])
 
-  const setQuery = useCallback((patch: Partial<LogQuery>) => {
-    setQueryState(q => {
-      const next = { ...q, ...patch, limit: patch.limit ?? (patch.branch !== undefined || patch.query !== undefined || patch.author !== undefined ? PAGE : q.limit) }
-      queryRef.current = next
-      return next
+  const running = useRef<Promise<void> | null>(null)
+  const again = useRef(false)
+  const refresh = useCallback(async (): Promise<void> => {
+    // Coalesce bursts (a checkout touches hundreds of files): one load at a time, one more after it.
+    if (running.current) {
+      again.current = true
+      return running.current
+    }
+    running.current = refreshNow().finally(() => {
+      running.current = null
+      if (again.current) {
+        again.current = false
+        void refresh()
+      }
     })
-    void refresh()
-  }, [refresh])
+    return running.current
+  }, [refreshNow])
+
+  const setQuery = useCallback(
+    (patch: Partial<LogQuery>) => {
+      setQueryState(q => {
+        const next = { ...q, ...patch, limit: patch.limit ?? (patch.branch !== undefined || patch.query !== undefined || patch.author !== undefined ? page() : q.limit) }
+        queryRef.current = next
+        return next
+      })
+      void refresh()
+    },
+    [refresh],
+  )
 
   // Load, watch the repository, and refresh when it changes or the window comes back.
   useEffect(() => {
@@ -95,20 +118,20 @@ function useAppState(root: string) {
 
   /** Runs a git (or gh) action: one at a time, failures as a toast, then a refresh. */
   const act = useCallback(
-    async (label: string, args: string[], opts: { stdin?: string; done?: string; tool?: 'git' | 'gh' } = {}) => {
+    async (label: string, args: string[], opts: { stdin?: string; done?: string; tool?: 'git' | 'gh'; quiet?: boolean } = {}) => {
       if (busy) return false
-      setBusy(label)
+      if (!opts.quiet) setBusy(label)
       try {
         await (opts.tool === 'gh' ? gh : git)(root, args, opts.stdin)
-        if (opts.done) toast({ kind: 'ok', title: opts.done })
+        if (opts.done) toast({ kind: 'ok', title: t(opts.done) })
         if (args[0] === 'fetch' || args[0] === 'pull') setLastFetch(Date.now())
         return true
       } catch (e) {
         const detail = e instanceof GitError || e instanceof GhError ? e.message : String(e)
-        toast({ kind: 'error', title: `${label} failed`, detail })
+        toast({ kind: 'error', title: t('{label} failed', { label: t(label) }), detail })
         return false
       } finally {
-        setBusy(null)
+        if (!opts.quiet) setBusy(null)
         void refresh()
       }
     },
@@ -141,7 +164,7 @@ function useAppState(root: string) {
     prompt,
     stage,
     lastFetch,
-    loadMore: () => setQuery({ limit: queryRef.current.limit + PAGE }),
+    loadMore: () => setQuery({ limit: queryRef.current.limit + page() }),
   }
 }
 
@@ -169,26 +192,7 @@ export function useRemoteNames() {
   return useMemo(() => new Set(repo?.refs.filter(r => r.kind === 'remote').map(r => r.name) ?? []), [repo?.refs])
 }
 
-// ─── Theme and recent repositories (per machine, so localStorage) ──────────
-
-export type ThemePref = 'system' | 'light' | 'dark'
-
-export function readTheme(): ThemePref {
-  try {
-    const t = localStorage.getItem('theme')
-    return t === 'light' || t === 'dark' ? t : 'system'
-  } catch {
-    return 'system'
-  }
-}
-
-export function applyTheme(t: ThemePref) {
-  if (t === 'system') delete document.documentElement.dataset.theme
-  else document.documentElement.dataset.theme = t
-  try {
-    localStorage.setItem('theme', t)
-  } catch {}
-}
+// ─── Recent repositories (per machine, so localStorage) ─────────────────────
 
 export type Recent = { path: string; branch?: string; at: number }
 

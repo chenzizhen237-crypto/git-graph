@@ -1,30 +1,15 @@
-import type {
-  BranchRef,
-  CommitDetail,
-  CommitFile,
-  FileChange,
-  LogQuery,
-  LogRow,
-  StashEntry,
-} from './types'
+import type { BranchRef, CommitDetail, CommitFile, FileChange, LogQuery, LogRow, StashEntry } from './types'
 
 export const SEP = '\x1f'
 
 /** Records end in \x1e, since the body may hold newlines. */
-export const LOG_FORMAT = ['%H', '%h', '%P', '%an', '%ae', '%at', '%ar', '%D', '%s', '%b'].join('%x1f') + '%x1e'
+export const LOG_FORMAT = `${['%H', '%h', '%P', '%an', '%ae', '%at', '%ar', '%D', '%s', '%b'].join('%x1f')}%x1e`
 export const RS = '\x1e'
 
 export const isFiltered = (ui: LogQuery) => !!(ui.query || ui.author || ui.since)
 
 export function logArgs(ui: LogQuery): string[] {
-  const argv = [
-    'git',
-    'log',
-    '--date-order',
-    '--color=never',
-    `--format=${LOG_FORMAT}`,
-    `-n${ui.limit + 1}`,
-  ]
+  const argv = ['git', 'log', '--date-order', '--color=never', `--format=${LOG_FORMAT}`, `-n${ui.limit + 1}`]
   if (ui.query) argv.push('-i', `--grep=${ui.query}`)
   if (ui.author) argv.push('-i', `--author=${ui.author}`)
   if (ui.since) argv.push(`--since=${ui.since}`)
@@ -46,8 +31,7 @@ export function parseLog(stdout: string, limit: number) {
       hasMore = true
       break
     }
-    const [hash = '', short = '', parents = '', author = '', email = '', time = '0', ago = '', refs = '', subject = '', body = ''] =
-      line.split(SEP)
+    const [hash = '', short = '', parents = '', author = '', email = '', time = '0', ago = '', refs = '', subject = '', body = ''] = line.split(SEP)
     commits.push({
       hash,
       short,
@@ -81,15 +65,7 @@ export function fullDate(time: number): string {
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`
 }
 
-export const REFS_FORMAT = [
-  '%(refname)',
-  '%(objectname)',
-  '%(upstream:short)',
-  '%(upstream:track)',
-  '%(HEAD)',
-  '%(committerdate:relative)',
-  '%(contents:subject)',
-].join('%1f')
+export const REFS_FORMAT = ['%(refname)', '%(objectname)', '%(upstream:short)', '%(upstream:track)', '%(HEAD)', '%(committerdate:relative)', '%(contents:subject)'].join('%1f')
 
 export function parseRefs(stdout: string): BranchRef[] {
   const refs: BranchRef[] = []
@@ -222,9 +198,7 @@ export function branchPath(rows: { hash: string; parents: string[]; graph: { lan
   return path
 }
 
-export const SHOW_FORMAT = ['%H', '%P', '%an <%ae>', '%ad', '%cn', '%B'].join(
-  '%x1f',
-)
+export const SHOW_FORMAT = ['%H', '%P', '%an <%ae>', '%ad', '%cn', '%B'].join('%x1f')
 
 export function parseShow(stdout: string): Omit<CommitDetail, 'files'> {
   const [hash = '', parents = '', author = '', date = '', committer = '', ...body] = stdout.split(SEP)
@@ -268,7 +242,6 @@ export const STATUS_COLORS: Record<string, string> = {
   '?': 'var(--text-muted)',
 }
 
-export const isConflict = (c: FileChange) =>
-  c.x === 'U' || c.y === 'U' || (c.x === 'A' && c.y === 'A') || (c.x === 'D' && c.y === 'D')
+export const isConflict = (c: FileChange) => c.x === 'U' || c.y === 'U' || (c.x === 'A' && c.y === 'A') || (c.x === 'D' && c.y === 'D')
 export const isStaged = (c: FileChange) => c.x !== ' ' && c.x !== '?' && !isConflict(c)
 export const isUnstaged = (c: FileChange) => c.y !== ' ' || c.x === '?'

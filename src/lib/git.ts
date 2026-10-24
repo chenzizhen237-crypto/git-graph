@@ -5,20 +5,8 @@
 import { invoke } from '@tauri-apps/api/core'
 
 import { layoutGraph } from './graph'
-import {
-  REFS_FORMAT,
-  SHOW_FORMAT,
-  hunksOnly,
-  isFiltered,
-  logArgs,
-  mergeNumstat,
-  parseLog,
-  parseNameStatus,
-  parseRefs,
-  parseShow,
-  parseStashes,
-  parseStatus,
-} from './parse'
+import { hunksOnly, isFiltered, logArgs, mergeNumstat, parseLog, parseNameStatus, parseRefs, parseShow, parseStashes, parseStatus, REFS_FORMAT, SHOW_FORMAT } from './parse'
+import { getSettings } from './settings'
 import type { CommitDetail, LogQuery, LogRow, Operation, RepoData, Worktree } from './types'
 
 export type GitOutput = { stdout: string; stderr: string; code: number }
@@ -33,8 +21,7 @@ export class GitError extends Error {
 }
 
 /** Runs git and returns its output whatever the exit code. */
-export const run = (repo: string, args: string[], stdin?: string) =>
-  invoke<GitOutput>('git', { repo, args, stdin: stdin ?? null })
+export const run = (repo: string, args: string[], stdin?: string) => invoke<GitOutput>('git', { repo, args, stdin: stdin ?? null })
 
 /** Runs git and throws a GitError when it fails. */
 export async function git(repo: string, args: string[], stdin?: string) {
@@ -43,10 +30,8 @@ export async function git(repo: string, args: string[], stdin?: string) {
   return out.stdout
 }
 
-const readGitFile = (repo: string, name: string) => invoke<string | null>('read_git_file', { repo, name })
-
 export const watchRepo = (repo: string) => invoke<void>('watch_repo', { repo })
-export const openTerminal = (path: string) => invoke<void>('open_terminal', { path })
+export const openTerminal = (path: string) => invoke<void>('open_terminal', { path, app: getSettings().terminal })
 export const reveal = (path: string) => invoke<void>('reveal', { path })
 
 /** The top of the work tree containing `path`, or null when it is not in one. */
@@ -58,27 +43,33 @@ export async function findRoot(path: string): Promise<string | null> {
 /** The hash used for the uncommitted-changes row in the graph layout. */
 export const WORK = '0000000000000000000000000000000000000000'
 
+type RepoState = {
+  merge: boolean
+  rebase: boolean
+  cherry_pick: boolean
+  revert: boolean
+  rebase_step: string | null
+  rebase_end: string | null
+  rebase_head: string | null
+  merge_msg: string | null
+}
+
+/** A merge, rebase, cherry-pick or revert stopped midway, read from the git dir in one call. */
 async function detectOperation(root: string): Promise<{ operation?: Operation; step?: string; title?: string }> {
-  const has = async (ref: string) => (await run(root, ['rev-parse', '-q', '--verify', ref])).code === 0
-  const [merge, rebaseHead, pick, revert, msgnum, end, headName, mergeMsg] = await Promise.all([
-    has('MERGE_HEAD'),
-    has('REBASE_HEAD'),
-    has('CHERRY_PICK_HEAD'),
-    has('REVERT_HEAD'),
-    readGitFile(root, 'rebase-merge/msgnum'),
-    readGitFile(root, 'rebase-merge/end'),
-    readGitFile(root, 'rebase-merge/head-name'),
-    readGitFile(root, 'MERGE_MSG'),
-  ])
-  const firstLine = (s: string | null) => s?.split('\n').find(l => l.trim() && !l.startsWith('#'))?.trim()
-  if (msgnum || rebaseHead) {
-    const step = msgnum && end ? `${msgnum.trim()} / ${end.trim()}` : undefined
-    const branch = headName?.trim().replace('refs/heads/', '')
+  const st = await invoke<RepoState>('repo_state', { repo: root })
+  const firstLine = (s: string | null) =>
+    s
+      ?.split('\n')
+      .find(l => l.trim() && !l.startsWith('#'))
+      ?.trim()
+  if (st.rebase) {
+    const step = st.rebase_step && st.rebase_end ? `${st.rebase_step} / ${st.rebase_end}` : undefined
+    const branch = st.rebase_head?.replace('refs/heads/', '')
     return { operation: 'rebase', step, title: `Rebasing${branch ? ` ${branch}` : ''}${step ? ` — applying ${step.replace(' / ', ' of ')}` : ''}` }
   }
-  if (merge) return { operation: 'merge', title: firstLine(mergeMsg) ?? 'Merging' }
-  if (pick) return { operation: 'cherry-pick', title: `Cherry-picking — ${firstLine(mergeMsg) ?? ''}` }
-  if (revert) return { operation: 'revert', title: firstLine(mergeMsg) ?? 'Reverting' }
+  if (st.merge) return { operation: 'merge', title: firstLine(st.merge_msg) ?? 'Merging' }
+  if (st.cherry_pick) return { operation: 'cherry-pick', title: `Cherry-picking — ${firstLine(st.merge_msg) ?? ''}` }
+  if (st.revert) return { operation: 'revert', title: firstLine(st.merge_msg) ?? 'Reverting' }
   return {}
 }
 
@@ -89,7 +80,11 @@ function parseWorktrees(stdout: string): Worktree[] {
     .map((block, i) => {
       const lines = block.split('\n')
       const path = lines.find(l => l.startsWith('worktree '))?.slice(9) ?? ''
-      const branch = lines.find(l => l.startsWith('branch '))?.slice(7).replace('refs/heads/', '') ?? '(detached)'
+      const branch =
+        lines
+          .find(l => l.startsWith('branch '))
+          ?.slice(7)
+          .replace('refs/heads/', '') ?? '(detached)'
       return { path, branch, isMain: i === 0 }
     })
 }
@@ -113,10 +108,7 @@ export async function loadRepo(root: string, q: LogQuery): Promise<RepoData> {
   // Uncommitted work is a dashed node above HEAD, as GitKraken draws it.
   const showsHead = ['--all', '--branches', 'HEAD', st.branch].includes(q.branch)
   const withWork = !isFiltered(q) && showsHead && st.changes.length > 0 && !!headHash
-  const laid = layoutGraph(
-    [...(withWork ? [{ hash: WORK, parents: [headHash] }] : []), ...parsed.commits],
-    !isFiltered(q),
-  )
+  const laid = layoutGraph([...(withWork ? [{ hash: WORK, parents: [headHash] }] : []), ...parsed.commits], !isFiltered(q))
   const graphs = withWork ? laid.rows.slice(1) : laid.rows
   const rows: LogRow[] = parsed.commits.map((c, i) => ({ ...c, graph: graphs[i]! }))
   return {
@@ -175,10 +167,7 @@ export async function workFileDiff(root: string, path: string, kind: 'staged' | 
 
 /** Line counts of working-tree changes by path, staged and unstaged apart. */
 export async function workStats(root: string) {
-  const [staged, unstaged] = await Promise.all([
-    git(root, ['diff', '--cached', '--numstat', '-z', '-M']),
-    git(root, ['diff', '--numstat', '-z', '-M']),
-  ])
+  const [staged, unstaged] = await Promise.all([git(root, ['diff', '--cached', '--numstat', '-z', '-M']), git(root, ['diff', '--numstat', '-z', '-M'])])
   const read = (out: string) => {
     const counts = new Map<string, { added?: number; deleted?: number }>()
     const parts = out.split('\0')
@@ -201,7 +190,7 @@ export async function stashDiff(root: string, ref: string) {
 
 /** The arguments of each action, so the UI and the palette share them. */
 export const actions = {
-  fetch: () => ['fetch', '--all', '--prune'],
+  fetch: () => ['fetch', '--all', ...(getSettings().pruneOnFetch ? ['--prune'] : [])],
   pull: () => ['pull', '--ff-only'],
   push: (repo: RepoData) => (repo.upstream ? ['push'] : ['push', '--set-upstream', 'origin', repo.branch]),
   stage: (paths: string[]) => ['add', '--', ...paths],

@@ -55,7 +55,10 @@ export function autoHideScrollbars() {
       if (bar.hover || bar.dragging) return
       for (const t of Object.values(bar.thumbs)) delete t.dataset.on
       // Drop thumbs of elements that left the page once they have faded.
-      if (!bar.el.isConnected) setTimeout(() => Object.values(bar.thumbs).forEach(t => t.remove()), 400)
+      if (!bar.el.isConnected)
+        setTimeout(() => {
+          for (const t of Object.values(bar.thumbs)) t.remove()
+        }, 400)
     }, HIDE_AFTER_MS)
   }
 
@@ -108,7 +111,7 @@ export function autoHideScrollbars() {
 
   const barFor = (el: Element) => {
     let bar = bars.get(el)
-    if (!bar || !bar.thumbs.y.isConnected) {
+    if (!bar?.thumbs.y.isConnected) {
       bar = { el, thumbs: {} as Record<Axis, HTMLDivElement>, hover: false, dragging: false }
       bar.thumbs = { y: makeThumb(bar, 'y'), x: makeThumb(bar, 'x') }
       bars.set(el, bar)

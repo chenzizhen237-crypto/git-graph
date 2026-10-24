@@ -15,23 +15,24 @@ import {
   GitFork,
   GitGraph,
   LogIn,
+  type LucideIcon,
   Rows3,
   Search,
   Tag,
   Undo2,
   Users,
   X,
-  type LucideIcon,
 } from 'lucide-react'
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { Fragment, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { DiffView } from '../components/Diff'
+import { GraphCell, graphWidth, type NodeKind, ROW_H } from '../components/GraphCell'
 import { Resizer, usePanelSize } from '../components/Split'
-import { GraphCell, ROW_H, graphWidth, type NodeKind } from '../components/GraphCell'
-import { Avatar, caps, Chip, Count, Empty, FilePath, fileRowClass, IconButton, LineStats, refChips, Segmented, shortAgo, splitPath, StageDot, StatusBadge } from '../components/ui'
+import { Avatar, Chip, Count, caps, Empty, FilePath, fileRowClass, IconButton, LineStats, refChips, Segmented, StageDot, StatusBadge, splitPath } from '../components/ui'
 import { cx } from '../lib/cx'
 import { actions, commitDetail, commitFileDiff } from '../lib/git'
-import { compactAgo, matchItems, nameParts, pickSections, QUICK_SCOPES, scopeLabel, type PickItem } from '../lib/picker'
+import { t, timeAgo } from '../lib/i18n'
+import { compactAgo, matchItems, nameParts, type PickItem, pickSections, QUICK_SCOPES, scopeLabel } from '../lib/picker'
 import type { CommitDetail, CommitFile, LogRow } from '../lib/types'
 import { useApp, useRemoteNames } from '../state'
 
@@ -66,7 +67,21 @@ export function HistoryView() {
 }
 
 /** Scope button: the outlined pill of the filter bar, or a quiet one. */
-function FilterButton({ icon: Icon, children, quiet, open, onClick, title }: { icon: LucideIcon; children: ReactNode; quiet?: boolean; open?: boolean; onClick: () => void; title?: string }) {
+function FilterButton({
+  icon: Icon,
+  children,
+  quiet,
+  open,
+  onClick,
+  title,
+}: {
+  icon: LucideIcon
+  children: ReactNode
+  quiet?: boolean
+  open?: boolean
+  onClick: () => void
+  title?: string
+}) {
   return (
     <button
       type="button"
@@ -94,13 +109,26 @@ function FilterInput({ placeholder, value, onCommit, onClose }: { placeholder: s
       onBlur={e => !e.target.value && onClose()}
       onKeyDown={e => {
         if (e.key === 'Enter') onCommit(e.currentTarget.value.trim())
-        if (e.key === 'Escape') (onCommit(''), onClose())
+        if (e.key === 'Escape') {
+          onCommit('')
+          onClose()
+        }
       }}
     />
   )
 }
 
-function FilterBar({ layout, setLayout, showGraph, setShowGraph }: { layout: 'list' | 'split'; setLayout: (v: 'list' | 'split') => void; showGraph: boolean; setShowGraph: (v: boolean) => void }) {
+function FilterBar({
+  layout,
+  setLayout,
+  showGraph,
+  setShowGraph,
+}: {
+  layout: 'list' | 'split'
+  setLayout: (v: 'list' | 'split') => void
+  showGraph: boolean
+  setShowGraph: (v: boolean) => void
+}) {
   const { repo, query, setQuery } = useApp()
   const [picker, setPicker] = useState(false)
   const [dateMenu, setDateMenu] = useState(false)
@@ -108,7 +136,7 @@ function FilterBar({ layout, setLayout, showGraph, setShowGraph }: { layout: 'li
   const scoped = query.branch !== '--all'
   return (
     <div className="relative flex h-11 shrink-0 items-center gap-2 px-3">
-      <FilterButton icon={GitFork} open={picker} onClick={() => setPicker(!picker)} title="Which branches the log shows">
+      <FilterButton icon={GitFork} open={picker} onClick={() => setPicker(!picker)} title={t('Which branches the log shows')}>
         <span className="truncate">{scopeLabel(query.branch)}</span>
         {scoped ? (
           <X
@@ -127,7 +155,7 @@ function FilterBar({ layout, setLayout, showGraph, setShowGraph }: { layout: 'li
 
       <div className="relative">
         <FilterButton icon={Calendar} quiet onClick={() => setDateMenu(!dateMenu)}>
-          {DATES.find(d => d.value === query.since)?.label ?? 'Any date'}
+          {t(DATES.find(d => d.value === query.since)?.label ?? 'Any date')}
           <ChevronDown size={13} className="text-muted" />
         </FilterButton>
         {dateMenu && (
@@ -144,7 +172,7 @@ function FilterBar({ layout, setLayout, showGraph, setShowGraph }: { layout: 'li
                     setDateMenu(false)
                   }}
                 >
-                  <span className="flex-1">{d.label}</span>
+                  <span className="flex-1">{t(d.label)}</span>
                   {query.since === d.value && <Check size={13} className="text-accent" />}
                 </button>
               ))}
@@ -154,17 +182,17 @@ function FilterBar({ layout, setLayout, showGraph, setShowGraph }: { layout: 'li
       </div>
 
       {editing === 'author' || query.author ? (
-        <FilterInput placeholder="Author" value={query.author} onCommit={author => setQuery({ author })} onClose={() => setEditing(null)} />
+        <FilterInput placeholder={t('Author')} value={query.author} onCommit={author => setQuery({ author })} onClose={() => setEditing(null)} />
       ) : (
         <FilterButton icon={Users} quiet onClick={() => setEditing('author')}>
-          All authors
+          {t('All authors')}
         </FilterButton>
       )}
       {editing === 'query' || query.query ? (
-        <FilterInput placeholder="Message contains…" value={query.query} onCommit={q => setQuery({ query: q })} onClose={() => setEditing(null)} />
+        <FilterInput placeholder={t('Message contains…')} value={query.query} onCommit={q => setQuery({ query: q })} onClose={() => setEditing(null)} />
       ) : (
         <FilterButton icon={Search} quiet onClick={() => setEditing('query')}>
-          Message
+          {t('Message')}
         </FilterButton>
       )}
 
@@ -179,11 +207,11 @@ function FilterBar({ layout, setLayout, showGraph, setShowGraph }: { layout: 'li
         value={layout}
         onChange={setLayout}
         options={[
-          { value: 'list', icon: Rows3, title: 'List only' },
-          { value: 'split', icon: Columns3, title: 'List and details' },
+          { value: 'list', icon: Rows3, title: t('List only') },
+          { value: 'split', icon: Columns3, title: t('List and details') },
         ]}
       />
-      <IconButton icon={GitGraph} active={showGraph} onClick={() => setShowGraph(!showGraph)} title="Show the graph" />
+      <IconButton icon={GitGraph} active={showGraph} onClick={() => setShowGraph(!showGraph)} title={t('Show the graph')} />
     </div>
   )
 }
@@ -212,7 +240,7 @@ function ScopePicker({ close }: { close: () => void }) {
           <input
             autoFocus
             className="min-w-0 flex-1 bg-transparent text-primary outline-none placeholder:text-faint"
-            placeholder="Filter branches, remotes and tags"
+            placeholder={t('Filter branches, remotes and tags')}
             value={q}
             onChange={e => setQ(e.target.value)}
             onKeyDown={e => {
@@ -226,7 +254,10 @@ function ScopePicker({ close }: { close: () => void }) {
             <button
               key={s.value}
               type="button"
-              className={cx('h-6 rounded-md border px-2 text-sm', query.branch === s.value ? 'border-transparent bg-selected font-semibold text-ref-head' : 'border-subtle text-secondary hover:bg-hover')}
+              className={cx(
+                'h-6 rounded-md border px-2 text-sm',
+                query.branch === s.value ? 'border-transparent bg-selected font-semibold text-ref-head' : 'border-subtle text-secondary hover:bg-hover',
+              )}
               onClick={() => pick(s.value)}
             >
               {s.label}
@@ -297,6 +328,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
     ro.observe(el)
     return () => ro.disconnect()
   }, [])
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a new page of rows arrived; allow asking for the next one
   useEffect(() => {
     asking.current = false
   }, [repo?.rows.length])
@@ -362,7 +394,12 @@ function LogList({ showGraph }: { showGraph: boolean }) {
     const chips = refChips(r.refs, remotes)
     const on = r.hash === selected
     items.push(
-      <div key={r.hash} className={cx(rowClass, on ? 'bg-selected group-focus:shadow-[inset_2px_0_0_var(--accent)]' : 'hover:bg-hover')} style={{ top }} onClick={() => setSelected(r.hash)}>
+      <div
+        key={r.hash}
+        className={cx(rowClass, on ? 'bg-selected group-focus:shadow-[inset_2px_0_0_var(--accent)]' : 'hover:bg-hover')}
+        style={{ top }}
+        onClick={() => setSelected(r.hash)}
+      >
         {showGraph && <GraphCell g={r.graph} laneCount={repo!.laneCount} kind={kind} />}
         <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden">
           {chips.map(c => (
@@ -376,7 +413,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
           <span className="truncate">{r.author}</span>
         </div>
         <span className="w-21 shrink-0 text-sm whitespace-nowrap text-muted" title={new Date(r.time * 1000).toLocaleString()}>
-          {shortAgo(r.ago)}
+          {timeAgo(r.time * 1000)}
         </span>
         <span className="w-15.5 shrink-0 text-right font-mono text-sm font-medium text-link">{r.short}</span>
       </div>,
@@ -386,29 +423,43 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   return (
     <>
       <div className={cx('flex h-6.5 shrink-0 items-center gap-2 border-b border-subtle pr-3 pl-4 tracking-[0.6px]', caps, 'font-semibold')}>
-        {showGraph && <span style={{ width: gw - 12 }}>GRAPH</span>}
-        <span className="flex-1">DESCRIPTION</span>
-        <span className="w-32.5">AUTHOR</span>
-        <span className="w-21">DATE</span>
-        <span className="w-15.5 text-right">SHA</span>
+        {showGraph && <span style={{ width: gw - 12 }}>{t('GRAPH')}</span>}
+        <span className="flex-1">{t('DESCRIPTION')}</span>
+        <span className="w-32.5">{t('AUTHOR')}</span>
+        <span className="w-21">{t('DATE')}</span>
+        <span className="w-15.5 text-right">{t('SHA')}</span>
       </div>
       <div
         className="group relative flex-1 overflow-y-auto outline-none"
         ref={box}
+        role="listbox"
+        aria-label={t('Commits')}
         tabIndex={0}
         onScroll={onScroll}
         onKeyDown={e => {
-          if (e.key === 'ArrowDown' || e.key === 'j') (e.preventDefault(), move(1))
-          if (e.key === 'ArrowUp' || e.key === 'k') (e.preventDefault(), move(-1))
-          if (e.key === 'PageDown') (e.preventDefault(), move(20))
-          if (e.key === 'PageUp') (e.preventDefault(), move(-20))
+          if (e.key === 'ArrowDown' || e.key === 'j') {
+            e.preventDefault()
+            move(1)
+          }
+          if (e.key === 'ArrowUp' || e.key === 'k') {
+            e.preventDefault()
+            move(-1)
+          }
+          if (e.key === 'PageDown') {
+            e.preventDefault()
+            move(20)
+          }
+          if (e.key === 'PageUp') {
+            e.preventDefault()
+            move(-20)
+          }
         }}
       >
         <div className="relative" style={{ height: total * ROW_H + (repo?.hasMore ? 40 : 0) }}>
           {items}
           {repo?.hasMore && (
             <div className="absolute inset-x-0 flex h-10 items-center justify-center text-sm text-muted" style={{ top: total * ROW_H }}>
-              Loading older commits…
+              {t('Loading older commits…')}
             </div>
           )}
         </div>
@@ -430,7 +481,11 @@ function byFolder(files: CommitFile[]) {
 /** Tab/Active and Tab/Inactive. */
 function Tab({ on, icon: Icon, children, onClick }: { on: boolean; icon: LucideIcon; children: ReactNode; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} className={cx('-mb-px flex items-center gap-1.25 border-b-2 py-2', on ? 'border-primary font-semibold text-primary' : 'border-transparent font-medium text-muted')}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={cx('-mb-px flex items-center gap-1.25 border-b-2 py-2', on ? 'border-primary font-semibold text-primary' : 'border-transparent font-medium text-muted')}
+    >
       <Icon size={13} />
       {children}
     </button>
@@ -479,7 +534,7 @@ function Inspector({ width }: { width: number }) {
   if (!row || !detail || detail.hash !== row.hash)
     return (
       <aside className={shell} style={{ width }}>
-        <Empty>{row ? 'Loading…' : 'Select a commit'}</Empty>
+        <Empty>{row ? t('Loading…') : t('Select a commit')}</Empty>
       </aside>
     )
 
@@ -490,7 +545,13 @@ function Inspector({ width }: { width: number }) {
   const fileRow = (f: CommitFile, nested = false) => {
     const { name, dir } = splitPath(f.path)
     return (
-      <button key={f.path} type="button" className={cx(fileRowClass(file?.path === f.path), nested && 'pl-6.5')} onClick={() => setFile(f)} title={f.orig ? `${f.orig} → ${f.path}` : f.path}>
+      <button
+        key={f.path}
+        type="button"
+        className={cx(fileRowClass(file?.path === f.path), nested && 'pl-6.5')}
+        onClick={() => setFile(f)}
+        title={f.orig ? `${f.orig} → ${f.path}` : f.path}
+      >
         <StatusBadge letter={f.status} />
         <FilePath name={name} dir={nested ? undefined : dir} />
         <LineStats added={f.added} deleted={f.deleted} />
@@ -499,21 +560,22 @@ function Inspector({ width }: { width: number }) {
   }
 
   const newBranch = async () => {
-    const name = await prompt({ title: `New branch at ${row.short}`, placeholder: 'feature/name', confirm: 'Create and switch' })
-    if (name) await act('Create branch', actions.createBranch(name.trim(), row.hash), { done: `Switched to ${name}` })
+    const name = await prompt({ title: t('New branch at {sha}', { sha: row.short }), placeholder: 'feature/name', confirm: t('Create and switch') })
+    if (name) await act('Create branch', actions.createBranch(name.trim(), row.hash), { done: t('Switched to {name}', { name }) })
   }
   const newTag = async () => {
-    const name = await prompt({ title: `Tag ${row.short}`, placeholder: 'v1.0.0', confirm: 'Create tag' })
-    if (name) await act('Tag', actions.tag(name.trim(), row.hash), { done: `Tagged ${name}` })
+    const name = await prompt({ title: t('Tag {sha}', { sha: row.short }), placeholder: 'v1.0.0', confirm: t('Create tag') })
+    if (name) await act('Tag', actions.tag(name.trim(), row.hash), { done: t('Tagged {name}', { name }) })
   }
   const checkout = async () => {
     const branch = chips.find(c => c.kind === 'local' || c.kind === 'head')
-    if (branch) return void act('Checkout', actions.checkout(branch.name), { done: `Switched to ${branch.name}` })
-    if (await ask({ title: `Check out ${row.short}?`, text: 'This puts HEAD in a detached state. Create a branch to keep new work.', confirm: 'Check out' }))
+    if (branch) return void act('Checkout', actions.checkout(branch.name), { done: t('Switched to {name}', { name: branch.name }) })
+    if (await ask({ title: t('Check out {sha}?', { sha: row.short }), text: t('This puts HEAD in a detached state. Create a branch to keep new work.'), confirm: t('Check out') }))
       await act('Checkout', actions.checkoutCommit(row.hash))
   }
   const revert = async () => {
-    if (await ask({ title: `Revert ${row.short}?`, text: `Creates a new commit that undoes “${subject}”.`, confirm: 'Revert' })) await act('Revert', actions.revert(row.hash), { done: 'Reverted' })
+    if (await ask({ title: t('Revert {sha}?', { sha: row.short }), text: t('Creates a new commit that undoes “{subject}”.', { subject }), confirm: t('Revert') }))
+      await act('Revert', actions.revert(row.hash), { done: t('Reverted') })
   }
 
   return (
@@ -528,21 +590,26 @@ function Inspector({ width }: { width: number }) {
             icon={Copy}
             size={13}
             small
-            title="Copy full SHA"
+            title={t('Copy full SHA')}
             onClick={() => {
               void navigator.clipboard.writeText(row.hash)
-              toast({ kind: 'ok', title: 'SHA copied' })
+              toast({ kind: 'ok', title: t('SHA copied') })
             }}
           />
           <span className="flex-1" />
-          <IconButton icon={LogIn} title="Check out" onClick={() => void checkout()} />
-          <IconButton icon={GitBranchPlus} title="New branch here" onClick={() => void newBranch()} />
-          <IconButton icon={Tag} title="Tag this commit" onClick={() => void newTag()} />
-          <IconButton icon={CherryIcon} title="Cherry-pick onto current branch" disabled={row.hash === repo?.head} onClick={() => void act('Cherry-pick', actions.cherryPick(row.hash), { done: 'Cherry-picked' })} />
-          <IconButton icon={Undo2} title="Revert" onClick={() => void revert()} />
+          <IconButton icon={LogIn} title={t('Check out')} onClick={() => void checkout()} />
+          <IconButton icon={GitBranchPlus} title={t('New branch here')} onClick={() => void newBranch()} />
+          <IconButton icon={Tag} title={t('Tag this commit')} onClick={() => void newTag()} />
+          <IconButton
+            icon={CherryIcon}
+            title={t('Cherry-pick onto current branch')}
+            disabled={row.hash === repo?.head}
+            onClick={() => void act('Cherry-pick', actions.cherryPick(row.hash), { done: t('Cherry-picked') })}
+          />
+          <IconButton icon={Undo2} title={t('Revert')} onClick={() => void revert()} />
           <IconButton
             icon={compact ? ChevronsUpDown : ChevronsDownUp}
-            title={compact ? 'Show commit details' : 'Collapse commit details'}
+            title={compact ? t('Show commit details') : t('Collapse commit details')}
             onClick={() => {
               localStorage.setItem('inspector:compact', compact ? '0' : '1')
               setCompact(!compact)
@@ -552,29 +619,29 @@ function Inspector({ width }: { width: number }) {
         <div className={cx('leading-snug font-semibold select-text', compact ? 'truncate' : 'text-lg')}>{subject}</div>
         {!compact && message && <div className="max-h-30 overflow-y-auto leading-normal whitespace-pre-wrap text-secondary select-text">{message}</div>}
         {!compact && (
-        <>
-        <div className="flex items-center gap-2.5">
-          <Avatar name={authorName} size={28} />
-          <div className="min-w-0">
-            <div className="truncate font-semibold">{authorName}</div>
-            <div className="truncate text-sm text-muted">
-              {detail.date}
-              {detail.committer && detail.committer !== authorName ? ` · committed by ${detail.committer}` : ''}
+          <>
+            <div className="flex items-center gap-2.5">
+              <Avatar name={authorName} size={28} />
+              <div className="min-w-0">
+                <div className="truncate font-semibold">{authorName}</div>
+                <div className="truncate text-sm text-muted">
+                  {detail.date}
+                  {detail.committer && detail.committer !== authorName ? t(' · committed by {committer}', { committer: detail.committer }) : ''}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5 text-sm text-muted">
-          {chips.map(c => (
-            <Chip key={c.kind + c.name} kind={c.kind} name={c.name} synced={c.synced} />
-          ))}
-          {detail.parents.length > 0 && <span>{detail.parents.length > 1 ? 'Parents' : 'Parent'}</span>}
-          {detail.parents.map(p => (
-            <button key={p} type="button" className="font-mono font-medium text-link hover:underline" onClick={() => setSelected(p)}>
-              {p.slice(0, 7)}
-            </button>
-          ))}
-        </div>
-        </>
+            <div className="flex flex-wrap items-center gap-1.5 text-sm text-muted">
+              {chips.map(c => (
+                <Chip key={c.kind + c.name} kind={c.kind} name={c.name} synced={c.synced} />
+              ))}
+              {detail.parents.length > 0 && <span>{detail.parents.length > 1 ? t('Parents') : t('Parent')}</span>}
+              {detail.parents.map(p => (
+                <button key={p} type="button" className="font-mono font-medium text-link hover:underline" onClick={() => setSelected(p)}>
+                  {p.slice(0, 7)}
+                </button>
+              ))}
+            </div>
+          </>
         )}
       </div>
       <div className="flex shrink-0 gap-4.5 border-y border-subtle px-4">
@@ -582,7 +649,7 @@ function Inspector({ width }: { width: number }) {
           Files <Count>{detail.files.length}</Count>
         </Tab>
         <Tab on={tab === 'tree'} icon={FolderTree} onClick={() => setTab('tree')}>
-          Tree
+          {t('Tree')}
         </Tab>
       </div>
       <div className="shrink-0 overflow-y-auto p-1.5" style={{ height: file ? filesPanel.size : undefined, flex: file ? undefined : 1 }}>
@@ -597,7 +664,7 @@ function Inspector({ width }: { width: number }) {
                 {files.map(f => fileRow(f, true))}
               </Fragment>
             ))}
-        {!detail.files.length && <Empty>No file changes</Empty>}
+        {!detail.files.length && <Empty>{t('No file changes')}</Empty>}
       </div>
       {file && (
         <>

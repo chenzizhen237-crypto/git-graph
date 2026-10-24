@@ -1,5 +1,5 @@
 /** The design's atoms: buttons, chips, avatar, badges. Names follow the Nib components. */
-import { ArrowDownUp, Cloud, GitBranch, House, Loader2, Tag, type LucideIcon } from 'lucide-react'
+import { ArrowDownUp, Cloud, GitBranch, House, Loader2, type LucideIcon, Tag } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 import { cx } from '../lib/cx'
@@ -23,7 +23,16 @@ export function ToolButton({ icon: Icon, label, busy, badge, ...rest }: { icon: 
 }
 
 /** Button/Primary and Button/Secondary. */
-export function Button({ icon: Icon, children, kind = 'secondary', small, busy, danger, className, ...rest }: { icon?: LucideIcon; children: ReactNode; kind?: 'primary' | 'secondary'; small?: boolean; busy?: boolean; danger?: boolean; className?: string } & Click) {
+export function Button({
+  icon: Icon,
+  children,
+  kind = 'secondary',
+  small,
+  busy,
+  danger,
+  className,
+  ...rest
+}: { icon?: LucideIcon; children: ReactNode; kind?: 'primary' | 'secondary'; small?: boolean; busy?: boolean; danger?: boolean; className?: string } & Click) {
   return (
     <button
       type="button"
@@ -44,7 +53,14 @@ export function Button({ icon: Icon, children, kind = 'secondary', small, busy, 
 }
 
 /** Button/Icon. */
-export function IconButton({ icon: Icon, size = 15, small, active, className, ...rest }: { icon: LucideIcon; size?: number; small?: boolean; active?: boolean; className?: string } & Click) {
+export function IconButton({
+  icon: Icon,
+  size = 15,
+  small,
+  active,
+  className,
+  ...rest
+}: { icon: LucideIcon; size?: number; small?: boolean; active?: boolean; className?: string } & Click) {
   return (
     <button
       type="button"
@@ -79,7 +95,14 @@ const CHIP_STYLE: Record<ChipKind, string> = {
 export function Chip({ kind, name, synced, large, icon }: { kind: ChipKind; name: string; synced?: boolean; large?: boolean; icon?: LucideIcon }) {
   const Icon = icon ?? CHIP_ICON[kind]
   return (
-    <span className={cx('inline-flex max-w-55 shrink-0 items-center gap-1 rounded-sm font-semibold whitespace-nowrap', large ? 'px-2 py-1 text-sm' : 'px-1.5 py-0.5 text-xs', CHIP_STYLE[kind])} title={name}>
+    <span
+      className={cx(
+        'inline-flex max-w-55 shrink-0 items-center gap-1 rounded-sm font-semibold whitespace-nowrap',
+        large ? 'px-2 py-1 text-sm' : 'px-1.5 py-0.5 text-xs',
+        CHIP_STYLE[kind],
+      )}
+      title={name}
+    >
       <Icon size={large ? 12 : 11} className="shrink-0" />
       <span className="truncate">{name}</span>
       {synced && <ArrowDownUp size={11} className="shrink-0 opacity-80" />}
@@ -143,7 +166,10 @@ export function avatarColor(name: string) {
 /** Avatar: the author's initial on a colour picked from their name. */
 export function Avatar({ name, size = 16 }: { name: string; size?: number }) {
   return (
-    <span className="inline-flex shrink-0 items-center justify-center rounded-full font-bold text-on-accent" style={{ width: size, height: size, background: avatarColor(name), fontSize: Math.round(size * 0.55) }}>
+    <span
+      className="inline-flex shrink-0 items-center justify-center rounded-full font-bold text-on-accent"
+      style={{ width: size, height: size, background: avatarColor(name), fontSize: Math.round(size * 0.55) }}
+    >
       {initials(name)}
     </span>
   )
@@ -155,14 +181,19 @@ export const StageDot = () => <span className="size-2 shrink-0 rounded-full bg-s
 /** The M / A / D / U square of Row/File. */
 export function StatusBadge({ letter }: { letter: string }) {
   return (
-    <span className="inline-flex size-4 shrink-0 items-center justify-center rounded-sm text-[10px] font-bold text-on-accent" style={{ background: STATUS_COLORS[letter] ?? 'var(--text-muted)' }}>
+    <span
+      className="inline-flex size-4 shrink-0 items-center justify-center rounded-sm text-[10px] font-bold text-on-accent"
+      style={{ background: STATUS_COLORS[letter] ?? 'var(--text-muted)' }}
+    >
       {letter === '?' ? 'U' : letter}
     </span>
   )
 }
 
 /** Count: the small grey pill beside tab and section labels. */
-export const Count = ({ children }: { children: ReactNode }) => <span className="rounded-full bg-surface px-1.5 py-px text-xs font-semibold tracking-normal text-muted">{children}</span>
+export const Count = ({ children }: { children: ReactNode }) => (
+  <span className="rounded-full bg-surface px-1.5 py-px text-xs font-semibold tracking-normal text-muted">{children}</span>
+)
 
 /** The middle of an empty pane. */
 export const Empty = ({ children }: { children: ReactNode }) => <div className="flex flex-1 flex-col items-center justify-center gap-2 p-6 text-center text-muted">{children}</div>

@@ -3,11 +3,13 @@
  * with conflict markers called out. Any diff pops out to fill the window.
  */
 import { Columns2, FileCode2, Maximize2, Minimize2, Rows2, WrapText, X } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 import { cx } from '../lib/cx'
-import { diffStats, pairLines, parseDiff, type DiffLine, type Hunk } from '../lib/diff'
+import { type DiffLine, diffStats, type Hunk, pairLines, parseDiff } from '../lib/diff'
+import { t } from '../lib/i18n'
+import { updateSettings, useSettings } from '../lib/settings'
 import { Empty, IconButton, Segmented } from './ui'
 
 type Side = 'ours' | 'theirs' | null
@@ -48,19 +50,26 @@ type Mode = 'unified' | 'split'
 /** Narrower than this, two columns of code are unreadable. */
 const SPLIT_MIN = 760
 
-function readPref<T extends string>(key: string, fallback: T): T {
-  try {
-    return (localStorage.getItem(key) as T | null) ?? fallback
-  } catch {
-    return fallback
-  }
-}
-
-export function DiffView({ path, text, loading, actions, empty, popped, onClose }: { path: string; text: string; loading?: boolean; actions?: ReactNode; empty?: string; popped?: boolean; onClose?: () => void }) {
+export function DiffView({
+  path,
+  text,
+  loading,
+  actions,
+  empty,
+  popped,
+  onClose,
+}: {
+  path: string
+  text: string
+  loading?: boolean
+  actions?: ReactNode
+  empty?: string
+  popped?: boolean
+  onClose?: () => void
+}) {
   const hunks = useMemo(() => parseDiff(text), [text])
   const stats = useMemo(() => diffStats(hunks), [hunks])
-  const [mode, setModeState] = useState<Mode>(() => readPref<Mode>('diff:mode', 'unified'))
-  const [wrap, setWrap] = useState(() => readPref<string>('diff:wrap', '0') === '1')
+  const { diffMode: mode, diffWrap: wrap } = useSettings()
   const [open, setOpen] = useState(false)
   const box = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(Infinity)
@@ -75,8 +84,7 @@ export function DiffView({ path, text, loading, actions, empty, popped, onClose 
   const narrow = width < SPLIT_MIN
   const shown: Mode = narrow ? 'unified' : mode
   const setMode = (m: Mode) => {
-    setModeState(m)
-    localStorage.setItem('diff:mode', m)
+    updateSettings({ diffMode: m })
     if (m === 'split' && narrow && !popped) setOpen(true)
   }
 
@@ -101,33 +109,23 @@ export function DiffView({ path, text, loading, actions, empty, popped, onClose 
           value={shown}
           onChange={setMode}
           options={[
-            { value: 'unified', icon: Rows2, title: 'Unified' },
-            { value: 'split', icon: Columns2, title: narrow ? 'Side by side (opens full window)' : 'Side by side' },
+            { value: 'unified', icon: Rows2, title: t('Unified') },
+            { value: 'split', icon: Columns2, title: narrow ? t('Side by side (opens full window)') : t('Side by side') },
           ]}
         />
-        <IconButton
-          icon={WrapText}
-          size={14}
-          small
-          active={wrap}
-          title="Wrap long lines"
-          onClick={() => {
-            localStorage.setItem('diff:wrap', wrap ? '0' : '1')
-            setWrap(!wrap)
-          }}
-        />
+        <IconButton icon={WrapText} size={14} small active={wrap} title={t('Wrap long lines')} onClick={() => updateSettings({ diffWrap: !wrap })} />
         {popped ? (
           <>
-            <IconButton icon={Minimize2} size={14} small title="Back to panel (esc)" onClick={onClose} />
-            <IconButton icon={X} size={14} small title="Close (esc)" onClick={onClose} />
+            <IconButton icon={Minimize2} size={14} small title={t('Back to panel (esc)')} onClick={onClose} />
+            <IconButton icon={X} size={14} small title={t('Close (esc)')} onClick={onClose} />
           </>
         ) : (
-          <IconButton icon={Maximize2} size={14} small title="Pop out to fill the window" onClick={() => setOpen(true)} />
+          <IconButton icon={Maximize2} size={14} small title={t('Pop out to fill the window')} onClick={() => setOpen(true)} />
         )}
       </div>
       <div className="flex-1 overflow-auto font-mono text-sm select-text">
         {!hunks.length ? (
-          <Empty>{loading ? 'Loading…' : (empty ?? 'No textual changes (binary file or mode change)')}</Empty>
+          <Empty>{loading ? t('Loading…') : (empty ?? t('No textual changes (binary file or mode change)'))}</Empty>
         ) : (
           <table className={cx('min-w-full border-collapse', shown === 'split' && 'w-full table-fixed')}>
             {shown === 'split' && (
@@ -138,9 +136,7 @@ export function DiffView({ path, text, loading, actions, empty, popped, onClose 
                 <col />
               </colgroup>
             )}
-            <tbody>
-              {hunks.map((h, hi) => (shown === 'split' ? <SplitHunk key={hi} hunk={h} wrap={wrap} /> : <UnifiedHunk key={hi} hunk={h} wrap={wrap} />))}
-            </tbody>
+            <tbody>{hunks.map((h, hi) => (shown === 'split' ? <SplitHunk key={hi} hunk={h} wrap={wrap} /> : <UnifiedHunk key={hi} hunk={h} wrap={wrap} />))}</tbody>
           </table>
         )}
       </div>
@@ -154,7 +150,10 @@ export function DiffView({ path, text, loading, actions, empty, popped, onClose 
       {open &&
         createPortal(
           <div className="fixed inset-0 z-50 flex bg-scrim p-6" onMouseDown={() => setOpen(false)}>
-            <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-strong bg-app shadow-[0_20px_50px_var(--shadow)]" onMouseDown={e => e.stopPropagation()}>
+            <div
+              className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-strong bg-app shadow-[0_20px_50px_var(--shadow)]"
+              onMouseDown={e => e.stopPropagation()}
+            >
               <DiffView path={path} text={text} loading={loading} actions={actions} empty={empty} popped onClose={() => setOpen(false)} />
             </div>
           </div>,
@@ -207,13 +206,13 @@ function UnifiedHunk({ hunk, wrap }: { hunk: Hunk; wrap: boolean }) {
 function SplitHunk({ hunk, wrap }: { hunk: Hunk; wrap: boolean }) {
   const rows = useMemo(() => pairLines(hunk.lines), [hunk])
   const half = (l: DiffLine | null, side: 'old' | 'new', key: string) => {
-    if (!l) return [<td key={key + 'n'} className={cx(numCell, 'bg-surface')} />, <td key={key + 'c'} className="bg-surface" />]
+    if (!l) return [<td key={`${key}n`} className={cx(numCell, 'bg-surface')} />, <td key={`${key}c`} className="bg-surface" />]
     const t = TONE[l.kind]
     return [
-      <td key={key + 'n'} className={cx(numCell, t.num)}>
+      <td key={`${key}n`} className={cx(numCell, t.num)}>
         {(side === 'old' ? l.old : l.new) ?? ''}
       </td>,
-      <td key={key + 'c'} className={cx('overflow-hidden pl-1.5', t.row, codeClass(l, wrap))}>
+      <td key={`${key}c`} className={cx('overflow-hidden pl-1.5', t.row, codeClass(l, wrap))}>
         <span className={cx('mr-1 font-semibold select-none', t.sign)}>{signFor(l.kind) || ' '}</span>
         {l.text || ' '}
       </td>,

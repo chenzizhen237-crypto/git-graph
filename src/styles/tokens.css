@@ -129,7 +129,7 @@
   --remote: var(--ref-remote);
   --tag: var(--ref-tag);
   --err: var(--status-deleted);
-  --sans: 'Inter Variable', Inter, -apple-system, system-ui, sans-serif;
+  --sans: 'Inter Variable', Inter, -apple-system, system-ui, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
   --mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, monospace;
   --neutral-0: #FFFFFF;
   --neutral-25: #FAFAF9;
@@ -355,4 +355,8 @@
   --stage-color: var(--blue-500);
   --stage-banner-bg: #3B82F61A;
   --stage-banner-fg: var(--blue-600);
+}
+
+:root[lang='zh'] {
+  --ff-sans: 'Inter Variable', Inter, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
 }

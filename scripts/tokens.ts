@@ -34,7 +34,8 @@ const cssName = (name: string) => {
   return `--${(isSize ? `${prefix}/${rest}` : name).replace(/\//g, '-')}`
 }
 const FONTS: Record<string, string> = {
-  Inter: `'Inter Variable', Inter, -apple-system, system-ui, sans-serif`,
+  Inter: `'Inter Variable', Inter, -apple-system, system-ui, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif`,
+  'Noto Sans SC': `'Inter Variable', Inter, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif`,
   'JetBrains Mono': `'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, monospace`,
 }
 
@@ -50,6 +51,13 @@ const variants = (v: Variable): Themed[] => (Array.isArray(v.value) ? v.value : 
 
 const base: string[] = []
 const dark: string[] = []
+/** Language-axis overrides (the CJK font), applied under :root[lang]. */
+const langs: Record<string, string[]> = {}
+const LANG_ATTR: Record<string, string> = { 中文: 'zh' }
+const addTo = (map: Record<string, string[]>, key: string, line: string) => {
+  map[key] ??= []
+  map[key].push(line)
+}
 const stages: Record<string, string[]> = {}
 const stageData: Record<string, Record<string, Value>> = {}
 
@@ -59,7 +67,8 @@ for (const [name, v] of Object.entries(doc.variables)) {
     const key = name.replace(/^stage\//, '').replace(/-(\w)/g, (_, c: string) => c.toUpperCase())
     for (const t of variants(v)) {
       const stage = t.theme?.Stage ?? 'Clean'
-      ;(stageData[stage] ??= {})[key] = t.value
+      stageData[stage] ??= {}
+      stageData[stage][key] = t.value
     }
     continue
   }
@@ -69,7 +78,8 @@ for (const [name, v] of Object.entries(doc.variables)) {
   for (const t of variants(v)) {
     const line = `  ${cssName(name)}: ${css(t.value, v.type)};`
     if (t.theme?.Mode === 'Dark') dark.push(line)
-    else if (t.theme?.Stage) (stages[t.theme.Stage] ??= []).push(line)
+    else if (t.theme?.Stage) addTo(stages, t.theme.Stage, line)
+    else if (t.theme?.Language) addTo(langs, LANG_ATTR[t.theme.Language] ?? t.theme.Language, line)
     else base.push(line)
   }
 }
@@ -109,9 +119,13 @@ const out =
   `@theme inline {\n${theme.join('\n')}\n}\n\n` +
   `:root {\n${base.join('\n')}\n}\n\n` +
   `:root[data-theme='dark'] {\n${dark.join('\n')}\n  color-scheme: dark;\n}\n\n` +
-  `@media (prefers-color-scheme: dark) {\n  :root:not([data-theme='light']) {\n${dark.map(l => '  ' + l).join('\n')}\n    color-scheme: dark;\n  }\n}\n\n` +
+  `@media (prefers-color-scheme: dark) {\n  :root:not([data-theme='light']) {\n${dark.map(l => `  ${l}`).join('\n')}\n    color-scheme: dark;\n  }\n}\n\n` +
   Object.entries(stages)
     .map(([s, lines]) => `[data-stage='${s}'] {\n${lines.join('\n')}\n}`)
+    .join('\n\n') +
+  '\n\n' +
+  Object.entries(langs)
+    .map(([l, lines]) => `:root[lang='${l}'] {\n${lines.join('\n')}\n}`)
     .join('\n\n') +
   '\n'
 writeFileSync(`${root}src/styles/tokens.css`, out)

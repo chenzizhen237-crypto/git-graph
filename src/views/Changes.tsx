@@ -1,12 +1,13 @@
 /** The Changes view: conflicts, staged, unstaged and untracked files, the diff, and the commit composer. */
 import { ArrowUp, Check, ChevronDown, ChevronRight, Minus, Plus, Undo2 } from 'lucide-react'
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { type ReactNode, useEffect, useMemo, useState } from 'react'
 
 import { DiffView } from '../components/Diff'
 import { Resizer, usePanelSize } from '../components/Split'
-import { Button, caps, Count, Empty, FilePath, fileRowClass, IconButton, LineStats, StatusBadge, splitPath } from '../components/ui'
+import { Button, Count, caps, Empty, FilePath, fileRowClass, IconButton, LineStats, StatusBadge, splitPath } from '../components/ui'
 import { cx } from '../lib/cx'
 import { actions, git, workFileDiff, workStats } from '../lib/git'
+import { t } from '../lib/i18n'
 import { isConflict, isStaged, isUnstaged } from '../lib/parse'
 import type { FileChange } from '../lib/types'
 import { useApp } from '../state'
@@ -56,11 +57,14 @@ export function ChangesView() {
 
   // Line counts, and keep a valid selection as files move between groups.
   useEffect(() => {
-    void workStats(root).then(setCounts).catch(() => {})
+    void workStats(root)
+      .then(setCounts)
+      .catch(() => {})
     const all = (Object.keys(groups) as Kind[]).flatMap(k => groups[k].map(c => ({ path: c.path, kind: k })))
     setSel(s => (s && all.some(a => a.path === s.path && a.kind === s.kind) ? s : (all.find(a => a.path === s?.path) ?? all[0] ?? null)))
   }, [root, groups])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reload the diff when the repo changes on disk
   useEffect(() => {
     if (!sel) return setDiff({ text: '', loading: false })
     let live = true
@@ -80,16 +84,16 @@ export function ChangesView() {
     const untracked = kind === 'untracked'
     if (
       await ask({
-        title: `Discard changes to ${splitPath(c.path).name}?`,
-        text: untracked ? 'The file is deleted. This cannot be undone.' : 'Your edits to this file are lost. This cannot be undone.',
-        confirm: untracked ? 'Delete file' : 'Discard',
+        title: t('Discard changes to {name}?', { name: splitPath(c.path).name }),
+        text: untracked ? t('The file is deleted. This cannot be undone.') : t('Your edits to this file are lost. This cannot be undone.'),
+        confirm: untracked ? t('Delete file') : t('Discard'),
         danger: true,
       })
     )
       await act('Discard', untracked ? actions.clean([c.path]) : actions.discard([c.path]))
   }
   const resolveWith = async (c: FileChange, side: 'ours' | 'theirs') => {
-    if (await act(`Use ${side}`, ['checkout', `--${side}`, '--', c.path])) await act('Mark resolved', actions.stage([c.path]))
+    if (await act(t('Use {side}', { side }), ['checkout', `--${side}`, '--', c.path])) await act('Mark resolved', actions.stage([c.path]))
   }
 
   const rowActions = (c: FileChange, kind: Kind) => {
@@ -97,19 +101,19 @@ export function ChangesView() {
       return (
         <>
           <Button small onClick={() => void resolveWith(c, 'ours')}>
-            Ours
+            {t('Ours')}
           </Button>
           <Button small onClick={() => void resolveWith(c, 'theirs')}>
-            Theirs
+            {t('Theirs')}
           </Button>
-          <IconButton icon={Check} small title="Mark resolved (stage)" onClick={() => void act('Mark resolved', actions.stage([c.path]))} />
+          <IconButton icon={Check} small title={t('Mark resolved (stage)')} onClick={() => void act('Mark resolved', actions.stage([c.path]))} />
         </>
       )
-    if (kind === 'staged') return <IconButton icon={Minus} small title="Unstage" onClick={() => void act('Unstage', actions.unstage([c.path]))} />
+    if (kind === 'staged') return <IconButton icon={Minus} small title={t('Unstage')} onClick={() => void act('Unstage', actions.unstage([c.path]))} />
     return (
       <>
-        <IconButton icon={Undo2} small title="Discard" onClick={() => void discard(c, kind)} />
-        <IconButton icon={Plus} small title="Stage" onClick={() => void act('Stage', actions.stage([c.path]))} />
+        <IconButton icon={Undo2} small title={t('Discard')} onClick={() => void discard(c, kind)} />
+        <IconButton icon={Plus} small title={t('Stage')} onClick={() => void act('Stage', actions.stage([c.path]))} />
       </>
     )
   }
@@ -128,13 +132,17 @@ export function ChangesView() {
               key={kind + c.path}
               className={fileRowClass(sel?.path === c.path && sel.kind === kind)}
               onClick={() => setSel({ path: c.path, kind })}
-              onDoubleClick={() => kind !== 'conflict' && void act(kind === 'staged' ? 'Unstage' : 'Stage', toggle)}
+              onDoubleClick={() => kind !== 'conflict' && void act(kind === 'staged' ? t('Unstage') : t('Stage'), toggle)}
               title={c.orig ? `${c.orig} → ${c.path}` : c.path}
             >
               <StatusBadge letter={LETTER[kind](c)} />
               <FilePath name={name} dir={kind === 'conflict' ? 'both modified' : dir} />
               <span className="group-hover:hidden">
-                {kind === 'conflict' ? <span className="font-mono text-sm text-status-conflict">conflict</span> : n?.added !== undefined && <LineStats added={n.added} deleted={n.deleted} />}
+                {kind === 'conflict' ? (
+                  <span className="font-mono text-sm text-status-conflict">conflict</span>
+                ) : (
+                  n?.added !== undefined && <LineStats added={n.added} deleted={n.deleted} />
+                )}
               </span>
               <span className="hidden gap-0.5 group-hover:flex" onClick={e => e.stopPropagation()}>
                 {rowActions(c, kind)}
@@ -149,26 +157,42 @@ export function ChangesView() {
   return (
     <>
       <div className={listColumn} style={{ width: list.size }}>
-        <PaneHead title="Changes" count={total} />
+        <PaneHead title={t('Changes')} count={total} />
         <div className="flex-1 overflow-y-auto p-1.5">
-          {section('conflict', 'UNMERGED', { label: 'Mark all resolved', run: () => void act('Mark resolved', actions.stage(groups.conflict.map(c => c.path))) })}
-          {section('staged', 'STAGED', { label: 'Unstage all', run: () => void act('Unstage all', actions.unstageAll()) })}
-          {section('unstaged', 'UNSTAGED', { label: 'Stage all', run: () => void act('Stage all', actions.stage(groups.unstaged.map(c => c.path))) })}
-          {section('untracked', 'UNTRACKED', { label: 'Stage all', run: () => void act('Stage all', actions.stage(groups.untracked.map(c => c.path))) })}
-          {!total && <Empty>Nothing to commit — working tree clean</Empty>}
+          {section('conflict', 'UNMERGED', { label: t('Mark all resolved'), run: () => void act('Mark resolved', actions.stage(groups.conflict.map(c => c.path))) })}
+          {section('staged', 'STAGED', { label: t('Unstage all'), run: () => void act('Unstage all', actions.unstageAll()) })}
+          {section('unstaged', 'UNSTAGED', { label: t('Stage all'), run: () => void act('Stage all', actions.stage(groups.unstaged.map(c => c.path))) })}
+          {section('untracked', 'UNTRACKED', { label: t('Stage all'), run: () => void act('Stage all', actions.stage(groups.untracked.map(c => c.path))) })}
+          {!total && <Empty>{t('Nothing to commit — working tree clean')}</Empty>}
         </div>
         <Resizer panel={composer} axis="y" side="after" />
         <Composer staged={groups.staged.length} conflicts={groups.conflict.length} busy={!!busy} descHeight={composer.size} />
       </div>
       <Resizer panel={list} />
       <div className="flex min-w-0 flex-1 flex-col">
-        {sel ? <DiffView path={sel.path} text={diff.text} loading={diff.loading} empty={sel.kind === 'untracked' ? 'Empty file' : undefined} /> : <Empty>Select a file to see its changes</Empty>}
+        {sel ? (
+          <DiffView path={sel.path} text={diff.text} loading={diff.loading} empty={sel.kind === 'untracked' ? t('Empty file') : undefined} />
+        ) : (
+          <Empty>{t('Select a file to see its changes')}</Empty>
+        )}
       </div>
     </>
   )
 }
 
-function Group({ label, count, conflict, action, children }: { label: string; count: number; conflict?: boolean; action?: { label: string; run: () => void }; children: ReactNode }) {
+function Group({
+  label,
+  count,
+  conflict,
+  action,
+  children,
+}: {
+  label: string
+  count: number
+  conflict?: boolean
+  action?: { label: string; run: () => void }
+  children: ReactNode
+}) {
   const [open, setOpen] = useState(true)
   return (
     <>
@@ -194,15 +218,15 @@ const field = 'w-full rounded-md border border-strong bg-app outline-none focus:
 function Composer({ staged, conflicts, busy, descHeight }: { staged: number; conflicts: number; busy: boolean; descHeight: number }) {
   const { root, repo, act } = useApp()
   const key = `draft:${root}`
-  const [summary, setSummary] = useState(() => localStorage.getItem(key + ':s') ?? '')
-  const [body, setBody] = useState(() => localStorage.getItem(key + ':b') ?? '')
+  const [summary, setSummary] = useState(() => localStorage.getItem(`${key}:s`) ?? '')
+  const [body, setBody] = useState(() => localStorage.getItem(`${key}:b`) ?? '')
   const [amend, setAmend] = useState(false)
   const [signoff, setSignoff] = useState(false)
 
   useEffect(() => {
     try {
-      localStorage.setItem(key + ':s', summary)
-      localStorage.setItem(key + ':b', body)
+      localStorage.setItem(`${key}:s`, summary)
+      localStorage.setItem(`${key}:b`, body)
     } catch {}
   }, [key, summary, body])
 
@@ -226,37 +250,56 @@ function Composer({ staged, conflicts, busy, descHeight }: { staged: number; con
   const commit = async (push: boolean) => {
     if (all && !(await act('Stage all', actions.stageAll()))) return
     const message = body.trim() ? `${summary.trim()}\n\n${body.trim()}` : summary.trim()
-    const ok = await act(amend ? 'Amend' : 'Commit', actions.commit(amend, signoff), { stdin: message + '\n', done: amend ? 'Commit amended' : 'Committed' })
+    const ok = await act(amend ? t('Amend') : t('Commit'), actions.commit(amend, signoff), { stdin: `${message}\n`, done: amend ? t('Commit amended') : t('Committed') })
     if (!ok) return
     setSummary('')
     setBody('')
     setAmend(false)
-    if (push && repo) await act('Push', amend ? [...actions.push(repo), '--force-with-lease'] : actions.push(repo), { done: 'Pushed' })
+    if (push && repo) await act('Push', amend ? [...actions.push(repo), '--force-with-lease'] : actions.push(repo), { done: t('Pushed') })
   }
   const submitOnCmdEnter = (e: React.KeyboardEvent) => e.key === 'Enter' && (e.metaKey || e.ctrlKey) && canCommit && void commit(false)
 
   return (
     <div className="flex shrink-0 flex-col gap-2 border-t border-subtle bg-sidebar p-3">
-      <input className={cx(field, 'h-8 px-2.5 font-medium')} placeholder="Summary (required)" value={summary} onChange={e => setSummary(e.target.value)} onKeyDown={submitOnCmdEnter} />
-      <textarea style={{ height: descHeight }} className={cx(field, 'resize-none px-2.5 py-2 leading-normal text-secondary')} placeholder="Description" value={body} onChange={e => setBody(e.target.value)} onKeyDown={submitOnCmdEnter} />
+      <input
+        className={cx(field, 'h-8 px-2.5 font-medium')}
+        placeholder={t('Summary (required)')}
+        value={summary}
+        onChange={e => setSummary(e.target.value)}
+        onKeyDown={submitOnCmdEnter}
+      />
+      <textarea
+        style={{ height: descHeight }}
+        className={cx(field, 'resize-none px-2.5 py-2 leading-normal text-secondary')}
+        placeholder={t('Description')}
+        value={body}
+        onChange={e => setBody(e.target.value)}
+        onKeyDown={submitOnCmdEnter}
+      />
       <div className="flex items-center gap-3.5 text-sm text-secondary">
         <label className="flex items-center gap-1.5">
           <input type="checkbox" className="m-0 accent-accent" checked={amend} onChange={e => void toggleAmend(e.target.checked)} />
-          Amend
+          {t('Amend')}
         </label>
         <label className="flex items-center gap-1.5">
           <input type="checkbox" className="m-0 accent-accent" checked={signoff} onChange={e => setSignoff(e.target.checked)} />
-          Sign-off
+          {t('Sign-off')}
         </label>
         <span className="flex-1" />
         <span className="text-faint">{summary.length || ''}</span>
       </div>
       <div className="flex gap-2">
         <Button kind="primary" icon={Check} className="flex-1" disabled={!canCommit} onClick={() => void commit(false)} title="⌘↩">
-          {conflicts ? `Resolve ${conflicts} first` : amend ? 'Amend commit' : all ? `Commit all ${repo?.changes.length}` : `Commit ${staged}`}
+          {conflicts
+            ? t('Resolve {n} first', { n: conflicts })
+            : amend
+              ? t('Amend commit')
+              : all
+                ? t('Commit all {n}', { n: repo?.changes.length ?? 0 })
+                : t('Commit {n}', { n: staged })}
         </Button>
         <Button icon={ArrowUp} disabled={!canCommit} onClick={() => void commit(true)}>
-          Commit & Push
+          {t('Commit & Push')}
         </Button>
       </div>
     </div>

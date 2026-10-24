@@ -1,7 +1,6 @@
 import { expect, test } from 'vitest'
-
-import type { BranchRef } from '../types'
 import { compactAgo, matchItems, nameParts, pickSections, scopeLabel } from '../picker'
+import type { BranchRef } from '../types'
 
 const ref = (name: string, kind: BranchRef['kind'], extra: Partial<BranchRef> = {}): BranchRef => ({
   name,
@@ -40,17 +39,8 @@ test('typing narrows by substring, ignoring case', async () => {
 })
 
 test('a name splits into a dim prefix and a tail, the match lit', async () => {
-  expect(nameParts('claude/dark-mode', 'dark')).toEqual([
-    { text: 'claude/', dim: true },
-    { text: 'dark', hit: true },
-    { text: '-mode' },
-  ])
-  expect(nameParts('claude/dark-mode', 'aud')).toEqual([
-    { text: 'cl', dim: true },
-    { text: 'aud', dim: true, hit: true },
-    { text: 'e/', dim: true },
-    { text: 'dark-mode' },
-  ])
+  expect(nameParts('claude/dark-mode', 'dark')).toEqual([{ text: 'claude/', dim: true }, { text: 'dark', hit: true }, { text: '-mode' }])
+  expect(nameParts('claude/dark-mode', 'aud')).toEqual([{ text: 'cl', dim: true }, { text: 'aud', dim: true, hit: true }, { text: 'e/', dim: true }, { text: 'dark-mode' }])
   expect(nameParts('main', '')).toEqual([{ text: 'main' }])
 })
 

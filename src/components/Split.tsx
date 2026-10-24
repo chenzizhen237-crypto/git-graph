@@ -47,14 +47,12 @@ export function Resizer({ panel, axis = 'x', side = 'before' }: { panel: PanelSi
   const horizontal = axis === 'x'
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: an <hr> cannot hold the drag handlers and hover line
     <div
       role="separator"
       aria-orientation={horizontal ? 'vertical' : 'horizontal'}
       title="Drag to resize · double-click to reset"
-      className={cx(
-        'group relative z-20 shrink-0',
-        horizontal ? '-mx-[3px] w-1.5 cursor-col-resize' : '-my-[3px] h-1.5 cursor-row-resize',
-      )}
+      className={cx('group relative z-20 shrink-0', horizontal ? '-mx-[3px] w-1.5 cursor-col-resize' : '-my-[3px] h-1.5 cursor-row-resize')}
       onDoubleClick={panel.reset}
       onPointerDown={e => {
         e.preventDefault()

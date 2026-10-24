@@ -1,0 +1,33 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.6.2/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    "includes": ["src/**", "scripts/**", "*.ts", "*.json", "!src/styles/tokens.css", "!src/lib/tokens.ts", "!src-tauri", "!assets"],
+  },
+  // Prettier formats (with Tailwind class sorting); Biome lints.
+  "formatter": { "enabled": false },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "style": {
+        // tsconfig has noUncheckedIndexedAccess, so `!` marks an index we know exists.
+        "noNonNullAssertion": "off",
+      },
+      "suspicious": {
+        // Diff lines and timeline items are static lists that never reorder.
+        "noArrayIndexKey": "off",
+      },
+      "a11y": {
+        // Palette, dialogs and inline editors take focus when they open, as in native apps.
+        "noAutofocus": "off",
+        // Rows and scrims take mouse clicks; keyboard users reach the same actions through
+        // the focusable list (↑↓, Enter), the command palette and shortcuts.
+        "noStaticElementInteractions": "off",
+        "useKeyWithClickEvents": "off",
+      },
+    },
+  },
+  "css": { "parser": { "tailwindDirectives": true } },
+  "assist": { "enabled": true, "actions": { "source": { "organizeImports": "on" } } },
+}

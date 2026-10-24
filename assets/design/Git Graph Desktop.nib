@@ -6360,6 +6360,16 @@
             },
             {
               "type": "ref",
+              "id": "tl_settings",
+              "ref": "c_btn_icon",
+              "descendants": {
+                "bi_icon": {
+                  "icon": "settings"
+                }
+              }
+            },
+            {
+              "type": "ref",
               "id": "tl_search",
               "ref": "c_search",
               "width": 240
@@ -11695,6 +11705,521 @@
               ]
             }
           ]
+        },
+        {
+          "type": "frame",
+          "id": "c_input",
+          "name": "Input",
+          "reusable": true,
+          "x": 0,
+          "y": 3700,
+          "width": 300,
+          "height": 30,
+          "padding": [
+            0,
+            10
+          ],
+          "gap": 8,
+          "alignItems": "center",
+          "cornerRadius": "$radius/md",
+          "fill": "$bg/app",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "children": [
+            {
+              "type": "text",
+              "id": "in_text",
+              "name": "in_text",
+              "content": "main",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/md",
+              "fontWeight": 400,
+              "fill": "$text/primary",
+              "width": "fill_container",
+              "textGrowth": "fixed-width"
+            },
+            {
+              "type": "text",
+              "id": "in_suffix",
+              "name": "in_suffix",
+              "content": "",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/sm",
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_select",
+          "name": "Select",
+          "reusable": true,
+          "x": 320,
+          "y": 3700,
+          "width": 300,
+          "height": 30,
+          "padding": [
+            0,
+            8,
+            0,
+            10
+          ],
+          "gap": 8,
+          "alignItems": "center",
+          "cornerRadius": "$radius/md",
+          "fill": "$bg/app",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "children": [
+            {
+              "type": "text",
+              "id": "se2_text",
+              "name": "se2_text",
+              "content": "System",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/md",
+              "fontWeight": 400,
+              "fill": "$text/primary",
+              "width": "fill_container",
+              "textGrowth": "fixed-width"
+            },
+            {
+              "type": "icon",
+              "id": "se2_chev",
+              "name": "icon chevrons-up-down",
+              "library": "lucide",
+              "icon": "chevrons-up-down",
+              "width": 14,
+              "height": 14,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_checkbox",
+          "name": "Checkbox",
+          "reusable": true,
+          "x": 640,
+          "y": 3700,
+          "width": 16,
+          "height": 16,
+          "cornerRadius": 4,
+          "fill": "$accent",
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "icon",
+              "id": "cb_check",
+              "name": "icon check",
+              "library": "lucide",
+              "icon": "check",
+              "width": 12,
+              "height": 12,
+              "fill": "$text/on-accent"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_checkbox_off",
+          "name": "Checkbox/Off",
+          "reusable": true,
+          "x": 670,
+          "y": 3700,
+          "width": 16,
+          "height": 16,
+          "cornerRadius": 4,
+          "fill": "$bg/app",
+          "stroke": "$border/strong",
+          "strokeWidth": 1.5,
+          "children": []
+        },
+        {
+          "type": "frame",
+          "id": "c_set_nav",
+          "name": "Settings/Nav item",
+          "reusable": true,
+          "x": 0,
+          "y": 3760,
+          "width": 216,
+          "height": 34,
+          "padding": [
+            0,
+            12
+          ],
+          "gap": 10,
+          "alignItems": "center",
+          "cornerRadius": "$radius/md",
+          "children": [
+            {
+              "type": "icon",
+              "id": "sn_icon",
+              "name": "icon settings",
+              "library": "lucide",
+              "icon": "settings",
+              "width": 16,
+              "height": 16,
+              "fill": "$text/secondary"
+            },
+            {
+              "type": "text",
+              "id": "sn_label",
+              "name": "sn_label",
+              "content": "General",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/md",
+              "fontWeight": 500,
+              "fill": "$text/primary"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_set_row",
+          "name": "Settings/Row",
+          "reusable": true,
+          "x": 260,
+          "y": 3760,
+          "width": 720,
+          "gap": 24,
+          "children": [
+            {
+              "type": "frame",
+              "id": "sr_labelbox",
+              "name": "Label",
+              "width": 200,
+              "padding": [
+                6,
+                0,
+                0,
+                0
+              ],
+              "justifyContent": "end",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "sr_label",
+                  "name": "sr_label",
+                  "content": "Default branch name",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/md",
+                  "fontWeight": 500,
+                  "fill": "$text/primary",
+                  "width": 200,
+                  "textGrowth": "fixed-width",
+                  "textAlign": "right"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "sr_body",
+              "name": "Control",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "sr_controls",
+                  "name": "Controls",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "ref",
+                      "id": "sr_input",
+                      "ref": "c_input"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "sr_select",
+                      "ref": "c_select",
+                      "enabled": false
+                    },
+                    {
+                      "type": "ref",
+                      "id": "sr_seg",
+                      "ref": "c_segmented",
+                      "enabled": false
+                    },
+                    {
+                      "type": "ref",
+                      "id": "sr_check",
+                      "ref": "c_checkbox",
+                      "enabled": false
+                    },
+                    {
+                      "type": "ref",
+                      "id": "sr_uncheck",
+                      "ref": "c_checkbox_off",
+                      "enabled": false
+                    },
+                    {
+                      "type": "text",
+                      "id": "sr_inline",
+                      "name": "sr_inline",
+                      "content": "",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 400,
+                      "fill": "$text/secondary",
+                      "enabled": false
+                    },
+                    {
+                      "type": "ref",
+                      "id": "sr_button",
+                      "ref": "c_btn_secondary",
+                      "enabled": false
+                    },
+                    {
+                      "type": "frame",
+                      "id": "sr_result",
+                      "name": "Result",
+                      "enabled": false,
+                      "gap": 6,
+                      "alignItems": "center",
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "cornerRadius": "$radius/md",
+                      "fill": "$ref/local-soft",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "sr_res_icon",
+                          "name": "icon circle-check",
+                          "library": "lucide",
+                          "icon": "circle-check",
+                          "width": 13,
+                          "height": 13,
+                          "fill": "$ref/local"
+                        },
+                        {
+                          "type": "text",
+                          "id": "sr_res_text",
+                          "name": "sr_res_text",
+                          "content": "api.github.com · 412 ms",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 500,
+                          "fill": "$ref/local"
+                        }
+                      ]
+                    }
+                  ],
+                  "height": 30
+                },
+                {
+                  "type": "text",
+                  "id": "sr_help",
+                  "name": "sr_help",
+                  "content": "Used when creating new repositories.",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width",
+                  "lineHeight": 1.45
+                },
+                {
+                  "type": "frame",
+                  "id": "sr_warn",
+                  "name": "Warning",
+                  "enabled": false,
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "sr_warn_icon",
+                      "name": "icon triangle-alert",
+                      "library": "lucide",
+                      "icon": "triangle-alert",
+                      "width": 13,
+                      "height": 13,
+                      "fill": "$status/modified"
+                    },
+                    {
+                      "type": "text",
+                      "id": "sr_warn_text",
+                      "name": "sr_warn_text",
+                      "content": "Fetching many remotes often may slow things down.",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/muted",
+                      "width": 440,
+                      "textGrowth": "fixed-width",
+                      "lineHeight": 1.45
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_set_navlist",
+          "name": "Settings/Navigation",
+          "reusable": true,
+          "x": 1000,
+          "y": 3760,
+          "width": 240,
+          "height": 640,
+          "layout": "vertical",
+          "gap": 2,
+          "padding": [
+            16,
+            12
+          ],
+          "fill": "$bg/sidebar",
+          "stroke": "$border/subtle",
+          "strokeWidth": {
+            "right": 1
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "snl_title",
+              "name": "snl_title",
+              "content": "Settings",
+              "fontFamily": "$font/sans",
+              "fontSize": 11,
+              "fontWeight": 700,
+              "fill": "$text/muted",
+              "letterSpacing": 0.7
+            },
+            {
+              "type": "frame",
+              "id": "snl_gap",
+              "name": "Gap",
+              "height": 6,
+              "width": 1,
+              "children": []
+            },
+            {
+              "type": "ref",
+              "id": "sni_general",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "settings"
+                },
+                "sn_label": {
+                  "content": "General"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sni_appearance",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "palette"
+                },
+                "sn_label": {
+                  "content": "Appearance"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sni_network",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "globe"
+                },
+                "sn_label": {
+                  "content": "Network"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sni_github",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "github"
+                },
+                "sn_label": {
+                  "content": "GitHub"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sni_diff",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "file-diff"
+                },
+                "sn_label": {
+                  "content": "Diff & editor"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sni_keys",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "keyboard"
+                },
+                "sn_label": {
+                  "content": "Shortcuts"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sni_about",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "info"
+                },
+                "sn_label": {
+                  "content": "About"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "snl_sp",
+              "name": "Spacer",
+              "width": 1,
+              "height": "fill_container",
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "snl_ver",
+              "name": "snl_ver",
+              "content": "Git Graph 0.1.0",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/sm",
+              "fontWeight": 400,
+              "fill": "$text/faint"
+            }
+          ]
         }
       ],
       "x": 3080,
@@ -12564,6 +13089,1111 @@
               "ref": "c_win_welcome",
               "x": 0,
               "y": 0
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl8",
+          "name": "Label · 08 · Settings — General",
+          "x": 0,
+          "y": 4310,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl8_t",
+              "name": "dl8_t",
+              "content": "08 · Settings — General",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl8_s",
+              "name": "dl8_s",
+              "content": "Light · ⌘, or the gear in the title bar · right-aligned labels, controls with help text",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_set_general",
+          "name": "08 · Settings — General — Light",
+          "x": 0,
+          "y": 4400,
+          "width": 1440,
+          "height": 900,
+          "layout": "none",
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d_set_general_win",
+              "ref": "c_win_history",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "type": "rectangle",
+              "id": "d_set_general_scrim",
+              "name": "Scrim",
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900,
+              "fill": "$bg/scrim",
+              "cornerRadius": 12
+            },
+            {
+              "type": "frame",
+              "id": "dsg",
+              "name": "Settings dialog",
+              "x": 230,
+              "y": 120,
+              "width": 980,
+              "height": 660,
+              "cornerRadius": "$radius/xl",
+              "clip": true,
+              "fill": "$bg/app",
+              "stroke": "$border/strong",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "offset": {
+                    "x": 0,
+                    "y": 24
+                  },
+                  "blur": 60,
+                  "spread": 0,
+                  "color": "$shadow"
+                }
+              ],
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "dsg_nav",
+                  "ref": "c_set_navlist",
+                  "descendants": {
+                    "sni_general": {
+                      "fill": "$bg/selected",
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "settings",
+                          "fill": "$ref/head"
+                        },
+                        "sn_label": {
+                          "content": "General",
+                          "fontWeight": 600
+                        }
+                      }
+                    },
+                    "sni_appearance": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "palette"
+                        },
+                        "sn_label": {
+                          "content": "Appearance"
+                        }
+                      }
+                    },
+                    "sni_network": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "globe"
+                        },
+                        "sn_label": {
+                          "content": "Network"
+                        }
+                      }
+                    },
+                    "sni_github": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "github"
+                        },
+                        "sn_label": {
+                          "content": "GitHub"
+                        }
+                      }
+                    },
+                    "sni_diff": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "file-diff"
+                        },
+                        "sn_label": {
+                          "content": "Diff & editor"
+                        }
+                      }
+                    },
+                    "sni_keys": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "keyboard"
+                        },
+                        "sn_label": {
+                          "content": "Shortcuts"
+                        }
+                      }
+                    },
+                    "sni_about": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "info"
+                        },
+                        "sn_label": {
+                          "content": "About"
+                        }
+                      }
+                    }
+                  },
+                  "height": "fill_container"
+                },
+                {
+                  "type": "frame",
+                  "id": "dsg_body",
+                  "name": "Content",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "gap": 22,
+                  "padding": [
+                    26,
+                    32,
+                    32,
+                    24
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "dsg_head",
+                      "name": "Header",
+                      "width": "fill_container",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "dsg_title",
+                          "name": "dsg_title",
+                          "content": "General",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/2xl",
+                          "fontWeight": 700,
+                          "fill": "$text/primary",
+                          "width": "fill_container",
+                          "textGrowth": "fixed-width"
+                        },
+                        {
+                          "type": "ref",
+                          "id": "dsg_close",
+                          "ref": "c_btn_icon",
+                          "descendants": {
+                            "bi_icon": {
+                              "icon": "x"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow1",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Auto-fetch interval"
+                        },
+                        "sr_help": {
+                          "content": "Fetches every remote in the background. 0 turns it off."
+                        },
+                        "sr_input": {
+                          "descendants": {
+                            "in_text": {
+                              "content": "5"
+                            },
+                            "in_suffix": {
+                              "content": "min"
+                            }
+                          },
+                          "width": 140
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow2",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Prune on fetch"
+                        },
+                        "sr_help": {
+                          "enabled": false
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_check": {
+                          "enabled": true
+                        },
+                        "sr_inline": {
+                          "enabled": true,
+                          "content": "Remove remote branches that were deleted upstream"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow3",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Commits loaded at a time"
+                        },
+                        "sr_help": {
+                          "content": "More load as you scroll the graph."
+                        },
+                        "sr_input": {
+                          "descendants": {
+                            "in_text": {
+                              "content": "600"
+                            },
+                            "in_suffix": {
+                              "content": ""
+                            }
+                          },
+                          "width": 140
+                        },
+                        "sr_warn": {
+                          "enabled": true
+                        },
+                        "sr_warn_text": {
+                          "content": "Large numbers make big repositories slower to open."
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow4",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Open last repository"
+                        },
+                        "sr_help": {
+                          "enabled": false
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_check": {
+                          "enabled": true
+                        },
+                        "sr_inline": {
+                          "enabled": true,
+                          "content": "Reopen the repository you used last when the app starts"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow5",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Default branch name"
+                        },
+                        "sr_help": {
+                          "content": "Used when creating new repositories."
+                        },
+                        "sr_input": {
+                          "descendants": {
+                            "in_text": {
+                              "content": "main"
+                            },
+                            "in_suffix": {
+                              "content": ""
+                            }
+                          },
+                          "width": 200
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow6",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Terminal"
+                        },
+                        "sr_help": {
+                          "content": "Opened by the Terminal button in the toolbar."
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_select": {
+                          "enabled": true,
+                          "descendants": {
+                            "se2_text": {
+                              "content": "Terminal"
+                            }
+                          }
+                        }
+                      },
+                      "width": "fill_container"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl9",
+          "name": "Label · 09 · Settings — Network",
+          "x": 1540,
+          "y": 4310,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl9_t",
+              "name": "dl9_t",
+              "content": "09 · Settings — Network",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl9_s",
+              "name": "dl9_s",
+              "content": "Dark · proxy for git, gh and the GitHub API, with a connection test",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_set_network",
+          "name": "09 · Settings — Network — Dark",
+          "x": 1540,
+          "y": 4400,
+          "width": 1440,
+          "height": 900,
+          "layout": "none",
+          "theme": {
+            "Mode": "Dark",
+            "Stage": "Clean"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d_set_network_win",
+              "ref": "c_win_history",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "type": "rectangle",
+              "id": "d_set_network_scrim",
+              "name": "Scrim",
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900,
+              "fill": "$bg/scrim",
+              "cornerRadius": 12
+            },
+            {
+              "type": "frame",
+              "id": "dsn",
+              "name": "Settings dialog",
+              "x": 230,
+              "y": 120,
+              "width": 980,
+              "height": 660,
+              "cornerRadius": "$radius/xl",
+              "clip": true,
+              "fill": "$bg/app",
+              "stroke": "$border/strong",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "offset": {
+                    "x": 0,
+                    "y": 24
+                  },
+                  "blur": 60,
+                  "spread": 0,
+                  "color": "$shadow"
+                }
+              ],
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "dsn_nav",
+                  "ref": "c_set_navlist",
+                  "descendants": {
+                    "sni_general": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "settings"
+                        },
+                        "sn_label": {
+                          "content": "General"
+                        }
+                      }
+                    },
+                    "sni_appearance": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "palette"
+                        },
+                        "sn_label": {
+                          "content": "Appearance"
+                        }
+                      }
+                    },
+                    "sni_network": {
+                      "fill": "$bg/selected",
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "globe",
+                          "fill": "$ref/head"
+                        },
+                        "sn_label": {
+                          "content": "Network",
+                          "fontWeight": 600
+                        }
+                      }
+                    },
+                    "sni_github": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "github"
+                        },
+                        "sn_label": {
+                          "content": "GitHub"
+                        }
+                      }
+                    },
+                    "sni_diff": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "file-diff"
+                        },
+                        "sn_label": {
+                          "content": "Diff & editor"
+                        }
+                      }
+                    },
+                    "sni_keys": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "keyboard"
+                        },
+                        "sn_label": {
+                          "content": "Shortcuts"
+                        }
+                      }
+                    },
+                    "sni_about": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "info"
+                        },
+                        "sn_label": {
+                          "content": "About"
+                        }
+                      }
+                    }
+                  },
+                  "height": "fill_container"
+                },
+                {
+                  "type": "frame",
+                  "id": "dsn_body",
+                  "name": "Content",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "gap": 22,
+                  "padding": [
+                    26,
+                    32,
+                    32,
+                    24
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "dsn_head",
+                      "name": "Header",
+                      "width": "fill_container",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "dsn_title",
+                          "name": "dsn_title",
+                          "content": "Network",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/2xl",
+                          "fontWeight": 700,
+                          "fill": "$text/primary",
+                          "width": "fill_container",
+                          "textGrowth": "fixed-width"
+                        },
+                        {
+                          "type": "ref",
+                          "id": "dsn_close",
+                          "ref": "c_btn_icon",
+                          "descendants": {
+                            "bi_icon": {
+                              "icon": "x"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow7",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Proxy"
+                        },
+                        "sr_help": {
+                          "content": "Off, the system proxy, or the address below. Applies to git, the GitHub CLI and pull requests."
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_select": {
+                          "enabled": true,
+                          "descendants": {
+                            "se2_text": {
+                              "content": "Custom proxy"
+                            }
+                          }
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow8",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Proxy address"
+                        },
+                        "sr_help": {
+                          "content": "http://, https:// or socks5:// — add user:password@ if your proxy needs it."
+                        },
+                        "sr_input": {
+                          "descendants": {
+                            "in_text": {
+                              "content": "http://127.0.0.1:7890"
+                            },
+                            "in_suffix": {
+                              "content": ""
+                            }
+                          }
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow9",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Bypass for"
+                        },
+                        "sr_help": {
+                          "content": "Hosts that connect directly, separated by commas."
+                        },
+                        "sr_input": {
+                          "descendants": {
+                            "in_text": {
+                              "content": "localhost, 127.0.0.1, *.local"
+                            },
+                            "in_suffix": {
+                              "content": ""
+                            }
+                          }
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow10",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Use for"
+                        },
+                        "sr_help": {
+                          "enabled": false
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_check": {
+                          "enabled": true
+                        },
+                        "sr_inline": {
+                          "enabled": true,
+                          "content": "Git — fetch, pull, push and clone"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow11",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": ""
+                        },
+                        "sr_help": {
+                          "enabled": false
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_check": {
+                          "enabled": true
+                        },
+                        "sr_inline": {
+                          "enabled": true,
+                          "content": "GitHub — pull requests and the gh CLI"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow12",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "Connection"
+                        },
+                        "sr_help": {
+                          "content": "Checks that GitHub answers through the proxy."
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_button": {
+                          "enabled": true,
+                          "descendants": {
+                            "bs_icon": {
+                              "icon": "plug-zap"
+                            },
+                            "bs_label": {
+                              "content": "Test connection"
+                            }
+                          }
+                        },
+                        "sr_result": {
+                          "enabled": true
+                        },
+                        "sr_res_text": {
+                          "content": "api.github.com · 412 ms"
+                        }
+                      },
+                      "width": "fill_container"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl10",
+          "name": "Label · 10 · Settings — Appearance (中文)",
+          "x": 0,
+          "y": 5410,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl10_t",
+              "name": "dl10_t",
+              "content": "10 · Settings — Appearance (中文)",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl10_s",
+              "name": "dl10_s",
+              "content": "Light · language switch: English / 简体中文, applied instantly",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_set_appearance",
+          "name": "10 · Settings — Appearance — 中文",
+          "x": 0,
+          "y": 5500,
+          "width": 1440,
+          "height": 900,
+          "layout": "none",
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean",
+            "Language": "中文"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d_set_appearance_win",
+              "ref": "c_win_history",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "type": "rectangle",
+              "id": "d_set_appearance_scrim",
+              "name": "Scrim",
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900,
+              "fill": "$bg/scrim",
+              "cornerRadius": 12
+            },
+            {
+              "type": "frame",
+              "id": "dsa",
+              "name": "Settings dialog",
+              "x": 230,
+              "y": 120,
+              "width": 980,
+              "height": 660,
+              "cornerRadius": "$radius/xl",
+              "clip": true,
+              "fill": "$bg/app",
+              "stroke": "$border/strong",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "offset": {
+                    "x": 0,
+                    "y": 24
+                  },
+                  "blur": 60,
+                  "spread": 0,
+                  "color": "$shadow"
+                }
+              ],
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "dsa_nav",
+                  "ref": "c_set_navlist",
+                  "descendants": {
+                    "sni_general": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "settings"
+                        },
+                        "sn_label": {
+                          "content": "通用"
+                        }
+                      }
+                    },
+                    "sni_appearance": {
+                      "fill": "$bg/selected",
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "palette",
+                          "fill": "$ref/head"
+                        },
+                        "sn_label": {
+                          "content": "外观",
+                          "fontWeight": 600
+                        }
+                      }
+                    },
+                    "sni_network": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "globe"
+                        },
+                        "sn_label": {
+                          "content": "网络"
+                        }
+                      }
+                    },
+                    "sni_github": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "github"
+                        },
+                        "sn_label": {
+                          "content": "GitHub"
+                        }
+                      }
+                    },
+                    "sni_diff": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "file-diff"
+                        },
+                        "sn_label": {
+                          "content": "差异与编辑器"
+                        }
+                      }
+                    },
+                    "sni_keys": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "keyboard"
+                        },
+                        "sn_label": {
+                          "content": "快捷键"
+                        }
+                      }
+                    },
+                    "sni_about": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "info"
+                        },
+                        "sn_label": {
+                          "content": "关于"
+                        }
+                      }
+                    },
+                    "snl_title": {
+                      "content": "设置"
+                    }
+                  },
+                  "height": "fill_container"
+                },
+                {
+                  "type": "frame",
+                  "id": "dsa_body",
+                  "name": "Content",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "gap": 22,
+                  "padding": [
+                    26,
+                    32,
+                    32,
+                    24
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "dsa_head",
+                      "name": "Header",
+                      "width": "fill_container",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "dsa_title",
+                          "name": "dsa_title",
+                          "content": "外观",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/2xl",
+                          "fontWeight": 700,
+                          "fill": "$text/primary",
+                          "width": "fill_container",
+                          "textGrowth": "fixed-width"
+                        },
+                        {
+                          "type": "ref",
+                          "id": "dsa_close",
+                          "ref": "c_btn_icon",
+                          "descendants": {
+                            "bi_icon": {
+                              "icon": "x"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow13",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "主题"
+                        },
+                        "sr_help": {
+                          "content": "浅色、深色，或跟随系统设置。"
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_select": {
+                          "enabled": true,
+                          "descendants": {
+                            "se2_text": {
+                              "content": "跟随系统"
+                            }
+                          }
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow14",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "语言"
+                        },
+                        "sr_help": {
+                          "content": "切换后立即生效。"
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_select": {
+                          "enabled": true,
+                          "descendants": {
+                            "se2_text": {
+                              "content": "简体中文"
+                            }
+                          }
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow15",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "差异视图"
+                        },
+                        "sr_help": {
+                          "content": "窄面板中会自动改为单栏显示。"
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_select": {
+                          "enabled": true,
+                          "descendants": {
+                            "se2_text": {
+                              "content": "并排对比"
+                            }
+                          }
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow16",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "自动换行"
+                        },
+                        "sr_help": {
+                          "enabled": false
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_uncheck": {
+                          "enabled": true
+                        },
+                        "sr_inline": {
+                          "enabled": true,
+                          "content": "在差异视图中折行显示长代码行"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "srow17",
+                      "ref": "c_set_row",
+                      "descendants": {
+                        "sr_label": {
+                          "content": "侧边栏"
+                        },
+                        "sr_help": {
+                          "enabled": false
+                        },
+                        "sr_input": {
+                          "enabled": false
+                        },
+                        "sr_check": {
+                          "enabled": true
+                        },
+                        "sr_inline": {
+                          "enabled": true,
+                          "content": "启动时显示侧边栏"
+                        }
+                      },
+                      "width": "fill_container"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -23460,9 +25090,21 @@
     },
     "font/sans": {
       "type": "string",
-      "value": "$sans",
+      "collection": "Language",
       "scopes": [
         "font-family"
+      ],
+      "description": "UI font; Chinese needs a CJK face",
+      "value": [
+        {
+          "value": "$sans"
+        },
+        {
+          "value": "Noto Sans SC",
+          "theme": {
+            "Language": "中文"
+          }
+        }
       ]
     },
     "font/mono": {
@@ -23975,6 +25617,10 @@
       "Working",
       "Conflict",
       "Rebasing"
+    ],
+    "Language": [
+      "English",
+      "中文"
     ]
   }
 }

@@ -48,7 +48,7 @@ export const diffStats = (hunks: Hunk[]) =>
 /** Side-by-side rows: context on both sides, a run of removals paired with the additions after it. */
 export function pairLines(lines: DiffLine[]): [DiffLine | null, DiffLine | null][] {
   const rows: [DiffLine | null, DiffLine | null][] = []
-  for (let i = 0; i < lines.length; ) {
+  for (let i = 0; i < lines.length;) {
     const l = lines[i]!
     if (l.kind === 'del' || l.kind === 'add') {
       const dels: DiffLine[] = []

@@ -8,7 +8,9 @@ import appIcon from '../../assets/icon/app-icon.svg'
 import { Button, Chip, Empty } from '../components/ui'
 import { cx } from '../lib/cx'
 import { findRoot, git, run } from '../lib/git'
-import { forgetRepo, readRecents, type Recent } from '../state'
+import { t } from '../lib/i18n'
+import { getSettings } from '../lib/settings'
+import { forgetRepo, type Recent, readRecents } from '../state'
 
 const home = (p: string) => p.replace(/^\/Users\/[^/]+/, '~')
 
@@ -32,10 +34,11 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
     setError(null)
     const root = await findRoot(path)
     if (root) onOpen(root)
-    else setError(`${home(path)} is not inside a Git repository.`)
+    else setError(t('{path} is not inside a Git repository.', { path: home(path) }))
   }
 
   // Folders dropped anywhere on the window.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: subscribe once; openPath only reads stable setters
   useEffect(() => {
     const un = getCurrentWebview().onDragDropEvent(e => {
       if (e.payload.type === 'over') setOver(true)
@@ -46,29 +49,34 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
       } else setOver(false)
     })
     return () => void un.then(f => f())
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   const pickFolder = async (title: string) => {
     const dir = await open({ directory: true, title })
     return typeof dir === 'string' ? dir : null
   }
   const openRepo = async () => {
-    const dir = await pickFolder('Open repository')
+    const dir = await pickFolder(t('Open repository'))
     if (dir) await openPath(dir)
   }
   const createRepo = async () => {
-    const dir = await pickFolder('Choose a folder for the new repository')
+    const dir = await pickFolder(t('Choose a folder for the new repository'))
     if (!dir) return
-    const out = await run(dir, ['init'])
+    const out = await run(dir, ['init', '-b', getSettings().defaultBranch])
     if (out.code !== 0) return setError(out.stderr.trim())
     onOpen(dir)
   }
   const cloneRepo = async (url: string) => {
     if (!url.trim()) return
-    const dir = await pickFolder('Clone into folder')
+    const dir = await pickFolder(t('Clone into folder'))
     if (!dir) return
     setCloneUrl(null)
-    const name = url.trim().replace(/\.git$/, '').split(/[/:]/).pop() || 'repo'
+    const name =
+      url
+        .trim()
+        .replace(/\.git$/, '')
+        .split(/[/:]/)
+        .pop() || 'repo'
     setBusy(true)
     setError(null)
     try {
@@ -90,15 +98,15 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
     <div className="flex h-full">
       <div className="flex w-80 shrink-0 flex-col items-center border-r border-subtle bg-titlebar px-7 pt-13 pb-7" data-tauri-drag-region>
         <img src={appIcon} alt="" className="mt-auto size-32" />
-        <h1 className="mt-5 mb-0.5 text-2xl font-bold">Git Graph</h1>
+        <h1 className="mt-5 mb-0.5 text-2xl font-bold">{t('Git Graph')}</h1>
         <div className="mb-auto text-sm text-muted">Version 0.1 · desktop</div>
         <div className="flex w-full flex-col gap-2 [&>button]:h-8.5">
           <Button kind="primary" icon={FolderOpen} onClick={() => void openRepo()}>
-            Open repository…
+            {t('Open repository…')}
           </Button>
           {cloneUrl === null ? (
             <Button icon={CloudDownload} busy={busy} onClick={() => setCloneUrl('')}>
-              Clone from URL…
+              {t('Clone from URL…')}
             </Button>
           ) : (
             <input
@@ -115,21 +123,31 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
             />
           )}
           <Button icon={FolderPlus} onClick={() => void createRepo()}>
-            Create new repository
+            {t('Create new repository')}
           </Button>
         </div>
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-2.5 px-5 pt-11 pb-5.5">
         <div className="flex items-center gap-2 font-semibold">
-          <span className="flex-1">Recent repositories</span>
+          <span className="flex-1">{t('Recent repositories')}</span>
           <div className="flex h-7 w-45 items-center gap-1.5 rounded-md bg-surface px-2 text-muted">
             <Search size={13} />
-            <input className="min-w-0 flex-1 bg-transparent font-normal text-primary outline-none placeholder:text-faint" placeholder="Filter" value={filter} onChange={e => setFilter(e.target.value)} />
+            <input
+              className="min-w-0 flex-1 bg-transparent font-normal text-primary outline-none placeholder:text-faint"
+              placeholder={t('Filter')}
+              value={filter}
+              onChange={e => setFilter(e.target.value)}
+            />
           </div>
         </div>
         <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto">
           {shown.map(r => (
-            <button key={r.path} type="button" className="group flex h-13 w-full items-center gap-3 rounded-lg px-3 text-left hover:bg-selected" onClick={() => void openPath(r.path)}>
+            <button
+              key={r.path}
+              type="button"
+              className="group flex h-13 w-full items-center gap-3 rounded-lg px-3 text-left hover:bg-selected"
+              onClick={() => void openPath(r.path)}
+            >
               <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-surface text-secondary">
                 <FolderGit2 size={16} />
               </span>
@@ -150,10 +168,15 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
               />
             </button>
           ))}
-          {!shown.length && <Empty>{recents.length ? 'No recent repository matches.' : 'Repositories you open show up here.'}</Empty>}
+          {!shown.length && <Empty>{recents.length ? t('No recent repository matches.') : t('Repositories you open show up here.')}</Empty>}
         </div>
         {error && <div className="text-sm text-status-deleted">{error}</div>}
-        <div className={cx('flex h-14 shrink-0 items-center justify-center gap-2 rounded-lg border border-dashed text-sm', over ? 'border-focus bg-selected text-primary' : 'border-strong text-muted')}>
+        <div
+          className={cx(
+            'flex h-14 shrink-0 items-center justify-center gap-2 rounded-lg border border-dashed text-sm',
+            over ? 'border-focus bg-selected text-primary' : 'border-strong text-muted',
+          )}
+        >
           <FolderDown size={15} />
           Drop a folder here, or run <code className="font-mono">git-graph .</code> in a terminal
         </div>

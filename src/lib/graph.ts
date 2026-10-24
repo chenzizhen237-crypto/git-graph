@@ -41,7 +41,7 @@ export function layoutGraph(commits: GraphCommit[], dangle: boolean): Layout {
   let colorIx = 0
   const nextColor = () => PALETTE[colorIx++ % PALETTE.length]!
   const firstFree = () => {
-    const at = lanes.findIndex(l => l === null)
+    const at = lanes.indexOf(null)
     return at < 0 ? lanes.length : at
   }
   let laneCount = 1
@@ -88,13 +88,7 @@ export function layoutGraph(commits: GraphCommit[], dangle: boolean): Layout {
     }
     while (lanes.length && lanes[lanes.length - 1] === null) lanes.pop()
 
-    const used = Math.max(
-      lane + 1,
-      lanes.length,
-      ...through.map(t => t.lane + 1),
-      ...inbound.map(e => e.from + 1),
-      ...outbound.map(e => e.to + 1),
-    )
+    const used = Math.max(lane + 1, lanes.length, ...through.map(t => t.lane + 1), ...inbound.map(e => e.from + 1), ...outbound.map(e => e.to + 1))
     laneCount = Math.max(laneCount, used)
     rows.push({
       lane,
