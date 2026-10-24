@@ -3,7 +3,7 @@
  * with conflict markers called out. Any diff pops out to fill the window.
  */
 import { Columns2, FileCode2, Maximize2, Minimize2, Rows2, WrapText, X } from 'lucide-react'
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 
 import { cx } from '../lib/cx'
@@ -45,6 +45,9 @@ const signFor = (k: DiffLine['kind']) => (k === 'add' ? '+' : k === 'del' ? '−
 
 type Mode = 'unified' | 'split'
 
+/** Narrower than this, two columns of code are unreadable. */
+const SPLIT_MIN = 760
+
 function readPref<T extends string>(key: string, fallback: T): T {
   try {
     return (localStorage.getItem(key) as T | null) ?? fallback
@@ -59,9 +62,22 @@ export function DiffView({ path, text, loading, actions, empty, popped, onClose 
   const [mode, setModeState] = useState<Mode>(() => readPref<Mode>('diff:mode', 'unified'))
   const [wrap, setWrap] = useState(() => readPref<string>('diff:wrap', '0') === '1')
   const [open, setOpen] = useState(false)
+  const box = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState(Infinity)
+  useEffect(() => {
+    const el = box.current
+    if (!el) return
+    const ro = new ResizeObserver(() => setWidth(el.clientWidth))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  // Side by side needs room: a narrow panel shows unified, and asking for split pops the diff out.
+  const narrow = width < SPLIT_MIN
+  const shown: Mode = narrow ? 'unified' : mode
   const setMode = (m: Mode) => {
     setModeState(m)
     localStorage.setItem('diff:mode', m)
+    if (m === 'split' && narrow && !popped) setOpen(true)
   }
 
   useEffect(() => {
@@ -72,7 +88,7 @@ export function DiffView({ path, text, loading, actions, empty, popped, onClose 
   }, [popped, onClose])
 
   const body = (
-    <div className={cx('flex min-h-0 flex-1 flex-col', !popped && 'border-t border-subtle')}>
+    <div ref={box} className={cx('flex min-h-0 flex-1 flex-col', !popped && 'border-t border-subtle')}>
       <div className={cx('flex shrink-0 items-center gap-2 border-b border-subtle bg-surface px-2.5 font-mono', popped ? 'h-11' : 'h-9')}>
         <FileCode2 size={14} className="shrink-0 text-muted" />
         <span className="min-w-0 flex-1 truncate" title={path}>
@@ -82,11 +98,11 @@ export function DiffView({ path, text, loading, actions, empty, popped, onClose 
         <span className="text-sm font-semibold text-status-added">+{stats.added}</span>
         <span className="text-sm font-semibold text-status-deleted">−{stats.deleted}</span>
         <Segmented
-          value={mode}
+          value={shown}
           onChange={setMode}
           options={[
             { value: 'unified', icon: Rows2, title: 'Unified' },
-            { value: 'split', icon: Columns2, title: 'Side by side' },
+            { value: 'split', icon: Columns2, title: narrow ? 'Side by side (opens full window)' : 'Side by side' },
           ]}
         />
         <IconButton
@@ -113,8 +129,8 @@ export function DiffView({ path, text, loading, actions, empty, popped, onClose 
         {!hunks.length ? (
           <Empty>{loading ? 'Loading…' : (empty ?? 'No textual changes (binary file or mode change)')}</Empty>
         ) : (
-          <table className={cx('min-w-full border-collapse', mode === 'split' && 'w-full table-fixed')}>
-            {mode === 'split' && (
+          <table className={cx('min-w-full border-collapse', shown === 'split' && 'w-full table-fixed')}>
+            {shown === 'split' && (
               <colgroup>
                 <col className="w-10" />
                 <col />
@@ -123,7 +139,7 @@ export function DiffView({ path, text, loading, actions, empty, popped, onClose 
               </colgroup>
             )}
             <tbody>
-              {hunks.map((h, hi) => (mode === 'split' ? <SplitHunk key={hi} hunk={h} wrap={wrap} /> : <UnifiedHunk key={hi} hunk={h} wrap={wrap} />))}
+              {hunks.map((h, hi) => (shown === 'split' ? <SplitHunk key={hi} hunk={h} wrap={wrap} /> : <UnifiedHunk key={hi} hunk={h} wrap={wrap} />))}
             </tbody>
           </table>
         )}

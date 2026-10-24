@@ -96,9 +96,20 @@ export async function listPrs(root: string, filter: PrFilter): Promise<PrSummary
   return JSON.parse(await gh(root, args))
 }
 
+const detailCache = new Map<string, PrDetail>()
+
+/** A PR's details; the last copy seen, so switching back is instant while it refreshes. */
+export const cachedPr = (root: string, n: number) => detailCache.get(`${root}#${n}`)
+
 export async function viewPr(root: string, n: number): Promise<PrDetail> {
-  return JSON.parse(await gh(root, ['pr', 'view', String(n), '--json', VIEW_FIELDS]))
+  const pr: PrDetail = JSON.parse(await gh(root, ['pr', 'view', String(n), '--json', VIEW_FIELDS]))
+  detailCache.set(`${root}#${n}`, pr)
+  return pr
 }
+
+let viewer: Promise<string> | undefined
+/** The signed-in GitHub login, asked once. */
+export const viewerLogin = (root: string) => (viewer ??= gh(root, ['api', 'user', '--jq', '.login']).then(s => s.trim()).catch(() => ''))
 
 /** The PR's patch, split per file so each opens in the diff viewer. */
 export async function prDiff(root: string, n: number): Promise<Map<string, string>> {
@@ -139,7 +150,7 @@ export const prActions = {
   reopen: (n: number) => ['pr', 'reopen', String(n)],
   ready: (n: number) => ['pr', 'ready', String(n)],
   draft: (n: number) => ['pr', 'ready', String(n), '--undo'],
-  create: (title: string, base: string, draft: boolean) => ['pr', 'create', '--title', title, '--base', base, '--body-file', '-', ...(draft ? ['--draft'] : [])],
+  create: (title: string, base: string, head: string, draft: boolean) => ['pr', 'create', '--title', title, '--base', base, '--head', head, '--body-file', '-', ...(draft ? ['--draft'] : [])],
 }
 
 /** `2026-10-24T13:15:57Z` → `3 hours ago`. */

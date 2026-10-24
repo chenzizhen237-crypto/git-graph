@@ -32,8 +32,8 @@ import { Markdown } from '../components/Markdown'
 import { Resizer, usePanelSize } from '../components/Split'
 import { Avatar, Button, caps, Chip, Count, Empty, FilePath, fileRowClass, IconButton, LineStats, splitPath, StatusBadge } from '../components/ui'
 import { cx } from '../lib/cx'
-import { actions, git } from '../lib/git'
-import { checkState, listPrs, openUrl, prActions, prDiff, relTime, repoInfo, viewPr, type Check as CheckRun, type PrDetail, type PrFilter, type PrSummary, type RepoInfo } from '../lib/github'
+import { git } from '../lib/git'
+import { cachedPr, checkState, listPrs, openUrl, prActions, prDiff, relTime, repoInfo, viewerLogin, viewPr, type Check as CheckRun, type PrDetail, type PrFilter, type PrSummary, type RepoInfo } from '../lib/github'
 import { useApp } from '../state'
 import { listColumn, PaneHead } from './Changes'
 
@@ -148,7 +148,7 @@ export function PullRequestsView() {
             ))}
           </div>
         </div>
-        {repo && !current && filter === 'open' && repo.branch !== info?.defaultBranchRef.name && !repo.branch.startsWith('HEAD') && (
+        {repo && info && prs && !current && filter === 'open' && repo.branch !== info.defaultBranchRef.name && !repo.branch.startsWith('HEAD') && (
           <button type="button" className="m-2 mb-0 flex items-center gap-2 rounded-md border border-dashed border-strong px-2.5 py-2 text-left text-sm hover:bg-hover" onClick={() => setSelected('new')}>
             <GitPullRequest size={14} className="shrink-0 text-status-added" />
             <span className="min-w-0 flex-1 truncate">
@@ -199,7 +199,7 @@ export function PullRequestsView() {
       <Resizer panel={list} />
       <div className="flex min-w-0 flex-1 flex-col">
         {selected === 'new' && info ? (
-          <CreatePr info={info} onCancel={() => setSelected(prs?.[0]?.number ?? null)} onCreated={() => void load()} />
+          <CreatePr info={info} openHeads={new Map((prs ?? []).filter(p => p.state === 'OPEN').map(p => [p.headRefName, p.number]))} onCancel={() => setSelected(prs?.[0]?.number ?? null)} onCreated={() => void load()} />
         ) : typeof selected === 'number' ? (
           <PrPane key={selected} number={selected} onChanged={() => void load()} />
         ) : (
@@ -223,9 +223,13 @@ function TabButton({ on, icon: Icon, children, onClick }: { on: boolean; icon: L
 
 function PrPane({ number, onChanged }: { number: number; onChanged: () => void }) {
   const { root, repo, act, ask } = useApp()
-  const [pr, setPr] = useState<PrDetail | null>(null)
+  const [pr, setPr] = useState<PrDetail | null>(() => cachedPr(root, number) ?? null)
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('conversation')
+  const [me, setMe] = useState('')
+  useEffect(() => {
+    void viewerLogin(root).then(setMe)
+  }, [root])
 
   const load = useCallback(async () => {
     try {
@@ -278,13 +282,17 @@ function PrPane({ number, onChanged }: { number: number; onChanged: () => void }
           </span>
           <Avatar name={pr.author.login} />
           <span className="font-medium text-secondary">{pr.author.login}</span>
-          <span>wants to merge {pr.commits.length} commit{pr.commits.length === 1 ? '' : 's'} into</span>
-          <Chip kind="local" name={pr.baseRefName} />
-          <span>from</span>
-          <Chip kind={isCurrent ? 'head' : 'local'} name={pr.headRefName} />
-          <span>· {relTime(pr.createdAt)}</span>
+          <span>
+            {pr.state === 'MERGED' ? 'merged' : pr.state === 'CLOSED' ? 'proposed' : 'wants to merge'} {pr.commits.length} commit{pr.commits.length === 1 ? '' : 's'} · opened {relTime(pr.createdAt)}
+          </span>
           <span className="flex-1" />
           <LineStats added={pr.additions} deleted={pr.deletions} />
+        </div>
+        <div className="flex min-w-0 items-center gap-1.5 text-sm text-muted">
+          <Chip kind="local" name={pr.baseRefName} />
+          <ArrowLeft size={13} className="shrink-0" aria-label="from" />
+          <Chip kind={isCurrent ? 'head' : 'local'} name={pr.headRefName} />
+          {isCurrent && <span>· checked out here</span>}
         </div>
       </div>
       <div className="flex shrink-0 gap-4.5 border-b border-subtle px-5">
@@ -301,7 +309,7 @@ function PrPane({ number, onChanged }: { number: number; onChanged: () => void }
           Checks <Count>{pr.statusCheckRollup.length}</Count>
         </TabButton>
       </div>
-      {tab === 'conversation' && <Conversation pr={pr} run={run} ask={ask} />}
+      {tab === 'conversation' && <Conversation pr={pr} run={run} ask={ask} own={!!me && me === pr.author.login} />}
       {tab === 'commits' && <Commits pr={pr} />}
       {tab === 'files' && <Files pr={pr} root={root} />}
       {tab === 'checks' && <Checks pr={pr} />}
@@ -311,7 +319,7 @@ function PrPane({ number, onChanged }: { number: number; onChanged: () => void }
 
 type Run = (label: string, args: string[], opts?: { stdin?: string; done?: string }) => Promise<boolean>
 
-function Conversation({ pr, run, ask }: { pr: PrDetail; run: Run; ask: ReturnType<typeof useApp>['ask'] }) {
+function Conversation({ pr, run, ask, own }: { pr: PrDetail; run: Run; ask: ReturnType<typeof useApp>['ask']; own: boolean }) {
   const [text, setText] = useState('')
   const timeline = useMemo(
     () =>
@@ -361,12 +369,17 @@ function Conversation({ pr, run, ask }: { pr: PrDetail; run: Run; ask: ReturnTyp
               )
             )}
             <span className="flex-1" />
-            <Button small disabled={!text.trim()} onClick={() => void send('request-changes')}>
-              Request changes
-            </Button>
-            <Button small icon={Check} onClick={() => void send('approve')}>
-              Approve
-            </Button>
+            {/* GitHub does not let authors review their own pull requests. */}
+            {!own && pr.state === 'OPEN' && (
+              <>
+                <Button small disabled={!text.trim()} onClick={() => void send('request-changes')}>
+                  Request changes
+                </Button>
+                <Button small icon={Check} onClick={() => void send('approve')}>
+                  Approve
+                </Button>
+              </>
+            )}
             <Button small kind="primary" icon={MessageSquare} disabled={!text.trim()} onClick={() => void send('comment')} title="⌘↩">
               Comment
             </Button>
@@ -476,10 +489,10 @@ function Commits({ pr }: { pr: PrDetail }) {
             className="flex h-9 w-full items-center gap-2.5 rounded-md px-2.5 text-left enabled:hover:bg-hover"
           >
             <GitCommitHorizontal size={14} className="shrink-0 text-muted" />
-            <span className="min-w-0 flex-1 truncate">{c.messageHeadline}</span>
-            <span className="text-sm text-muted">{c.authors.map(a => a.login || a.name).join(', ')}</span>
-            <span className="w-24 text-right text-sm text-muted">{relTime(c.authoredDate)}</span>
-            <span className="w-16 text-right font-mono text-sm font-medium text-link">{c.oid.slice(0, 7)}</span>
+            <span className={cx('min-w-0 flex-1 truncate', !local && 'text-secondary')}>{c.messageHeadline}</span>
+            <span className="max-w-40 shrink truncate text-sm text-muted">{c.authors.map(a => a.login || a.name).join(', ')}</span>
+            <span className="w-24 shrink-0 text-right text-sm text-muted">{relTime(c.authoredDate)}</span>
+            <span className="w-16 shrink-0 text-right font-mono text-sm font-medium text-link">{c.oid.slice(0, 7)}</span>
           </button>
         )
       })}
@@ -545,34 +558,53 @@ function Checks({ pr }: { pr: PrDetail }) {
   )
 }
 
-function CreatePr({ info, onCancel, onCreated }: { info: RepoInfo; onCancel: () => void; onCreated: () => void }) {
+function CreatePr({ info, openHeads, onCancel, onCreated }: { info: RepoInfo; openHeads: Map<string, number>; onCancel: () => void; onCreated: () => void }) {
   const { root, repo, act } = useApp()
+  const defaultBase = info.defaultBranchRef.name
+  const locals = useMemo(() => repo?.refs.filter(r => r.kind === 'local') ?? [], [repo?.refs])
+  // Head: the current branch, unless that is the base; then the newest other branch.
+  const [head, setHead] = useState(() => (repo && repo.branch !== defaultBase ? repo.branch : (locals.find(r => r.name !== defaultBase && !openHeads.has(r.name))?.name ?? '')))
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
-  const [base, setBase] = useState(info.defaultBranchRef.name)
+  const [base, setBase] = useState(defaultBase)
   const [draft, setDraft] = useState(false)
   const [preview, setPreview] = useState(false)
+  const [edited, setEdited] = useState(false)
 
-  // Start from the branch's commits: the last subject as title, the list as body.
+  // Start from the head's commits: the last subject as title, the list as body.
   useEffect(() => {
-    void git(root, ['log', '--format=%s', `origin/${info.defaultBranchRef.name}..HEAD`])
+    if (!head || edited) return
+    void git(root, ['log', '--format=%s', `origin/${base}..${head}`])
+      .catch(() => git(root, ['log', '--format=%s', `${base}..${head}`]))
       .then(out => {
         const subjects = out.trim().split('\n').filter(Boolean)
-        setTitle(t => t || subjects[0] || '')
-        setBody(b => b || (subjects.length > 1 ? subjects.map(s => `- ${s}`).join('\n') : ''))
+        setTitle(subjects[0] ?? '')
+        setBody(subjects.length > 1 ? subjects.map(s => `- ${s}`).join('\n') : '')
       })
       .catch(() => {})
-  }, [root, info.defaultBranchRef.name])
+  }, [root, head, base, edited])
 
   if (!repo) return null
-  const branch = repo.branch
-  const bases = repo.refs.filter(r => r.kind === 'local' && r.name !== branch).map(r => r.name)
+  const ref = locals.find(r => r.name === head)
+  const ahead = Number(/ahead (\d+)/.exec(ref?.track ?? '')?.[1] ?? 0)
+  const needsPush = !!ref && (!ref.upstream || ahead > 0)
+  const existing = openHeads.get(head)
   const create = async () => {
     // gh cannot push for us without a terminal; publish the branch first.
-    if ((!repo.upstream || repo.ahead > 0) && !(await act('Push', actions.push(repo), { done: `Pushed ${branch}` }))) return
-    if (await act('Create pull request', prActions.create(title.trim(), base, draft), { stdin: body, done: 'Pull request opened', tool: 'gh' })) onCreated()
+    if (needsPush && !(await act('Push', ['push', '--set-upstream', 'origin', head], { done: `Pushed ${head}` }))) return
+    if (await act('Create pull request', prActions.create(title.trim(), base, head, draft), { stdin: body, done: 'Pull request opened', tool: 'gh' })) onCreated()
   }
   const field = 'rounded-md border border-strong bg-app px-2.5 outline-none focus:border-focus focus:ring-1 focus:ring-focus'
+  const branchSelect = (value: string, onChange: (v: string) => void, names: string[]) => (
+    <select className={cx(field, 'h-7 max-w-80 text-primary')} value={value} onChange={e => onChange(e.target.value)}>
+      {names.map(b => (
+        <option key={b} value={b}>
+          {b}
+          {openHeads.has(b) && value !== b ? ` (#${openHeads.get(b)})` : ''}
+        </option>
+      ))}
+    </select>
+  )
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -584,16 +616,14 @@ function CreatePr({ info, onCancel, onCreated }: { info: RepoInfo; onCancel: () 
         <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
           <GitBranch size={14} />
           <span>Merge</span>
-          <Chip kind="head" name={branch} />
+          {branchSelect(head, h => (setHead(h), setEdited(false)), locals.map(r => r.name).filter(n => n !== base))}
           <span>into</span>
-          <select className={cx(field, 'h-7 text-primary')} value={base} onChange={e => setBase(e.target.value)}>
-            {[...new Set([info.defaultBranchRef.name, ...bases])].map(b => (
-              <option key={b}>{b}</option>
-            ))}
-          </select>
-          {(!repo.upstream || repo.ahead > 0) && <span>· {repo.upstream ? `${repo.ahead} commit${repo.ahead > 1 ? 's' : ''} will be pushed first` : 'the branch will be published first'}</span>}
+          {branchSelect(base, b => (setBase(b), setEdited(false)), [...new Set([defaultBase, ...locals.map(r => r.name)])].filter(n => n !== head))}
+          {needsPush && <span>· {ref?.upstream ? `${ahead} commit${ahead > 1 ? 's' : ''} will be pushed first` : 'the branch will be published first'}</span>}
         </div>
-        <input className={cx(field, 'h-9 text-lg font-medium')} placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} autoFocus />
+        {!head && <div className="text-sm text-status-modified">Create a branch first — there is no branch to propose besides {base}.</div>}
+        {existing !== undefined && <div className="text-sm text-status-modified">{head} already has an open pull request, #{existing}.</div>}
+        <input className={cx(field, 'h-9 text-lg font-medium')} placeholder="Title" value={title} onChange={e => (setTitle(e.target.value), setEdited(true))} autoFocus />
         <div className="flex gap-3 text-sm">
           <button type="button" className={cx('border-b-2 pb-1', !preview ? 'border-primary font-semibold' : 'border-transparent text-muted')} onClick={() => setPreview(false)}>
             Write
@@ -607,7 +637,7 @@ function CreatePr({ info, onCancel, onCreated }: { info: RepoInfo; onCancel: () 
             <Markdown text={body} />
           </div>
         ) : (
-          <textarea className={cx(field, 'h-60 resize-y py-2 leading-normal')} placeholder="Describe the change (Markdown)" value={body} onChange={e => setBody(e.target.value)} />
+          <textarea className={cx(field, 'h-60 resize-y py-2 leading-normal')} placeholder="Describe the change (Markdown)" value={body} onChange={e => (setBody(e.target.value), setEdited(true))} />
         )}
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-1.5 text-sm text-secondary">
@@ -616,7 +646,7 @@ function CreatePr({ info, onCancel, onCreated }: { info: RepoInfo; onCancel: () 
           </label>
           <span className="flex-1" />
           <Button onClick={onCancel}>Cancel</Button>
-          <Button kind="primary" icon={GitPullRequest} disabled={!title.trim() || branch === base} onClick={() => void create()}>
+          <Button kind="primary" icon={GitPullRequest} disabled={!title.trim() || !head || head === base || existing !== undefined} onClick={() => void create()}>
             {draft ? 'Create draft' : 'Create pull request'}
           </Button>
         </div>
