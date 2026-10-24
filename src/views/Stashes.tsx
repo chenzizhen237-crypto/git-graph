@@ -3,6 +3,7 @@ import { Archive } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { DiffView } from '../components/Diff'
+import { Resizer, usePanelSize } from '../components/Split'
 import { Button, Empty } from '../components/ui'
 import { cx } from '../lib/cx'
 import { actions, stashDiff } from '../lib/git'
@@ -14,6 +15,7 @@ export function StashesView() {
   const [sel, setSel] = useState<string | null>(null)
   const [text, setText] = useState('')
   const stashes = repo?.stashes ?? []
+  const list = usePanelSize('stash-list', 380, 260, 900)
 
   useEffect(() => {
     if (!stashes.some(s => s.ref === sel)) setSel(stashes[0]?.ref ?? null)
@@ -36,7 +38,7 @@ export function StashesView() {
 
   return (
     <>
-      <div className={listColumn}>
+      <div className={listColumn} style={{ width: list.size }}>
         <PaneHead title="Stashes" count={stashes.length} />
         <div className="flex-1 overflow-y-auto p-1.5">
           {stashes.map(s => (
@@ -65,6 +67,7 @@ export function StashesView() {
           {!stashes.length && <Empty>No stashes. Use Stash in the toolbar to shelve your changes.</Empty>}
         </div>
       </div>
+      <Resizer panel={list} />
       <div className="flex min-w-0 flex-1 flex-col">{sel ? <DiffView path={sel} text={text} /> : <Empty>Select a stash</Empty>}</div>
     </>
   )

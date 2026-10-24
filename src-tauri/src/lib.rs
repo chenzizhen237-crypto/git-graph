@@ -1,5 +1,6 @@
-//! The native side of Git Graph: run `git`, watch a repository for changes,
-//! and hand paths to the OS. Everything else lives in the web view.
+//! The native side of Git Graph: run `git` and the GitHub CLI `gh`, watch a
+//! repository for changes, and hand paths to the OS. Everything else lives in
+//! the web view.
 
 use notify::{RecursiveMode, Watcher};
 use serde::Serialize;
@@ -18,9 +19,11 @@ pub struct GitOutput {
 }
 
 /// Apps started from Finder get a bare PATH; add the usual install places so
-/// Homebrew's git, credential helpers and hooks are found.
+/// Homebrew's git, `gh`, credential helpers and hooks are found.
 fn search_path() -> String {
-    let extra = ["/opt/homebrew/bin", "/usr/local/bin", "/usr/bin", "/bin", "/usr/sbin", "/sbin"];
+    let home = std::env::var("HOME").unwrap_or_default();
+    let local = format!("{home}/.local/bin");
+    let extra = ["/opt/homebrew/bin", "/usr/local/bin", local.as_str(), "/usr/bin", "/bin", "/usr/sbin", "/sbin"];
     let current = std::env::var("PATH").unwrap_or_default();
     let mut parts: Vec<&str> = current.split(':').filter(|p| !p.is_empty()).collect();
     for p in extra {
@@ -31,33 +34,35 @@ fn search_path() -> String {
     parts.join(":")
 }
 
-fn git_binary() -> &'static PathBuf {
-    static GIT: OnceLock<PathBuf> = OnceLock::new();
-    GIT.get_or_init(|| {
-        for dir in search_path().split(':') {
-            let candidate = Path::new(dir).join("git");
-            if candidate.is_file() {
-                return candidate;
-            }
+fn find_binary(name: &str) -> PathBuf {
+    for dir in search_path().split(':') {
+        let candidate = Path::new(dir).join(name);
+        if candidate.is_file() {
+            return candidate;
         }
-        PathBuf::from("git")
-    })
+    }
+    PathBuf::from(name)
 }
 
-fn run_git(repo: &str, args: &[String], stdin: Option<&str>) -> Result<GitOutput, String> {
-    let mut cmd = Command::new(git_binary());
-    cmd.arg("-C")
-        .arg(repo)
-        .args(["-c", "color.ui=false", "-c", "core.quotepath=false"])
-        .args(args)
-        .env("PATH", search_path())
+fn git_binary() -> &'static PathBuf {
+    static GIT: OnceLock<PathBuf> = OnceLock::new();
+    GIT.get_or_init(|| find_binary("git"))
+}
+
+fn gh_binary() -> &'static PathBuf {
+    static GH: OnceLock<PathBuf> = OnceLock::new();
+    GH.get_or_init(|| find_binary("gh"))
+}
+
+/// Spawns a tool with the app's environment, feeds `stdin`, collects output.
+fn run_tool(mut cmd: Command, name: &str, stdin: Option<&str>) -> Result<GitOutput, String> {
+    cmd.env("PATH", search_path())
         .env("GIT_TERMINAL_PROMPT", "0")
-        .env("GIT_OPTIONAL_LOCKS", "0")
         .env("LANG", "en_US.UTF-8")
         .stdin(if stdin.is_some() { Stdio::piped() } else { Stdio::null() })
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
-    let mut child = cmd.spawn().map_err(|e| format!("could not start git: {e}"))?;
+    let mut child = cmd.spawn().map_err(|e| format!("could not start {name}: {e}"))?;
     if let Some(input) = stdin {
         use std::io::Write;
         if let Some(mut pipe) = child.stdin.take() {
@@ -70,6 +75,41 @@ fn run_git(repo: &str, args: &[String], stdin: Option<&str>) -> Result<GitOutput
         stderr: String::from_utf8_lossy(&out.stderr).into_owned(),
         code: out.status.code().unwrap_or(-1),
     })
+}
+
+fn run_git(repo: &str, args: &[String], stdin: Option<&str>) -> Result<GitOutput, String> {
+    let mut cmd = Command::new(git_binary());
+    cmd.arg("-C")
+        .arg(repo)
+        .args(["-c", "color.ui=false", "-c", "core.quotepath=false"])
+        .args(args)
+        .env("GIT_OPTIONAL_LOCKS", "0");
+    run_tool(cmd, "git", stdin)
+}
+
+/// Runs the GitHub CLI in `repo`, never prompting. Only gh is ever spawned.
+#[tauri::command]
+async fn gh(repo: String, args: Vec<String>, stdin: Option<String>) -> Result<GitOutput, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let mut cmd = Command::new(gh_binary());
+        cmd.current_dir(&repo)
+            .args(&args)
+            .env("GH_PROMPT_DISABLED", "1")
+            .env("GH_NO_UPDATE_NOTIFIER", "1")
+            .env("NO_COLOR", "1");
+        run_tool(cmd, "gh", stdin.as_deref())
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
+/// Opens a web page (a pull request, a check run) in the default browser.
+#[tauri::command]
+fn open_url(url: String) -> Result<(), String> {
+    if !url.starts_with("https://") {
+        return Err("only https links open".into());
+    }
+    open_with(&[&url])
 }
 
 /// Runs `git -C <repo> <args…>`. Only git is ever spawned.
@@ -175,7 +215,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .manage(WatchState::default())
-        .invoke_handler(tauri::generate_handler![git, read_git_file, watch_repo, open_terminal, reveal, initial_repo])
+        .invoke_handler(tauri::generate_handler![git, gh, open_url, read_git_file, watch_repo, open_terminal, reveal, initial_repo])
         .run(tauri::generate_context!())
         .expect("error while running Git Graph");
 }

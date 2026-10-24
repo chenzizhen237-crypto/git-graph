@@ -6,11 +6,12 @@ import { listen } from '@tauri-apps/api/event'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 
 import { GitError, git, loadRepo, watchRepo } from './lib/git'
+import { GhError, gh } from './lib/github'
 import { isConflict } from './lib/parse'
 import type { Stage } from './lib/tokens'
 import type { LogQuery, RepoData } from './lib/types'
 
-export type View = 'history' | 'changes' | 'stashes'
+export type View = 'history' | 'changes' | 'stashes' | 'pulls'
 
 export type Toast = { id: number; kind: 'ok' | 'error'; title: string; detail?: string }
 
@@ -92,18 +93,18 @@ function useAppState(root: string) {
   const ask = useCallback((a: Ask) => new Promise<boolean>(resolve => setDialog({ ...a, kind: 'ask', resolve })), [])
   const prompt = useCallback((p: Prompt) => new Promise<string | null>(resolve => setDialog({ ...p, kind: 'prompt', resolve })), [])
 
-  /** Runs a git action: one at a time, failures as a toast, then a refresh. */
+  /** Runs a git (or gh) action: one at a time, failures as a toast, then a refresh. */
   const act = useCallback(
-    async (label: string, args: string[], opts: { stdin?: string; done?: string } = {}) => {
+    async (label: string, args: string[], opts: { stdin?: string; done?: string; tool?: 'git' | 'gh' } = {}) => {
       if (busy) return false
       setBusy(label)
       try {
-        await git(root, args, opts.stdin)
+        await (opts.tool === 'gh' ? gh : git)(root, args, opts.stdin)
         if (opts.done) toast({ kind: 'ok', title: opts.done })
         if (args[0] === 'fetch' || args[0] === 'pull') setLastFetch(Date.now())
         return true
       } catch (e) {
-        const detail = e instanceof GitError ? e.message : String(e)
+        const detail = e instanceof GitError || e instanceof GhError ? e.message : String(e)
         toast({ kind: 'error', title: `${label} failed`, detail })
         return false
       } finally {

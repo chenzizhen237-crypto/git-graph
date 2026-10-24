@@ -14,8 +14,11 @@ import {
   GitBranch,
   GitGraph,
   GitMerge,
+  GitPullRequest,
   House,
   Monitor,
+  PanelLeftClose,
+  PanelLeftOpen,
   Moon,
   Plus,
   RefreshCcw,
@@ -37,7 +40,7 @@ import { Button, caps, Chip, IconButton, Kbd, StageDot, ToolButton } from './ui'
 
 const Sep = () => <div className="h-6 w-px bg-strong" />
 
-export function TitleBar({ onSwitchRepo }: { onSwitchRepo: () => void }) {
+export function TitleBar({ onSwitchRepo, sidebar, onToggleSidebar }: { onSwitchRepo: () => void; sidebar: boolean; onToggleSidebar: () => void }) {
   const app = useApp()
   const { repo, act, busy, prompt, setPaletteOpen } = app
   // Leaves room on the left for the native traffic lights.
@@ -71,6 +74,7 @@ export function TitleBar({ onSwitchRepo }: { onSwitchRepo: () => void }) {
 
   return (
     <div className={bar} data-tauri-drag-region>
+      <IconButton icon={sidebar ? PanelLeftClose : PanelLeftOpen} onClick={onToggleSidebar} title={`${sidebar ? 'Hide' : 'Show'} sidebar (⌘\\)`} />
       <button type="button" className="flex items-center gap-1.75 rounded-md px-2 py-1 text-left hover:bg-hover" onClick={onSwitchRepo} title="Switch repository">
         <img className="size-5.5 rounded-[5.5px]" src={appIcon} alt="" />
         <div>
@@ -185,7 +189,7 @@ const trackMeta = (track?: string) => ({
   behind: /behind (\d+)/.exec(track ?? '')?.[1],
 })
 
-export function Sidebar() {
+export function Sidebar({ width }: { width: number }) {
   const { repo, view, setView, query, setQuery, act, prompt } = useApp()
   const remotes = useMemo(() => {
     const groups = new Map<string, string[]>()
@@ -197,8 +201,8 @@ export function Sidebar() {
     return groups
   }, [repo?.refs])
   const [openRemotes, setOpenRemotes] = useState<Set<string>>(new Set(['origin']))
-  const shell = 'flex w-sidebar shrink-0 flex-col gap-px overflow-y-auto border-r border-subtle bg-sidebar px-2 py-2.5'
-  if (!repo) return <nav className={shell} />
+  const shell = 'flex shrink-0 flex-col gap-px overflow-y-auto border-r border-subtle bg-sidebar px-2 py-2.5'
+  if (!repo) return <nav className={shell} style={{ width }} />
   const locals = repo.refs.filter(r => r.kind === 'local').sort((a, b) => Number(b.isHead) - Number(a.isHead))
   const tags = repo.refs.filter(r => r.kind === 'tag')
   const scopeTo = (branch: string) => {
@@ -218,11 +222,12 @@ export function Sidebar() {
     })
 
   return (
-    <nav className={shell}>
+    <nav className={shell} style={{ width }}>
       <Section label="WORKSPACE">
         <Item icon={FileDiff} color="var(--status-modified)" label="Changes" meta={repo.changes.length} selected={view === 'changes'} onClick={() => setView('changes')} title="Changes (⌘2)" />
         <Item icon={GitGraph} color="var(--ref-head)" label="History" selected={view === 'history'} onClick={() => setView('history')} title="History (⌘1)" />
         <Item icon={Archive} color="var(--text-muted)" label="Stashes" meta={repo.stashes.length || ''} selected={view === 'stashes'} onClick={() => setView('stashes')} title="Stashes (⌘3)" />
+        <Item icon={GitPullRequest} color="var(--status-added)" label="Pull requests" selected={view === 'pulls'} onClick={() => setView('pulls')} title="Pull requests (⌘4)" />
       </Section>
       <Section label="BRANCHES" onAdd={() => void newBranch()}>
         {locals.map(b => {

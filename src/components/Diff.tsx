@@ -1,13 +1,17 @@
-/** Diff/File header, Diff/Hunk and the three line kinds, with conflict markers called out. */
-import { AlignJustify, FileCode2, WrapText } from 'lucide-react'
-import { useMemo, useState, type ReactNode } from 'react'
+/**
+ * Diff/File header, Diff/Hunk and the line kinds, unified or side by side,
+ * with conflict markers called out. Any diff pops out to fill the window.
+ */
+import { Columns2, FileCode2, Maximize2, Minimize2, Rows2, WrapText, X } from 'lucide-react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 
 import { cx } from '../lib/cx'
-import { diffStats, parseDiff, type DiffLine } from '../lib/diff'
-import { Empty, Segmented } from './ui'
+import { diffStats, pairLines, parseDiff, type DiffLine, type Hunk } from '../lib/diff'
+import { Empty, IconButton, Segmented } from './ui'
 
 type Side = 'ours' | 'theirs' | null
-type Marked = { l: DiffLine; marker: 'ours' | 'mid' | 'theirs' | null; side: Side }
+type Marked = DiffLine & { marker?: 'ours' | 'mid' | 'theirs'; side?: Side }
 
 /** Marks conflict regions so `<<<<<<<`, `=======` and `>>>>>>>` lines and their halves read apart. */
 function markConflicts(lines: DiffLine[]): Marked[] {
@@ -16,34 +20,60 @@ function markConflicts(lines: DiffLine[]): Marked[] {
     const t = l.text
     if (t.startsWith('<<<<<<<')) {
       side = 'ours'
-      return { l, marker: 'ours', side: null }
+      return { ...l, marker: 'ours' }
     }
     if (side && t.startsWith('=======')) {
       side = 'theirs'
-      return { l, marker: 'mid', side: null }
+      return { ...l, marker: 'mid' }
     }
     if (side && t.startsWith('>>>>>>>')) {
       side = null
-      return { l, marker: 'theirs', side: null }
+      return { ...l, marker: 'theirs' }
     }
-    return { l, marker: null, side }
+    return { ...l, side }
   })
 }
 
-const ROW: Record<DiffLine['kind'], { row: string; num: string; sign: string }> = {
+const TONE: Record<DiffLine['kind'], { row: string; num: string; sign: string }> = {
   ctx: { row: '', num: '', sign: '' },
   meta: { row: '', num: '', sign: '' },
   add: { row: 'bg-diff-add-bg', num: 'bg-diff-add-gutter', sign: 'text-status-added' },
   del: { row: 'bg-diff-del-bg', num: 'bg-diff-del-gutter', sign: 'text-status-deleted' },
 }
+const numCell = 'w-10 min-w-10 pr-1.5 text-right align-top text-xs text-faint select-none'
+const signFor = (k: DiffLine['kind']) => (k === 'add' ? '+' : k === 'del' ? '−' : '')
 
-export function DiffView({ path, text, loading, actions, empty }: { path: string; text: string; loading?: boolean; actions?: ReactNode; empty?: string }) {
+type Mode = 'unified' | 'split'
+
+function readPref<T extends string>(key: string, fallback: T): T {
+  try {
+    return (localStorage.getItem(key) as T | null) ?? fallback
+  } catch {
+    return fallback
+  }
+}
+
+export function DiffView({ path, text, loading, actions, empty, popped, onClose }: { path: string; text: string; loading?: boolean; actions?: ReactNode; empty?: string; popped?: boolean; onClose?: () => void }) {
   const hunks = useMemo(() => parseDiff(text), [text])
   const stats = useMemo(() => diffStats(hunks), [hunks])
-  const [wrap, setWrap] = useState<'nowrap' | 'wrap'>('nowrap')
-  return (
-    <div className="flex min-h-0 flex-1 flex-col border-t border-subtle">
-      <div className="flex h-9 shrink-0 items-center gap-2 border-b border-subtle bg-surface px-2.5 font-mono">
+  const [mode, setModeState] = useState<Mode>(() => readPref<Mode>('diff:mode', 'unified'))
+  const [wrap, setWrap] = useState(() => readPref<string>('diff:wrap', '0') === '1')
+  const [open, setOpen] = useState(false)
+  const setMode = (m: Mode) => {
+    setModeState(m)
+    localStorage.setItem('diff:mode', m)
+  }
+
+  useEffect(() => {
+    if (!popped) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose?.()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [popped, onClose])
+
+  const body = (
+    <div className={cx('flex min-h-0 flex-1 flex-col', !popped && 'border-t border-subtle')}>
+      <div className={cx('flex shrink-0 items-center gap-2 border-b border-subtle bg-surface px-2.5 font-mono', popped ? 'h-11' : 'h-9')}>
         <FileCode2 size={14} className="shrink-0 text-muted" />
         <span className="min-w-0 flex-1 truncate" title={path}>
           {path}
@@ -52,63 +82,136 @@ export function DiffView({ path, text, loading, actions, empty }: { path: string
         <span className="text-sm font-semibold text-status-added">+{stats.added}</span>
         <span className="text-sm font-semibold text-status-deleted">−{stats.deleted}</span>
         <Segmented
-          value={wrap}
-          onChange={setWrap}
+          value={mode}
+          onChange={setMode}
           options={[
-            { value: 'nowrap', icon: AlignJustify, title: 'No wrap' },
-            { value: 'wrap', icon: WrapText, title: 'Wrap lines' },
+            { value: 'unified', icon: Rows2, title: 'Unified' },
+            { value: 'split', icon: Columns2, title: 'Side by side' },
           ]}
         />
+        <IconButton
+          icon={WrapText}
+          size={14}
+          small
+          active={wrap}
+          title="Wrap long lines"
+          onClick={() => {
+            localStorage.setItem('diff:wrap', wrap ? '0' : '1')
+            setWrap(!wrap)
+          }}
+        />
+        {popped ? (
+          <>
+            <IconButton icon={Minimize2} size={14} small title="Back to panel (esc)" onClick={onClose} />
+            <IconButton icon={X} size={14} small title="Close (esc)" onClick={onClose} />
+          </>
+        ) : (
+          <IconButton icon={Maximize2} size={14} small title="Pop out to fill the window" onClick={() => setOpen(true)} />
+        )}
       </div>
       <div className="flex-1 overflow-auto font-mono text-sm select-text">
         {!hunks.length ? (
           <Empty>{loading ? 'Loading…' : (empty ?? 'No textual changes (binary file or mode change)')}</Empty>
         ) : (
-          <table className="min-w-full border-collapse">
+          <table className={cx('min-w-full border-collapse', mode === 'split' && 'w-full table-fixed')}>
+            {mode === 'split' && (
+              <colgroup>
+                <col className="w-10" />
+                <col />
+                <col className="w-10" />
+                <col />
+              </colgroup>
+            )}
             <tbody>
-              {hunks.map((h, hi) => (
-                <HunkRows key={hi} header={h.header} lines={h.lines} wrap={wrap === 'wrap'} />
-              ))}
+              {hunks.map((h, hi) => (mode === 'split' ? <SplitHunk key={hi} hunk={h} wrap={wrap} /> : <UnifiedHunk key={hi} hunk={h} wrap={wrap} />))}
             </tbody>
           </table>
         )}
       </div>
     </div>
   )
-}
 
-function HunkRows({ header, lines, wrap }: { header: string; lines: DiffLine[]; wrap: boolean }) {
-  const marked = useMemo(() => markConflicts(lines), [lines])
-  const num = 'w-9.5 min-w-9.5 pr-1.5 text-right align-top text-xs text-faint select-none'
+  if (popped) return body
   return (
     <>
-      <tr>
-        <td colSpan={4} className="h-6 bg-diff-hunk-bg px-2.5 text-xs font-medium whitespace-pre text-link">
-          {header}
-        </td>
-      </tr>
-      {marked.map(({ l, marker, side }, i) => {
-        const s = ROW[l.kind]
-        const theirs = marker === 'theirs' || side === 'theirs'
+      {body}
+      {open &&
+        createPortal(
+          <div className="fixed inset-0 z-50 flex bg-scrim p-6" onMouseDown={() => setOpen(false)}>
+            <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-strong bg-app shadow-[0_20px_50px_var(--shadow)]" onMouseDown={e => e.stopPropagation()}>
+              <DiffView path={path} text={text} loading={loading} actions={actions} empty={empty} popped onClose={() => setOpen(false)} />
+            </div>
+          </div>,
+          document.body,
+        )}
+    </>
+  )
+}
+
+function HunkHeader({ header, span }: { header: string; span: number }) {
+  return (
+    <tr>
+      <td colSpan={span} className="h-6 bg-diff-hunk-bg px-2.5 text-xs font-medium whitespace-pre text-link">
+        {header}
+      </td>
+    </tr>
+  )
+}
+
+function codeClass(l: Marked, wrap: boolean) {
+  return cx(
+    'pr-4',
+    wrap ? 'break-all whitespace-pre-wrap' : 'whitespace-pre',
+    l.kind === 'meta' && 'text-muted italic',
+    l.marker && 'font-semibold',
+    l.marker && (l.marker === 'theirs' ? 'text-status-renamed' : 'text-status-conflict'),
+  )
+}
+
+function UnifiedHunk({ hunk, wrap }: { hunk: Hunk; wrap: boolean }) {
+  const lines = useMemo(() => markConflicts(hunk.lines), [hunk])
+  return (
+    <>
+      <HunkHeader header={hunk.header} span={4} />
+      {lines.map((l, i) => {
+        const t = TONE[l.kind]
         return (
-          <tr key={i} className={cx('leading-5', s.row, theirs && 'bg-diff-hunk-bg')}>
-            <td className={cx(num, s.num)}>{l.old ?? ''}</td>
-            <td className={cx(num, s.num)}>{l.new ?? ''}</td>
-            <td className={cx('w-4.5 text-center align-top font-semibold select-none', s.sign)}>{l.kind === 'add' ? '+' : l.kind === 'del' ? '−' : ''}</td>
-            <td
-              className={cx(
-                'w-full pr-4',
-                wrap ? 'break-all whitespace-pre-wrap' : 'whitespace-pre',
-                l.kind === 'meta' && 'text-muted italic',
-                marker && 'font-semibold',
-                marker && (marker === 'theirs' ? 'text-status-renamed' : 'text-status-conflict'),
-              )}
-            >
-              {l.text || ' '}
-            </td>
+          <tr key={i} className={cx('leading-5', t.row, (l.marker === 'theirs' || l.side === 'theirs') && 'bg-diff-hunk-bg')}>
+            <td className={cx(numCell, t.num)}>{l.old ?? ''}</td>
+            <td className={cx(numCell, t.num)}>{l.new ?? ''}</td>
+            <td className={cx('w-4.5 text-center align-top font-semibold select-none', t.sign)}>{signFor(l.kind)}</td>
+            <td className={cx('w-full', codeClass(l, wrap))}>{l.text || ' '}</td>
           </tr>
         )
       })}
+    </>
+  )
+}
+
+function SplitHunk({ hunk, wrap }: { hunk: Hunk; wrap: boolean }) {
+  const rows = useMemo(() => pairLines(hunk.lines), [hunk])
+  const half = (l: DiffLine | null, side: 'old' | 'new', key: string) => {
+    if (!l) return [<td key={key + 'n'} className={cx(numCell, 'bg-surface')} />, <td key={key + 'c'} className="bg-surface" />]
+    const t = TONE[l.kind]
+    return [
+      <td key={key + 'n'} className={cx(numCell, t.num)}>
+        {(side === 'old' ? l.old : l.new) ?? ''}
+      </td>,
+      <td key={key + 'c'} className={cx('overflow-hidden pl-1.5', t.row, codeClass(l, wrap))}>
+        <span className={cx('mr-1 font-semibold select-none', t.sign)}>{signFor(l.kind) || ' '}</span>
+        {l.text || ' '}
+      </td>,
+    ]
+  }
+  return (
+    <>
+      <HunkHeader header={hunk.header} span={4} />
+      {rows.map(([a, b], i) => (
+        <tr key={i} className="leading-5">
+          {half(a, 'old', 'a')}
+          {half(b, 'new', 'b')}
+        </tr>
+      ))}
     </>
   )
 }

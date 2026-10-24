@@ -13,6 +13,7 @@ import {
   GitCommitHorizontal,
   GitGraph,
   GitMerge,
+  GitPullRequest,
   RefreshCcw,
   Search,
   SquareTerminal,
@@ -108,6 +109,7 @@ export function CommandPalette({ onSwitchRepo }: { onSwitchRepo: () => void }) {
       { id: 'a:history', group: 'ACTIONS', icon: GitGraph, color: 'var(--text-secondary)', label: 'Show History', kbd: '⌘1', run: () => setView('history') },
       { id: 'a:changes', group: 'ACTIONS', icon: FileDiff, color: 'var(--text-secondary)', label: 'Show Changes', kbd: '⌘2', run: () => setView('changes') },
       { id: 'a:stashes', group: 'ACTIONS', icon: Archive, color: 'var(--text-secondary)', label: 'Show Stashes', kbd: '⌘3', run: () => setView('stashes') },
+      { id: 'a:pulls', group: 'ACTIONS', icon: GitPullRequest, color: 'var(--text-secondary)', label: 'Show Pull requests', kbd: '⌘4', run: () => setView('pulls') },
       { id: 'a:term', group: 'ACTIONS', icon: SquareTerminal, color: 'var(--text-secondary)', label: 'Open in Terminal', run: () => void openTerminal(repo.root) },
       { id: 'a:repo', group: 'ACTIONS', icon: FolderOpen, color: 'var(--text-secondary)', label: 'Open another repository…', kbd: '⌘O', run: onSwitchRepo },
       {

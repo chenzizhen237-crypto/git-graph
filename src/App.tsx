@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react'
 
 import { Banner, Sidebar, StatusBar, TitleBar } from './components/Chrome'
 import { CommandPalette, DialogHost, Toasts } from './components/Overlays'
+import { Resizer, usePanelSize } from './components/Split'
 import { actions, findRoot } from './lib/git'
 import { AppProvider, rememberRepo, useApp } from './state'
 import { ChangesView } from './views/Changes'
 import { HistoryView } from './views/History'
+import { PullRequestsView } from './views/PullRequests'
 import { StashesView } from './views/Stashes'
 import { Welcome } from './views/Welcome'
 
@@ -38,6 +40,13 @@ export function App() {
 function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
   const app = useApp()
   const { repo, view, setView, paletteOpen, setPaletteOpen, refresh, act } = app
+  const sidebar = usePanelSize('sidebar', 248, 180, 480)
+  const [showSidebar, setShowSidebar] = useState(() => localStorage.getItem('sidebar:hidden') !== '1')
+  const toggleSidebar = () =>
+    setShowSidebar(v => {
+      localStorage.setItem('sidebar:hidden', v ? '1' : '0')
+      return !v
+    })
 
   useEffect(() => {
     if (repo) rememberRepo(repo.root, repo.branch)
@@ -53,8 +62,10 @@ function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
       else if (k === '1') (handled(), setView('history'))
       else if (k === '2') (handled(), setView('changes'))
       else if (k === '3') (handled(), setView('stashes'))
+      else if (k === '4') (handled(), setView('pulls'))
       else if (k === 'r') (handled(), void refresh())
       else if (k === 'o') (handled(), onSwitchRepo())
+      else if (k === '\\') (handled(), toggleSidebar())
       else if (k === 'f' && e.shiftKey) (handled(), void act('Fetch', actions.fetch(), { done: 'Fetched' }))
       else if (k === 'p' && e.shiftKey && repo) (handled(), void act('Push', actions.push(repo), { done: 'Pushed' }))
     }
@@ -64,13 +75,19 @@ function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
 
   return (
     <div className="flex h-full flex-col bg-app">
-      <TitleBar onSwitchRepo={onSwitchRepo} />
+      <TitleBar onSwitchRepo={onSwitchRepo} sidebar={showSidebar} onToggleSidebar={toggleSidebar} />
       <Banner />
       <div className="flex min-h-0 flex-1">
-        <Sidebar />
+        {showSidebar && (
+          <>
+            <Sidebar width={sidebar.size} />
+            <Resizer panel={sidebar} />
+          </>
+        )}
         {view === 'history' && <HistoryView />}
         {view === 'changes' && <ChangesView />}
         {view === 'stashes' && <StashesView />}
+        {view === 'pulls' && <PullRequestsView />}
       </div>
       <StatusBar />
       {paletteOpen && <CommandPalette onSwitchRepo={onSwitchRepo} />}

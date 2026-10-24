@@ -44,3 +44,22 @@ export const diffStats = (hunks: Hunk[]) =>
     },
     { added: 0, deleted: 0 },
   )
+
+/** Side-by-side rows: context on both sides, a run of removals paired with the additions after it. */
+export function pairLines(lines: DiffLine[]): [DiffLine | null, DiffLine | null][] {
+  const rows: [DiffLine | null, DiffLine | null][] = []
+  for (let i = 0; i < lines.length; ) {
+    const l = lines[i]!
+    if (l.kind === 'del' || l.kind === 'add') {
+      const dels: DiffLine[] = []
+      const adds: DiffLine[] = []
+      while (lines[i]?.kind === 'del') dels.push(lines[i++]!)
+      while (lines[i]?.kind === 'add') adds.push(lines[i++]!)
+      for (let k = 0; k < Math.max(dels.length, adds.length); k++) rows.push([dels[k] ?? null, adds[k] ?? null])
+    } else {
+      rows.push([l, l])
+      i++
+    }
+  }
+  return rows
+}

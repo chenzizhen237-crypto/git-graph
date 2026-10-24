@@ -4,6 +4,8 @@ import {
   Check,
   CherryIcon,
   ChevronDown,
+  ChevronsDownUp,
+  ChevronsUpDown,
   Columns3,
   Copy,
   FileText,
@@ -24,6 +26,7 @@ import {
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 
 import { DiffView } from '../components/Diff'
+import { Resizer, usePanelSize } from '../components/Split'
 import { GraphCell, ROW_H, graphWidth, type NodeKind } from '../components/GraphCell'
 import { Avatar, caps, Chip, Count, Empty, FilePath, fileRowClass, IconButton, LineStats, refChips, Segmented, shortAgo, splitPath, StageDot, StatusBadge } from '../components/ui'
 import { cx } from '../lib/cx'
@@ -45,13 +48,19 @@ const popover = 'absolute z-40 flex flex-col overflow-hidden rounded-lg border b
 export function HistoryView() {
   const [layout, setLayout] = useState<'list' | 'split'>('split')
   const [showGraph, setShowGraph] = useState(true)
+  const inspector = usePanelSize('inspector', 420, 300, 1200)
   return (
     <>
       <div className="flex min-w-0 flex-1 flex-col">
         <FilterBar layout={layout} setLayout={setLayout} showGraph={showGraph} setShowGraph={setShowGraph} />
         <LogList showGraph={showGraph} />
       </div>
-      {layout === 'split' && <Inspector />}
+      {layout === 'split' && (
+        <>
+          <Resizer panel={inspector} side="after" />
+          <Inspector width={inspector.size} />
+        </>
+      )}
     </>
   )
 }
@@ -428,13 +437,15 @@ function Tab({ on, icon: Icon, children, onClick }: { on: boolean; icon: LucideI
   )
 }
 
-function Inspector() {
+function Inspector({ width }: { width: number }) {
   const { root, repo, selected, setSelected, act, prompt, ask, toast } = useApp()
   const remotes = useRemoteNames()
   const [detail, setDetail] = useState<CommitDetail | null>(null)
   const [file, setFile] = useState<CommitFile | null>(null)
   const [diff, setDiff] = useState<{ text: string; loading: boolean }>({ text: '', loading: false })
   const [tab, setTab] = useState<'files' | 'tree'>('files')
+  const [compact, setCompact] = useState(() => localStorage.getItem('inspector:compact') === '1')
+  const filesPanel = usePanelSize('inspector-files', 200, 56, 900)
   const row = repo?.rows.find(r => r.hash === selected)
 
   useEffect(() => {
@@ -464,10 +475,10 @@ function Inspector() {
     }
   }, [root, selected, file])
 
-  const shell = 'flex min-h-0 w-inspector shrink-0 flex-col border-l border-subtle'
+  const shell = 'flex min-h-0 shrink-0 flex-col border-l border-subtle'
   if (!row || !detail || detail.hash !== row.hash)
     return (
-      <aside className={shell}>
+      <aside className={shell} style={{ width }}>
         <Empty>{row ? 'Loading…' : 'Select a commit'}</Empty>
       </aside>
     )
@@ -506,7 +517,7 @@ function Inspector() {
   }
 
   return (
-    <aside className={shell}>
+    <aside className={shell} style={{ width }}>
       <div className="flex flex-col gap-2.5 px-4 pt-3.5 pb-3">
         <div className="flex items-center gap-1">
           <span className="inline-flex items-center gap-1.25 rounded-sm bg-surface px-1.5 py-0.5 font-mono text-sm font-medium text-link">
@@ -529,9 +540,19 @@ function Inspector() {
           <IconButton icon={Tag} title="Tag this commit" onClick={() => void newTag()} />
           <IconButton icon={CherryIcon} title="Cherry-pick onto current branch" disabled={row.hash === repo?.head} onClick={() => void act('Cherry-pick', actions.cherryPick(row.hash), { done: 'Cherry-picked' })} />
           <IconButton icon={Undo2} title="Revert" onClick={() => void revert()} />
+          <IconButton
+            icon={compact ? ChevronsUpDown : ChevronsDownUp}
+            title={compact ? 'Show commit details' : 'Collapse commit details'}
+            onClick={() => {
+              localStorage.setItem('inspector:compact', compact ? '0' : '1')
+              setCompact(!compact)
+            }}
+          />
         </div>
-        <div className="text-lg leading-snug font-semibold select-text">{subject}</div>
-        {message && <div className="max-h-30 overflow-y-auto leading-normal whitespace-pre-wrap text-secondary select-text">{message}</div>}
+        <div className={cx('leading-snug font-semibold select-text', compact ? 'truncate' : 'text-lg')}>{subject}</div>
+        {!compact && message && <div className="max-h-30 overflow-y-auto leading-normal whitespace-pre-wrap text-secondary select-text">{message}</div>}
+        {!compact && (
+        <>
         <div className="flex items-center gap-2.5">
           <Avatar name={authorName} size={28} />
           <div className="min-w-0">
@@ -553,6 +574,8 @@ function Inspector() {
             </button>
           ))}
         </div>
+        </>
+        )}
       </div>
       <div className="flex shrink-0 gap-4.5 border-y border-subtle px-4">
         <Tab on={tab === 'files'} icon={FileText} onClick={() => setTab('files')}>
@@ -562,7 +585,7 @@ function Inspector() {
           Tree
         </Tab>
       </div>
-      <div className="max-h-[40%] shrink-0 overflow-y-auto p-1.5">
+      <div className="shrink-0 overflow-y-auto p-1.5" style={{ height: file ? filesPanel.size : undefined, flex: file ? undefined : 1 }}>
         {tab === 'files'
           ? detail.files.map(f => fileRow(f))
           : byFolder(detail.files).map(([dir, files]) => (
@@ -576,7 +599,12 @@ function Inspector() {
             ))}
         {!detail.files.length && <Empty>No file changes</Empty>}
       </div>
-      {file && <DiffView path={file.path} text={diff.text} loading={diff.loading} />}
+      {file && (
+        <>
+          <Resizer panel={filesPanel} axis="y" />
+          <DiffView path={file.path} text={diff.text} loading={diff.loading} />
+        </>
+      )}
     </aside>
   )
 }

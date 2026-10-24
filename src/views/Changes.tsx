@@ -3,6 +3,7 @@ import { ArrowUp, Check, ChevronDown, ChevronRight, Minus, Plus, Undo2 } from 'l
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 
 import { DiffView } from '../components/Diff'
+import { Resizer, usePanelSize } from '../components/Split'
 import { Button, caps, Count, Empty, FilePath, fileRowClass, IconButton, LineStats, StatusBadge, splitPath } from '../components/ui'
 import { cx } from '../lib/cx'
 import { actions, git, workFileDiff, workStats } from '../lib/git'
@@ -22,7 +23,7 @@ const LETTER: Record<Kind, (c: FileChange) => string> = {
 }
 
 /** The list column shared by Changes and Stashes. */
-export const listColumn = 'flex min-h-0 w-95 shrink-0 flex-col border-r border-subtle'
+export const listColumn = 'flex min-h-0 shrink-0 flex-col border-r border-subtle'
 
 export function PaneHead({ title, count, children }: { title: string; count: number; children?: ReactNode }) {
   return (
@@ -40,6 +41,8 @@ export function ChangesView() {
   const [sel, setSel] = useState<Sel | null>(null)
   const [diff, setDiff] = useState({ text: '', loading: false })
   const [counts, setCounts] = useState<{ staged: Counts; unstaged: Counts }>({ staged: new Map(), unstaged: new Map() })
+  const list = usePanelSize('changes-list', 380, 260, 900)
+  const composer = usePanelSize('composer', 84, 36, 520)
 
   const groups = useMemo(() => {
     const ch = repo?.changes ?? []
@@ -145,7 +148,7 @@ export function ChangesView() {
 
   return (
     <>
-      <div className={listColumn}>
+      <div className={listColumn} style={{ width: list.size }}>
         <PaneHead title="Changes" count={total} />
         <div className="flex-1 overflow-y-auto p-1.5">
           {section('conflict', 'UNMERGED', { label: 'Mark all resolved', run: () => void act('Mark resolved', actions.stage(groups.conflict.map(c => c.path))) })}
@@ -154,8 +157,10 @@ export function ChangesView() {
           {section('untracked', 'UNTRACKED', { label: 'Stage all', run: () => void act('Stage all', actions.stage(groups.untracked.map(c => c.path))) })}
           {!total && <Empty>Nothing to commit — working tree clean</Empty>}
         </div>
-        <Composer staged={groups.staged.length} conflicts={groups.conflict.length} busy={!!busy} />
+        <Resizer panel={composer} axis="y" side="after" />
+        <Composer staged={groups.staged.length} conflicts={groups.conflict.length} busy={!!busy} descHeight={composer.size} />
       </div>
+      <Resizer panel={list} />
       <div className="flex min-w-0 flex-1 flex-col">
         {sel ? <DiffView path={sel.path} text={diff.text} loading={diff.loading} empty={sel.kind === 'untracked' ? 'Empty file' : undefined} /> : <Empty>Select a file to see its changes</Empty>}
       </div>
@@ -186,7 +191,7 @@ function Group({ label, count, conflict, action, children }: { label: string; co
 
 const field = 'w-full rounded-md border border-strong bg-app outline-none focus:border-focus focus:ring-1 focus:ring-focus'
 
-function Composer({ staged, conflicts, busy }: { staged: number; conflicts: number; busy: boolean }) {
+function Composer({ staged, conflicts, busy, descHeight }: { staged: number; conflicts: number; busy: boolean; descHeight: number }) {
   const { root, repo, act } = useApp()
   const key = `draft:${root}`
   const [summary, setSummary] = useState(() => localStorage.getItem(key + ':s') ?? '')
@@ -233,7 +238,7 @@ function Composer({ staged, conflicts, busy }: { staged: number; conflicts: numb
   return (
     <div className="flex shrink-0 flex-col gap-2 border-t border-subtle bg-sidebar p-3">
       <input className={cx(field, 'h-8 px-2.5 font-medium')} placeholder="Summary (required)" value={summary} onChange={e => setSummary(e.target.value)} onKeyDown={submitOnCmdEnter} />
-      <textarea className={cx(field, 'h-21 resize-none px-2.5 py-2 leading-normal text-secondary')} placeholder="Description" value={body} onChange={e => setBody(e.target.value)} onKeyDown={submitOnCmdEnter} />
+      <textarea style={{ height: descHeight }} className={cx(field, 'resize-none px-2.5 py-2 leading-normal text-secondary')} placeholder="Description" value={body} onChange={e => setBody(e.target.value)} onKeyDown={submitOnCmdEnter} />
       <div className="flex items-center gap-3.5 text-sm text-secondary">
         <label className="flex items-center gap-1.5">
           <input type="checkbox" className="m-0 accent-accent" checked={amend} onChange={e => void toggleAmend(e.target.checked)} />
