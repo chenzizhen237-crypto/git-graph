@@ -21,16 +21,42 @@
         "minHeight": 600,
         "titleBarStyle": "Overlay",
         "hiddenTitle": true,
-        "trafficLightPosition": { "x": 18, "y": 26 },
+        "trafficLightPosition": {
+          "x": 18,
+          "y": 26
+        },
         "transparent": false
       }
     ],
-    "security": { "csp": null }
+    "security": {
+      "csp": null
+    }
   },
   "bundle": {
     "active": true,
-    "targets": ["app", "dmg"],
+    "targets": "all",
     "category": "DeveloperTool",
-    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.png"]
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.png"
+    ],
+    "publisher": "chenzizhen237-crypto",
+    "copyright": "\u00a9 2026 chenzizhen237-crypto. MIT License.",
+    "shortDescription": "A desktop commit graph for Git and GitHub",
+    "longDescription": "Git Graph shows your repository as a commit graph, with branches, changes, stashes and GitHub pull requests in one window.",
+    "homepage": "https://github.com/chenzizhen237-crypto/git-graph",
+    "license": "MIT",
+    "macOS": {
+      "signingIdentity": "-",
+      "minimumSystemVersion": "11.0"
+    },
+    "linux": {
+      "deb": {
+        "depends": []
+      }
+    }
   }
 }
