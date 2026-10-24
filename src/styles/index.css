@@ -29,24 +29,9 @@
   textarea {
     @apply select-text;
   }
-  /* Overlay-style scrollbars: the thumb shows while scrolling (see lib/scrollbars.ts)
-     or under the pointer, and is hidden otherwise. The track keeps its width so
-     content never shifts. */
+  /* Native scrollbars are hidden; lib/scrollbars.ts draws overlay thumbs while scrolling. */
   ::-webkit-scrollbar {
-    @apply size-2.5 bg-transparent;
-  }
-  ::-webkit-scrollbar-corner {
-    @apply bg-transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    @apply rounded-full border-3 border-transparent bg-transparent bg-clip-content;
-  }
-  .is-scrolling::-webkit-scrollbar-thumb {
-    @apply bg-strong;
-  }
-  ::-webkit-scrollbar-thumb:hover,
-  ::-webkit-scrollbar-thumb:active {
-    @apply border-2 bg-muted;
+    @apply size-0 bg-transparent;
   }
 }
 
