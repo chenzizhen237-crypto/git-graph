@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+/* Lets `dark:` follow our own data-theme switch as well as the system setting. */
+@custom-variant dark {
+  :root[data-theme='dark'] & {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) & {
+      @slot;
+    }
+  }
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    @apply h-full;
+  }
+  body {
+    @apply bg-app font-sans text-md text-primary antialiased select-none overflow-hidden cursor-default;
+  }
+  button {
+    @apply cursor-default;
+  }
+  input,
+  textarea {
+    @apply select-text;
+  }
+  ::-webkit-scrollbar {
+    @apply size-2.5;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full border-3 border-transparent bg-strong bg-clip-content;
+  }
+}
