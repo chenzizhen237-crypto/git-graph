@@ -22,6 +22,9 @@ import {
   Undo2,
   Users,
   X,
+  Shield,
+  ShieldAlert,
+  ShieldCheck,
 } from 'lucide-react'
 import { Fragment, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
@@ -32,9 +35,11 @@ import { Resizer, usePanelSize } from '../components/Split'
 import { Avatar, Chip, CiIcon, Count, caps, Empty, FilePath, fileRowClass, IconButton, LineStats, refChips, Segmented, StageDot, StatusBadge, splitPath } from '../components/ui'
 import { cachedCi, type CiState, commitStates } from '../lib/actions'
 import { cx } from '../lib/cx'
-import { actions, commitDetail, commitFileDiff } from '../lib/git'
-import { t, timeAgo } from '../lib/i18n'
+import { commitDate } from '../lib/dates'
+import { actions, commitDetail, commitFileDiff, run } from '../lib/git'
+import { t } from '../lib/i18n'
 import { compactAgo, matchItems, nameParts, type PickItem, pickSections, QUICK_SCOPES, scopeLabel } from '../lib/picker'
+import { useSettings } from '../lib/settings'
 import type { CommitDetail, CommitFile, LogRow } from '../lib/types'
 import { useApp, useRemoteNames } from '../state'
 
@@ -308,6 +313,26 @@ function RefPickRow({ item, q, on, onPick }: { item: PickItem; q: string; on: bo
   )
 }
 
+/** `git log %G?`: G good, U good but untrusted, E no key to check, others bad. */
+function SignatureBadge({ status, signer }: { status: string; signer: string }) {
+  const good = status === 'G' || status === 'U'
+  const unknown = status === 'E'
+  const label = good ? t('Verified') : unknown ? t('Signed') : t('Bad signature')
+  const title = good ? signer : unknown ? t('Signed, but the key to check it is not here') : t('The signature does not match')
+  return (
+    <span
+      title={title}
+      className={cx(
+        'inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-sm font-medium',
+        good ? 'bg-ref-local-soft text-ref-local' : unknown ? 'bg-surface text-muted' : 'bg-diff-del-bg text-status-deleted',
+      )}
+    >
+      {good ? <ShieldCheck size={13} /> : unknown ? <Shield size={13} /> : <ShieldAlert size={13} />}
+      {label}
+    </span>
+  )
+}
+
 function nodeKind(row: LogRow, head: string): NodeKind {
   if (row.hash === head) return 'head'
   return row.parents.length > 1 ? 'merge' : 'commit'
@@ -319,6 +344,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   const { root, repo, selected, setSelected, setView, loadMore, error, openMenu } = useApp()
   const remotes = useRemoteNames()
   const menus = useMenus()
+  const { graph: cols } = useSettings()
   const [ci, setCi] = useState<Map<string, CiState>>(new Map())
   const [ciOff, setCiOff] = useState(false)
   const box = useRef<HTMLDivElement>(null)
@@ -398,6 +424,8 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   if (error && !repo) return <Empty>{error}</Empty>
   if (repo && !rows.length && !repo.work) return <Empty>{t(repo.head ? 'No commits match these filters.' : 'No commits yet.')}</Empty>
 
+  // Absolute dates need room for the date and the time.
+  const dateW = cols.dates === 'relative' ? 'w-21' : cols.dateFormat === 'locale' ? 'w-36' : 'w-33'
   const items = []
   for (let i = first; i < last; i++) {
     const top = i * ROW_H
@@ -417,7 +445,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
     }
     const r = rows[i - offset]!
     const kind = nodeKind(r, repo!.head)
-    const chips = refChips(r.refs, remotes)
+    const chips = refChips(r.refs, remotes).filter(c => cols.tags || c.kind !== 'tag')
     const on = r.hash === selected
     items.push(
       <div
@@ -438,15 +466,19 @@ function LogList({ showGraph }: { showGraph: boolean }) {
           <span className={cx('min-w-24 truncate', kind === 'head' && 'font-semibold', kind === 'merge' && 'text-secondary')}>{r.subject}</span>
           {r.body && <span className="min-w-0 shrink-[4] truncate text-muted">{r.body}</span>}
         </div>
-        <div className="flex w-32.5 shrink-0 items-center gap-1.5 text-sm text-secondary">
-          <Avatar name={r.author} />
-          <span className="truncate">{r.author}</span>
-        </div>
-        <span className="w-21 shrink-0 text-sm whitespace-nowrap text-muted" title={new Date(r.time * 1000).toLocaleString()}>
-          {timeAgo(r.time * 1000)}
-        </span>
+        {cols.author && (
+          <div className="flex w-32.5 shrink-0 items-center gap-1.5 text-sm text-secondary">
+            <Avatar name={r.author} />
+            <span className="truncate">{r.author}</span>
+          </div>
+        )}
+        {cols.date && (
+          <span className={cx('shrink-0 truncate text-sm whitespace-nowrap text-muted', dateW)} title={new Date(r.time * 1000).toLocaleString()}>
+            {commitDate(r.time * 1000)}
+          </span>
+        )}
         {!ciOff && <CiIcon state={ci.get(r.hash)} />}
-        <span className="w-15.5 shrink-0 text-right font-mono text-sm font-medium text-link">{r.short}</span>
+        {cols.sha && <span className="w-15.5 shrink-0 text-right font-mono text-sm font-medium text-link">{r.short}</span>}
       </div>,
     )
   }
@@ -456,10 +488,10 @@ function LogList({ showGraph }: { showGraph: boolean }) {
       <div className={cx('flex h-6.5 shrink-0 items-center gap-2 border-b border-subtle pr-3 pl-4 tracking-[0.6px]', caps, 'font-semibold')}>
         {showGraph && <span style={{ width: gw - 12 }}>{t('GRAPH')}</span>}
         <span className="flex-1">{t('DESCRIPTION')}</span>
-        <span className="w-32.5">{t('AUTHOR')}</span>
-        <span className="w-21">{t('DATE')}</span>
+        {cols.author && <span className="w-32.5">{t('AUTHOR')}</span>}
+        {cols.date && <span className={dateW}>{t('DATE')}</span>}
         {!ciOff && <span className="w-3.5" />}
-        <span className="w-15.5 text-right">{t('SHA')}</span>
+        {cols.sha && <span className="w-15.5 text-right">{t('SHA')}</span>}
       </div>
       <div
         className="group relative flex-1 overflow-y-auto outline-none"
@@ -551,6 +583,23 @@ function Inspector({ width }: { width: number }) {
     }
   }, [root, selected])
 
+  // The commit's signature, checked by git (slow enough to keep out of the list).
+  const [sig, setSig] = useState<{ status: string; signer: string } | null>(null)
+  useEffect(() => {
+    setSig(null)
+    if (!selected) return
+    let live = true
+    void run(root, ['log', '-1', '--format=%G?%x1f%GS', selected]).then(out => {
+      const [status = 'N', signer = ''] = out.stdout.trim().split('\x1f')
+      if (live) setSig({ status, signer })
+    })
+    return () => {
+      live = false
+    }
+  }, [root, selected])
+
+  const { diffWhitespace } = useSettings()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reload when the whitespace setting changes
   useEffect(() => {
     if (!selected || !file) return setDiff({ text: '', loading: false })
     let live = true
@@ -561,7 +610,7 @@ function Inspector({ width }: { width: number }) {
     return () => {
       live = false
     }
-  }, [root, selected, file])
+  }, [root, selected, file, diffWhitespace])
 
   const shell = 'flex min-h-0 shrink-0 flex-col border-l border-subtle'
   if (!row || !detail || detail.hash !== row.hash)
@@ -620,6 +669,7 @@ function Inspector({ width }: { width: number }) {
             <GitCommitHorizontal size={12} className="text-muted" />
             {row.short}
           </span>
+          {sig && sig.status !== 'N' && <SignatureBadge status={sig.status} signer={sig.signer} />}
           <IconButton
             icon={Copy}
             size={13}

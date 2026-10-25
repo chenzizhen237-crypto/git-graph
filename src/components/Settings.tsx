@@ -8,7 +8,13 @@ import { invoke } from '@tauri-apps/api/core'
 import { homeDir } from '@tauri-apps/api/path'
 import { open } from '@tauri-apps/plugin-dialog'
 import {
+  Bell,
+  BellRing,
   ChevronsUpDown,
+  FolderOpen,
+  GitBranch,
+  GitCommitHorizontal,
+  Wrench,
   CircleCheck,
   CircleX,
   FileDiff,
@@ -36,19 +42,26 @@ import { cx } from '../lib/cx'
 import { repoFolders as suggestedFolders, SCAN_DEPTH, scanRepos } from '../lib/local'
 import { openTerminal } from '../lib/git'
 import { openUrl } from '../lib/github'
-import { useT } from '../lib/i18n'
+import { timeAgo, useT } from '../lib/i18n'
+import { formatDate } from '../lib/dates'
+import { notify } from '../lib/notify'
+import { type Editor, editors, getGlobal, gitTools, setGlobal, TOOL_NAMES } from '../lib/tools'
 import { DEFAULT_FONTS, type Fonts as FontSettings, testConnection, updateSettings, useSettings, ZOOMS } from '../lib/settings'
 import { Button, IconButton, Kbd } from './ui'
 
-type Section = 'general' | 'appearance' | 'fonts' | 'network' | 'github' | 'diff' | 'keys' | 'about'
+type Section = 'general' | 'appearance' | 'fonts' | 'git' | 'commits' | 'tools' | 'notify' | 'network' | 'github' | 'diff' | 'keys' | 'about'
 
 const SECTIONS: { id: Section; icon: LucideIcon; label: string }[] = [
   { id: 'general', icon: Gear, label: 'General' },
   { id: 'appearance', icon: Palette, label: 'Appearance' },
   { id: 'fonts', icon: Type, label: 'Fonts' },
+  { id: 'git', icon: GitBranch, label: 'Git' },
+  { id: 'commits', icon: GitCommitHorizontal, label: 'Commits & graph' },
+  { id: 'diff', icon: FileDiff, label: 'Diff & editor' },
+  { id: 'tools', icon: Wrench, label: 'External tools' },
+  { id: 'notify', icon: Bell, label: 'Notifications' },
   { id: 'network', icon: Globe, label: 'Network' },
   { id: 'github', icon: GitPullRequest, label: 'GitHub' },
-  { id: 'diff', icon: FileDiff, label: 'Diff & editor' },
   { id: 'keys', icon: Keyboard, label: 'Shortcuts' },
   { id: 'about', icon: Info, label: 'About' },
 ]
@@ -192,9 +205,13 @@ export function SettingsDialog({ onClose, initial = 'general' }: { onClose: () =
             {section === 'general' && <General />}
             {section === 'appearance' && <Appearance />}
             {section === 'fonts' && <Fonts />}
+            {section === 'git' && <GitPage />}
+            {section === 'commits' && <CommitsGraph />}
             {section === 'network' && <Network />}
             {section === 'github' && <GitHubAccount />}
             {section === 'diff' && <DiffEditor />}
+            {section === 'tools' && <ExternalTools />}
+            {section === 'notify' && <Notifications />}
             {section === 'keys' && <Shortcuts />}
             {section === 'about' && <About />}
           </div>
@@ -269,7 +286,6 @@ function RepoFolders() {
 function General() {
   const t = useT()
   const s = useSettings()
-  const isMac = navigator.userAgent.includes('Mac')
   return (
     <>
       <RepoFolders />
@@ -296,11 +312,6 @@ function General() {
       <Row label={t('Default branch name')} help={t('Used when creating new repositories.')}>
         <TextField value={s.defaultBranch} width="w-50" onCommit={v => updateSettings({ defaultBranch: v || 'main' })} />
       </Row>
-      {isMac && (
-        <Row label={t('Terminal')} help={t('Opened by the Terminal button in the toolbar.')}>
-          <Select value={s.terminal} options={TERMINALS.map(v => ({ value: v, label: v }))} onChange={v => updateSettings({ terminal: v })} />
-        </Row>
-      )}
     </>
   )
 }
@@ -404,6 +415,272 @@ function Fonts() {
         <Button icon={RotateCcw} onClick={() => updateSettings({ fonts: DEFAULT_FONTS })}>
           {t('Reset to defaults')}
         </Button>
+      </Row>
+    </>
+  )
+}
+
+/** `~/…` for paths under the home folder, as the fields show them. */
+async function tildify(path: string) {
+  const home = (await homeDir()).replace(/\/$/, '')
+  return path.startsWith(home) ? `~${path.slice(home.length)}` : path
+}
+
+function Section({ children }: { children: ReactNode }) {
+  return <div className="-mb-1.5 pt-1.5 pl-56 text-[11px] font-bold tracking-[0.7px] text-muted uppercase">{children}</div>
+}
+
+/** Global git settings: read from ~/.gitconfig on open, written back as you change them. */
+function useGlobalConfig(keys: string[]) {
+  const [values, setValues] = useState<Record<string, string> | null>(null)
+  const key = keys.join()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: keyed on the joined key list
+  useEffect(() => {
+    void Promise.all(keys.map(async k => [k, await getGlobal(k)] as const)).then(e => setValues(Object.fromEntries(e)))
+  }, [key])
+  const set = async (k: string, v: string) => {
+    setValues(vs => ({ ...vs, [k]: v }))
+    await setGlobal(k, v)
+  }
+  return [values, set] as const
+}
+
+const SIGNING = ['user.name', 'user.email', 'commit.gpgsign', 'tag.gpgsign', 'gpg.format', 'user.signingkey']
+
+function GitPage() {
+  const t = useT()
+  const s = useSettings()
+  const [c, set] = useGlobalConfig(SIGNING)
+  const [error, setError] = useState('')
+  const save = (k: string, v: string) => void set(k, v).catch(e => setError(String(e)))
+  const chooseKey = async () => {
+    const file = await open({ title: t('Choose a signing key'), defaultPath: `${await homeDir()}/.ssh` })
+    if (typeof file === 'string') save('user.signingkey', await tildify(file))
+  }
+  const chooseCloneDir = async () => {
+    const dir = await open({ directory: true, title: t('Clone repositories into') })
+    if (typeof dir === 'string') updateSettings({ cloneDir: await tildify(dir) })
+  }
+  if (!c) return <Loader2 size={15} className="animate-spin text-muted" />
+  const format = c['gpg.format'] || 'openpgp'
+  return (
+    <>
+      <Section>{t('Identity')}</Section>
+      <Row label={t('Name')}>
+        <TextField value={c['user.name'] ?? ''} placeholder="Your Name" onCommit={v => save('user.name', v)} />
+      </Row>
+      <Row label={t('Email')} help={t('Saved in ~/.gitconfig. Repositories that set their own keep it.')} warn={error || undefined}>
+        <TextField value={c['user.email'] ?? ''} placeholder="you@example.com" onCommit={v => save('user.email', v)} />
+      </Row>
+      <Section>{t('Commit signing')}</Section>
+      <Row label={t('Sign by default')}>
+        <div className="flex flex-col gap-2.5">
+          <Check checked={c['commit.gpgsign'] === 'true'} onChange={v => save('commit.gpgsign', v ? 'true' : '')}>
+            {t('Commits')}
+          </Check>
+          <Check checked={c['tag.gpgsign'] === 'true'} onChange={v => save('tag.gpgsign', v ? 'true' : '')}>
+            {t('Tags')}
+          </Check>
+        </div>
+      </Row>
+      <Row label={t('Format')}>
+        <Select
+          width="w-35"
+          value={format}
+          options={[
+            { value: 'openpgp', label: 'GPG' },
+            { value: 'ssh', label: 'SSH' },
+            { value: 'x509', label: 'X.509' },
+          ]}
+          onChange={v => save('gpg.format', v === 'openpgp' ? '' : v)}
+        />
+      </Row>
+      <Row label={t('Signing key')} help={t('Signed commits show a Verified badge in the commit details.')}>
+        <TextField value={c['user.signingkey'] ?? ''} mono placeholder={format === 'ssh' ? '~/.ssh/id_ed25519.pub' : t('Key ID')} onCommit={v => save('user.signingkey', v)} />
+        {format === 'ssh' && (
+          <Button icon={FolderOpen} onClick={() => void chooseKey()}>
+            {t('Choose…')}
+          </Button>
+        )}
+      </Row>
+      <Section>{t('Branches')}</Section>
+      <Row label={t('Uncommitted changes')}>
+        <Check checked={s.autoStash} onChange={autoStash => updateSettings({ autoStash })}>
+          {t('Stash and reapply them when switching branches or pulling')}
+        </Check>
+      </Row>
+      <Row label={t('Clone into')} help={t('Where Clone from GitHub puts new repositories. Empty asks each time.')}>
+        <TextField value={s.cloneDir} mono placeholder={t('Ask each time')} onCommit={cloneDir => updateSettings({ cloneDir })} />
+        <Button icon={FolderOpen} onClick={() => void chooseCloneDir()}>
+          {t('Choose…')}
+        </Button>
+      </Row>
+    </>
+  )
+}
+
+function TextArea({ value, placeholder, onCommit }: { value: string; placeholder?: string; onCommit: (v: string) => void }) {
+  const [v, setV] = useState(value)
+  useEffect(() => setV(value), [value])
+  return (
+    <textarea
+      className="h-19 w-115 resize-y rounded-md border border-strong bg-app px-2.5 py-2 font-mono text-sm leading-normal outline-none focus:border-focus focus:ring-1 focus:ring-focus"
+      value={v}
+      placeholder={placeholder}
+      onChange={e => setV(e.target.value)}
+      onBlur={() => v !== value && onCommit(v)}
+    />
+  )
+}
+
+function CommitsGraph() {
+  const t = useT()
+  const { graph: g, commit: c } = useSettings()
+  const setG = (patch: Partial<typeof g>) => updateSettings({ graph: { ...g, ...patch } })
+  const setC = (patch: Partial<typeof c>) => updateSettings({ commit: { ...c, ...patch } })
+  const sample = new Date(Date.now() - 3 * 3600_000)
+  return (
+    <>
+      <Section>{t('Graph')}</Section>
+      <Row label={t('Columns')}>
+        <div className="flex flex-col gap-2.5">
+          <Check checked={g.author} onChange={author => setG({ author })}>
+            {t('Author')}
+          </Check>
+          <Check checked={g.date} onChange={date => setG({ date })}>
+            {t('Date')}
+          </Check>
+          <Check checked={g.sha} onChange={sha => setG({ sha })}>
+            SHA
+          </Check>
+          <Check checked={g.tags} onChange={tags => setG({ tags })}>
+            {t('Tags on commits')}
+          </Check>
+        </div>
+      </Row>
+      <Row label={t('Dates')}>
+        <Select
+          width="w-55"
+          value={g.dates}
+          options={[
+            { value: 'relative', label: t('Relative — {example}', { example: timeAgo(sample.getTime()) }) },
+            { value: 'absolute', label: t('Absolute') },
+          ]}
+          onChange={dates => setG({ dates })}
+        />
+        <Select
+          width="w-50"
+          value={g.dateFormat}
+          options={(['locale', 'iso', 'dmy', 'mdy'] as const).map(f => ({ value: f, label: formatDate(sample.getTime(), { ...g, dateFormat: f }) }))}
+          onChange={dateFormat => setG({ dateFormat })}
+        />
+      </Row>
+      <Row>
+        <Check checked={g.hour24} onChange={hour24 => setG({ hour24 })}>
+          {t('24-hour clock')}
+        </Check>
+      </Row>
+      <Section>{t('Commit message')}</Section>
+      <Row label={t('Subject guide')} help={t('The counter turns amber past this length. 0 turns it off.')}>
+        <NumberField value={c.subjectGuide} min={0} max={200} suffix={t('chars')} onChange={subjectGuide => setC({ subjectGuide })} />
+      </Row>
+      <Row label={t('Template')} help={t('Fills an empty message box. Empty uses git’s commit.template.')}>
+        <TextArea value={c.template} placeholder={'feat: \n\nRefs #'} onCommit={template => setC({ template })} />
+      </Row>
+      <Row label={t('Hooks')}>
+        <Check checked={c.skipHooks} onChange={skipHooks => setC({ skipHooks })}>
+          {t('Skip hooks by default (--no-verify)')}
+        </Check>
+      </Row>
+    </>
+  )
+}
+
+function ExternalTools() {
+  const t = useT()
+  const s = useSettings()
+  const [eds, setEds] = useState<Editor[]>([])
+  const [diffs, setDiffs] = useState<string[]>([])
+  const [merges, setMerges] = useState<string[]>([])
+  useEffect(() => {
+    void editors().then(setEds)
+    void gitTools('difftool').then(setDiffs)
+    void gitTools('mergetool').then(setMerges)
+  }, [])
+  const set = (patch: Partial<typeof s.tools>) => updateSettings({ tools: { ...s.tools, ...patch } })
+  const toolOptions = (list: string[], current: string) => [
+    { value: '', label: t('Git default') },
+    ...(current && !list.includes(current) ? [current] : []).concat(list).map(n => ({ value: n, label: TOOL_NAMES[n] ?? n })),
+  ]
+  const isMac = navigator.userAgent.includes('Mac')
+  return (
+    <>
+      <Row
+        label={t('Editor')}
+        help={
+          eds.length
+            ? t('Open in editor on files and repositories. Found here: {list}.', { list: eds.map(e => e.name).join(', ') })
+            : t('Open in editor on files and repositories.')
+        }
+      >
+        <Select
+          width="w-65"
+          value={s.tools.editor}
+          options={[{ value: '', label: t('System default') }, ...eds.map(e => ({ value: e.id, label: e.name }))]}
+          onChange={editor => set({ editor })}
+        />
+      </Row>
+      <Row label={t('Diff tool')} help={t('Open in diff tool on changed files.')}>
+        <Select width="w-65" value={s.tools.diffTool} options={toolOptions(diffs, s.tools.diffTool)} onChange={diffTool => set({ diffTool })} />
+      </Row>
+      <Row label={t('Merge tool')} help={t('Open in merge tool on conflicted files. Git default uses your merge.tool setting.')}>
+        <Select width="w-65" value={s.tools.mergeTool} options={toolOptions(merges, s.tools.mergeTool)} onChange={mergeTool => set({ mergeTool })} />
+      </Row>
+      {isMac && (
+        <Row label={t('Terminal')} help={t('Opened by the Terminal button in the toolbar.')}>
+          <Select width="w-65" value={s.terminal} options={TERMINALS.map(v => ({ value: v, label: v }))} onChange={v => updateSettings({ terminal: v })} />
+        </Row>
+      )}
+    </>
+  )
+}
+
+function Notifications() {
+  const t = useT()
+  const n = useSettings().notify
+  const set = (patch: Partial<typeof n>) => updateSettings({ notify: { ...n, ...patch } })
+  return (
+    <>
+      <Row label={t('Desktop notifications')}>
+        <Check checked={n.enabled} onChange={enabled => set({ enabled })}>
+          {t('Allow Git Graph to show notifications')}
+        </Check>
+        <Button icon={BellRing} onClick={() => void notify('test', t('Notifications are working'), 'Git Graph')}>
+          {t('Send test')}
+        </Button>
+      </Row>
+      <Row label={t('Notify me when')}>
+        <div className={cx('flex flex-col gap-2.5', !n.enabled && 'pointer-events-none opacity-50')}>
+          <Check checked={n.ci} onChange={ci => set({ ci })}>
+            {t('A CI run on my branch finishes')}
+          </Check>
+          <Check checked={n.fetch} onChange={fetch => set({ fetch })}>
+            {t('Fetching brings new commits')}
+          </Check>
+          <Check checked={n.long} onChange={long => set({ long })}>
+            {t('A long push, pull or clone finishes')}
+          </Check>
+        </div>
+      </Row>
+      <Row help={t('CI is checked every minute while a repository is open.')}>
+        <Check checked={n.backgroundOnly} onChange={backgroundOnly => set({ backgroundOnly })}>
+          {t('Only while Git Graph is in the background')}
+        </Check>
+      </Row>
+      <Row label={t('Updates')}>
+        <Check checked={n.updates} onChange={updates => set({ updates })}>
+          {t('Check for a new version on startup')}
+        </Check>
       </Row>
     </>
   )
@@ -541,13 +818,24 @@ function DiffEditor() {
           {t('Wrap long lines in diffs')}
         </Check>
       </Row>
+      <Row label={t('Whitespace')} help={t('Show all, ignore changes at line ends (including CR), or ignore all whitespace changes.')}>
+        <Select
+          value={s.diffWhitespace}
+          options={[
+            { value: 'all', label: t('Show all changes') },
+            { value: 'eol', label: t('Ignore at line ends') },
+            { value: 'ignore', label: t('Ignore all whitespace') },
+          ]}
+          onChange={v => updateSettings({ diffWhitespace: v })}
+        />
+      </Row>
     </>
   )
 }
 
 const KEYS: [string, string][] = [
   ['⌘K', 'Command palette'],
-  ['⌘1 · ⌘2 · ⌘3 · ⌘4', 'History · Changes · Stashes · Pull requests'],
+  ['⌘1 · ⌘2 · ⌘3 · ⌘4 · ⌘5', 'History · Changes · Stashes · Pull requests · Actions'],
   ['⌘,', 'Settings'],
   ['⌘\\', 'Show or hide the sidebar'],
   ['⌘+ · ⌘− · ⌘0', 'Zoom in · Zoom out · Actual size'],

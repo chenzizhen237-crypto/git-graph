@@ -5,6 +5,7 @@
 mod fonts;
 mod github;
 mod scan;
+mod tools;
 
 use notify::{RecursiveMode, Watcher};
 use serde::Deserialize;
@@ -314,7 +315,7 @@ fn watch_repo(app: AppHandle, state: State<WatchState>, repo: String) -> Result<
     Ok(())
 }
 
-fn open_with(args: &[&str]) -> Result<(), String> {
+pub(crate) fn open_with(args: &[&str]) -> Result<(), String> {
     #[cfg(target_os = "macos")]
     let program = "open";
     #[cfg(target_os = "windows")]
@@ -369,6 +370,7 @@ fn initial_repo() -> Option<String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_notification::init())
         .manage(WatchState::default())
         .manage(github::GitHub::default())
         .invoke_handler(tauri::generate_handler![
@@ -382,6 +384,8 @@ pub fn run() {
             scan::scan_repos,
             scan::suggest_repo_folders,
             fonts::system_fonts,
+            tools::editors,
+            tools::open_in_editor,
             open_url,
             read_git_file,
             watch_repo,

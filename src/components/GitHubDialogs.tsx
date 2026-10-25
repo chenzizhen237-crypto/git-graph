@@ -12,6 +12,7 @@ import { cx } from '../lib/cx'
 import { byGitHub, cachedLocalRepos, localRepos } from '../lib/local'
 import { runGh } from '../lib/github'
 import { t, timeAgo } from '../lib/i18n'
+import { getSettings } from '../lib/settings'
 import { readRecents, useApp } from '../state'
 import { Avatar, Button, Empty, IconButton } from './ui'
 
@@ -62,10 +63,14 @@ export function CloneDialog({ onClose, onCloned }: { onClose: () => void; onClon
     myAccount()
       .then(setAccount)
       .catch(e => setError(e instanceof Error ? e.message : String(e)))
-    // Clone next to the most recent repository, else into the home folder.
+    // Settings → Git → Clone into; else next to the most recent repository, else the home folder.
     const recent = readRecents()[0]?.path
-    if (recent) setParent(recent.slice(0, recent.lastIndexOf('/')))
-    else void homeDir().then(h => setParent(h.replace(/\/$/, '')))
+    const chosen = getSettings().cloneDir
+    void homeDir().then(h => {
+      const home = h.replace(/\/$/, '')
+      if (chosen) setParent(chosen.replace(/^~(?=\/|$)/, home))
+      else setParent(recent ? recent.slice(0, recent.lastIndexOf('/')) : home)
+    })
   }, [])
 
   const repos = useMemo(() => {

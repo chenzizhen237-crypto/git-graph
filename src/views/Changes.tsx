@@ -1,14 +1,16 @@
 /** The Changes view: conflicts, staged, unstaged and untracked files, the diff, and the commit composer. */
 import { ArrowUp, Check, ChevronDown, ChevronRight, Minus, Plus, Undo2 } from 'lucide-react'
-import { type ReactNode, useEffect, useMemo, useState } from 'react'
+import { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { DiffView } from '../components/Diff'
 import { Resizer, usePanelSize } from '../components/Split'
 import { Button, Count, caps, Empty, FilePath, fileRowClass, IconButton, LineStats, StatusBadge, splitPath } from '../components/ui'
 import { cx } from '../lib/cx'
-import { actions, git, workFileDiff, workStats } from '../lib/git'
+import { useMenus } from '../components/menus'
+import { actions, git, run, workFileDiff, workStats } from '../lib/git'
 import { t } from '../lib/i18n'
 import { isConflict, isStaged, isUnstaged } from '../lib/parse'
+import { getSettings, useSettings } from '../lib/settings'
 import type { FileChange } from '../lib/types'
 import { useApp } from '../state'
 
@@ -38,7 +40,8 @@ export function PaneHead({ title, count, children }: { title: string; count: num
 }
 
 export function ChangesView() {
-  const { root, repo, act, ask, busy } = useApp()
+  const { root, repo, act, ask, busy, openMenu } = useApp()
+  const menus = useMenus()
   const [sel, setSel] = useState<Sel | null>(null)
   const [diff, setDiff] = useState({ text: '', loading: false })
   const [counts, setCounts] = useState<{ staged: Counts; unstaged: Counts }>({ staged: new Map(), unstaged: new Map() })
@@ -64,7 +67,8 @@ export function ChangesView() {
     setSel(s => (s && all.some(a => a.path === s.path && a.kind === s.kind) ? s : (all.find(a => a.path === s?.path) ?? all[0] ?? null)))
   }, [root, groups])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: reload the diff when the repo changes on disk
+  const { diffWhitespace } = useSettings()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reload the diff when the repo changes on disk or the whitespace setting does
   useEffect(() => {
     if (!sel) return setDiff({ text: '', loading: false })
     let live = true
@@ -75,7 +79,7 @@ export function ChangesView() {
     return () => {
       live = false
     }
-  }, [root, sel, repo])
+  }, [root, sel, repo, diffWhitespace])
 
   if (!repo) return null
   const total = repo.changes.length
@@ -132,6 +136,10 @@ export function ChangesView() {
               key={kind + c.path}
               className={fileRowClass(sel?.path === c.path && sel.kind === kind)}
               onClick={() => setSel({ path: c.path, kind })}
+              onContextMenu={e => {
+                setSel({ path: c.path, kind })
+                openMenu(e, menus.workFile(c.path, kind))
+              }}
               onDoubleClick={() => kind !== 'conflict' && void act(kind === 'staged' ? t('Unstage') : t('Stage'), toggle)}
               title={c.orig ? `${c.orig} → ${c.path}` : c.path}
             >
@@ -215,13 +223,49 @@ function Group({
 
 const field = 'w-full rounded-md border border-strong bg-app outline-none focus:border-focus focus:ring-1 focus:ring-focus'
 
+/** Settings → Commits & graph template, else the file git's commit.template points at. */
+async function commitTemplate(root: string) {
+  const own = getSettings().commit.template
+  if (own.trim()) return own
+  const path = (await run(root, ['config', '--get', '--path', 'commit.template'])).stdout.trim()
+  if (!path) return ''
+  // git prints any file as one added hunk; read it back from that.
+  const out = await run(root, ['diff', '--no-index', '--no-color', '--', '/dev/null', path])
+  const lines = out.stdout.split('\n')
+  const start = lines.findIndex(l => l.startsWith('@@'))
+  return start < 0
+    ? ''
+    : lines
+        .slice(start + 1)
+        .filter(l => l.startsWith('+'))
+        .map(l => l.slice(1))
+        .filter(l => !l.startsWith('#'))
+        .join('\n')
+}
+
 function Composer({ staged, conflicts, busy, descHeight }: { staged: number; conflicts: number; busy: boolean; descHeight: number }) {
   const { root, repo, act } = useApp()
+  const { commit: prefs } = useSettings()
   const key = `draft:${root}`
   const [summary, setSummary] = useState(() => localStorage.getItem(`${key}:s`) ?? '')
   const [body, setBody] = useState(() => localStorage.getItem(`${key}:b`) ?? '')
   const [amend, setAmend] = useState(false)
   const [signoff, setSignoff] = useState(false)
+  const [noVerify, setNoVerify] = useState(prefs.skipHooks)
+  useEffect(() => setNoVerify(prefs.skipHooks), [prefs.skipHooks])
+
+  /** Puts the template in an empty message box. */
+  const fillTemplate = useCallback(async () => {
+    const tpl = (await commitTemplate(root).catch(() => '')).replace(/\s+$/, '')
+    if (!tpl) return
+    const [s = '', ...rest] = tpl.split('\n')
+    setSummary(cur => cur || s)
+    setBody(cur => cur || rest.join('\n').replace(/^\n+/, ''))
+  }, [root])
+  // biome-ignore lint/correctness/useExhaustiveDependencies: only when the box is first shown or the template changes
+  useEffect(() => {
+    if (!summary && !body) void fillTemplate()
+  }, [fillTemplate, prefs.template])
 
   useEffect(() => {
     try {
@@ -250,11 +294,12 @@ function Composer({ staged, conflicts, busy, descHeight }: { staged: number; con
   const commit = async (push: boolean) => {
     if (all && !(await act('Stage all', actions.stageAll()))) return
     const message = body.trim() ? `${summary.trim()}\n\n${body.trim()}` : summary.trim()
-    const ok = await act(amend ? t('Amend') : t('Commit'), actions.commit(amend, signoff), { stdin: `${message}\n`, done: amend ? t('Commit amended') : t('Committed') })
+    const ok = await act(amend ? t('Amend') : t('Commit'), actions.commit(amend, signoff, noVerify), { stdin: `${message}\n`, done: amend ? t('Commit amended') : t('Committed') })
     if (!ok) return
     setSummary('')
     setBody('')
     setAmend(false)
+    void fillTemplate()
     if (push && repo) await act('Push', amend ? [...actions.push(repo), '--force-with-lease'] : actions.push(repo), { done: t('Pushed') })
   }
   const submitOnCmdEnter = (e: React.KeyboardEvent) => e.key === 'Enter' && (e.metaKey || e.ctrlKey) && canCommit && void commit(false)
@@ -285,8 +330,14 @@ function Composer({ staged, conflicts, busy, descHeight }: { staged: number; con
           <input type="checkbox" className="m-0 accent-accent" checked={signoff} onChange={e => setSignoff(e.target.checked)} />
           {t('Sign-off')}
         </label>
+        <label className="flex items-center gap-1.5" title="--no-verify">
+          <input type="checkbox" className="m-0 accent-accent" checked={noVerify} onChange={e => setNoVerify(e.target.checked)} />
+          {t('Skip hooks')}
+        </label>
         <span className="flex-1" />
-        <span className="text-faint">{summary.length || ''}</span>
+        <span className={cx(prefs.subjectGuide && summary.length > prefs.subjectGuide ? 'font-semibold text-status-modified' : 'text-faint')}>
+          {summary.length ? (prefs.subjectGuide ? `${summary.length} / ${prefs.subjectGuide}` : summary.length) : ''}
+        </span>
       </div>
       <div className="flex gap-2">
         <Button kind="primary" icon={Check} className="flex-1" disabled={!canCommit} onClick={() => void commit(false)} title="⌘↩">

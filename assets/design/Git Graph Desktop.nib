@@ -12287,6 +12287,76 @@
             },
             {
               "type": "ref",
+              "id": "sni_git",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "git-branch"
+                },
+                "sn_label": {
+                  "content": "Git"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sni_commits",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "git-commit-horizontal"
+                },
+                "sn_label": {
+                  "content": "Commits & graph"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sni_diff",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "file-diff"
+                },
+                "sn_label": {
+                  "content": "Diff & editor"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sni_tools",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "wrench"
+                },
+                "sn_label": {
+                  "content": "External tools"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sni_notify",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "bell"
+                },
+                "sn_label": {
+                  "content": "Notifications"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
               "id": "sni_network",
               "ref": "c_set_nav",
               "descendants": {
@@ -12309,20 +12379,6 @@
                 },
                 "sn_label": {
                   "content": "GitHub"
-                }
-              },
-              "width": "fill_container"
-            },
-            {
-              "type": "ref",
-              "id": "sni_diff",
-              "ref": "c_set_nav",
-              "descendants": {
-                "sn_icon": {
-                  "icon": "file-diff"
-                },
-                "sn_label": {
-                  "content": "Diff & editor"
                 }
               },
               "width": "fill_container"
@@ -19770,6 +19826,3313 @@
                           "content": "Reset to defaults"
                         }
                       }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl18",
+          "name": "Label · 18 · Settings — Git",
+          "x": 0,
+          "y": 9810,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl18_t",
+              "name": "dl18_t",
+              "content": "18 · Settings — Git",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl18_s",
+              "name": "dl18_s",
+              "content": "Light · identity and signing in ~/.gitconfig, auto-stash, clone folder",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_git",
+          "name": "18 · Settings — Git — Light",
+          "x": 0,
+          "y": 9900,
+          "width": 980,
+          "height": 720,
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "cornerRadius": "$radius/xl",
+          "clip": true,
+          "fill": "$bg/app",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 24
+            },
+            "blur": 60,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d_git_nav",
+              "ref": "c_set_navlist",
+              "descendants": {
+                "sni_git": {
+                  "fill": "$bg/selected",
+                  "descendants": {
+                    "sn_icon": {
+                      "icon": "git-branch",
+                      "fill": "$ref/head"
+                    },
+                    "sn_label": {
+                      "content": "Git",
+                      "fontWeight": 600
+                    }
+                  }
+                }
+              },
+              "height": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "d_git_content",
+              "name": "Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 18,
+              "padding": [
+                26,
+                32,
+                32,
+                24
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d_git_head",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d_git_title",
+                      "name": "d_git_title",
+                      "content": "Git",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/2xl",
+                      "fontWeight": 700,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d_git_close",
+                      "ref": "c_btn_icon",
+                      "descendants": {
+                        "bi_icon": {
+                          "icon": "x"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g_s1",
+                  "name": "Section Identity",
+                  "width": "fill_container",
+                  "padding": [
+                    6,
+                    0,
+                    0,
+                    204
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "g_s1_t",
+                      "name": "g_s1_t",
+                      "content": "IDENTITY",
+                      "fontFamily": "$font/sans",
+                      "fontSize": 11,
+                      "fontWeight": 700,
+                      "fill": "$text/muted",
+                      "letterSpacing": 0.7
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g_name",
+                  "name": "Name",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "g_name_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "g_name_l",
+                          "name": "g_name_l",
+                          "content": "Name",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "g_name_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g_name_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "g_ni",
+                              "ref": "c_input",
+                              "descendants": {
+                                "in_text": {
+                                  "content": "Lucas Chen"
+                                },
+                                "in_suffix": {
+                                  "content": ""
+                                }
+                              },
+                              "width": 300
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g_mail",
+                  "name": "Email",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "g_mail_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "g_mail_l",
+                          "name": "g_mail_l",
+                          "content": "Email",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "g_mail_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g_mail_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "g_mi",
+                              "ref": "c_input",
+                              "descendants": {
+                                "in_text": {
+                                  "content": "chenzizhen237@gmail.com"
+                                },
+                                "in_suffix": {
+                                  "content": ""
+                                }
+                              },
+                              "width": 300
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "g_mail_h",
+                          "name": "g_mail_h",
+                          "content": "Saved in ~/.gitconfig. Repositories that set their own keep it.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g_s2",
+                  "name": "Section Commit signing",
+                  "width": "fill_container",
+                  "padding": [
+                    6,
+                    0,
+                    0,
+                    204
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "g_s2_t",
+                      "name": "g_s2_t",
+                      "content": "COMMIT SIGNING",
+                      "fontFamily": "$font/sans",
+                      "fontSize": 11,
+                      "fontWeight": 700,
+                      "fill": "$text/muted",
+                      "letterSpacing": 0.7
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g_sign",
+                  "name": "Sign by default",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "g_sign_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "g_sign_l",
+                          "name": "g_sign_l",
+                          "content": "Sign by default",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "g_sign_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g_sign_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "g_sc",
+                              "name": "Checks",
+                              "layout": "vertical",
+                              "gap": 10,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "g_sc0",
+                                  "name": "Check Commits",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ref",
+                                      "id": "g_sc0_cb",
+                                      "ref": "c_checkbox",
+                                      "descendants": {}
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "g_sc0_t",
+                                      "name": "g_sc0_t",
+                                      "content": "Commits",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 400,
+                                      "fill": "$text/secondary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "g_sc1",
+                                  "name": "Check Tags",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ref",
+                                      "id": "g_sc1_cb",
+                                      "ref": "c_checkbox_off",
+                                      "descendants": {}
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "g_sc1_t",
+                                      "name": "g_sc1_t",
+                                      "content": "Tags",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 400,
+                                      "fill": "$text/secondary"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g_fmt",
+                  "name": "Format",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "g_fmt_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "g_fmt_l",
+                          "name": "g_fmt_l",
+                          "content": "Format",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "g_fmt_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g_fmt_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "g_fs",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "SSH"
+                                }
+                              },
+                              "width": 140
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g_key",
+                  "name": "Signing key",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "g_key_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "g_key_l",
+                          "name": "g_key_l",
+                          "content": "Signing key",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "g_key_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g_key_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "g_ki",
+                              "ref": "c_input",
+                              "descendants": {
+                                "in_text": {
+                                  "content": "~/.ssh/id_ed25519.pub",
+                                  "fontFamily": "$font/mono",
+                                  "fontSize": "$text/sm"
+                                },
+                                "in_suffix": {
+                                  "content": ""
+                                }
+                              },
+                              "width": 300
+                            },
+                            {
+                              "type": "ref",
+                              "id": "g_kb",
+                              "ref": "c_btn_secondary",
+                              "descendants": {
+                                "bs_icon": {
+                                  "icon": "folder-open"
+                                },
+                                "bs_label": {
+                                  "content": "Choose…"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "g_key_h",
+                          "name": "g_key_h",
+                          "content": "Signed commits show a Verified badge in the commit details.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g_s3",
+                  "name": "Section Branches",
+                  "width": "fill_container",
+                  "padding": [
+                    6,
+                    0,
+                    0,
+                    204
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "g_s3_t",
+                      "name": "g_s3_t",
+                      "content": "BRANCHES",
+                      "fontFamily": "$font/sans",
+                      "fontSize": 11,
+                      "fontWeight": 700,
+                      "fill": "$text/muted",
+                      "letterSpacing": 0.7
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g_stash",
+                  "name": "Uncommitted changes",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "g_stash_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "g_stash_l",
+                          "name": "g_stash_l",
+                          "content": "Uncommitted changes",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "g_stash_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g_stash_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "g_st",
+                              "name": "Check Stash and reapply them when switching branches or pulling",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "g_st_cb",
+                                  "ref": "c_checkbox",
+                                  "descendants": {}
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "g_st_t",
+                                  "name": "g_st_t",
+                                  "content": "Stash and reapply them when switching branches or pulling",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g_clone",
+                  "name": "Clone into",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "g_clone_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "g_clone_l",
+                          "name": "g_clone_l",
+                          "content": "Clone into",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "g_clone_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "g_clone_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "g_ci",
+                              "ref": "c_input",
+                              "descendants": {
+                                "in_text": {
+                                  "content": "~/Downloads/Code",
+                                  "fontFamily": "$font/mono",
+                                  "fontSize": "$text/sm"
+                                },
+                                "in_suffix": {
+                                  "content": ""
+                                }
+                              },
+                              "width": 300
+                            },
+                            {
+                              "type": "ref",
+                              "id": "g_cb",
+                              "ref": "c_btn_secondary",
+                              "descendants": {
+                                "bs_icon": {
+                                  "icon": "folder-open"
+                                },
+                                "bs_label": {
+                                  "content": "Choose…"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "g_clone_h",
+                          "name": "g_clone_h",
+                          "content": "Where Clone from GitHub puts new repositories.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl19",
+          "name": "Label · 19 · Settings — Commits & graph",
+          "x": 1100,
+          "y": 9810,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl19_t",
+              "name": "dl19_t",
+              "content": "19 · Settings — Commits & graph",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl19_s",
+              "name": "dl19_s",
+              "content": "Light · graph columns, date style, subject guide, template, hooks",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_commits",
+          "name": "19 · Settings — Commits & graph — Light",
+          "x": 1100,
+          "y": 9900,
+          "width": 980,
+          "height": 720,
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "cornerRadius": "$radius/xl",
+          "clip": true,
+          "fill": "$bg/app",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 24
+            },
+            "blur": 60,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d_commits_nav",
+              "ref": "c_set_navlist",
+              "descendants": {
+                "sni_commits": {
+                  "fill": "$bg/selected",
+                  "descendants": {
+                    "sn_icon": {
+                      "icon": "git-commit-horizontal",
+                      "fill": "$ref/head"
+                    },
+                    "sn_label": {
+                      "content": "Commits & graph",
+                      "fontWeight": 600
+                    }
+                  }
+                }
+              },
+              "height": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "d_commits_content",
+              "name": "Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 18,
+              "padding": [
+                26,
+                32,
+                32,
+                24
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d_commits_head",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d_commits_title",
+                      "name": "d_commits_title",
+                      "content": "Commits & graph",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/2xl",
+                      "fontWeight": 700,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d_commits_close",
+                      "ref": "c_btn_icon",
+                      "descendants": {
+                        "bi_icon": {
+                          "icon": "x"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_s1",
+                  "name": "Section Graph",
+                  "width": "fill_container",
+                  "padding": [
+                    6,
+                    0,
+                    0,
+                    204
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "c_s1_t",
+                      "name": "c_s1_t",
+                      "content": "GRAPH",
+                      "fontFamily": "$font/sans",
+                      "fontSize": 11,
+                      "fontWeight": 700,
+                      "fill": "$text/muted",
+                      "letterSpacing": 0.7
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_cols",
+                  "name": "Columns",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "c_cols_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "c_cols_l",
+                          "name": "c_cols_l",
+                          "content": "Columns",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "c_cols_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "c_cols_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "c_cc",
+                              "name": "Checks",
+                              "layout": "vertical",
+                              "gap": 10,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "c_cc0",
+                                  "name": "Check Author",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ref",
+                                      "id": "c_cc0_cb",
+                                      "ref": "c_checkbox",
+                                      "descendants": {}
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "c_cc0_t",
+                                      "name": "c_cc0_t",
+                                      "content": "Author",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 400,
+                                      "fill": "$text/secondary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "c_cc1",
+                                  "name": "Check Date",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ref",
+                                      "id": "c_cc1_cb",
+                                      "ref": "c_checkbox",
+                                      "descendants": {}
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "c_cc1_t",
+                                      "name": "c_cc1_t",
+                                      "content": "Date",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 400,
+                                      "fill": "$text/secondary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "c_cc2",
+                                  "name": "Check SHA",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ref",
+                                      "id": "c_cc2_cb",
+                                      "ref": "c_checkbox",
+                                      "descendants": {}
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "c_cc2_t",
+                                      "name": "c_cc2_t",
+                                      "content": "SHA",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 400,
+                                      "fill": "$text/secondary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "c_cc3",
+                                  "name": "Check Tags on commits",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ref",
+                                      "id": "c_cc3_cb",
+                                      "ref": "c_checkbox",
+                                      "descendants": {}
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "c_cc3_t",
+                                      "name": "c_cc3_t",
+                                      "content": "Tags on commits",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 400,
+                                      "fill": "$text/secondary"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_dates",
+                  "name": "Dates",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "c_dates_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "c_dates_l",
+                          "name": "c_dates_l",
+                          "content": "Dates",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "c_dates_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "c_dates_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "c_ds",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "Relative — 3 hours ago"
+                                }
+                              },
+                              "width": 220
+                            },
+                            {
+                              "type": "ref",
+                              "id": "c_df",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "2026-10-25 14:30"
+                                }
+                              },
+                              "width": 180
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_24",
+                  "name": "Row",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "c_24_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "c_24_l",
+                          "name": "c_24_l",
+                          "content": "",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "c_24_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "c_24_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "c_24c",
+                              "name": "Check 24-hour clock",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "c_24c_cb",
+                                  "ref": "c_checkbox",
+                                  "descendants": {}
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "c_24c_t",
+                                  "name": "c_24c_t",
+                                  "content": "24-hour clock",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_s2",
+                  "name": "Section Commit message",
+                  "width": "fill_container",
+                  "padding": [
+                    6,
+                    0,
+                    0,
+                    204
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "c_s2_t",
+                      "name": "c_s2_t",
+                      "content": "COMMIT MESSAGE",
+                      "fontFamily": "$font/sans",
+                      "fontSize": 11,
+                      "fontWeight": 700,
+                      "fill": "$text/muted",
+                      "letterSpacing": 0.7
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_len",
+                  "name": "Subject guide",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "c_len_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "c_len_l",
+                          "name": "c_len_l",
+                          "content": "Subject guide",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "c_len_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "c_len_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "c_li",
+                              "ref": "c_input",
+                              "descendants": {
+                                "in_text": {
+                                  "content": "72"
+                                },
+                                "in_suffix": {
+                                  "content": "chars"
+                                }
+                              },
+                              "width": 100
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "c_len_h",
+                          "name": "c_len_h",
+                          "content": "The counter turns amber past this length. 0 turns it off.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_tpl",
+                  "name": "Template",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "c_tpl_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "c_tpl_l",
+                          "name": "c_tpl_l",
+                          "content": "Template",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "c_tpl_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "c_tpl_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "c_ta",
+                              "name": "Textarea",
+                              "width": 440,
+                              "height": 76,
+                              "padding": [
+                                8,
+                                10
+                              ],
+                              "cornerRadius": "$radius/md",
+                              "stroke": "$border/strong",
+                              "strokeWidth": 1,
+                              "fill": "$bg/app",
+                              "layout": "vertical",
+                              "gap": 2,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "c_t1",
+                                  "name": "c_t1",
+                                  "content": "feat: ",
+                                  "fontFamily": "$font/mono",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 400,
+                                  "fill": "$text/primary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "c_t2",
+                                  "name": "c_t2",
+                                  "content": "",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/primary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "c_t3",
+                                  "name": "c_t3",
+                                  "content": "Refs #",
+                                  "fontFamily": "$font/mono",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 400,
+                                  "fill": "$text/muted"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "c_tpl_h",
+                          "name": "c_tpl_h",
+                          "content": "Fills an empty message box. Empty uses git’s commit.template.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_hooks",
+                  "name": "Hooks",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "c_hooks_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "c_hooks_l",
+                          "name": "c_hooks_l",
+                          "content": "Hooks",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "c_hooks_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "c_hooks_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "c_hc",
+                              "name": "Check Skip hooks by default (--no-verify)",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "c_hc_cb",
+                                  "ref": "c_checkbox_off",
+                                  "descendants": {}
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "c_hc_t",
+                                  "name": "c_hc_t",
+                                  "content": "Skip hooks by default (--no-verify)",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl20",
+          "name": "Label · 20 · Settings — External tools",
+          "x": 2200,
+          "y": 9810,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl20_t",
+              "name": "dl20_t",
+              "content": "20 · Settings — External tools",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl20_s",
+              "name": "dl20_s",
+              "content": "Light · editor, diff and merge tools found on this Mac, terminal",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_tools",
+          "name": "20 · Settings — External tools — Light",
+          "x": 2200,
+          "y": 9900,
+          "width": 980,
+          "height": 600,
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "cornerRadius": "$radius/xl",
+          "clip": true,
+          "fill": "$bg/app",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 24
+            },
+            "blur": 60,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d_tools_nav",
+              "ref": "c_set_navlist",
+              "descendants": {
+                "sni_tools": {
+                  "fill": "$bg/selected",
+                  "descendants": {
+                    "sn_icon": {
+                      "icon": "wrench",
+                      "fill": "$ref/head"
+                    },
+                    "sn_label": {
+                      "content": "External tools",
+                      "fontWeight": 600
+                    }
+                  }
+                }
+              },
+              "height": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "d_tools_content",
+              "name": "Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 18,
+              "padding": [
+                26,
+                32,
+                32,
+                24
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d_tools_head",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d_tools_title",
+                      "name": "d_tools_title",
+                      "content": "External tools",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/2xl",
+                      "fontWeight": 700,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d_tools_close",
+                      "ref": "c_btn_icon",
+                      "descendants": {
+                        "bi_icon": {
+                          "icon": "x"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "t_ed",
+                  "name": "Editor",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "t_ed_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t_ed_l",
+                          "name": "t_ed_l",
+                          "content": "Editor",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "t_ed_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "t_ed_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "t_es",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "Visual Studio Code"
+                                }
+                              },
+                              "width": 260
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "t_ed_h",
+                          "name": "t_ed_h",
+                          "content": "Open in editor on files and repositories. Found on this Mac: VS Code, Cursor, Zed, Xcode.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "t_diff",
+                  "name": "Diff tool",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "t_diff_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t_diff_l",
+                          "name": "t_diff_l",
+                          "content": "Diff tool",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "t_diff_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "t_diff_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "t_ds",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "FileMerge (opendiff)"
+                                }
+                              },
+                              "width": 260
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "t_diff_h",
+                          "name": "t_diff_h",
+                          "content": "Open in diff tool on changed files.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "t_merge",
+                  "name": "Merge tool",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "t_merge_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t_merge_l",
+                          "name": "t_merge_l",
+                          "content": "Merge tool",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "t_merge_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "t_merge_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "t_ms",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "Visual Studio Code"
+                                }
+                              },
+                              "width": 260
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "t_merge_h",
+                          "name": "t_merge_h",
+                          "content": "Open in merge tool on conflicted files. Git’s merge.tool is used when set to Git default.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "t_term",
+                  "name": "Terminal",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "t_term_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t_term_l",
+                          "name": "t_term_l",
+                          "content": "Terminal",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "t_term_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "t_term_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "t_ts",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "Ghostty"
+                                }
+                              },
+                              "width": 260
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "t_term_h",
+                          "name": "t_term_h",
+                          "content": "Opened by the Terminal button in the toolbar.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl21",
+          "name": "Label · 21 · Settings — Notifications",
+          "x": 3300,
+          "y": 9810,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl21_t",
+              "name": "dl21_t",
+              "content": "21 · Settings — Notifications",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl21_s",
+              "name": "dl21_s",
+              "content": "Light · CI finished, new commits after fetch, long operations, update check",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lkwOT",
+          "name": "Label · 21 · Settings — Notifications",
+          "x": 3300,
+          "y": 9810,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "DvqnH",
+              "name": "dl21_t",
+              "content": "21 · Settings — Notifications",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "3ddNI",
+              "name": "dl21_s",
+              "content": "Light · CI finished, new commits after fetch, long operations, update check",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_notify",
+          "name": "21 · Settings — Notifications — Light",
+          "x": 3300,
+          "y": 9900,
+          "width": 980,
+          "height": 600,
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "cornerRadius": "$radius/xl",
+          "clip": true,
+          "fill": "$bg/app",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 24
+            },
+            "blur": 60,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d_notify_nav",
+              "ref": "c_set_navlist",
+              "descendants": {
+                "sni_notify": {
+                  "fill": "$bg/selected",
+                  "descendants": {
+                    "sn_icon": {
+                      "icon": "bell",
+                      "fill": "$ref/head"
+                    },
+                    "sn_label": {
+                      "content": "Notifications",
+                      "fontWeight": 600
+                    }
+                  }
+                }
+              },
+              "height": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "d_notify_content",
+              "name": "Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 18,
+              "padding": [
+                26,
+                32,
+                32,
+                24
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d_notify_head",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d_notify_title",
+                      "name": "d_notify_title",
+                      "content": "Notifications",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/2xl",
+                      "fontWeight": 700,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d_notify_close",
+                      "ref": "c_btn_icon",
+                      "descendants": {
+                        "bi_icon": {
+                          "icon": "x"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "n_on",
+                  "name": "Desktop notifications",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "n_on_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "n_on_l",
+                          "name": "n_on_l",
+                          "content": "Desktop notifications",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "n_on_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "n_on_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "n_onc",
+                              "name": "Check Allow Git Graph to show notifications",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "n_onc_cb",
+                                  "ref": "c_checkbox",
+                                  "descendants": {}
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "n_onc_t",
+                                  "name": "n_onc_t",
+                                  "content": "Allow Git Graph to show notifications",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "ref",
+                              "id": "n_test",
+                              "ref": "c_btn_secondary",
+                              "descendants": {
+                                "bs_icon": {
+                                  "icon": "bell-ring"
+                                },
+                                "bs_label": {
+                                  "content": "Send test"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "n_when",
+                  "name": "Notify me when",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "n_when_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "n_when_l",
+                          "name": "n_when_l",
+                          "content": "Notify me when",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "n_when_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "n_when_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "n_wc",
+                              "name": "Checks",
+                              "layout": "vertical",
+                              "gap": 10,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "n_wc0",
+                                  "name": "Check A CI run on my branch finishes",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ref",
+                                      "id": "n_wc0_cb",
+                                      "ref": "c_checkbox",
+                                      "descendants": {}
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "n_wc0_t",
+                                      "name": "n_wc0_t",
+                                      "content": "A CI run on my branch finishes",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 400,
+                                      "fill": "$text/secondary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "n_wc1",
+                                  "name": "Check Fetching brings new commits",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ref",
+                                      "id": "n_wc1_cb",
+                                      "ref": "c_checkbox",
+                                      "descendants": {}
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "n_wc1_t",
+                                      "name": "n_wc1_t",
+                                      "content": "Fetching brings new commits",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 400,
+                                      "fill": "$text/secondary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "n_wc2",
+                                  "name": "Check A long push, pull or clone finishes",
+                                  "gap": 8,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "ref",
+                                      "id": "n_wc2_cb",
+                                      "ref": "c_checkbox_off",
+                                      "descendants": {}
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "n_wc2_t",
+                                      "name": "n_wc2_t",
+                                      "content": "A long push, pull or clone finishes",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 400,
+                                      "fill": "$text/secondary"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "n_bg",
+                  "name": "Row",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "n_bg_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "n_bg_l",
+                          "name": "n_bg_l",
+                          "content": "",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "n_bg_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "n_bg_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "n_bgc",
+                              "name": "Check Only while Git Graph is in the background",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "n_bgc_cb",
+                                  "ref": "c_checkbox",
+                                  "descendants": {}
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "n_bgc_t",
+                                  "name": "n_bgc_t",
+                                  "content": "Only while Git Graph is in the background",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "n_bg_h",
+                          "name": "n_bg_h",
+                          "content": "CI is checked every minute while a run on your branch is going.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "n_upd",
+                  "name": "Updates",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "n_upd_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "n_upd_l",
+                          "name": "n_upd_l",
+                          "content": "Updates",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "n_upd_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "n_upd_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "n_uc",
+                              "name": "Check Check for a new version on startup",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "n_uc_cb",
+                                  "ref": "c_checkbox",
+                                  "descendants": {}
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "n_uc_t",
+                                  "name": "n_uc_t",
+                                  "content": "Check for a new version on startup",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl22",
+          "name": "Label · 22 · Settings — Diff & editor",
+          "x": 4400,
+          "y": 9810,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl22_t",
+              "name": "dl22_t",
+              "content": "22 · Settings — Diff & editor",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl22_s",
+              "name": "dl22_s",
+              "content": "Light · whitespace handling added",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_diffset",
+          "name": "22 · Settings — Diff & editor — Light",
+          "x": 4400,
+          "y": 9900,
+          "width": 980,
+          "height": 420,
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "cornerRadius": "$radius/xl",
+          "clip": true,
+          "fill": "$bg/app",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 24
+            },
+            "blur": 60,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d_diffset_nav",
+              "ref": "c_set_navlist",
+              "descendants": {
+                "sni_diff": {
+                  "fill": "$bg/selected",
+                  "descendants": {
+                    "sn_icon": {
+                      "icon": "file-diff",
+                      "fill": "$ref/head"
+                    },
+                    "sn_label": {
+                      "content": "Diff & editor",
+                      "fontWeight": 600
+                    }
+                  }
+                }
+              },
+              "height": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "d_diffset_content",
+              "name": "Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 18,
+              "padding": [
+                26,
+                32,
+                32,
+                24
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d_diffset_head",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d_diffset_title",
+                      "name": "d_diffset_title",
+                      "content": "Diff & editor",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/2xl",
+                      "fontWeight": 700,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d_diffset_close",
+                      "ref": "c_btn_icon",
+                      "descendants": {
+                        "bi_icon": {
+                          "icon": "x"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "df_mode",
+                  "name": "Diff view",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "df_mode_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "df_mode_l",
+                          "name": "df_mode_l",
+                          "content": "Diff view",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "df_mode_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "df_mode_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "df_ms",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "Unified"
+                                }
+                              },
+                              "width": 260
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "df_mode_h",
+                          "name": "df_mode_h",
+                          "content": "Narrow panels switch to unified automatically.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "df_wrap",
+                  "name": "Wrap lines",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "df_wrap_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "df_wrap_l",
+                          "name": "df_wrap_l",
+                          "content": "Wrap lines",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "df_wrap_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "df_wrap_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "df_wc",
+                              "name": "Check Wrap long lines in diffs",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "df_wc_cb",
+                                  "ref": "c_checkbox_off",
+                                  "descendants": {}
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "df_wc_t",
+                                  "name": "df_wc_t",
+                                  "content": "Wrap long lines in diffs",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "df_ws",
+                  "name": "Whitespace",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "df_ws_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "df_ws_l",
+                          "name": "df_ws_l",
+                          "content": "Whitespace",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "df_ws_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "df_ws_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "df_wss",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "Ignore at line ends"
+                                }
+                              },
+                              "width": 260
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "df_ws_h",
+                          "name": "df_ws_h",
+                          "content": "Show all, ignore changes at line ends (incl. CR), or ignore all whitespace changes.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl23",
+          "name": "Label · 23 · Verified badge, commit box",
+          "x": 5500,
+          "y": 9810,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl23_t",
+              "name": "dl23_t",
+              "content": "23 · Verified badge, commit box",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl23_s",
+              "name": "dl23_s",
+              "content": "Light · signature in commit details; skip hooks; subject guide counter",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_bits",
+          "name": "23 · Signed badge and commit box — Light",
+          "x": 5500,
+          "y": 9900,
+          "width": 420,
+          "layout": "vertical",
+          "gap": 16,
+          "padding": 16,
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "fill": "$bg/app",
+          "cornerRadius": "$radius/xl",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "children": [
+            {
+              "type": "frame",
+              "id": "b_head",
+              "name": "Commit header",
+              "width": "fill_container",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "b_sha",
+                  "name": "SHA",
+                  "gap": 5,
+                  "padding": [
+                    2,
+                    6
+                  ],
+                  "cornerRadius": "$radius/sm",
+                  "fill": "$bg/surface",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "b_shai",
+                      "name": "icon git-commit-horizontal",
+                      "library": "lucide",
+                      "icon": "git-commit-horizontal",
+                      "width": 12,
+                      "height": 12,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "b_shat",
+                      "name": "b_shat",
+                      "content": "3f2a9c1",
+                      "fontFamily": "$font/mono",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 500,
+                      "fill": "$text/link"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "b_ver",
+                  "name": "Badge",
+                  "gap": 5,
+                  "alignItems": "center",
+                  "padding": [
+                    3,
+                    8
+                  ],
+                  "cornerRadius": "$radius/md",
+                  "fill": "$ref/local-soft",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "b_ver_i",
+                      "name": "icon shield-check",
+                      "library": "lucide",
+                      "icon": "shield-check",
+                      "width": 13,
+                      "height": 13,
+                      "fill": "$ref/local"
+                    },
+                    {
+                      "type": "text",
+                      "id": "b_ver_t",
+                      "name": "b_ver_t",
+                      "content": "Verified",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 500,
+                      "fill": "$ref/local"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "b_by",
+                  "name": "b_by",
+                  "content": "SSH · lucas",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "b_comp",
+              "name": "Composer",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "padding": 12,
+              "fill": "$bg/sidebar",
+              "cornerRadius": "$radius/md",
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "b_sum",
+                  "ref": "c_input",
+                  "descendants": {
+                    "in_text": {
+                      "content": "feat: add settings for git identity, signing and tools",
+                      "fontWeight": 500
+                    }
+                  },
+                  "width": "fill_container"
+                },
+                {
+                  "type": "frame",
+                  "id": "b_opts",
+                  "name": "Options",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "b_am",
+                      "name": "Check Amend",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "ref",
+                          "id": "b_am_cb",
+                          "ref": "c_checkbox_off",
+                          "descendants": {}
+                        },
+                        {
+                          "type": "text",
+                          "id": "b_am_t",
+                          "name": "b_am_t",
+                          "content": "Amend",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 400,
+                          "fill": "$text/secondary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "b_so",
+                      "name": "Check Sign-off",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "ref",
+                          "id": "b_so_cb",
+                          "ref": "c_checkbox_off",
+                          "descendants": {}
+                        },
+                        {
+                          "type": "text",
+                          "id": "b_so_t",
+                          "name": "b_so_t",
+                          "content": "Sign-off",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 400,
+                          "fill": "$text/secondary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "b_nv",
+                      "name": "Check Skip hooks",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "ref",
+                          "id": "b_nv_cb",
+                          "ref": "c_checkbox",
+                          "descendants": {}
+                        },
+                        {
+                          "type": "text",
+                          "id": "b_nv_t",
+                          "name": "b_nv_t",
+                          "content": "Skip hooks",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 400,
+                          "fill": "$text/secondary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "b_sp",
+                      "name": "Spacer",
+                      "width": "fill_container",
+                      "height": 1,
+                      "children": []
+                    },
+                    {
+                      "type": "text",
+                      "id": "b_cnt",
+                      "name": "b_cnt",
+                      "content": "56 / 72",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 500,
+                      "fill": "$text/faint"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "b_opts2",
+                  "name": "Over",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "b_ol",
+                      "name": "b_ol",
+                      "content": "Past the guide:",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "b_sp2",
+                      "name": "Spacer",
+                      "width": "fill_container",
+                      "height": 1,
+                      "children": []
+                    },
+                    {
+                      "type": "text",
+                      "id": "b_cnt2",
+                      "name": "b_cnt2",
+                      "content": "81 / 72",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 600,
+                      "fill": "$status/modified"
                     }
                   ]
                 }

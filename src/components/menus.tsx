@@ -1,10 +1,11 @@
 /** Right-click menus for commits, files, branches and tags: GitHub links first, then git actions. */
-import { CherryIcon, Copy, ExternalLink, GitBranchPlus, GitCompareArrows, Link, LogIn, Tag, Undo2 } from 'lucide-react'
+import { CherryIcon, Code2, Copy, ExternalLink, FileDiff, FolderSearch, GitBranchPlus, GitCompareArrows, GitMerge, Link, LogIn, Tag, Undo2 } from 'lucide-react'
 
 import { links, webUrl } from '../lib/actions'
-import { actions } from '../lib/git'
+import { actions, reveal } from '../lib/git'
 import { openUrl } from '../lib/github'
 import { t } from '../lib/i18n'
+import { openDiffTool, openInEditor, openMergeTool } from '../lib/tools'
 import type { BranchRef, LogRow } from '../lib/types'
 import { useApp } from '../state'
 import type { MenuItem } from './Menu'
@@ -28,6 +29,16 @@ export function useMenus() {
       toast({ kind: 'error', title: t('Copy failed'), detail: String(e) })
     }
   }
+  /** Runs something outside the app, with failures as a toast. */
+  const external = (label: string, run: () => Promise<unknown>) => async () => {
+    try {
+      await run()
+    } catch (e) {
+      toast({ kind: 'error', title: t('{label} failed', { label: t(label) }), detail: e instanceof Error ? e.message : String(e) })
+    }
+  }
+  const full = (path: string) => `${root}/${path}`
+  const editorItem = (path: string): MenuItem => ({ icon: Code2, label: t('Open in editor'), run: external('Open in editor', () => openInEditor(full(path))) })
   const permalink = (make: (base: string) => string) => async () => make(await webUrl(root))
 
   const commit = (row: Pick<LogRow, 'hash' | 'short' | 'subject'>): MenuItem[] => [
@@ -87,6 +98,21 @@ export function useMenus() {
       ),
     },
     { icon: Copy, label: t('Copy path'), run: copy(path, 'Path') },
+    'separator',
+    { icon: FileDiff, label: t('Open in diff tool'), run: external('Open in diff tool', () => openDiffTool(root, path, { commit: sha })) },
+    editorItem(path),
+  ]
+
+  /** A file in the Changes list. */
+  const workFile = (path: string, kind: 'staged' | 'unstaged' | 'untracked' | 'conflict'): MenuItem[] => [
+    ...(kind === 'conflict'
+      ? [{ icon: GitMerge, label: t('Open in merge tool'), run: external('Open in merge tool', () => openMergeTool(root, path)) }]
+      : kind === 'untracked'
+        ? []
+        : [{ icon: FileDiff, label: t('Open in diff tool'), run: external('Open in diff tool', () => openDiffTool(root, path, { staged: kind === 'staged' })) }]),
+    editorItem(path),
+    { icon: FolderSearch, label: t('Reveal in Finder'), run: external('Reveal in Finder', () => reveal(full(path).replace(/\/[^/]*$/, ''))) },
+    { icon: Copy, label: t('Copy path'), run: copy(path, 'Path') },
   ]
 
   const branch = (ref: BranchRef): MenuItem[] => {
@@ -115,5 +141,5 @@ export function useMenus() {
     { icon: Copy, label: t('Copy tag name'), run: copy(name, 'Tag name') },
   ]
 
-  return { commit, file, branch, tag }
+  return { commit, file, workFile, branch, tag }
 }

@@ -39,7 +39,29 @@ export type Settings = {
   /** Folders scanned for repositories; null until first suggested. */
   repoFolders: string[] | null
   fonts: Fonts
+  autoStash: boolean
+  /** Where Clone from GitHub puts repositories; '' asks each time. */
+  cloneDir: string
+  graph: Graph
+  commit: CommitPrefs
+  diffWhitespace: 'all' | 'eol' | 'ignore'
+  /** '' = the system default app / git's own config. */
+  tools: Tools
+  notify: Notify
 }
+
+export type Graph = {
+  author: boolean
+  date: boolean
+  sha: boolean
+  tags: boolean
+  dates: 'relative' | 'absolute'
+  dateFormat: 'locale' | 'iso' | 'dmy' | 'mdy'
+  hour24: boolean
+}
+export type CommitPrefs = { subjectGuide: number; template: string; skipHooks: boolean }
+export type Tools = { editor: string; diffTool: string; mergeTool: string }
+export type Notify = { enabled: boolean; ci: boolean; fetch: boolean; long: boolean; backgroundOnly: boolean; updates: boolean }
 
 export const DEFAULT_FONTS: Fonts = { ui: '', uiSize: 13, mono: '', monoSize: 12, monoOnly: true, ligatures: false, tabWidth: 4, zoom: 1 }
 export const ZOOMS = [0.8, 0.9, 1, 1.1, 1.25, 1.5]
@@ -58,6 +80,21 @@ export const DEFAULTS: Settings = {
   proxy: { mode: 'system', url: '', bypass: 'localhost, 127.0.0.1, *.local', git: true, github: true },
   repoFolders: null,
   fonts: DEFAULT_FONTS,
+  autoStash: true,
+  cloneDir: '',
+  graph: { author: true, date: true, sha: true, tags: true, dates: 'relative', dateFormat: 'locale', hour24: true },
+  commit: { subjectGuide: 72, template: '', skipHooks: false },
+  diffWhitespace: 'all',
+  tools: { editor: '', diffTool: '', mergeTool: '' },
+  notify: { enabled: true, ci: true, fetch: true, long: false, backgroundOnly: true, updates: true },
+}
+
+/** Grouped settings (proxy, fonts…) merge key by key so new keys get their defaults. */
+const GROUPS = ['proxy', 'fonts', 'graph', 'commit', 'tools', 'notify'] as const
+function merge(base: Settings, patch: Partial<Settings>): Settings {
+  const out = { ...base, ...patch } as Record<string, unknown>
+  for (const k of GROUPS) out[k] = { ...base[k], ...patch[k] }
+  return out as Settings
 }
 
 function load(): Settings {
@@ -65,7 +102,7 @@ function load(): Settings {
     const raw = JSON.parse(localStorage.getItem('settings') ?? '{}') as Partial<Settings>
     // Older builds kept the theme on its own.
     const theme = (localStorage.getItem('theme') as Settings['theme'] | null) ?? undefined
-    return { ...DEFAULTS, ...(theme ? { theme } : {}), ...raw, proxy: { ...DEFAULTS.proxy, ...raw.proxy }, fonts: { ...DEFAULT_FONTS, ...raw.fonts } }
+    return merge(DEFAULTS, { ...(theme ? { theme } : {}), ...raw })
   } catch {
     return DEFAULTS
   }
@@ -77,7 +114,7 @@ const listeners = new Set<() => void>()
 export const getSettings = () => current
 
 export function updateSettings(patch: Partial<Settings>) {
-  current = { ...current, ...patch, proxy: { ...current.proxy, ...patch.proxy }, fonts: { ...current.fonts, ...patch.fonts } }
+  current = merge(current, patch)
   try {
     localStorage.setItem('settings', JSON.stringify(current))
   } catch {}

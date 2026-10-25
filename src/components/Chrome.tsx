@@ -27,6 +27,7 @@ import {
   Search,
   Settings as SettingsIcon,
   SquareTerminal,
+  Code2,
   Sun,
   Tag,
   TriangleAlert,
@@ -37,6 +38,7 @@ import { type ReactNode, useMemo, useState } from 'react'
 import appIcon from '../../assets/icon/app-icon.svg'
 import { cx } from '../lib/cx'
 import { actions, openTerminal } from '../lib/git'
+import { openInEditor } from '../lib/tools'
 import { t } from '../lib/i18n'
 import { isConflict } from '../lib/parse'
 import { useMenus } from './menus'
@@ -122,6 +124,11 @@ export function TitleBar({
       </div>
       <Sep />
       <ToolButton icon={SquareTerminal} label={t('Terminal')} onClick={() => void openTerminal(repo.root)} />
+      <ToolButton
+        icon={Code2}
+        label={t('Editor')}
+        onClick={() => void openInEditor(repo.root).catch(e => app.toast({ kind: 'error', title: t('Open in editor failed'), detail: String(e) }))}
+      />
       <div className="flex-1 self-stretch" data-tauri-drag-region />
       <IconButton icon={SettingsIcon} onClick={onSettings} title={t('Settings (⌘,)')} />
       <button type="button" className="flex h-7 w-60 items-center gap-1.5 rounded-md bg-surface pr-1.5 pl-2 text-muted" onClick={() => setPaletteOpen(true)}>

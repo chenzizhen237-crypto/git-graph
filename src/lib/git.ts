@@ -145,10 +145,13 @@ export async function commitDetail(root: string, hash: string): Promise<CommitDe
   return { ...parseShow(show), files: mergeNumstat(parseNameStatus(names), nums) }
 }
 
+/** Settings → Diff & editor: how whitespace-only changes show. */
+const ws = () => ({ all: [], eol: ['--ignore-space-at-eol', '--ignore-cr-at-eol'], ignore: ['-w'] })[getSettings().diffWhitespace]
+
 /** The patch of one file in a commit, from its first hunk. */
 export async function commitFileDiff(root: string, hash: string, path: string, orig?: string) {
   const paths = orig ? [orig, path] : [path]
-  const out = await git(root, ['show', '--format=', '-M', '--first-parent', '--root', hash, '--', ...paths])
+  const out = await git(root, ['show', '--format=', '-M', '--first-parent', '--root', ...ws(), hash, '--', ...paths])
   return hunksOnly(out)
 }
 
@@ -161,7 +164,7 @@ export async function workFileDiff(root: string, path: string, kind: 'staged' | 
     const out = await run(root, ['diff', '--no-index', '--', '/dev/null', path])
     return hunksOnly(out.stdout)
   }
-  const out = await git(root, ['diff', ...(kind === 'staged' ? ['--cached'] : []), '-M', '--', path])
+  const out = await git(root, ['diff', ...(kind === 'staged' ? ['--cached'] : []), '-M', ...ws(), '--', path])
   return hunksOnly(out)
 }
 
@@ -199,7 +202,14 @@ export const actions = {
   unstageAll: () => ['restore', '--staged', '--', '.'],
   discard: (paths: string[]) => ['restore', '--worktree', '--', ...paths],
   clean: (paths: string[]) => ['clean', '-f', '--', ...paths],
-  commit: (amend: boolean, signoff: boolean) => ['commit', '-F', '-', ...(amend ? ['--amend'] : []), ...(signoff ? ['--signoff'] : [])],
+  commit: (amend: boolean, signoff: boolean, noVerify = false) => [
+    'commit',
+    '-F',
+    '-',
+    ...(amend ? ['--amend'] : []),
+    ...(signoff ? ['--signoff'] : []),
+    ...(noVerify ? ['--no-verify'] : []),
+  ],
   checkout: (name: string) => ['switch', name],
   checkoutRemote: (name: string) => ['switch', '--track', name],
   checkoutCommit: (hash: string) => ['switch', '--detach', hash],

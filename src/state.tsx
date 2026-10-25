@@ -6,9 +6,10 @@ import { listen } from '@tauri-apps/api/event'
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import type { MenuItem, MenuState } from './components/Menu'
-import { GitError, git, loadRepo, watchRepo } from './lib/git'
+import { GitError, git, loadRepo, run, watchRepo } from './lib/git'
 import { GhError, gh } from './lib/github'
 import { t } from './lib/i18n'
+import { notify } from './lib/notify'
 import { isConflict } from './lib/parse'
 import { getSettings } from './lib/settings'
 import type { Stage } from './lib/tokens'
@@ -124,10 +125,30 @@ function useAppState(root: string) {
     async (label: string, args: string[], opts: { stdin?: string; done?: string; tool?: 'git' | 'gh'; quiet?: boolean } = {}) => {
       if (busy) return false
       if (!opts.quiet) setBusy(label)
+      const isGit = opts.tool !== 'gh'
+      const verb = (isGit && args[0]) || ''
+      const { autoStash } = getSettings()
+      // Settings → Git: carry uncommitted changes across a pull or a branch switch.
+      const stashing = autoStash && verb === 'switch' && !!repo?.changes.some(c => c.x !== '?' && c.y !== '?')
+      const argv = autoStash && verb === 'pull' ? [...args, '--autostash'] : args
+      // Upstream before a fetch, to tell how many commits it brought.
+      const before = verb === 'fetch' ? (await run(root, ['rev-parse', '--verify', '-q', '@{u}'])).stdout.trim() : ''
+      const started = Date.now()
       try {
-        await (opts.tool === 'gh' ? gh : git)(root, args, opts.stdin)
+        if (stashing) await git(root, ['stash', 'push', '-m', 'git-graph: auto-stash before switching'])
+        try {
+          await (isGit ? git : gh)(root, argv, opts.stdin)
+        } finally {
+          if (stashing) await git(root, ['stash', 'pop'])
+        }
         if (opts.done) toast({ kind: 'ok', title: t(opts.done) })
-        if (args[0] === 'fetch' || args[0] === 'pull') setLastFetch(Date.now())
+        if (verb === 'fetch' || verb === 'pull') setLastFetch(Date.now())
+        if (before) {
+          const n = Number((await run(root, ['rev-list', '--count', `${before}..@{u}`])).stdout.trim()) || 0
+          if (n) void notify('fetch', t(n === 1 ? '{n} new commit on {branch}' : '{n} new commits on {branch}', { n, branch: repo?.upstream ?? '' }), repo?.name)
+        }
+        if (['push', 'pull', 'fetch', 'clone'].includes(verb) && !opts.quiet && Date.now() - started > 15_000)
+          void notify('long', t('{label} finished', { label: t(label) }), repo?.name)
         return true
       } catch (e) {
         const detail = e instanceof GitError || e instanceof GhError ? e.message : String(e)
@@ -138,7 +159,7 @@ function useAppState(root: string) {
         void refresh()
       }
     },
-    [busy, root, refresh, toast],
+    [busy, root, refresh, toast, repo],
   )
 
   const stage = stageOf(repo)

@@ -24,6 +24,7 @@ import {
   Search,
   Settings as SettingsIcon,
   SquareTerminal,
+  Code2,
   SunMoon,
   Tag,
   X,
@@ -33,6 +34,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { cx } from '../lib/cx'
 import { repoActions, webUrl } from '../lib/actions'
 import { actions, openTerminal } from '../lib/git'
+import { openInEditor } from '../lib/tools'
 import { openUrl } from '../lib/github'
 import { t } from '../lib/i18n'
 import { getSettings, updateSettings } from '../lib/settings'
@@ -193,6 +195,7 @@ export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () 
           },
         },
         { id: 'a:term', group: 'ACTIONS', icon: SquareTerminal, color: 'var(--text-secondary)', label: t('Open in Terminal'), run: () => void openTerminal(repo.root) },
+        { id: 'a:editor', group: 'ACTIONS', icon: Code2, color: 'var(--text-secondary)', label: t('Open in editor'), run: () => void openInEditor(repo.root).catch(() => {}) },
         { id: 'a:repo', group: 'ACTIONS', icon: FolderOpen, color: 'var(--text-secondary)', label: t('Open another repository…'), kbd: '⌘O', run: onSwitchRepo },
         { id: 'a:settings', group: 'ACTIONS', icon: SettingsIcon, color: 'var(--text-secondary)', label: t('Settings…'), kbd: '⌘,', run: onSettings },
         {

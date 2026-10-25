@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Banner, Sidebar, StatusBar, TitleBar } from './components/Chrome'
 import { PublishDialog } from './components/GitHubDialogs'
@@ -9,6 +9,8 @@ import { CommandPalette, DialogHost, Toasts } from './components/Overlays'
 import { SettingsDialog } from './components/Settings'
 import { Resizer, usePanelSize } from './components/Split'
 import { actions, findRoot } from './lib/git'
+import { t } from './lib/i18n'
+import { checkRuns, newerRelease, notify, REPO_SLUG } from './lib/notify'
 import { getSettings, stepZoom, useSettings } from './lib/settings'
 import { AppProvider, readRecents, rememberRepo, useApp } from './state'
 import { ChangesView } from './views/Changes'
@@ -60,6 +62,8 @@ export function App() {
   )
 }
 
+let updateChecked = false
+
 function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
   const app = useApp()
   const { repo, view, setView, paletteOpen, setPaletteOpen, refresh, act } = app
@@ -72,6 +76,37 @@ function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
     const id = window.setInterval(() => void act('Fetch', actions.fetch(), { quiet: true }), autoFetchMinutes * 60_000)
     return () => window.clearInterval(id)
   }, [autoFetchMinutes, act])
+  // Settings → Notifications: watch CI on the current branch once a minute.
+  const { notify: notifyPrefs } = useSettings()
+  const ciWatch = notifyPrefs.enabled && notifyPrefs.ci
+  const branch = repo?.branch
+  const root = app.root
+  useEffect(() => {
+    if (!ciWatch || !branch) return
+    let off = false
+    const tick = () =>
+      void checkRuns(root, branch).catch(() => {
+        // No GitHub remote or no access: stop asking for this repository.
+        off = true
+      })
+    tick()
+    const id = window.setInterval(() => !off && tick(), 60_000)
+    return () => window.clearInterval(id)
+  }, [ciWatch, root, branch])
+
+  // A newer release, once per launch.
+  const toastRef = useRef(app.toast)
+  useEffect(() => {
+    if (!getSettings().notify.updates || updateChecked) return
+    updateChecked = true
+    void newerRelease(REPO_SLUG)
+      .then(r => {
+        if (!r) return
+        toastRef.current({ kind: 'ok', title: t('Git Graph {tag} is available', { tag: r.tag }), detail: t('Download it from Settings → About → Releases on GitHub.') })
+        void notify('updates', t('Git Graph {tag} is available', { tag: r.tag }))
+      })
+      .catch(() => {})
+  }, [])
   const sidebar = usePanelSize('sidebar', 248, 180, 480)
   const [showSidebar, setShowSidebar] = useState(() => localStorage.getItem('sidebar:hidden') !== '1')
   const toggleSidebar = useCallback(
