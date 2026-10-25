@@ -463,6 +463,7 @@ const zh: Record<string, string> = {
   'Scan again': '重新扫描',
   'No repository matches.': '没有匹配的仓库。',
   'Found in {n} folders, up to {depth} levels deep.': '在 {n} 个文件夹中查找，最多向下 {depth} 层。',
+  'Found in {n} folder, up to {depth} levels deep.': '在 {n} 个文件夹中查找，最多向下 {depth} 层。',
   'Drop a folder here, or run git-graph . in a terminal': '将文件夹拖到这里，或在终端中运行 git-graph .',
   'Manage folders…': '管理文件夹…',
 
@@ -480,6 +481,21 @@ const zh: Record<string, string> = {
   '{n} months ago': '{n} 个月前',
   '{n} year ago': '{n} 年前',
   '{n} years ago': '{n} 年前',
+  Fonts: '字体',
+  Default: '默认',
+  'Interface font': '界面字体',
+  'Used for menus, lists and labels. Chinese text falls back to the system Chinese font.': '用于菜单、列表和标签。中文会回退到系统中文字体。',
+  'Code font': '代码字体',
+  'Used for hashes, diffs, logs and paths.': '用于哈希、差异、日志和路径。',
+  'Show only monospace fonts': '只显示等宽字体',
+  Ligatures: '连字',
+  'Tab width': '制表符宽度',
+  spaces: '个空格',
+  Zoom: '缩放',
+  'Add a Fonts page to Settings': '在设置中添加字体页面',
+  'Reset to defaults': '恢复默认',
+  'Zoom in · Zoom out · Actual size': '放大 · 缩小 · 实际大小',
+  'If macOS asks whether Git Graph may open files in a folder, allow it so the scan can finish.': '如果 macOS 询问是否允许 Git Graph 访问某个文件夹，请选择允许，扫描才能完成。',
 }
 
 export default zh

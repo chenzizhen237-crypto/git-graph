@@ -29,6 +29,13 @@
   textarea {
     @apply select-text;
   }
+  /* Settings → Fonts: ligatures and tab width for every bit of code. */
+  .font-mono,
+  code,
+  pre {
+    font-variant-ligatures: var(--mono-liga, none);
+    tab-size: var(--tab-size, 4);
+  }
   /* Native scrollbars are hidden; lib/scrollbars.ts draws overlay thumbs while scrolling. */
   ::-webkit-scrollbar {
     @apply size-0 bg-transparent;
@@ -36,6 +43,11 @@
 }
 
 @plugin '@tailwindcss/typography';
+
+/* Diffs and logs: the code size from Settings → Fonts. */
+@utility text-code {
+  font-size: var(--fs-code, var(--fs-sm));
+}
 
 /* Typography for PR bodies and comments, on the design's tokens. Unlayered so it wins over .prose. */
 .markdown.prose {

@@ -35,6 +35,13 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
   const [version, setVersion] = useState('')
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [local, setLocal] = useState<LocalRepo[] | null>(cachedLocalRepos)
+  // A scan that takes this long is usually waiting on the macOS folder-access prompt.
+  const [slow, setSlow] = useState(false)
+  useEffect(() => {
+    if (local) return
+    const timer = setTimeout(() => setSlow(true), 3000)
+    return () => clearTimeout(timer)
+  }, [local])
   const [tab, setTab] = useState<'recent' | 'mac'>(() => (localStorage.getItem('welcome:tab') as 'recent' | null) ?? 'mac')
   const { repoFolders: savedFolders } = useSettings()
   const folders = savedFolders ?? []
@@ -190,7 +197,14 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
           )}
           {tab === 'mac' && (
             <>
-              {local === null && <Empty>{t('Looking for repositories…')}</Empty>}
+              {local === null && (
+                <Empty>
+                  {t('Looking for repositories…')}
+                  {slow && (
+                    <div className="mt-1.5 max-w-90 text-sm text-faint">{t('If macOS asks whether Git Graph may open files in a folder, allow it so the scan can finish.')}</div>
+                  )}
+                </Empty>
+              )}
               {local && !folders.length && (
                 <Empty>
                   {t('No code folders found yet.')}
@@ -248,7 +262,12 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
         <div className="flex shrink-0 items-center gap-1.5 border-t border-subtle px-1 pt-2 text-sm text-muted">
           <ScanSearch size={13} />
           {tab === 'mac' ? (
-            <span>{t('Found in {n} folders, up to {depth} levels deep.', { n: folders.length, depth: SCAN_DEPTH })}</span>
+            <span>
+              {t(folders.length === 1 ? 'Found in {n} folder, up to {depth} levels deep.' : 'Found in {n} folders, up to {depth} levels deep.', {
+                n: folders.length,
+                depth: SCAN_DEPTH,
+              })}
+            </span>
           ) : (
             <span>{t('Drop a folder here, or run git-graph . in a terminal')}</span>
           )}

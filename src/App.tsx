@@ -9,7 +9,7 @@ import { CommandPalette, DialogHost, Toasts } from './components/Overlays'
 import { SettingsDialog } from './components/Settings'
 import { Resizer, usePanelSize } from './components/Split'
 import { actions, findRoot } from './lib/git'
-import { getSettings, useSettings } from './lib/settings'
+import { getSettings, stepZoom, useSettings } from './lib/settings'
 import { AppProvider, readRecents, rememberRepo, useApp } from './state'
 import { ChangesView } from './views/Changes'
 import { ActionsView } from './views/Actions'
@@ -116,6 +116,9 @@ function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
       } else if (k === '4') {
         handled()
         setView('pulls')
+      } else if (k === '=' || k === '+' || k === '-' || k === '0') {
+        handled()
+        stepZoom(k === '0' ? 0 : k === '-' ? -1 : 1)
       } else if (k === 'r') {
         handled()
         void refresh()

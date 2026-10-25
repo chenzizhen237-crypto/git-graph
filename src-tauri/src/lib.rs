@@ -2,6 +2,7 @@
 //! repository for changes, and hand paths to the OS. Everything else lives in
 //! the web view.
 
+mod fonts;
 mod github;
 mod scan;
 
@@ -380,6 +381,7 @@ pub fn run() {
             repo_state,
             scan::scan_repos,
             scan::suggest_repo_folders,
+            fonts::system_fonts,
             open_url,
             read_git_file,
             watch_repo,

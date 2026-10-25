@@ -24,8 +24,10 @@ import {
   Palette,
   PlugZap,
   RefreshCcw,
+  RotateCcw,
   SquareTerminal,
   TriangleAlert,
+  Type,
   X,
 } from 'lucide-react'
 import { type ReactNode, useCallback, useEffect, useState } from 'react'
@@ -35,14 +37,15 @@ import { repoFolders as suggestedFolders, SCAN_DEPTH, scanRepos } from '../lib/l
 import { openTerminal } from '../lib/git'
 import { openUrl } from '../lib/github'
 import { useT } from '../lib/i18n'
-import { testConnection, updateSettings, useSettings } from '../lib/settings'
+import { DEFAULT_FONTS, type Fonts as FontSettings, testConnection, updateSettings, useSettings, ZOOMS } from '../lib/settings'
 import { Button, IconButton, Kbd } from './ui'
 
-type Section = 'general' | 'appearance' | 'network' | 'github' | 'diff' | 'keys' | 'about'
+type Section = 'general' | 'appearance' | 'fonts' | 'network' | 'github' | 'diff' | 'keys' | 'about'
 
 const SECTIONS: { id: Section; icon: LucideIcon; label: string }[] = [
   { id: 'general', icon: Gear, label: 'General' },
   { id: 'appearance', icon: Palette, label: 'Appearance' },
+  { id: 'fonts', icon: Type, label: 'Fonts' },
   { id: 'network', icon: Globe, label: 'Network' },
   { id: 'github', icon: GitPullRequest, label: 'GitHub' },
   { id: 'diff', icon: FileDiff, label: 'Diff & editor' },
@@ -82,10 +85,23 @@ function Check({ checked, onChange, children }: { checked: boolean; onChange: (v
   )
 }
 
-function Select<T extends string>({ value, options, onChange, width = 'w-75' }: { value: T; options: { value: T; label: string }[]; onChange: (v: T) => void; width?: string }) {
+function Select<T extends string>({
+  value,
+  options,
+  onChange,
+  width = 'w-75',
+  font,
+}: {
+  value: T
+  options: { value: T; label: string }[]
+  onChange: (v: T) => void
+  width?: string
+  /** Shows the chosen value in this font family. */
+  font?: string
+}) {
   return (
     <div className={cx('relative', width)}>
-      <select className={cx(field, 'w-full appearance-none pr-8')} value={value} onChange={e => onChange(e.target.value as T)}>
+      <select className={cx(field, 'w-full appearance-none pr-8')} style={font ? { fontFamily: font } : undefined} value={value} onChange={e => onChange(e.target.value as T)}>
         {options.map(o => (
           <option key={o.value} value={o.value}>
             {o.label}
@@ -175,6 +191,7 @@ export function SettingsDialog({ onClose, initial = 'general' }: { onClose: () =
           <div className="flex flex-col gap-5.5">
             {section === 'general' && <General />}
             {section === 'appearance' && <Appearance />}
+            {section === 'fonts' && <Fonts />}
             {section === 'network' && <Network />}
             {section === 'github' && <GitHubAccount />}
             {section === 'diff' && <DiffEditor />}
@@ -313,6 +330,80 @@ function Appearance() {
           ]}
           onChange={v => updateSettings({ language: v })}
         />
+      </Row>
+    </>
+  )
+}
+
+type Family = { name: string; mono: boolean }
+let families: Promise<Family[]> | null = null
+const systemFonts = () => (families ??= invoke<Family[]>('system_fonts').catch(() => []))
+
+function Fonts() {
+  const t = useT()
+  const f = useSettings().fonts
+  const [all, setAll] = useState<Family[]>([])
+  useEffect(() => {
+    void systemFonts().then(setAll)
+  }, [])
+  const set = (patch: Partial<FontSettings>) => updateSettings({ fonts: { ...f, ...patch } })
+  const options = (list: Family[], current: string) => [
+    { value: '', label: t('Default') },
+    // Keep a saved family listed even if it is not installed any more.
+    ...(current && !list.some(x => x.name === current) ? [{ value: current, label: current }] : []),
+    ...list.map(x => ({ value: x.name, label: x.name })),
+  ]
+  const isMac = navigator.userAgent.includes('Mac')
+  return (
+    <>
+      <Row label={t('Interface font')} help={t('Used for menus, lists and labels. Chinese text falls back to the system Chinese font.')}>
+        <Select width="w-65" value={f.ui} font={f.ui || undefined} options={options(all, f.ui)} onChange={ui => set({ ui })} />
+        <NumberField value={f.uiSize} min={11} max={16} suffix="px" onChange={uiSize => set({ uiSize })} />
+      </Row>
+      <Row label={t('Code font')}>
+        <Select
+          width="w-65"
+          value={f.mono}
+          font={f.mono ? `"${f.mono}", var(--mono)` : 'var(--mono)'}
+          options={options(f.monoOnly ? all.filter(x => x.mono) : all, f.mono)}
+          onChange={mono => set({ mono })}
+        />
+        <NumberField value={f.monoSize} min={9} max={20} suffix="px" onChange={monoSize => set({ monoSize })} />
+      </Row>
+      <Row help={t('Used for hashes, diffs, logs and paths.')}>
+        <Check checked={f.monoOnly} onChange={monoOnly => set({ monoOnly })}>
+          {t('Show only monospace fonts')}
+        </Check>
+        <Check checked={f.ligatures} onChange={ligatures => set({ ligatures })}>
+          {t('Ligatures')}
+        </Check>
+      </Row>
+      <Row label={t('Tab width')}>
+        <NumberField value={f.tabWidth} min={1} max={8} suffix={t('spaces')} onChange={tabWidth => set({ tabWidth })} />
+      </Row>
+      <Row label={t('Zoom')}>
+        <Select width="w-30" value={String(f.zoom)} options={ZOOMS.map(z => ({ value: String(z), label: `${Math.round(z * 100)}%` }))} onChange={z => set({ zoom: Number(z) })} />
+        <span className="text-sm text-muted">{isMac ? '⌘+  ⌘−  ⌘0' : 'Ctrl +  Ctrl −  Ctrl 0'}</span>
+      </Row>
+      <Row label={t('Preview')}>
+        <div className="w-115 overflow-hidden rounded-md border border-strong bg-app">
+          <div className="flex h-8.5 items-center gap-2.5 border-b border-subtle px-3">
+            <span className="size-2.25 shrink-0 rounded-full bg-ref-head" />
+            <span className="min-w-0 flex-1 truncate font-medium">{t('Add a Fonts page to Settings')}</span>
+            <span className="font-mono text-sm text-muted">3f2a9c1</span>
+          </div>
+          <div className="py-1.5 font-mono text-code leading-[1.6] whitespace-pre select-text">
+            <div className="px-3 text-secondary">{'  const size = settings.codeFontSize'}</div>
+            <div className="bg-diff-del-bg px-3 text-status-deleted">{'- if (size != 12) return null'}</div>
+            <div className="bg-diff-add-bg px-3 text-status-added">{'+ if (size !== 12) return () => size >= 10'}</div>
+            <div className="px-3 text-secondary">{'\treturn size'}</div>
+          </div>
+        </div>
+      </Row>
+      <Row>
+        <Button icon={RotateCcw} onClick={() => updateSettings({ fonts: DEFAULT_FONTS })}>
+          {t('Reset to defaults')}
+        </Button>
       </Row>
     </>
   )
@@ -459,6 +550,7 @@ const KEYS: [string, string][] = [
   ['⌘1 · ⌘2 · ⌘3 · ⌘4', 'History · Changes · Stashes · Pull requests'],
   ['⌘,', 'Settings'],
   ['⌘\\', 'Show or hide the sidebar'],
+  ['⌘+ · ⌘− · ⌘0', 'Zoom in · Zoom out · Actual size'],
   ['⌘R', 'Refresh'],
   ['⌘O', 'Switch repository'],
   ['⌘⇧F · ⌘⇧P', 'Fetch · Push'],

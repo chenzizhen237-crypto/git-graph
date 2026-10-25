@@ -327,7 +327,7 @@ function JobLog({ job, onRerun }: { job: Job; onRerun: () => void }) {
               <span className="text-sm text-muted">{s.lines.length}</span>
             </button>
             {isOpen && (
-              <div className="py-1 font-mono text-sm select-text">
+              <div className="py-1 font-mono text-code select-text">
                 {s.lines.map(l => {
                   return (
                     <div

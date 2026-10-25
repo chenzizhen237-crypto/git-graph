@@ -123,7 +123,7 @@ export function DiffView({
           <IconButton icon={Maximize2} size={14} small title={t('Pop out to fill the window')} onClick={() => setOpen(true)} />
         )}
       </div>
-      <div className="flex-1 overflow-auto font-mono text-sm select-text">
+      <div className="flex-1 overflow-auto font-mono text-code select-text">
         {!hunks.length ? (
           <Empty>{loading ? t('Loading…') : (empty ?? t('No textual changes (binary file or mode change)'))}</Empty>
         ) : (

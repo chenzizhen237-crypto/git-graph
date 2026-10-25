@@ -12273,6 +12273,20 @@
             },
             {
               "type": "ref",
+              "id": "sni_fonts",
+              "ref": "c_set_nav",
+              "descendants": {
+                "sn_icon": {
+                  "icon": "type"
+                },
+                "sn_label": {
+                  "content": "Fonts"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
               "id": "sni_network",
               "ref": "c_set_nav",
               "descendants": {
@@ -18977,6 +18991,787 @@
                     }
                   },
                   "width": "fill_container"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl17",
+          "name": "Label · 17 · Settings — Fonts",
+          "x": 2200,
+          "y": 8710,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl17_t",
+              "name": "dl17_t",
+              "content": "17 · Settings — Fonts",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl17_s",
+              "name": "dl17_s",
+              "content": "Light · interface and code fonts from the system, sizes, zoom, tab width, live preview",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_fonts",
+          "name": "17 · Settings — Fonts — Light",
+          "x": 2200,
+          "y": 8800,
+          "width": 980,
+          "height": 640,
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "cornerRadius": "$radius/xl",
+          "clip": true,
+          "fill": "$bg/app",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 24
+            },
+            "blur": 60,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d17_nav",
+              "ref": "c_set_navlist",
+              "descendants": {
+                "sni_fonts": {
+                  "fill": "$bg/selected",
+                  "descendants": {
+                    "sn_icon": {
+                      "icon": "type",
+                      "fill": "$ref/head"
+                    },
+                    "sn_label": {
+                      "content": "Fonts",
+                      "fontWeight": 600
+                    }
+                  }
+                }
+              },
+              "height": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "d17_content",
+              "name": "Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                26,
+                32,
+                32,
+                24
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d17_head",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d17_title",
+                      "name": "d17_title",
+                      "content": "Fonts",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/2xl",
+                      "fontWeight": 700,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d17_close",
+                      "ref": "c_btn_icon",
+                      "descendants": {
+                        "bi_icon": {
+                          "icon": "x"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d17_ui",
+                  "name": "Interface font",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d17_ui_lb",
+                      "name": "Label",
+                      "width": 200,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d17_ui_l",
+                          "name": "d17_ui_l",
+                          "content": "Interface font",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 200,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d17_ui_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d17_ui_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "d17_uis",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "System default"
+                                }
+                              },
+                              "width": 260
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d17_uin",
+                              "ref": "c_input",
+                              "descendants": {
+                                "in_text": {
+                                  "content": "13"
+                                },
+                                "in_suffix": {
+                                  "content": "px"
+                                }
+                              },
+                              "width": 86
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "d17_ui_h",
+                          "name": "d17_ui_h",
+                          "content": "Used for menus, lists and labels. Chinese text falls back to PingFang SC.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 460,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d17_mono",
+                  "name": "Code font",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d17_mono_lb",
+                      "name": "Label",
+                      "width": 200,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d17_mono_l",
+                          "name": "d17_mono_l",
+                          "content": "Code font",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 200,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d17_mono_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d17_mono_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "d17_ms",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "JetBrains Mono",
+                                  "fontFamily": "$font/mono"
+                                }
+                              },
+                              "width": 260
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d17_mn",
+                              "ref": "c_input",
+                              "descendants": {
+                                "in_text": {
+                                  "content": "12"
+                                },
+                                "in_suffix": {
+                                  "content": "px"
+                                }
+                              },
+                              "width": 86
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d17_opts",
+                  "name": "",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d17_opts_lb",
+                      "name": "Label",
+                      "width": 200,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d17_opts_l",
+                          "name": "d17_opts_l",
+                          "content": "",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 200,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d17_opts_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d17_opts_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d17_only",
+                              "name": "Check Show only monospace fonts",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "d17_only_cb",
+                                  "ref": "c_checkbox",
+                                  "descendants": {}
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d17_only_t",
+                                  "name": "d17_only_t",
+                                  "content": "Show only monospace fonts",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "d17_lig",
+                              "name": "Check Ligatures",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "d17_lig_cb",
+                                  "ref": "c_checkbox_off",
+                                  "descendants": {}
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d17_lig_t",
+                                  "name": "d17_lig_t",
+                                  "content": "Ligatures",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "d17_opts_h",
+                          "name": "d17_opts_h",
+                          "content": "Used for hashes, diffs, logs and paths.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 460,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d17_tab",
+                  "name": "Tab width",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d17_tab_lb",
+                      "name": "Label",
+                      "width": 200,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d17_tab_l",
+                          "name": "d17_tab_l",
+                          "content": "Tab width",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 200,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d17_tab_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d17_tab_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "d17_tn",
+                              "ref": "c_input",
+                              "descendants": {
+                                "in_text": {
+                                  "content": "4"
+                                },
+                                "in_suffix": {
+                                  "content": "spaces"
+                                }
+                              },
+                              "width": 110
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d17_zoom",
+                  "name": "Zoom",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d17_zoom_lb",
+                      "name": "Label",
+                      "width": 200,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d17_zoom_l",
+                          "name": "d17_zoom_l",
+                          "content": "Zoom",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 200,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d17_zoom_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d17_zoom_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "d17_zs",
+                              "ref": "c_select",
+                              "descendants": {
+                                "se2_text": {
+                                  "content": "100%"
+                                }
+                              },
+                              "width": 120
+                            },
+                            {
+                              "type": "text",
+                              "id": "d17_zk",
+                              "name": "d17_zk",
+                              "content": "⌘+  ⌘−  ⌘0",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d17_prev",
+                  "name": "Preview",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d17_plb",
+                      "name": "Label",
+                      "width": 200,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d17_pl",
+                          "name": "d17_pl",
+                          "content": "Preview",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 200,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d17_pbox",
+                      "name": "Sample",
+                      "width": 460,
+                      "layout": "vertical",
+                      "cornerRadius": "$radius/md",
+                      "stroke": "$border/strong",
+                      "strokeWidth": 1,
+                      "clip": true,
+                      "fill": "$bg/app",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d17_pr1",
+                          "name": "Commit",
+                          "width": "fill_container",
+                          "height": 34,
+                          "padding": [
+                            0,
+                            12
+                          ],
+                          "gap": 10,
+                          "alignItems": "center",
+                          "stroke": "$border/subtle",
+                          "strokeWidth": {
+                            "bottom": 1
+                          },
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "d17_dot",
+                              "name": "node",
+                              "width": 9,
+                              "height": 9,
+                              "fill": "$ref/head"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d17_subj",
+                              "name": "d17_subj",
+                              "content": "Add a Fonts page to Settings",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 500,
+                              "fill": "$text/primary",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d17_sha",
+                              "name": "d17_sha",
+                              "content": "3f2a9c1",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d17_code",
+                          "name": "Diff",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "padding": [
+                            6,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d17_l1",
+                              "name": "Context",
+                              "width": "fill_container",
+                              "padding": [
+                                1,
+                                12
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "d17_l1t",
+                                  "name": "d17_l1t",
+                                  "content": "  const size = settings.codeFontSize",
+                                  "fontFamily": "$font/mono",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "d17_l2",
+                              "name": "Removed",
+                              "width": "fill_container",
+                              "padding": [
+                                1,
+                                12
+                              ],
+                              "fill": "$diff/del-bg",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "d17_l2t",
+                                  "name": "d17_l2t",
+                                  "content": "- if (size != 12) return null",
+                                  "fontFamily": "$font/mono",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 400,
+                                  "fill": "$status/deleted"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "d17_l3",
+                              "name": "Added",
+                              "width": "fill_container",
+                              "padding": [
+                                1,
+                                12
+                              ],
+                              "fill": "$diff/add-bg",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "d17_l3t",
+                                  "name": "d17_l3t",
+                                  "content": "+ if (size !== 12) return () => size >= 10",
+                                  "fontFamily": "$font/mono",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 400,
+                                  "fill": "$status/added"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d17_foot",
+                  "name": "Footer",
+                  "width": "fill_container",
+                  "padding": [
+                    0,
+                    0,
+                    0,
+                    224
+                  ],
+                  "children": [
+                    {
+                      "type": "ref",
+                      "id": "d17_reset",
+                      "ref": "c_btn_secondary",
+                      "descendants": {
+                        "bs_icon": {
+                          "icon": "rotate-ccw"
+                        },
+                        "bs_label": {
+                          "content": "Reset to defaults"
+                        }
+                      }
+                    }
+                  ]
                 }
               ]
             }
