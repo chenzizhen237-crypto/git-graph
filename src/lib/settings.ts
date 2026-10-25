@@ -21,6 +21,8 @@ export type Settings = {
   diffMode: 'unified' | 'split'
   diffWrap: boolean
   proxy: { mode: ProxyMode; url: string; bypass: string; git: boolean; github: boolean }
+  /** Folders scanned for repositories; null until first suggested. */
+  repoFolders: string[] | null
 }
 
 export const DEFAULTS: Settings = {
@@ -35,6 +37,7 @@ export const DEFAULTS: Settings = {
   diffMode: 'unified',
   diffWrap: false,
   proxy: { mode: 'system', url: '', bypass: 'localhost, 127.0.0.1, *.local', git: true, github: true },
+  repoFolders: null,
 }
 
 function load(): Settings {

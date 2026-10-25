@@ -8,6 +8,14 @@ A desktop commit graph for Git and GitHub: history, changes, stashes and pull re
 
 Get the latest installer for macOS, Windows or Linux from **[Releases](https://github.com/chenzizhen237-crypto/git-graph/releases/latest)**.
 
+On macOS, double-click [`scripts/Update-Git-Graph.command`](scripts/Update-Git-Graph.command) to download and install the latest stable release into `/Applications`, then launch it. The standalone script selects Apple Silicon or Intel automatically, verifies the GitHub asset SHA-256 digest and app signature, and backs up the previous app under `~/Library/Application Support/Git Graph/Installer Backups`. It requires no Git, Node.js or GitHub account. It asks a running app to quit before replacing it and restores the previous app if replacement fails.
+
+To download and validate without changing your installed app:
+
+```bash
+./scripts/Update-Git-Graph.command --prepare
+```
+
 The builds are not signed with a paid certificate yet. On macOS, right-click the app and choose **Open** the first time (or run `xattr -cr "/Applications/Git Graph.app"`); on Windows choose **More info → Run anyway**.
 
 Pull requests use the [GitHub CLI](https://cli.github.com): run `gh auth login` once.

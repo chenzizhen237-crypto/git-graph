@@ -4,11 +4,12 @@
  */
 import { homeDir } from '@tauri-apps/api/path'
 import { open } from '@tauri-apps/plugin-dialog'
-import { BookMarked, ChevronsUpDown, CloudDownload, CloudUpload, Folder, Globe, Loader2, Lock, Search, X } from 'lucide-react'
+import { BookMarked, ChevronsUpDown, CloudDownload, CloudUpload, Folder, FolderOpen, Globe, Loader2, Lock, Search, X } from 'lucide-react'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 
 import { type Account, myAccount, type RemoteRepo, repoActions } from '../lib/actions'
 import { cx } from '../lib/cx'
+import { byGitHub, cachedLocalRepos, localRepos } from '../lib/local'
 import { runGh } from '../lib/github'
 import { t, timeAgo } from '../lib/i18n'
 import { readRecents, useApp } from '../state'
@@ -51,8 +52,13 @@ export function CloneDialog({ onClose, onCloned }: { onClose: () => void; onClon
   const [pick, setPick] = useState<string | null>(null)
   const [parent, setParent] = useState('')
   const [busy, setBusy] = useState(false)
+  const [local, setLocal] = useState(() => byGitHub(cachedLocalRepos() ?? []))
 
   useEffect(() => {
+    // Repositories already on disk open instead of cloning a second copy.
+    void localRepos()
+      .then(r => setLocal(byGitHub(r)))
+      .catch(() => {})
     myAccount()
       .then(setAccount)
       .catch(e => setError(e instanceof Error ? e.message : String(e)))
@@ -71,9 +77,11 @@ export function CloneDialog({ onClose, onCloned }: { onClose: () => void; onClon
   const typed = typedRepo(q)
   const target = pick ?? (typed && !repos.some(r => r.nameWithOwner === typed) ? typed : (repos[0]?.nameWithOwner ?? null))
   const folder = target?.split('/')[1] ?? ''
+  const existing = target ? local.get(target.toLowerCase()) : undefined
   const home = (p: string) => p.replace(/^\/Users\/[^/]+/, '~')
 
   const clone = async () => {
+    if (existing) return onCloned(existing.path)
     if (!target || !parent) return
     setBusy(true)
     setError(null)
@@ -108,6 +116,7 @@ export function CloneDialog({ onClose, onCloned }: { onClose: () => void; onClon
             <span className="font-semibold">{n}</span>
             {full?.isPrivate && <span className="rounded-full border border-strong px-1.5 text-[10px] font-semibold text-muted">{t('Private')}</span>}
             {full?.isFork && <span className="rounded-full border border-strong px-1.5 text-[10px] font-semibold text-muted">{t('Fork')}</span>}
+            {local.has(r.nameWithOwner.toLowerCase()) && <span className="rounded-full bg-ref-local-soft px-1.5 text-[10px] font-semibold text-ref-local">{t('On this Mac')}</span>}
           </span>
           <span className="truncate text-sm text-muted">{full ? full.description || t('No description') : t('Clone {name} from GitHub', { name: r.nameWithOwner })}</span>
         </span>
@@ -178,17 +187,17 @@ export function CloneDialog({ onClose, onCloned }: { onClose: () => void; onClon
       </div>
       {error && <div className="border-t border-subtle px-5.5 py-2 text-sm whitespace-pre-wrap text-status-deleted">{error}</div>}
       <div className="flex items-center gap-2.5 border-t border-subtle bg-surface px-5.5 py-3.5">
-        <span className="font-medium text-secondary">{t('Clone into')}</span>
-        <div className={cx(field, 'flex min-w-0 flex-1 items-center font-mono text-sm')} title={`${parent}/${folder}`}>
-          <span className="truncate">
-            {home(parent)}/{folder}
-          </span>
+        <span className="font-medium text-secondary">{existing ? t('Already at') : t('Clone into')}</span>
+        <div className={cx(field, 'flex min-w-0 flex-1 items-center font-mono text-sm')} title={existing?.path ?? `${parent}/${folder}`}>
+          <span className="truncate">{existing ? home(existing.path) : `${home(parent)}/${folder}`}</span>
         </div>
-        <Button icon={Folder} onClick={() => void choose()}>
-          {t('Choose…')}
-        </Button>
-        <Button kind="primary" icon={CloudDownload} busy={busy} disabled={!target || !parent || busy} onClick={() => void clone()}>
-          {t('Clone')}
+        {!existing && (
+          <Button icon={Folder} onClick={() => void choose()}>
+            {t('Choose…')}
+          </Button>
+        )}
+        <Button kind="primary" icon={existing ? FolderOpen : CloudDownload} busy={busy} disabled={!target || (!existing && !parent) || busy} onClick={() => void clone()}>
+          {existing ? t('Open') : t('Clone')}
         </Button>
       </div>
     </Shell>

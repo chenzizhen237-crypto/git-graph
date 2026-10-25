@@ -2,16 +2,18 @@
 import { getCurrentWebview } from '@tauri-apps/api/webview'
 import { getVersion } from '@tauri-apps/api/app'
 import { open } from '@tauri-apps/plugin-dialog'
-import { CloudDownload, FolderDown, FolderGit2, FolderOpen, FolderPlus, Search, X } from 'lucide-react'
+import { CloudDownload, Folder, FolderGit2, FolderOpen, FolderPlus, RefreshCcw, ScanSearch, Search, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 
 import appIcon from '../../assets/icon/app-icon.svg'
 import { CloneDialog } from '../components/GitHubDialogs'
-import { Button, Chip, Empty } from '../components/ui'
+import { SettingsDialog } from '../components/Settings'
+import { Button, Chip, Empty, IconButton } from '../components/ui'
 import { cx } from '../lib/cx'
 import { findRoot, run } from '../lib/git'
 import { t } from '../lib/i18n'
-import { getSettings } from '../lib/settings'
+import { cachedLocalRepos, type LocalRepo, localRepos, SCAN_DEPTH } from '../lib/local'
+import { getSettings, useSettings } from '../lib/settings'
 import { forgetRepo, type Recent, readRecents } from '../state'
 
 const home = (p: string) => p.replace(/^\/Users\/[^/]+/, '~')
@@ -31,6 +33,27 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
   const [over, setOver] = useState(false)
   const [cloning, setCloning] = useState(false)
   const [version, setVersion] = useState('')
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [local, setLocal] = useState<LocalRepo[] | null>(cachedLocalRepos)
+  const [tab, setTab] = useState<'recent' | 'mac'>(() => (localStorage.getItem('welcome:tab') as 'recent' | null) ?? 'mac')
+  const { repoFolders: savedFolders } = useSettings()
+  const folders = savedFolders ?? []
+  const chooseTab = (k: 'recent' | 'mac') => {
+    setTab(k)
+    localStorage.setItem('welcome:tab', k)
+  }
+  const rescan = async () => {
+    try {
+      setLocal(await localRepos())
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e))
+      setLocal([])
+    }
+  }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: scan once when the screen opens
+  useEffect(() => {
+    void rescan()
+  }, [])
   useEffect(() => {
     void getVersion()
       .then(setVersion)
@@ -73,6 +96,16 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
     if (out.code !== 0) return setError(out.stderr.trim())
     onOpen(dir)
   }
+  const groups = useMemo(() => {
+    const q = filter.trim().toLowerCase()
+    const map = new Map<string, LocalRepo[]>()
+    for (const r of local ?? []) {
+      if (q && !r.name.toLowerCase().includes(q) && !r.subject.toLowerCase().includes(q)) continue
+      map.set(r.folder, [...(map.get(r.folder) ?? []), r])
+    }
+    return [...map]
+  }, [local, filter])
+
   const shown = useMemo(() => {
     const q = filter.trim().toLowerCase()
     return q ? recents.filter(r => r.path.toLowerCase().includes(q)) : recents
@@ -96,60 +129,142 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
           </Button>
         </div>
       </div>
-      <div className="flex min-w-0 flex-1 flex-col gap-2.5 px-5 pt-11 pb-5.5">
-        <div className="flex items-center gap-2 font-semibold">
-          <span className="flex-1">{t('Recent repositories')}</span>
-          <div className="flex h-7 w-45 items-center gap-1.5 rounded-md bg-surface px-2 text-muted">
+      <div className={cx('flex min-w-0 flex-1 flex-col gap-2.5 px-4.5 pt-11 pb-4', over && 'bg-selected')}>
+        <div className="flex items-center gap-2">
+          <div className="flex gap-0.5 rounded-md bg-surface p-0.5">
+            {(['recent', 'mac'] as const).map(k => (
+              <button
+                key={k}
+                type="button"
+                onClick={() => chooseTab(k)}
+                className={cx('flex h-6.5 items-center gap-1.5 rounded-sm px-2.5 text-sm', tab === k ? 'bg-elevated font-semibold shadow-[0_1px_2px_var(--shadow)]' : 'text-muted')}
+              >
+                {k === 'recent' ? t('Recent') : t('On this Mac')}
+                {k === 'mac' && local && <span className="rounded-full bg-surface px-1.5 text-xs font-semibold text-muted">{local.length}</span>}
+              </button>
+            ))}
+          </div>
+          <span className="flex-1" />
+          <div className="flex h-7 w-50 items-center gap-1.5 rounded-md bg-surface px-2 text-muted focus-within:ring-1 focus-within:ring-focus">
             <Search size={13} />
             <input
-              className="min-w-0 flex-1 bg-transparent font-normal text-primary outline-none placeholder:text-faint"
+              className="min-w-0 flex-1 bg-transparent text-primary outline-none placeholder:text-faint"
               placeholder={t('Filter')}
               value={filter}
               onChange={e => setFilter(e.target.value)}
             />
           </div>
         </div>
-        <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto">
-          {shown.map(r => (
-            <button
-              key={r.path}
-              type="button"
-              className="group flex h-13 w-full items-center gap-3 rounded-lg px-3 text-left hover:bg-selected"
-              onClick={() => void openPath(r.path)}
-            >
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-surface text-secondary">
-                <FolderGit2 size={16} />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block font-semibold">{r.path.split('/').pop()}</span>
-                <span className="block truncate text-sm text-muted">{home(r.path)}</span>
-              </span>
-              {r.branch && <Chip kind="local" name={r.branch} />}
-              <span className="w-10 text-right text-sm text-muted">{ago(r.at)}</span>
-              <X
-                size={14}
-                className="hidden shrink-0 text-muted group-hover:block"
-                onClick={e => {
-                  e.stopPropagation()
-                  forgetRepo(r.path)
-                  setRecents(readRecents())
-                }}
-              />
-            </button>
-          ))}
-          {!shown.length && <Empty>{recents.length ? t('No recent repository matches.') : t('Repositories you open show up here.')}</Empty>}
+        <div className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto">
+          {tab === 'recent' && (
+            <>
+              {shown.map(r => (
+                <button
+                  key={r.path}
+                  type="button"
+                  className="group flex h-12 w-full shrink-0 items-center gap-3 rounded-lg px-3 text-left hover:bg-selected"
+                  onClick={() => void openPath(r.path)}
+                >
+                  <span className="flex size-7.5 shrink-0 items-center justify-center rounded-md bg-surface text-secondary">
+                    <FolderGit2 size={15} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-semibold">{r.path.split('/').pop()}</span>
+                    <span className="block truncate text-sm text-muted">{home(r.path)}</span>
+                  </span>
+                  {r.branch && <Chip kind="local" name={r.branch} />}
+                  <span className="w-10 text-right text-sm text-muted">{ago(r.at)}</span>
+                  <X
+                    size={14}
+                    className="hidden shrink-0 text-muted group-hover:block"
+                    onClick={e => {
+                      e.stopPropagation()
+                      forgetRepo(r.path)
+                      setRecents(readRecents())
+                    }}
+                  />
+                </button>
+              ))}
+              {!shown.length && <Empty>{recents.length ? t('No recent repository matches.') : t('Repositories you open show up here.')}</Empty>}
+            </>
+          )}
+          {tab === 'mac' && (
+            <>
+              {local === null && <Empty>{t('Looking for repositories…')}</Empty>}
+              {local && !folders.length && (
+                <Empty>
+                  {t('No code folders found yet.')}
+                  <Button icon={FolderPlus} onClick={() => setSettingsOpen(true)}>
+                    {t('Add a folder…')}
+                  </Button>
+                </Empty>
+              )}
+              {groups.map(([folder, repos]) => (
+                <div key={folder} className="flex flex-col gap-0.5">
+                  <div className="flex h-7 shrink-0 items-center gap-1.5 pr-1 pl-3 text-sm">
+                    <Folder size={13} className="text-muted" />
+                    <span className="font-semibold text-secondary">{home(folder)}</span>
+                    <span className="text-muted">· {repos.length}</span>
+                    <span className="flex-1" />
+                    <IconButton icon={RefreshCcw} small size={13} title={t('Scan again')} onClick={() => void rescan()} />
+                  </div>
+                  {repos.map(r => (
+                    <button
+                      key={r.path}
+                      type="button"
+                      className="flex h-12 w-full shrink-0 items-center gap-3 rounded-lg px-3 text-left hover:bg-selected"
+                      onClick={() => void openPath(r.path)}
+                      title={r.path}
+                    >
+                      <span className="flex size-7.5 shrink-0 items-center justify-center rounded-md bg-surface text-secondary">
+                        <FolderGit2 size={15} />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block font-semibold">{r.name}</span>
+                        <span className="block truncate text-sm text-muted">{r.subject || home(r.path)}</span>
+                      </span>
+                      {r.branch && <Chip kind="local" name={r.branch} />}
+                      {r.changes > 0 && (
+                        <span
+                          className="flex shrink-0 items-center gap-1 rounded-sm bg-diff-hunk-bg px-1.5 py-0.5 text-xs font-semibold text-status-modified"
+                          title={t('{n} uncommitted changes', { n: r.changes })}
+                        >
+                          <span className="size-1.5 rounded-full bg-status-modified" />
+                          {r.changes}
+                        </span>
+                      )}
+                      {r.ahead > 0 && <span className="text-sm font-medium text-ref-head">↑{r.ahead}</span>}
+                      {r.behind > 0 && <span className="text-sm font-medium text-status-deleted">↓{r.behind}</span>}
+                      <span className="w-10 shrink-0 text-right text-sm text-muted">{r.time ? ago(r.time * 1000) : ''}</span>
+                    </button>
+                  ))}
+                </div>
+              ))}
+              {local && folders.length > 0 && !groups.length && <Empty>{t('No repository matches.')}</Empty>}
+            </>
+          )}
         </div>
         {error && <div className="text-sm text-status-deleted">{error}</div>}
-        <div
-          className={cx(
-            'flex h-14 shrink-0 items-center justify-center gap-2 rounded-lg border border-dashed text-sm',
-            over ? 'border-focus bg-selected text-primary' : 'border-strong text-muted',
+        <div className="flex shrink-0 items-center gap-1.5 border-t border-subtle px-1 pt-2 text-sm text-muted">
+          <ScanSearch size={13} />
+          {tab === 'mac' ? (
+            <span>{t('Found in {n} folders, up to {depth} levels deep.', { n: folders.length, depth: SCAN_DEPTH })}</span>
+          ) : (
+            <span>{t('Drop a folder here, or run git-graph . in a terminal')}</span>
           )}
-        >
-          <FolderDown size={15} />
-          Drop a folder here, or run <code className="font-mono">git-graph .</code> in a terminal
+          <button type="button" className="font-medium text-link hover:underline" onClick={() => setSettingsOpen(true)}>
+            {t('Manage folders…')}
+          </button>
         </div>
       </div>
+      {settingsOpen && (
+        <SettingsDialog
+          onClose={() => {
+            setSettingsOpen(false)
+            void rescan()
+          }}
+        />
+      )}
       {cloning && (
         <CloneDialog
           onClose={() => setCloning(false)}

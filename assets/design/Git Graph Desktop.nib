@@ -12809,6 +12809,146 @@
               "fill": "$text/muted"
             }
           ]
+        },
+        {
+          "type": "frame",
+          "id": "c_local_repo",
+          "name": "Row/Local repo",
+          "reusable": true,
+          "x": 0,
+          "y": 4700,
+          "width": 560,
+          "height": 48,
+          "padding": [
+            0,
+            12
+          ],
+          "gap": 12,
+          "alignItems": "center",
+          "cornerRadius": "$radius/lg",
+          "children": [
+            {
+              "type": "frame",
+              "id": "lr_ic",
+              "name": "Icon",
+              "width": 30,
+              "height": 30,
+              "cornerRadius": "$radius/md",
+              "fill": "$bg/surface",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "lr_i",
+                  "name": "icon folder-git-2",
+                  "library": "lucide",
+                  "icon": "folder-git-2",
+                  "width": 15,
+                  "height": 15,
+                  "fill": "$text/secondary"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lr_t",
+              "name": "Text",
+              "layout": "vertical",
+              "width": "fill_container",
+              "gap": 1,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lr_name",
+                  "name": "lr_name",
+                  "content": "git-graph",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/md",
+                  "fontWeight": 600,
+                  "fill": "$text/primary"
+                },
+                {
+                  "type": "text",
+                  "id": "lr_sub",
+                  "name": "lr_sub",
+                  "content": "Actions and repositories data: CI per commit…",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "id": "lr_branch",
+              "ref": "c_chip_local",
+              "descendants": {
+                "chl_label": {
+                  "content": "main"
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "lr_changes",
+              "name": "Changes",
+              "gap": 4,
+              "alignItems": "center",
+              "padding": [
+                2,
+                6
+              ],
+              "cornerRadius": "$radius/sm",
+              "fill": "#F59E0B1A",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "lr_dot",
+                  "name": "dot",
+                  "width": 6,
+                  "height": 6,
+                  "fill": "$status/modified"
+                },
+                {
+                  "type": "text",
+                  "id": "lr_ct",
+                  "name": "lr_ct",
+                  "content": "3",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/xs",
+                  "fontWeight": 600,
+                  "fill": "$status/modified"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "lr_ab",
+              "name": "lr_ab",
+              "content": "↑1",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/sm",
+              "fontWeight": 500,
+              "fill": "$ref/head"
+            },
+            {
+              "type": "text",
+              "id": "lr_when",
+              "name": "lr_when",
+              "content": "12m",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/sm",
+              "fontWeight": 400,
+              "fill": "$text/muted",
+              "width": 40,
+              "textGrowth": "fixed-width",
+              "textAlign": "right"
+            }
+          ]
         }
       ],
       "x": 3080,
@@ -17527,6 +17667,1316 @@
                       }
                     }
                   ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl15",
+          "name": "Label · 15 · Welcome — On this Mac",
+          "x": 0,
+          "y": 8710,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl15_t",
+              "name": "dl15_t",
+              "content": "15 · Welcome — On this Mac",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl15_s",
+              "name": "dl15_s",
+              "content": "Light · repositories found in your folders, with branch, uncommitted changes and last activity",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_found",
+          "name": "15 · Welcome — repositories on this Mac — Light",
+          "x": 0,
+          "y": 8800,
+          "width": 1000,
+          "height": 680,
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "fill": "$bg/app",
+          "cornerRadius": 12,
+          "clip": true,
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 24
+            },
+            "blur": 60,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "frame",
+              "id": "d15_left",
+              "name": "Brand",
+              "width": 300,
+              "height": "fill_container",
+              "layout": "vertical",
+              "fill": "$bg/titlebar",
+              "padding": [
+                18,
+                26,
+                26,
+                26
+              ],
+              "alignItems": "center",
+              "stroke": "$border/subtle",
+              "strokeWidth": {
+                "right": 1
+              },
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d15_lights",
+                  "name": "Traffic lights",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "d15_c",
+                      "name": "close",
+                      "width": 12,
+                      "height": 12,
+                      "fill": "$macos/close"
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "d15_m",
+                      "name": "min",
+                      "width": 12,
+                      "height": 12,
+                      "fill": "$border/strong"
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "d15_z",
+                      "name": "zoom",
+                      "width": 12,
+                      "height": 12,
+                      "fill": "$border/strong"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d15_s0",
+                  "name": "Spacer",
+                  "width": 1,
+                  "height": "fill_container",
+                  "children": []
+                },
+                {
+                  "type": "ref",
+                  "id": "d15_icon",
+                  "ref": "c_app_icon",
+                  "descendants": {}
+                },
+                {
+                  "type": "frame",
+                  "id": "d15_g",
+                  "name": "Gap",
+                  "width": 1,
+                  "height": 18,
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "d15_name",
+                  "name": "d15_name",
+                  "content": "Git Graph",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/2xl",
+                  "fontWeight": 700,
+                  "fill": "$text/primary"
+                },
+                {
+                  "type": "text",
+                  "id": "d15_ver",
+                  "name": "d15_ver",
+                  "content": "Version 0.3.0",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted"
+                },
+                {
+                  "type": "frame",
+                  "id": "d15_s1",
+                  "name": "Spacer",
+                  "width": 1,
+                  "height": "fill_container",
+                  "children": []
+                },
+                {
+                  "type": "frame",
+                  "id": "d15_btns",
+                  "name": "Actions",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "ref",
+                      "id": "d15_open",
+                      "ref": "c_btn_primary",
+                      "descendants": {
+                        "bp_icon": {
+                          "icon": "folder-open"
+                        },
+                        "bp_label": {
+                          "content": "Open repository…"
+                        }
+                      },
+                      "width": "fill_container",
+                      "height": 34,
+                      "justifyContent": "center"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_clone",
+                      "ref": "c_btn_secondary",
+                      "descendants": {
+                        "bs_icon": {
+                          "icon": "cloud-download"
+                        },
+                        "bs_label": {
+                          "content": "Clone from GitHub…"
+                        }
+                      },
+                      "width": "fill_container",
+                      "height": 34,
+                      "justifyContent": "center"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_init",
+                      "ref": "c_btn_secondary",
+                      "descendants": {
+                        "bs_icon": {
+                          "icon": "folder-plus"
+                        },
+                        "bs_label": {
+                          "content": "Create new repository"
+                        }
+                      },
+                      "width": "fill_container",
+                      "height": 34,
+                      "justifyContent": "center"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "d15_right",
+              "name": "Repositories",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "padding": [
+                20,
+                18,
+                16,
+                18
+              ],
+              "gap": 10,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d15_head",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d15_tabs",
+                      "name": "Tabs",
+                      "gap": 2,
+                      "padding": 2,
+                      "cornerRadius": "$radius/md",
+                      "fill": "$bg/surface",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d15_t1",
+                          "name": "Recent",
+                          "height": 26,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "cornerRadius": "$radius/sm",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "d15_t1t",
+                              "name": "d15_t1t",
+                              "content": "Recent",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 500,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d15_t2",
+                          "name": "On this Mac",
+                          "height": 26,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 6,
+                          "cornerRadius": "$radius/sm",
+                          "alignItems": "center",
+                          "fill": "$bg/elevated",
+                          "effect": {
+                            "type": "shadow",
+                            "shadowType": "outer",
+                            "offset": {
+                              "x": 0,
+                              "y": 1
+                            },
+                            "blur": 2,
+                            "spread": 0,
+                            "color": "$shadow"
+                          },
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "d15_t2t",
+                              "name": "d15_t2t",
+                              "content": "On this Mac",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 600,
+                              "fill": "$text/primary"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "d15_t2c",
+                              "name": "Count",
+                              "fill": "$bg/surface",
+                              "cornerRadius": 9,
+                              "padding": [
+                                0,
+                                6
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "d15_t2n",
+                                  "name": "d15_t2n",
+                                  "content": "12",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/xs",
+                                  "fontWeight": 600,
+                                  "fill": "$text/muted"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d15_sp",
+                      "name": "Spacer",
+                      "width": "fill_container",
+                      "height": 1,
+                      "children": []
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_filter",
+                      "ref": "c_search",
+                      "descendants": {
+                        "se_text": {
+                          "content": "Filter"
+                        },
+                        "se_kbd": {
+                          "enabled": false
+                        }
+                      },
+                      "width": 200
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d15_group",
+                  "name": "Folder",
+                  "width": "fill_container",
+                  "height": 28,
+                  "padding": [
+                    0,
+                    8,
+                    0,
+                    12
+                  ],
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "d15_gi",
+                      "name": "icon folder",
+                      "library": "lucide",
+                      "icon": "folder",
+                      "width": 13,
+                      "height": 13,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "d15_gt",
+                      "name": "d15_gt",
+                      "content": "~/Downloads/Code",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 600,
+                      "fill": "$text/secondary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "d15_gn",
+                      "name": "d15_gn",
+                      "content": "· 12",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d15_gsp",
+                      "name": "Spacer",
+                      "width": "fill_container",
+                      "height": 1,
+                      "children": []
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_gr",
+                      "ref": "c_btn_icon",
+                      "descendants": {
+                        "bi_icon": {
+                          "icon": "refresh-ccw",
+                          "width": 13,
+                          "height": 13
+                        }
+                      },
+                      "width": 24,
+                      "height": 24
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d15_list",
+                  "name": "List",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "gap": 1,
+                  "clip": true,
+                  "children": [
+                    {
+                      "type": "ref",
+                      "id": "d15_r0",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "beat-ts"
+                        },
+                        "lr_sub": {
+                          "content": "Rhythm game engine"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "main"
+                            }
+                          }
+                        },
+                        "lr_changes": {},
+                        "lr_ct": {
+                          "content": "2"
+                        },
+                        "lr_ab": {
+                          "enabled": false
+                        },
+                        "lr_when": {
+                          "content": "2h"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r1",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "bwsr"
+                        },
+                        "lr_sub": {
+                          "content": "Bitwarden secrets CLI"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "main"
+                            }
+                          }
+                        },
+                        "lr_changes": {
+                          "enabled": false
+                        },
+                        "lr_ct": {
+                          "content": ""
+                        },
+                        "lr_ab": {
+                          "enabled": false
+                        },
+                        "lr_when": {
+                          "content": "2d"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r2",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "claude-mods"
+                        },
+                        "lr_sub": {
+                          "content": "git-graph: inline branch picker"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "claude/git-graph-mod"
+                            }
+                          }
+                        },
+                        "lr_changes": {
+                          "enabled": false
+                        },
+                        "lr_ct": {
+                          "content": ""
+                        },
+                        "lr_ab": {
+                          "content": "↑2",
+                          "fill": "$ref/head"
+                        },
+                        "lr_when": {
+                          "content": "3h"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r3",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "Combat"
+                        },
+                        "lr_sub": {
+                          "content": "Combat prototype"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "main"
+                            }
+                          }
+                        },
+                        "lr_changes": {
+                          "enabled": false
+                        },
+                        "lr_ct": {
+                          "content": ""
+                        },
+                        "lr_ab": {
+                          "enabled": false
+                        },
+                        "lr_when": {
+                          "content": "1w"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r4",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "combat-raw"
+                        },
+                        "lr_sub": {
+                          "content": "Raw combat data tools"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "main"
+                            }
+                          }
+                        },
+                        "lr_changes": {
+                          "enabled": false
+                        },
+                        "lr_ct": {
+                          "content": ""
+                        },
+                        "lr_ab": {
+                          "enabled": false
+                        },
+                        "lr_when": {
+                          "content": "1w"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r5",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "danmu-collector"
+                        },
+                        "lr_sub": {
+                          "content": "Danmu hub UI"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "dev"
+                            }
+                          }
+                        },
+                        "lr_changes": {
+                          "enabled": false
+                        },
+                        "lr_ct": {
+                          "content": ""
+                        },
+                        "lr_ab": {
+                          "content": "↓1",
+                          "fill": "$status/deleted"
+                        },
+                        "lr_when": {
+                          "content": "3d"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r6",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "draft-stage"
+                        },
+                        "lr_sub": {
+                          "content": "Game-client style draft screen"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "main"
+                            }
+                          }
+                        },
+                        "lr_changes": {},
+                        "lr_ct": {
+                          "content": "5"
+                        },
+                        "lr_ab": {
+                          "enabled": false
+                        },
+                        "lr_when": {
+                          "content": "7h"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r7",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "git-graph"
+                        },
+                        "lr_sub": {
+                          "content": "v0.2.0: CI status and Actions"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "main"
+                            }
+                          }
+                        },
+                        "lr_changes": {},
+                        "lr_ct": {
+                          "content": "14"
+                        },
+                        "lr_ab": {
+                          "content": "↑1",
+                          "fill": "$ref/head"
+                        },
+                        "lr_when": {
+                          "content": "now"
+                        }
+                      },
+                      "width": "fill_container",
+                      "fill": "$bg/selected"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r8",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "jap-learn"
+                        },
+                        "lr_sub": {
+                          "content": "Furigana reader"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "main"
+                            }
+                          }
+                        },
+                        "lr_changes": {
+                          "enabled": false
+                        },
+                        "lr_ct": {
+                          "content": ""
+                        },
+                        "lr_ab": {
+                          "enabled": false
+                        },
+                        "lr_when": {
+                          "content": "18h"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r9",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "nib"
+                        },
+                        "lr_sub": {
+                          "content": "Component properties and variants"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "main"
+                            }
+                          }
+                        },
+                        "lr_changes": {
+                          "enabled": false
+                        },
+                        "lr_ct": {
+                          "content": ""
+                        },
+                        "lr_ab": {
+                          "content": "↓4",
+                          "fill": "$status/deleted"
+                        },
+                        "lr_when": {
+                          "content": "1h"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r10",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "raycast-plugins"
+                        },
+                        "lr_sub": {
+                          "content": "Raycast extensions"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "main"
+                            }
+                          }
+                        },
+                        "lr_changes": {
+                          "enabled": false
+                        },
+                        "lr_ct": {
+                          "content": ""
+                        },
+                        "lr_ab": {
+                          "enabled": false
+                        },
+                        "lr_when": {
+                          "content": "5d"
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d15_r11",
+                      "ref": "c_local_repo",
+                      "descendants": {
+                        "lr_name": {
+                          "content": "Waist-level-Camera"
+                        },
+                        "lr_sub": {
+                          "content": "WL66 viewfinder"
+                        },
+                        "lr_branch": {
+                          "descendants": {
+                            "chl_label": {
+                              "content": "main"
+                            }
+                          }
+                        },
+                        "lr_changes": {
+                          "enabled": false
+                        },
+                        "lr_ct": {
+                          "content": ""
+                        },
+                        "lr_ab": {
+                          "enabled": false
+                        },
+                        "lr_when": {
+                          "content": "2w"
+                        }
+                      },
+                      "width": "fill_container"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d15_foot",
+                  "name": "Footer",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "padding": [
+                    6,
+                    4,
+                    0,
+                    4
+                  ],
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "d15_fi",
+                      "name": "icon scan-search",
+                      "library": "lucide",
+                      "icon": "scan-search",
+                      "width": 13,
+                      "height": 13,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "d15_ft",
+                      "name": "d15_ft",
+                      "content": "Found in 1 folder, up to 3 levels deep.",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "d15_fl",
+                      "name": "d15_fl",
+                      "content": "Manage folders…",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 500,
+                      "fill": "$text/link"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl16",
+          "name": "Label · 16 · Settings — Repository folders",
+          "x": 1100,
+          "y": 8710,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl16_t",
+              "name": "dl16_t",
+              "content": "16 · Settings — Repository folders",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl16_s",
+              "name": "dl16_s",
+              "content": "Light · folders to scan, suggested from the usual places",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_folders",
+          "name": "16 · Settings — Repository folders — Light",
+          "x": 1100,
+          "y": 8800,
+          "width": 980,
+          "height": 560,
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "cornerRadius": "$radius/xl",
+          "clip": true,
+          "fill": "$bg/app",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 24
+            },
+            "blur": 60,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d16_nav",
+              "ref": "c_set_navlist",
+              "descendants": {
+                "sni_general": {
+                  "fill": "$bg/selected",
+                  "descendants": {
+                    "sn_icon": {
+                      "icon": "settings",
+                      "fill": "$ref/head"
+                    },
+                    "sn_label": {
+                      "content": "General",
+                      "fontWeight": 600
+                    }
+                  }
+                }
+              },
+              "height": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "d16_content",
+              "name": "Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 22,
+              "padding": [
+                26,
+                32,
+                32,
+                24
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d16_head",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d16_title",
+                      "name": "d16_title",
+                      "content": "General",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/2xl",
+                      "fontWeight": 700,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d16_close",
+                      "ref": "c_btn_icon",
+                      "descendants": {
+                        "bi_icon": {
+                          "icon": "x"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d16_folders",
+                  "name": "Repository folders",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d16_lb",
+                      "name": "Label",
+                      "width": 200,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d16_l",
+                          "name": "d16_l",
+                          "content": "Repository folders",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 200,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d16_body",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d16_box",
+                          "name": "List",
+                          "width": 460,
+                          "layout": "vertical",
+                          "cornerRadius": "$radius/md",
+                          "stroke": "$border/strong",
+                          "strokeWidth": 1,
+                          "clip": true,
+                          "fill": "$bg/app",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d16_f1",
+                              "name": "Folder ~/Downloads/Code",
+                              "width": "fill_container",
+                              "height": 34,
+                              "padding": [
+                                0,
+                                10
+                              ],
+                              "gap": 8,
+                              "alignItems": "center",
+                              "stroke": "$border/subtle",
+                              "strokeWidth": {
+                                "bottom": 1
+                              },
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "d16_f1_i",
+                                  "name": "icon folder",
+                                  "library": "lucide",
+                                  "icon": "folder",
+                                  "width": 14,
+                                  "height": 14,
+                                  "fill": "$text/secondary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d16_f1_p",
+                                  "name": "d16_f1_p",
+                                  "content": "~/Downloads/Code",
+                                  "fontFamily": "$font/mono",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 500,
+                                  "fill": "$text/primary",
+                                  "width": "fill_container",
+                                  "textGrowth": "fixed-width"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d16_f1_n",
+                                  "name": "d16_f1_n",
+                                  "content": "12 repositories",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 400,
+                                  "fill": "$text/muted"
+                                },
+                                {
+                                  "type": "ref",
+                                  "id": "d16_f1_x",
+                                  "ref": "c_btn_icon",
+                                  "descendants": {
+                                    "bi_icon": {
+                                      "icon": "x",
+                                      "width": 13,
+                                      "height": 13
+                                    }
+                                  },
+                                  "width": 22,
+                                  "height": 22
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "d16_f2",
+                              "name": "Folder ~/Developer",
+                              "width": "fill_container",
+                              "height": 34,
+                              "padding": [
+                                0,
+                                10
+                              ],
+                              "gap": 8,
+                              "alignItems": "center",
+                              "stroke": "$border/subtle",
+                              "strokeWidth": {
+                                "bottom": 1
+                              },
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "d16_f2_i",
+                                  "name": "icon folder",
+                                  "library": "lucide",
+                                  "icon": "folder",
+                                  "width": 14,
+                                  "height": 14,
+                                  "fill": "$text/secondary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d16_f2_p",
+                                  "name": "d16_f2_p",
+                                  "content": "~/Developer",
+                                  "fontFamily": "$font/mono",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 500,
+                                  "fill": "$text/primary",
+                                  "width": "fill_container",
+                                  "textGrowth": "fixed-width"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d16_f2_n",
+                                  "name": "d16_f2_n",
+                                  "content": "none yet",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 400,
+                                  "fill": "$text/faint"
+                                },
+                                {
+                                  "type": "ref",
+                                  "id": "d16_f2_x",
+                                  "ref": "c_btn_icon",
+                                  "descendants": {
+                                    "bi_icon": {
+                                      "icon": "x",
+                                      "width": 13,
+                                      "height": 13
+                                    }
+                                  },
+                                  "width": 22,
+                                  "height": 22
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d16_btns",
+                          "name": "Buttons",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "d16_add",
+                              "ref": "c_btn_secondary",
+                              "descendants": {
+                                "bs_icon": {
+                                  "icon": "folder-plus"
+                                },
+                                "bs_label": {
+                                  "content": "Add folder…"
+                                }
+                              }
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d16_scan",
+                              "ref": "c_btn_secondary",
+                              "descendants": {
+                                "bs_icon": {
+                                  "icon": "refresh-ccw"
+                                },
+                                "bs_label": {
+                                  "content": "Scan now"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "d16_h",
+                          "name": "d16_h",
+                          "content": "Git Graph lists the repositories it finds in these folders, up to 3 levels deep, on the Welcome screen.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 460,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "ref",
+                  "id": "d16_r1",
+                  "ref": "c_set_row",
+                  "descendants": {
+                    "sr_label": {
+                      "content": "Open last repository"
+                    },
+                    "sr_input": {
+                      "enabled": false
+                    },
+                    "sr_check": {
+                      "enabled": true
+                    },
+                    "sr_inline": {
+                      "enabled": true,
+                      "content": "Reopen the repository you used last when the app starts"
+                    },
+                    "sr_help": {
+                      "enabled": false
+                    }
+                  },
+                  "width": "fill_container"
+                },
+                {
+                  "type": "ref",
+                  "id": "d16_r2",
+                  "ref": "c_set_row",
+                  "descendants": {
+                    "sr_label": {
+                      "content": "Default branch name"
+                    },
+                    "sr_input": {
+                      "width": 200,
+                      "descendants": {
+                        "in_text": {
+                          "content": "main"
+                        }
+                      }
+                    },
+                    "sr_help": {
+                      "content": "Used when creating new repositories."
+                    }
+                  },
+                  "width": "fill_container"
                 }
               ]
             }

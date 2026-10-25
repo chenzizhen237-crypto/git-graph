@@ -3,6 +3,7 @@
 //! the web view.
 
 mod github;
+mod scan;
 
 use notify::{RecursiveMode, Watcher};
 use serde::Deserialize;
@@ -377,6 +378,8 @@ pub fn run() {
             github::test_github,
             set_network,
             repo_state,
+            scan::scan_repos,
+            scan::suggest_repo_folders,
             open_url,
             read_git_file,
             watch_repo,

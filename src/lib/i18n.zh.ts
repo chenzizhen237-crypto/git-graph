@@ -442,6 +442,30 @@ const zh: Record<string, string> = {
   'No commits yet.': '还没有提交。',
   'Version {v}': '版本 {v}',
 
+  // v0.3: repositories on this Mac
+  'On this Mac': '本机',
+  'Already at': '已在',
+  'Add a folder with repositories': '添加包含仓库的文件夹',
+  'Repository folders': '仓库文件夹',
+  'Git Graph lists the repositories it finds in these folders, up to {depth} levels deep, on the Welcome screen.':
+    'Git Graph 会在欢迎页列出这些文件夹中找到的仓库（最多向下 {depth} 层）。',
+  'none yet': '暂无',
+  Remove: '移除',
+  'No folders yet.': '还没有文件夹。',
+  'Add folder…': '添加文件夹…',
+  'Scan now': '立即扫描',
+  '{n} repository': '{n} 个仓库',
+  '{n} repositories': '{n} 个仓库',
+  Recent: '最近',
+  'Looking for repositories…': '正在查找仓库…',
+  'No code folders found yet.': '还没有找到代码文件夹。',
+  'Add a folder…': '添加文件夹…',
+  'Scan again': '重新扫描',
+  'No repository matches.': '没有匹配的仓库。',
+  'Found in {n} folders, up to {depth} levels deep.': '在 {n} 个文件夹中查找，最多向下 {depth} 层。',
+  'Drop a folder here, or run git-graph . in a terminal': '将文件夹拖到这里，或在终端中运行 git-graph .',
+  'Manage folders…': '管理文件夹…',
+
   // Time
   'just now': '刚刚',
   '{n} minute ago': '{n} 分钟前',
