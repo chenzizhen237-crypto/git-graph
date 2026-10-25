@@ -26,9 +26,11 @@ import {
 import { Fragment, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { DiffView } from '../components/Diff'
+import { useMenus } from '../components/menus'
 import { GraphCell, graphWidth, type NodeKind, ROW_H } from '../components/GraphCell'
 import { Resizer, usePanelSize } from '../components/Split'
-import { Avatar, Chip, Count, caps, Empty, FilePath, fileRowClass, IconButton, LineStats, refChips, Segmented, StageDot, StatusBadge, splitPath } from '../components/ui'
+import { Avatar, Chip, CiIcon, Count, caps, Empty, FilePath, fileRowClass, IconButton, LineStats, refChips, Segmented, StageDot, StatusBadge, splitPath } from '../components/ui'
+import { cachedCi, type CiState, commitStates } from '../lib/actions'
 import { cx } from '../lib/cx'
 import { actions, commitDetail, commitFileDiff } from '../lib/git'
 import { t, timeAgo } from '../lib/i18n'
@@ -314,8 +316,11 @@ function nodeKind(row: LogRow, head: string): NodeKind {
 const rowClass = 'absolute inset-x-0 flex h-row items-center gap-2 pr-3 pl-1'
 
 function LogList({ showGraph }: { showGraph: boolean }) {
-  const { repo, selected, setSelected, setView, loadMore, error } = useApp()
+  const { root, repo, selected, setSelected, setView, loadMore, error, openMenu } = useApp()
   const remotes = useRemoteNames()
+  const menus = useMenus()
+  const [ci, setCi] = useState<Map<string, CiState>>(new Map())
+  const [ciOff, setCiOff] = useState(false)
   const box = useRef<HTMLDivElement>(null)
   const [scroll, setScroll] = useState(0)
   const [height, setHeight] = useState(800)
@@ -345,6 +350,29 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   const last = Math.min(total, Math.ceil((scroll + height) / ROW_H) + 10)
   const gw = repo ? graphWidth(repo.laneCount) : 56
 
+  // CI state for the rows on screen: one batched request after scrolling settles,
+  // then again every 30s while any of them is still running.
+  const visible = rows.slice(Math.max(0, first - offset), Math.max(0, last - offset)).map(r => r.hash)
+  const visibleKey = visible.join(',')
+  // biome-ignore lint/correctness/useExhaustiveDependencies: keyed on the visible SHAs, not the array identity
+  useEffect(() => {
+    if (ciOff || !visible.length) return
+    let live = true
+    const ask = () =>
+      commitStates(root, visible)
+        .then(m => live && setCi(prev => new Map([...prev, ...m])))
+        .catch(() => live && setCiOff(true))
+    const soon = window.setTimeout(ask, 250)
+    const again = window.setInterval(() => {
+      if (visible.some(h => cachedCi(h) === 'pending')) void ask()
+    }, 30_000)
+    return () => {
+      live = false
+      window.clearTimeout(soon)
+      window.clearInterval(again)
+    }
+  }, [root, visibleKey, ciOff])
+
   const onScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget
     setScroll(el.scrollTop)
@@ -368,7 +396,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   )
 
   if (error && !repo) return <Empty>{error}</Empty>
-  if (repo && !rows.length && !repo.work) return <Empty>No commits{repo.head ? ' match these filters' : ' yet'}.</Empty>
+  if (repo && !rows.length && !repo.work) return <Empty>{t(repo.head ? 'No commits match these filters.' : 'No commits yet.')}</Empty>
 
   const items = []
   for (let i = first; i < last; i++) {
@@ -379,10 +407,8 @@ function LogList({ showGraph }: { showGraph: boolean }) {
           {showGraph && <GraphCell g={repo.work} laneCount={repo.laneCount} kind="work" />}
           <div className="flex min-w-0 flex-1 items-center gap-1.5 italic">
             <StageDot />
-            <span className="font-medium text-secondary">
-              {repo.changes.length} uncommitted change{repo.changes.length > 1 ? 's' : ''}
-            </span>
-            <span className="text-muted">· open Changes</span>
+            <span className="font-medium text-secondary">{t(repo.changes.length === 1 ? '{n} uncommitted change' : '{n} uncommitted changes', { n: repo.changes.length })}</span>
+            <span className="text-muted">· {t('open Changes')}</span>
           </div>
           <span className="text-sm text-faint">⌘2</span>
         </div>,
@@ -399,6 +425,10 @@ function LogList({ showGraph }: { showGraph: boolean }) {
         className={cx(rowClass, on ? 'bg-selected group-focus:shadow-[inset_2px_0_0_var(--accent)]' : 'hover:bg-hover')}
         style={{ top }}
         onClick={() => setSelected(r.hash)}
+        onContextMenu={e => {
+          setSelected(r.hash)
+          openMenu(e, menus.commit(r))
+        }}
       >
         {showGraph && <GraphCell g={r.graph} laneCount={repo!.laneCount} kind={kind} />}
         <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden">
@@ -415,6 +445,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
         <span className="w-21 shrink-0 text-sm whitespace-nowrap text-muted" title={new Date(r.time * 1000).toLocaleString()}>
           {timeAgo(r.time * 1000)}
         </span>
+        {!ciOff && <CiIcon state={ci.get(r.hash)} />}
         <span className="w-15.5 shrink-0 text-right font-mono text-sm font-medium text-link">{r.short}</span>
       </div>,
     )
@@ -427,6 +458,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
         <span className="flex-1">{t('DESCRIPTION')}</span>
         <span className="w-32.5">{t('AUTHOR')}</span>
         <span className="w-21">{t('DATE')}</span>
+        {!ciOff && <span className="w-3.5" />}
         <span className="w-15.5 text-right">{t('SHA')}</span>
       </div>
       <div
@@ -493,7 +525,8 @@ function Tab({ on, icon: Icon, children, onClick }: { on: boolean; icon: LucideI
 }
 
 function Inspector({ width }: { width: number }) {
-  const { root, repo, selected, setSelected, act, prompt, ask, toast } = useApp()
+  const { root, repo, selected, setSelected, act, prompt, ask, toast, openMenu } = useApp()
+  const menus = useMenus()
   const remotes = useRemoteNames()
   const [detail, setDetail] = useState<CommitDetail | null>(null)
   const [file, setFile] = useState<CommitFile | null>(null)
@@ -550,6 +583,7 @@ function Inspector({ width }: { width: number }) {
         type="button"
         className={cx(fileRowClass(file?.path === f.path), nested && 'pl-6.5')}
         onClick={() => setFile(f)}
+        onContextMenu={e => openMenu(e, menus.file(row.hash, f.path))}
         title={f.orig ? `${f.orig} → ${f.path}` : f.path}
       >
         <StatusBadge letter={f.status} />

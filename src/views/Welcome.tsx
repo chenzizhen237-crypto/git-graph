@@ -1,13 +1,15 @@
 /** Window/Welcome: open, clone or create a repository, or pick a recent one. */
 import { getCurrentWebview } from '@tauri-apps/api/webview'
+import { getVersion } from '@tauri-apps/api/app'
 import { open } from '@tauri-apps/plugin-dialog'
 import { CloudDownload, FolderDown, FolderGit2, FolderOpen, FolderPlus, Search, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 
 import appIcon from '../../assets/icon/app-icon.svg'
+import { CloneDialog } from '../components/GitHubDialogs'
 import { Button, Chip, Empty } from '../components/ui'
 import { cx } from '../lib/cx'
-import { findRoot, git, run } from '../lib/git'
+import { findRoot, run } from '../lib/git'
 import { t } from '../lib/i18n'
 import { getSettings } from '../lib/settings'
 import { forgetRepo, type Recent, readRecents } from '../state'
@@ -27,8 +29,13 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
   const [filter, setFilter] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [over, setOver] = useState(false)
-  const [busy, setBusy] = useState(false)
-  const [cloneUrl, setCloneUrl] = useState<string | null>(null)
+  const [cloning, setCloning] = useState(false)
+  const [version, setVersion] = useState('')
+  useEffect(() => {
+    void getVersion()
+      .then(setVersion)
+      .catch(() => {})
+  }, [])
 
   const openPath = async (path: string) => {
     setError(null)
@@ -66,29 +73,6 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
     if (out.code !== 0) return setError(out.stderr.trim())
     onOpen(dir)
   }
-  const cloneRepo = async (url: string) => {
-    if (!url.trim()) return
-    const dir = await pickFolder(t('Clone into folder'))
-    if (!dir) return
-    setCloneUrl(null)
-    const name =
-      url
-        .trim()
-        .replace(/\.git$/, '')
-        .split(/[/:]/)
-        .pop() || 'repo'
-    setBusy(true)
-    setError(null)
-    try {
-      await git(dir, ['clone', url.trim(), name])
-      onOpen(`${dir}/${name}`)
-    } catch (e) {
-      setError(e instanceof Error ? e.message : String(e))
-    } finally {
-      setBusy(false)
-    }
-  }
-
   const shown = useMemo(() => {
     const q = filter.trim().toLowerCase()
     return q ? recents.filter(r => r.path.toLowerCase().includes(q)) : recents
@@ -99,29 +83,14 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
       <div className="flex w-80 shrink-0 flex-col items-center border-r border-subtle bg-titlebar px-7 pt-13 pb-7" data-tauri-drag-region>
         <img src={appIcon} alt="" className="mt-auto size-32" />
         <h1 className="mt-5 mb-0.5 text-2xl font-bold">{t('Git Graph')}</h1>
-        <div className="mb-auto text-sm text-muted">Version 0.1 · desktop</div>
+        <div className="mb-auto text-sm text-muted">{t('Version {v}', { v: version })}</div>
         <div className="flex w-full flex-col gap-2 [&>button]:h-8.5">
           <Button kind="primary" icon={FolderOpen} onClick={() => void openRepo()}>
             {t('Open repository…')}
           </Button>
-          {cloneUrl === null ? (
-            <Button icon={CloudDownload} busy={busy} onClick={() => setCloneUrl('')}>
-              {t('Clone from URL…')}
-            </Button>
-          ) : (
-            <input
-              autoFocus
-              className="h-8.5 rounded-md border border-focus bg-app px-2.5 ring-1 ring-focus outline-none"
-              placeholder="https://github.com/owner/repo.git ↩"
-              value={cloneUrl}
-              onChange={e => setCloneUrl(e.target.value)}
-              onBlur={() => !cloneUrl && setCloneUrl(null)}
-              onKeyDown={e => {
-                if (e.key === 'Enter') void cloneRepo(cloneUrl)
-                if (e.key === 'Escape') setCloneUrl(null)
-              }}
-            />
-          )}
+          <Button icon={CloudDownload} onClick={() => setCloning(true)}>
+            {t('Clone from GitHub…')}
+          </Button>
           <Button icon={FolderPlus} onClick={() => void createRepo()}>
             {t('Create new repository')}
           </Button>
@@ -181,6 +150,15 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
           Drop a folder here, or run <code className="font-mono">git-graph .</code> in a terminal
         </div>
       </div>
+      {cloning && (
+        <CloneDialog
+          onClose={() => setCloning(false)}
+          onCloned={path => {
+            setCloning(false)
+            onOpen(path)
+          }}
+        />
+      )}
     </div>
   )
 }

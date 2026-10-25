@@ -5,7 +5,11 @@ import {
   ArrowUp,
   CircleAlert,
   CircleCheck,
+  CirclePlay,
   Cloud,
+  CloudUpload,
+  ExternalLink,
+  GitFork,
   FileDiff,
   FolderOpen,
   GitBranch,
@@ -27,7 +31,9 @@ import {
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { cx } from '../lib/cx'
+import { repoActions, webUrl } from '../lib/actions'
 import { actions, openTerminal } from '../lib/git'
+import { openUrl } from '../lib/github'
 import { t } from '../lib/i18n'
 import { getSettings, updateSettings } from '../lib/settings'
 import { useApp } from '../state'
@@ -52,7 +58,7 @@ function highlight(text: string, q: string) {
 
 export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () => void; onSettings: () => void }) {
   const app = useApp()
-  const { repo, act, setPaletteOpen, setView, setSelected, setQuery, prompt } = app
+  const { repo, act, setPaletteOpen, setView, setSelected, setQuery, prompt, toast, ask, setPublishOpen } = app
   const [q, setQ] = useState('')
   const [at, setAt] = useState(0)
   const list = useRef<HTMLDivElement>(null)
@@ -160,6 +166,32 @@ export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () 
         { id: 'a:changes', group: 'ACTIONS', icon: FileDiff, color: 'var(--text-secondary)', label: t('Show Changes'), kbd: '⌘2', run: () => setView('changes') },
         { id: 'a:stashes', group: 'ACTIONS', icon: Archive, color: 'var(--text-secondary)', label: t('Show Stashes'), kbd: '⌘3', run: () => setView('stashes') },
         { id: 'a:pulls', group: 'ACTIONS', icon: GitPullRequest, color: 'var(--text-secondary)', label: t('Show Pull requests'), kbd: '⌘4', run: () => setView('pulls') },
+        { id: 'a:actions', group: 'ACTIONS', icon: CirclePlay, color: 'var(--text-secondary)', label: t('Show Actions'), kbd: '⌘5', run: () => setView('actions') },
+        {
+          id: 'a:web',
+          group: 'ACTIONS',
+          icon: ExternalLink,
+          color: 'var(--text-secondary)',
+          label: t('Open repository on GitHub'),
+          run: () =>
+            void webUrl(repo.root)
+              .then(openUrl)
+              .catch(e => toast({ kind: 'error', title: t('Not on GitHub'), detail: String(e) })),
+        },
+        ...(!repo.refs.some(r => r.kind === 'remote')
+          ? [{ id: 'a:publish', group: 'ACTIONS' as const, icon: CloudUpload, color: 'var(--text-secondary)', label: t('Publish to GitHub…'), run: () => setPublishOpen(true) }]
+          : []),
+        {
+          id: 'a:fork',
+          group: 'ACTIONS',
+          icon: GitFork,
+          color: 'var(--text-secondary)',
+          label: t('Fork on GitHub'),
+          run: async () => {
+            if (await ask({ title: t('Fork this repository?'), text: t('Creates your fork on GitHub, makes it origin, and keeps the original as upstream.'), confirm: t('Fork') }))
+              await act('Fork', repoActions.fork(), { tool: 'gh', done: t('Forked — origin is now your fork') })
+          },
+        },
         { id: 'a:term', group: 'ACTIONS', icon: SquareTerminal, color: 'var(--text-secondary)', label: t('Open in Terminal'), run: () => void openTerminal(repo.root) },
         { id: 'a:repo', group: 'ACTIONS', icon: FolderOpen, color: 'var(--text-secondary)', label: t('Open another repository…'), kbd: '⌘O', run: onSwitchRepo },
         { id: 'a:settings', group: 'ACTIONS', icon: SettingsIcon, color: 'var(--text-secondary)', label: t('Settings…'), kbd: '⌘,', run: onSettings },
@@ -186,7 +218,7 @@ export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () 
       ] satisfies Item[]
     ).filter(a => a.id === 'a:branch' || a.id.startsWith('m:') || match(a.label))
     return [...branches, ...tags, ...commits, ...all]
-  }, [repo, q, act, prompt, setQuery, setSelected, setView, onSwitchRepo, onSettings])
+  }, [repo, q, act, prompt, setQuery, setSelected, setView, onSwitchRepo, onSettings, toast, ask, setPublishOpen])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: the query is the trigger: a new search selects the first result
   useEffect(() => setAt(0), [q])

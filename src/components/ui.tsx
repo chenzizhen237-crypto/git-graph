@@ -1,8 +1,10 @@
 /** The design's atoms: buttons, chips, avatar, badges. Names follow the Nib components. */
-import { ArrowDownUp, Cloud, GitBranch, House, Loader2, type LucideIcon, Tag } from 'lucide-react'
+import { ArrowDownUp, CircleCheck, CircleX, Cloud, GitBranch, House, Loader2, LoaderCircle, type LucideIcon, Tag } from 'lucide-react'
 import type { ReactNode } from 'react'
 
+import type { CiState } from '../lib/actions'
 import { cx } from '../lib/cx'
+import { t } from '../lib/i18n'
 import { STATUS_COLORS } from '../lib/parse'
 
 type Click = { onClick?: () => void; disabled?: boolean; title?: string; type?: 'button' | 'submit' }
@@ -250,3 +252,11 @@ export function splitPath(path: string) {
 
 /** `3 hours ago` without the noise of `, 2 minutes`. */
 export const shortAgo = (ago: string) => ago.replace(/, \d+ \w+ ago$/, ' ago')
+
+/** CI state of a commit: ✓ passed, ✗ failed, ● running; nothing when it has no checks. */
+export function CiIcon({ state, size = 14 }: { state?: CiState; size?: number }) {
+  if (state === 'pass') return <CircleCheck size={size} className="shrink-0 text-status-added" aria-label={t('Checks passed')} />
+  if (state === 'fail') return <CircleX size={size} className="shrink-0 text-status-deleted" aria-label={t('Checks failed')} />
+  if (state === 'pending') return <LoaderCircle size={size} className="shrink-0 animate-[spin_2s_linear_infinite] text-status-modified" aria-label={t('Checks running')} />
+  return <span className="shrink-0" style={{ width: size }} />
+}

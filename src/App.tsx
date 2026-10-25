@@ -3,6 +3,8 @@ import { getCurrentWindow } from '@tauri-apps/api/window'
 import { useCallback, useEffect, useState } from 'react'
 
 import { Banner, Sidebar, StatusBar, TitleBar } from './components/Chrome'
+import { PublishDialog } from './components/GitHubDialogs'
+import { ContextMenu } from './components/Menu'
 import { CommandPalette, DialogHost, Toasts } from './components/Overlays'
 import { SettingsDialog } from './components/Settings'
 import { Resizer, usePanelSize } from './components/Split'
@@ -10,6 +12,7 @@ import { actions, findRoot } from './lib/git'
 import { getSettings, useSettings } from './lib/settings'
 import { AppProvider, readRecents, rememberRepo, useApp } from './state'
 import { ChangesView } from './views/Changes'
+import { ActionsView } from './views/Actions'
 import { HistoryView } from './views/History'
 import { PullRequestsView } from './views/PullRequests'
 import { StashesView } from './views/Stashes'
@@ -22,11 +25,26 @@ export function App() {
 
   // A repository passed on the command line opens straight away; otherwise the last one, if that is on.
   useEffect(() => {
-    void invoke<string | null>('initial_repo').then(async path => {
-      const last = getSettings().openLastRepo ? readRecents()[0]?.path : undefined
-      const found = (path && (await findRoot(path))) || (last && (await findRoot(last)))
-      if (found) setRoot(found)
-    })
+    let live = true
+    const start = async (attempt: number): Promise<void> => {
+      try {
+        const path = await invoke<string | null>('initial_repo')
+        const last = getSettings().openLastRepo ? readRecents()[0]?.path : undefined
+        const found = (path && (await findRoot(path))) || (last && (await findRoot(last)))
+        if (found && live) setRoot(r => r ?? found)
+      } catch (e) {
+        // A cold start can reach the backend before it is ready; try again shortly.
+        if (attempt < 3 && live) {
+          await new Promise(r => setTimeout(r, 250 * (attempt + 1)))
+          return start(attempt + 1)
+        }
+        console.error('Could not open the starting repository', e)
+      }
+    }
+    void start(0)
+    return () => {
+      live = false
+    }
   }, [])
   useEffect(() => {
     void getCurrentWindow()
@@ -92,6 +110,9 @@ function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
       } else if (k === '3') {
         handled()
         setView('stashes')
+      } else if (k === '5') {
+        handled()
+        setView('actions')
       } else if (k === '4') {
         handled()
         setView('pulls')
@@ -131,10 +152,13 @@ function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
         {view === 'changes' && <ChangesView />}
         {view === 'stashes' && <StashesView />}
         {view === 'pulls' && <PullRequestsView />}
+        {view === 'actions' && <ActionsView />}
       </div>
       <StatusBar />
       {paletteOpen && <CommandPalette onSwitchRepo={onSwitchRepo} onSettings={() => setSettingsOpen(true)} />}
       {settingsOpen && <SettingsDialog onClose={() => setSettingsOpen(false)} />}
+      {app.menu && <ContextMenu menu={app.menu} onClose={app.closeMenu} />}
+      {app.publishOpen && <PublishDialog onClose={() => app.setPublishOpen(false)} />}
       <DialogHost />
       <Toasts />
     </div>

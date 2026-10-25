@@ -5,6 +5,7 @@
 import { listen } from '@tauri-apps/api/event'
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
+import type { MenuItem, MenuState } from './components/Menu'
 import { GitError, git, loadRepo, watchRepo } from './lib/git'
 import { GhError, gh } from './lib/github'
 import { t } from './lib/i18n'
@@ -13,7 +14,7 @@ import { getSettings } from './lib/settings'
 import type { Stage } from './lib/tokens'
 import type { LogQuery, RepoData } from './lib/types'
 
-export type View = 'history' | 'changes' | 'stashes' | 'pulls'
+export type View = 'history' | 'changes' | 'stashes' | 'pulls' | 'actions'
 
 export type Toast = { id: number; kind: 'ok' | 'error'; title: string; detail?: string }
 
@@ -44,6 +45,8 @@ function useAppState(root: string) {
   const [busy, setBusy] = useState<string | null>(null)
   const [toasts, setToasts] = useState<Toast[]>([])
   const [dialog, setDialog] = useState<Dialog | null>(null)
+  const [menu, setMenu] = useState<MenuState>(null)
+  const [publishOpen, setPublishOpen] = useState(false)
   const [lastFetch, setLastFetch] = useState<number | null>(null)
   const queryRef = useRef(query)
   queryRef.current = query
@@ -159,6 +162,15 @@ function useAppState(root: string) {
     toasts,
     dismissToast: (id: number) => setToasts(ts => ts.filter(t => t.id !== id)),
     dialog,
+    menu,
+    closeMenu: () => setMenu(null),
+    /** Opens the right-click menu at the pointer. */
+    openMenu: (e: { preventDefault: () => void; clientX: number; clientY: number }, items: MenuItem[]) => {
+      e.preventDefault()
+      setMenu({ x: e.clientX, y: e.clientY, items })
+    },
+    publishOpen,
+    setPublishOpen,
     closeDialog: () => setDialog(null),
     ask,
     prompt,

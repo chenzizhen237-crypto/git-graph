@@ -5186,6 +5186,17 @@
               "textGrowth": "fixed-width"
             },
             {
+              "type": "icon",
+              "id": "cr_ci",
+              "name": "icon circle-check",
+              "library": "lucide",
+              "icon": "circle-check",
+              "width": 14,
+              "height": 14,
+              "fill": "$status/added",
+              "enabled": false
+            },
+            {
               "type": "text",
               "id": "cr_sha",
               "name": "a3f9c21",
@@ -7047,6 +7058,11 @@
                               "content": "claude/git-graph-mod"
                             }
                           }
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "loader-circle",
+                          "fill": "$status/modified"
                         }
                       },
                       "width": "fill_container",
@@ -7089,6 +7105,11 @@
                         },
                         "cr_sha": {
                           "content": "7c1d2e0"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7147,6 +7168,11 @@
                               "content": "origin/claude/git-graph-mod"
                             }
                           }
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7221,6 +7247,11 @@
                               "content": "origin/main"
                             }
                           }
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7285,6 +7316,11 @@
                               "content": "claude/live-tasks"
                             }
                           }
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-x",
+                          "fill": "$status/deleted"
                         }
                       },
                       "width": "fill_container"
@@ -7332,6 +7368,11 @@
                         },
                         "cr_sha": {
                           "content": "c3e8f04"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7385,6 +7426,11 @@
                         },
                         "cr_sha": {
                           "content": "18f4a6d"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7446,6 +7492,11 @@
                               "content": "v0.4.0"
                             }
                           }
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7496,6 +7547,11 @@
                         },
                         "cr_sha": {
                           "content": "f0a9d37"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7557,6 +7613,11 @@
                               "content": "origin/claude/history"
                             }
                           }
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7610,6 +7671,11 @@
                         },
                         "cr_sha": {
                           "content": "6a1c9b4"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7663,6 +7729,11 @@
                         },
                         "cr_sha": {
                           "content": "b8d27e5"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7724,6 +7795,11 @@
                               "content": "v0.3.1"
                             }
                           }
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7774,6 +7850,11 @@
                         },
                         "cr_sha": {
                           "content": "d91e2b6"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7824,6 +7905,11 @@
                         },
                         "cr_sha": {
                           "content": "82ac4f9"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7874,6 +7960,11 @@
                         },
                         "cr_sha": {
                           "content": "5e19d03"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7924,6 +8015,11 @@
                         },
                         "cr_sha": {
                           "content": "7f30a15"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       },
                       "width": "fill_container"
@@ -7975,6 +8071,11 @@
                         },
                         "cr_sha": {
                           "content": "4c8b2a1"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       }
                     },
@@ -8025,6 +8126,11 @@
                         },
                         "cr_sha": {
                           "content": "e7d10f6"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       }
                     },
@@ -8075,6 +8181,11 @@
                         },
                         "cr_sha": {
                           "content": "a02f5c8"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       }
                     },
@@ -8125,6 +8236,11 @@
                         },
                         "cr_sha": {
                           "content": "91b3e47"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       }
                     },
@@ -8172,6 +8288,11 @@
                         },
                         "cr_sha": {
                           "content": "0d6a3f2"
+                        },
+                        "cr_ci": {
+                          "enabled": true,
+                          "icon": "circle-check",
+                          "fill": "$status/added"
                         }
                       }
                     }
@@ -8917,6 +9038,25 @@
                 },
                 "si_meta": {
                   "content": "2"
+                }
+              },
+              "width": "fill_container"
+            },
+            {
+              "type": "ref",
+              "id": "sd_actions",
+              "ref": "c_side_item",
+              "descendants": {
+                "si_icon": {
+                  "icon": "circle-play",
+                  "fill": "$status/renamed"
+                },
+                "si_label": {
+                  "content": "Actions"
+                },
+                "si_meta": {
+                  "content": "1",
+                  "fill": "$status/deleted"
                 }
               },
               "width": "fill_container"
@@ -11106,7 +11246,7 @@
                           "icon": "cloud-download"
                         },
                         "bs_label": {
-                          "content": "Clone from URL…"
+                          "content": "Clone from GitHub…"
                         }
                       },
                       "width": "fill_container",
@@ -12218,6 +12358,455 @@
               "fontSize": "$text/sm",
               "fontWeight": 400,
               "fill": "$text/faint"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_ctx_menu",
+          "name": "Menu/Context",
+          "reusable": true,
+          "x": 0,
+          "y": 4500,
+          "width": 260,
+          "layout": "vertical",
+          "padding": 5,
+          "gap": 1,
+          "fill": "$bg/elevated",
+          "cornerRadius": "$radius/lg",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 12
+              },
+              "blur": 32,
+              "spread": 0,
+              "color": "$shadow"
+            }
+          ],
+          "children": [
+            {
+              "type": "ref",
+              "id": "cm_open",
+              "ref": "c_menu_item",
+              "descendants": {
+                "mi_icon": {
+                  "icon": "external-link"
+                },
+                "mi_label": {
+                  "content": "Open commit on GitHub"
+                },
+                "mi_kbd": {
+                  "enabled": false
+                }
+              },
+              "width": "fill_container",
+              "height": 28
+            },
+            {
+              "type": "ref",
+              "id": "cm_link",
+              "ref": "c_menu_item",
+              "descendants": {
+                "mi_icon": {
+                  "icon": "link"
+                },
+                "mi_label": {
+                  "content": "Copy permalink"
+                },
+                "mi_kbd": {
+                  "enabled": false
+                }
+              },
+              "width": "fill_container",
+              "height": 28
+            },
+            {
+              "type": "ref",
+              "id": "cm_sha",
+              "ref": "c_menu_item",
+              "descendants": {
+                "mi_icon": {
+                  "icon": "copy"
+                },
+                "mi_label": {
+                  "content": "Copy SHA"
+                },
+                "mi_kbd": {
+                  "enabled": false
+                }
+              },
+              "width": "fill_container",
+              "height": 28
+            },
+            {
+              "type": "rectangle",
+              "id": "cm_sep",
+              "name": "Separator",
+              "width": "fill_container",
+              "height": 1,
+              "fill": "$border/subtle"
+            },
+            {
+              "type": "ref",
+              "id": "cm_checkout",
+              "ref": "c_menu_item",
+              "descendants": {
+                "mi_icon": {
+                  "icon": "log-in"
+                },
+                "mi_label": {
+                  "content": "Check out…"
+                },
+                "mi_kbd": {
+                  "enabled": false
+                }
+              },
+              "width": "fill_container",
+              "height": 28
+            },
+            {
+              "type": "ref",
+              "id": "cm_branch",
+              "ref": "c_menu_item",
+              "descendants": {
+                "mi_icon": {
+                  "icon": "git-branch-plus"
+                },
+                "mi_label": {
+                  "content": "New branch here…"
+                },
+                "mi_kbd": {
+                  "enabled": false
+                }
+              },
+              "width": "fill_container",
+              "height": 28
+            },
+            {
+              "type": "ref",
+              "id": "cm_pick",
+              "ref": "c_menu_item",
+              "descendants": {
+                "mi_icon": {
+                  "icon": "cherry"
+                },
+                "mi_label": {
+                  "content": "Cherry-pick"
+                },
+                "mi_kbd": {
+                  "enabled": false
+                }
+              },
+              "width": "fill_container",
+              "height": 28
+            },
+            {
+              "type": "ref",
+              "id": "cm_revert",
+              "ref": "c_menu_item",
+              "descendants": {
+                "mi_icon": {
+                  "icon": "undo-2"
+                },
+                "mi_label": {
+                  "content": "Revert"
+                },
+                "mi_kbd": {
+                  "enabled": false
+                }
+              },
+              "width": "fill_container",
+              "height": 28
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_run_row",
+          "name": "Row/Run",
+          "reusable": true,
+          "x": 300,
+          "y": 4500,
+          "width": 380,
+          "layout": "vertical",
+          "gap": 4,
+          "padding": [
+            9,
+            12
+          ],
+          "cornerRadius": "$radius/md",
+          "children": [
+            {
+              "type": "frame",
+              "id": "rr_top",
+              "name": "Top",
+              "width": "fill_container",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "rr_status",
+                  "name": "icon circle-x",
+                  "library": "lucide",
+                  "icon": "circle-x",
+                  "width": 15,
+                  "height": 15,
+                  "fill": "$status/deleted"
+                },
+                {
+                  "type": "text",
+                  "id": "rr_title",
+                  "name": "rr_title",
+                  "content": "Bundle: include the .ico icon",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/md",
+                  "fontWeight": 500,
+                  "fill": "$text/primary",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rr_meta",
+              "name": "Meta",
+              "width": "fill_container",
+              "gap": 6,
+              "alignItems": "center",
+              "padding": [
+                0,
+                0,
+                0,
+                23
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rr_flow",
+                  "name": "rr_flow",
+                  "content": "Release",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 600,
+                  "fill": "$text/secondary"
+                },
+                {
+                  "type": "ref",
+                  "id": "rr_branch",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "main"
+                    }
+                  }
+                },
+                {
+                  "type": "ref",
+                  "id": "rr_tag",
+                  "ref": "c_chip_tag",
+                  "descendants": {
+                    "cht_label": {
+                      "content": "v0.1.0"
+                    }
+                  },
+                  "enabled": false
+                },
+                {
+                  "type": "text",
+                  "id": "rr_num",
+                  "name": "rr_num",
+                  "content": "#2 · push",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted"
+                },
+                {
+                  "type": "frame",
+                  "id": "rr_sp",
+                  "name": "Spacer",
+                  "width": "fill_container",
+                  "height": 1,
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "rr_dur",
+                  "name": "rr_dur",
+                  "content": "6m 12s · 2h",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_job_row",
+          "name": "Row/Job",
+          "reusable": true,
+          "x": 720,
+          "y": 4500,
+          "width": 260,
+          "height": 30,
+          "padding": [
+            0,
+            10
+          ],
+          "gap": 8,
+          "alignItems": "center",
+          "cornerRadius": "$radius/md",
+          "children": [
+            {
+              "type": "icon",
+              "id": "jr_status",
+              "name": "icon circle-check",
+              "library": "lucide",
+              "icon": "circle-check",
+              "width": 15,
+              "height": 15,
+              "fill": "$status/added"
+            },
+            {
+              "type": "text",
+              "id": "jr_name",
+              "name": "jr_name",
+              "content": "Build (macOS Apple Silicon)",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/md",
+              "fontWeight": 400,
+              "fill": "$text/primary",
+              "width": "fill_container",
+              "textGrowth": "fixed-width"
+            },
+            {
+              "type": "text",
+              "id": "jr_dur",
+              "name": "jr_dur",
+              "content": "4m 2s",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/sm",
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_log_line",
+          "name": "Log/Line",
+          "reusable": true,
+          "x": 1000,
+          "y": 4500,
+          "width": 640,
+          "height": 20,
+          "gap": 12,
+          "alignItems": "center",
+          "padding": [
+            0,
+            10
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "ll_num",
+              "name": "ll_num",
+              "content": "214",
+              "fontFamily": "$font/mono",
+              "fontSize": "$text/xs",
+              "fontWeight": 400,
+              "fill": "$text/faint",
+              "width": 34,
+              "textGrowth": "fixed-width",
+              "textAlign": "right"
+            },
+            {
+              "type": "text",
+              "id": "ll_text",
+              "name": "ll_text",
+              "content": "Compiling git-graph v0.1.0",
+              "fontFamily": "$font/mono",
+              "fontSize": "$text/sm",
+              "fontWeight": 400,
+              "fill": "$text/secondary",
+              "width": "fill_container",
+              "textGrowth": "fixed-width"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_step_row",
+          "name": "Row/Step",
+          "reusable": true,
+          "x": 1000,
+          "y": 4540,
+          "width": 640,
+          "height": 30,
+          "padding": [
+            0,
+            10
+          ],
+          "gap": 8,
+          "alignItems": "center",
+          "fill": "$bg/surface",
+          "stroke": "$border/subtle",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "children": [
+            {
+              "type": "icon",
+              "id": "st_chev",
+              "name": "icon chevron-down",
+              "library": "lucide",
+              "icon": "chevron-down",
+              "width": 13,
+              "height": 13,
+              "fill": "$text/muted"
+            },
+            {
+              "type": "icon",
+              "id": "st_status",
+              "name": "icon circle-x",
+              "library": "lucide",
+              "icon": "circle-x",
+              "width": 15,
+              "height": 15,
+              "fill": "$status/deleted"
+            },
+            {
+              "type": "text",
+              "id": "st_name",
+              "name": "st_name",
+              "content": "Run tauri-apps/tauri-action@v1",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/md",
+              "fontWeight": 500,
+              "fill": "$text/primary",
+              "width": "fill_container",
+              "textGrowth": "fixed-width"
+            },
+            {
+              "type": "text",
+              "id": "st_dur",
+              "name": "st_dur",
+              "content": "4m 51s",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/sm",
+              "fontWeight": 400,
+              "fill": "$text/muted"
             }
           ]
         }
@@ -14190,6 +14779,2752 @@
                         }
                       },
                       "width": "fill_container"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl11",
+          "name": "Label · 11 · History — CI status",
+          "x": 0,
+          "y": 6510,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl11_t",
+              "name": "dl11_t",
+              "content": "11 · History — CI status",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl11_s",
+              "name": "dl11_s",
+              "content": "Light · ✓ ✗ ● per commit from one batched query · right-click: open on GitHub, copy permalink",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_ci_history",
+          "name": "11 · History — CI status + context menu — Light",
+          "x": 0,
+          "y": 6600,
+          "width": 1440,
+          "height": 900,
+          "layout": "none",
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d11_win",
+              "ref": "c_win_history",
+              "descendants": {},
+              "x": 0,
+              "y": 0
+            },
+            {
+              "type": "ref",
+              "id": "d11_menu",
+              "ref": "c_ctx_menu",
+              "descendants": {},
+              "x": 470,
+              "y": 236
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl12",
+          "name": "Label · 12 · Actions",
+          "x": 1540,
+          "y": 6510,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl12_t",
+              "name": "dl12_t",
+              "content": "12 · Actions",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl12_s",
+              "name": "dl12_s",
+              "content": "Dark · ⌘5 · runs, jobs, step logs · re-run failed jobs, cancel",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_actions",
+          "name": "12 · Actions — runs, jobs and logs — Dark",
+          "x": 1540,
+          "y": 6600,
+          "width": 1440,
+          "height": 900,
+          "layout": "vertical",
+          "theme": {
+            "Mode": "Dark",
+            "Stage": "Clean"
+          },
+          "fill": "$bg/app",
+          "cornerRadius": 12,
+          "clip": true,
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "children": [
+            {
+              "type": "ref",
+              "id": "d12_title",
+              "ref": "c_titlebar",
+              "descendants": {},
+              "width": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "d12_body",
+              "name": "Body",
+              "width": "fill_container",
+              "height": "fill_container",
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "d12_side",
+                  "ref": "c_sidebar",
+                  "descendants": {
+                    "sd_si3": {
+                      "fill": "#00000000",
+                      "descendants": {
+                        "si_icon": {
+                          "icon": "git-graph",
+                          "fill": "$ref/head"
+                        },
+                        "si_label": {
+                          "content": "History",
+                          "fontWeight": 400
+                        },
+                        "si_meta": {
+                          "content": ""
+                        }
+                      }
+                    },
+                    "sd_actions": {
+                      "fill": "$bg/selected",
+                      "descendants": {
+                        "si_icon": {
+                          "icon": "circle-play",
+                          "fill": "$status/renamed"
+                        },
+                        "si_label": {
+                          "content": "Actions",
+                          "fontWeight": 600
+                        },
+                        "si_meta": {
+                          "content": "1",
+                          "fill": "$status/deleted"
+                        }
+                      }
+                    }
+                  },
+                  "height": "fill_container"
+                },
+                {
+                  "type": "frame",
+                  "id": "d12_runs",
+                  "name": "Runs",
+                  "width": 380,
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "right": 1
+                  },
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d12_rh",
+                      "name": "Header",
+                      "width": "fill_container",
+                      "height": 44,
+                      "padding": [
+                        0,
+                        10,
+                        0,
+                        14
+                      ],
+                      "gap": 8,
+                      "alignItems": "center",
+                      "stroke": "$border/subtle",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d12_rt",
+                          "name": "d12_rt",
+                          "content": "Actions",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/lg",
+                          "fontWeight": 700,
+                          "fill": "$text/primary"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d12_rc",
+                          "name": "Count",
+                          "fill": "$bg/surface",
+                          "cornerRadius": 9,
+                          "padding": [
+                            1,
+                            6
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "d12_rcn",
+                              "name": "d12_rcn",
+                              "content": "5",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d12_rsp",
+                          "name": "Spacer",
+                          "width": "fill_container",
+                          "height": 1,
+                          "children": []
+                        },
+                        {
+                          "type": "ref",
+                          "id": "d12_rr",
+                          "ref": "c_btn_icon",
+                          "descendants": {
+                            "bi_icon": {
+                              "icon": "refresh-ccw"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "d12_rgh",
+                          "ref": "c_btn_icon",
+                          "descendants": {
+                            "bi_icon": {
+                              "icon": "external-link"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d12_rf",
+                      "name": "Filters",
+                      "width": "fill_container",
+                      "padding": 8,
+                      "gap": 4,
+                      "stroke": "$border/subtle",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d12_f1",
+                          "name": "All",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "cornerRadius": "$radius/md",
+                          "fill": "$bg/selected",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "d12_f1t",
+                              "name": "d12_f1t",
+                              "content": "All runs",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 600,
+                              "fill": "$ref/head"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d12_f2",
+                          "name": "Branch",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "cornerRadius": "$radius/md",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "d12_f2t",
+                              "name": "d12_f2t",
+                              "content": "This branch",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d12_f3",
+                          "name": "Failed",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "cornerRadius": "$radius/md",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "d12_f3t",
+                              "name": "d12_f3t",
+                              "content": "Failed",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d12_rl",
+                      "name": "List",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "padding": 6,
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "ref",
+                          "id": "d12r1",
+                          "ref": "c_run_row",
+                          "descendants": {
+                            "rr_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "rr_title": {
+                              "content": "Add Actions view"
+                            },
+                            "rr_flow": {
+                              "content": "CI"
+                            },
+                            "rr_num": {
+                              "content": "#6 · push"
+                            },
+                            "rr_dur": {
+                              "content": "2m 10s · now"
+                            },
+                            "rr_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            }
+                          },
+                          "width": "fill_container"
+                        },
+                        {
+                          "type": "ref",
+                          "id": "d12r2",
+                          "ref": "c_run_row",
+                          "descendants": {
+                            "rr_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "rr_title": {
+                              "content": "Bundle: include the .ico icon"
+                            },
+                            "rr_flow": {
+                              "content": "Release"
+                            },
+                            "rr_num": {
+                              "content": "#1 · push"
+                            },
+                            "rr_dur": {
+                              "content": "5m 12s · 2h"
+                            },
+                            "rr_branch": {
+                              "enabled": false
+                            },
+                            "rr_tag": {
+                              "enabled": true,
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v0.1.0"
+                                }
+                              }
+                            }
+                          },
+                          "width": "fill_container",
+                          "fill": "$bg/selected"
+                        },
+                        {
+                          "type": "ref",
+                          "id": "d12r3",
+                          "ref": "c_run_row",
+                          "descendants": {
+                            "rr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rr_title": {
+                              "content": "Bundle: include the .ico icon"
+                            },
+                            "rr_flow": {
+                              "content": "Release"
+                            },
+                            "rr_num": {
+                              "content": "#2 · push"
+                            },
+                            "rr_dur": {
+                              "content": "8m 25s · 2h"
+                            },
+                            "rr_branch": {
+                              "enabled": false
+                            },
+                            "rr_tag": {
+                              "enabled": true,
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v0.1.0"
+                                }
+                              }
+                            }
+                          },
+                          "width": "fill_container"
+                        },
+                        {
+                          "type": "ref",
+                          "id": "d12r4",
+                          "ref": "c_run_row",
+                          "descendants": {
+                            "rr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rr_title": {
+                              "content": "CI and release workflows, MIT license, README"
+                            },
+                            "rr_flow": {
+                              "content": "CI"
+                            },
+                            "rr_num": {
+                              "content": "#1 · push"
+                            },
+                            "rr_dur": {
+                              "content": "4m 40s · 2h"
+                            },
+                            "rr_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            }
+                          },
+                          "width": "fill_container"
+                        },
+                        {
+                          "type": "ref",
+                          "id": "d12r5",
+                          "ref": "c_run_row",
+                          "descendants": {
+                            "rr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rr_title": {
+                              "content": "Settings dialog with proxy and language switch"
+                            },
+                            "rr_flow": {
+                              "content": "CI"
+                            },
+                            "rr_num": {
+                              "content": "#0 · push"
+                            },
+                            "rr_dur": {
+                              "content": "4m 2s · 3h"
+                            },
+                            "rr_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            }
+                          },
+                          "width": "fill_container"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d12_detail",
+                  "name": "Run",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d12_dh",
+                      "name": "Header",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": [
+                        16,
+                        20,
+                        14,
+                        20
+                      ],
+                      "stroke": "$border/subtle",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d12_dht",
+                          "name": "Title",
+                          "width": "fill_container",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "d12_ds",
+                              "name": "icon circle-x",
+                              "library": "lucide",
+                              "icon": "circle-x",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$status/deleted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d12_dtt",
+                              "name": "d12_dtt",
+                              "content": "Bundle: include the .ico icon",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xl",
+                              "fontWeight": 600,
+                              "fill": "$text/primary",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12_rerun",
+                              "ref": "c_btn_primary",
+                              "descendants": {
+                                "bp_icon": {
+                                  "icon": "rotate-ccw"
+                                },
+                                "bp_label": {
+                                  "content": "Re-run failed jobs"
+                                }
+                              }
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12_cancel",
+                              "ref": "c_btn_secondary",
+                              "descendants": {
+                                "bs_icon": {
+                                  "icon": "circle-stop"
+                                },
+                                "bs_label": {
+                                  "content": "Cancel"
+                                }
+                              },
+                              "opacity": 0.5
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12_gh",
+                              "ref": "c_btn_secondary",
+                              "descendants": {
+                                "bs_icon": {
+                                  "icon": "external-link"
+                                },
+                                "bs_label": {
+                                  "content": "GitHub"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d12_dm",
+                          "name": "Meta",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "padding": [
+                            0,
+                            0,
+                            0,
+                            28
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "d12_dm1",
+                              "name": "d12_dm1",
+                              "content": "Release #1",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 600,
+                              "fill": "$text/secondary"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12_dm2",
+                              "ref": "c_chip_tag",
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v0.1.0"
+                                }
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "id": "d12_dm3",
+                              "name": "d12_dm3",
+                              "content": "c5c0244",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 500,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d12_dm4",
+                              "name": "d12_dm4",
+                              "content": "· push · started 2h ago · 5m 12s",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d12_dbody",
+                      "name": "Jobs and log",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d12_jobs",
+                          "name": "Jobs",
+                          "width": 270,
+                          "height": "fill_container",
+                          "layout": "vertical",
+                          "padding": 6,
+                          "gap": 2,
+                          "stroke": "$border/subtle",
+                          "strokeWidth": {
+                            "right": 1
+                          },
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "d12_jt",
+                              "name": "d12_jt",
+                              "content": "JOBS",
+                              "fontFamily": "$font/sans",
+                              "fontSize": 10,
+                              "fontWeight": 700,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.7
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12j6",
+                              "ref": "c_job_row",
+                              "descendants": {
+                                "jr_status": {
+                                  "icon": "circle-check",
+                                  "fill": "$status/added"
+                                },
+                                "jr_name": {
+                                  "content": "Build (macOS Apple Silicon)"
+                                },
+                                "jr_dur": {
+                                  "content": "4m 2s"
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12j7",
+                              "ref": "c_job_row",
+                              "descendants": {
+                                "jr_status": {
+                                  "icon": "circle-check",
+                                  "fill": "$status/added"
+                                },
+                                "jr_name": {
+                                  "content": "Build (macOS Intel)"
+                                },
+                                "jr_dur": {
+                                  "content": "4m 31s"
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12j8",
+                              "ref": "c_job_row",
+                              "descendants": {
+                                "jr_status": {
+                                  "icon": "circle-x",
+                                  "fill": "$status/deleted"
+                                },
+                                "jr_name": {
+                                  "content": "Build (Windows)"
+                                },
+                                "jr_dur": {
+                                  "content": "5m 12s"
+                                }
+                              },
+                              "width": "fill_container",
+                              "fill": "$bg/selected"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12j9",
+                              "ref": "c_job_row",
+                              "descendants": {
+                                "jr_status": {
+                                  "icon": "circle-check",
+                                  "fill": "$status/added"
+                                },
+                                "jr_name": {
+                                  "content": "Build (Linux)"
+                                },
+                                "jr_dur": {
+                                  "content": "3m 50s"
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12j10",
+                              "ref": "c_job_row",
+                              "descendants": {
+                                "jr_status": {
+                                  "icon": "circle-slash",
+                                  "fill": "$text/muted"
+                                },
+                                "jr_name": {
+                                  "content": "Publish release"
+                                },
+                                "jr_dur": {
+                                  "content": "—"
+                                }
+                              },
+                              "width": "fill_container"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d12_log",
+                          "name": "Log",
+                          "width": "fill_container",
+                          "height": "fill_container",
+                          "layout": "vertical",
+                          "clip": true,
+                          "fill": "$bg/app",
+                          "children": [
+                            {
+                              "type": "ref",
+                              "id": "d12s11",
+                              "ref": "c_step_row",
+                              "descendants": {
+                                "st_chev": {
+                                  "icon": "chevron-right"
+                                },
+                                "st_status": {
+                                  "icon": "circle-check",
+                                  "fill": "$status/added"
+                                },
+                                "st_name": {
+                                  "content": "Set up job"
+                                },
+                                "st_dur": {
+                                  "content": "2s"
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12s12",
+                              "ref": "c_step_row",
+                              "descendants": {
+                                "st_chev": {
+                                  "icon": "chevron-right"
+                                },
+                                "st_status": {
+                                  "icon": "circle-check",
+                                  "fill": "$status/added"
+                                },
+                                "st_name": {
+                                  "content": "Run actions/checkout@v7"
+                                },
+                                "st_dur": {
+                                  "content": "3s"
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12s13",
+                              "ref": "c_step_row",
+                              "descendants": {
+                                "st_chev": {
+                                  "icon": "chevron-right"
+                                },
+                                "st_status": {
+                                  "icon": "circle-check",
+                                  "fill": "$status/added"
+                                },
+                                "st_name": {
+                                  "content": "Run pnpm install --frozen-lockfile"
+                                },
+                                "st_dur": {
+                                  "content": "21s"
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12s14",
+                              "ref": "c_step_row",
+                              "descendants": {
+                                "st_chev": {
+                                  "icon": "chevron-down"
+                                },
+                                "st_status": {
+                                  "icon": "circle-x",
+                                  "fill": "$status/deleted"
+                                },
+                                "st_name": {
+                                  "content": "Run tauri-apps/tauri-action@v1"
+                                },
+                                "st_dur": {
+                                  "content": "4m 51s"
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12l15",
+                              "ref": "c_log_line",
+                              "descendants": {
+                                "ll_num": {
+                                  "content": "812"
+                                },
+                                "ll_text": {
+                                  "content": "   Compiling git-graph v0.1.0 (D:\\a\\git-graph\\src-tauri)"
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12l16",
+                              "ref": "c_log_line",
+                              "descendants": {
+                                "ll_num": {
+                                  "content": "813"
+                                },
+                                "ll_text": {
+                                  "content": "    Finished `release` profile [optimized] target(s) in 3m 18s"
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12l17",
+                              "ref": "c_log_line",
+                              "descendants": {
+                                "ll_num": {
+                                  "content": "814"
+                                },
+                                "ll_text": {
+                                  "content": "    Bundling Git Graph_0.1.0_x64_en-US.msi"
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12l18",
+                              "ref": "c_log_line",
+                              "descendants": {
+                                "ll_num": {
+                                  "content": "815"
+                                },
+                                "ll_text": {
+                                  "content": "failed to bundle project: `Couldn't find a .ico icon`",
+                                  "fill": "$status/deleted",
+                                  "fontWeight": 600
+                                }
+                              },
+                              "width": "fill_container",
+                              "fill": "$diff/del-bg"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12l19",
+                              "ref": "c_log_line",
+                              "descendants": {
+                                "ll_num": {
+                                  "content": "816"
+                                },
+                                "ll_text": {
+                                  "content": "Error failed to bundle project: `Couldn't find a .ico icon`",
+                                  "fill": "$status/deleted",
+                                  "fontWeight": 600
+                                }
+                              },
+                              "width": "fill_container",
+                              "fill": "$diff/del-bg"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12l20",
+                              "ref": "c_log_line",
+                              "descendants": {
+                                "ll_num": {
+                                  "content": "817"
+                                },
+                                "ll_text": {
+                                  "content": "[ELIFECYCLE] Command failed with exit code 1."
+                                }
+                              },
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "d12s21",
+                              "ref": "c_step_row",
+                              "descendants": {
+                                "st_chev": {
+                                  "icon": "chevron-right"
+                                },
+                                "st_status": {
+                                  "icon": "circle-slash",
+                                  "fill": "$text/muted"
+                                },
+                                "st_name": {
+                                  "content": "Post Run actions/checkout@v7"
+                                },
+                                "st_dur": {
+                                  "content": "0s"
+                                }
+                              },
+                              "width": "fill_container"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl13",
+          "name": "Label · 13 · Clone from GitHub",
+          "x": 0,
+          "y": 7610,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl13_t",
+              "name": "dl13_t",
+              "content": "13 · Clone from GitHub",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl13_s",
+              "name": "dl13_s",
+              "content": "Light · your and your organisations' repositories, newest first",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_clone",
+          "name": "13 · Clone from GitHub — Light",
+          "x": 0,
+          "y": 7700,
+          "width": 1440,
+          "height": 900,
+          "layout": "none",
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "children": [
+            {
+              "type": "frame",
+              "id": "d13_bg",
+              "name": "Welcome behind",
+              "x": 280,
+              "y": 170,
+              "width": 880,
+              "height": 560,
+              "layout": "none",
+              "clip": true,
+              "cornerRadius": 12,
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "d13_wel",
+                  "ref": "c_win_welcome",
+                  "descendants": {},
+                  "x": 0,
+                  "y": 0
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "d13_scrim",
+              "name": "Scrim",
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900,
+              "fill": "$bg/scrim"
+            },
+            {
+              "type": "frame",
+              "id": "d13_dlg",
+              "name": "Clone dialog",
+              "x": 340,
+              "y": 140,
+              "width": 760,
+              "height": 620,
+              "layout": "vertical",
+              "fill": "$bg/elevated",
+              "cornerRadius": "$radius/xl",
+              "stroke": "$border/strong",
+              "strokeWidth": 1,
+              "clip": true,
+              "effect": [
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "offset": {
+                    "x": 0,
+                    "y": 24
+                  },
+                  "blur": 60,
+                  "spread": 0,
+                  "color": "$shadow"
+                }
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d13_h",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "padding": [
+                    18,
+                    18,
+                    12,
+                    22
+                  ],
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "d13_hi",
+                      "name": "icon cloud-download",
+                      "library": "lucide",
+                      "icon": "cloud-download",
+                      "width": 18,
+                      "height": 18,
+                      "fill": "$text/secondary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "d13_ht",
+                      "name": "d13_ht",
+                      "content": "Clone from GitHub",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/xl",
+                      "fontWeight": 700,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d13_x",
+                      "ref": "c_btn_icon",
+                      "descendants": {
+                        "bi_icon": {
+                          "icon": "x"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d13_f",
+                  "name": "Filters",
+                  "width": "fill_container",
+                  "padding": [
+                    0,
+                    22,
+                    12,
+                    22
+                  ],
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "ref",
+                      "id": "d13_s",
+                      "ref": "c_search",
+                      "descendants": {
+                        "se_text": {
+                          "content": "Filter repositories"
+                        },
+                        "se_kbd": {
+                          "enabled": false
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d13_o1",
+                      "name": "Owner",
+                      "height": 28,
+                      "padding": [
+                        0,
+                        10
+                      ],
+                      "gap": 6,
+                      "cornerRadius": "$radius/md",
+                      "fill": "$bg/selected",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d13_o1t",
+                          "name": "d13_o1t",
+                          "content": "All",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 600,
+                          "fill": "$ref/head"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d13_o2",
+                      "name": "Owner",
+                      "height": 28,
+                      "padding": [
+                        0,
+                        10
+                      ],
+                      "gap": 6,
+                      "cornerRadius": "$radius/md",
+                      "alignItems": "center",
+                      "stroke": "$border/subtle",
+                      "strokeWidth": 1,
+                      "children": [
+                        {
+                          "type": "ref",
+                          "id": "d13_o2a",
+                          "ref": "c_avatar",
+                          "descendants": {
+                            "av_text": {
+                              "content": "C"
+                            }
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "id": "d13_o2t",
+                          "name": "d13_o2t",
+                          "content": "chenzizhen237-crypto",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 500,
+                          "fill": "$text/secondary"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d13_list",
+                  "name": "Repositories",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "padding": [
+                    0,
+                    12
+                  ],
+                  "gap": 2,
+                  "clip": true,
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d13_lg",
+                      "name": "Gap",
+                      "height": 6,
+                      "width": 1,
+                      "children": []
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d13_r1",
+                      "name": "Repo nib",
+                      "width": "fill_container",
+                      "height": 56,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "gap": 12,
+                      "alignItems": "center",
+                      "cornerRadius": "$radius/lg",
+                      "fill": "$bg/selected",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d13_r1_ic",
+                          "name": "Icon",
+                          "width": 32,
+                          "height": 32,
+                          "cornerRadius": "$radius/md",
+                          "fill": "$bg/surface",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "d13_r1_i",
+                              "name": "icon book-marked",
+                              "library": "lucide",
+                              "icon": "book-marked",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r1_t",
+                          "name": "Text",
+                          "layout": "vertical",
+                          "width": "fill_container",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d13_r1_nr",
+                              "name": "Name",
+                              "gap": 6,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "d13_r1_o",
+                                  "name": "d13_r1_o",
+                                  "content": "chenzizhen237-crypto/",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/muted"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d13_r1_n",
+                                  "name": "d13_r1_n",
+                                  "content": "nib",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 600,
+                                  "fill": "$text/primary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r1_d",
+                              "name": "d13_r1_d",
+                              "content": "A web recreation of the Pencil design editor",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r1_l",
+                          "name": "Language",
+                          "gap": 5,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "d13_r1_ld",
+                              "name": "dot",
+                              "width": 9,
+                              "height": 9,
+                              "fill": "#3178C6"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r1_lt",
+                              "name": "d13_r1_lt",
+                              "content": "TypeScript",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "d13_r1_a",
+                          "name": "d13_r1_a",
+                          "content": "12m",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 52,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d13_r2",
+                      "name": "Repo git-graph",
+                      "width": "fill_container",
+                      "height": 56,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "gap": 12,
+                      "alignItems": "center",
+                      "cornerRadius": "$radius/lg",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d13_r2_ic",
+                          "name": "Icon",
+                          "width": 32,
+                          "height": 32,
+                          "cornerRadius": "$radius/md",
+                          "fill": "$bg/surface",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "d13_r2_i",
+                              "name": "icon book-marked",
+                              "library": "lucide",
+                              "icon": "book-marked",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r2_t",
+                          "name": "Text",
+                          "layout": "vertical",
+                          "width": "fill_container",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d13_r2_nr",
+                              "name": "Name",
+                              "gap": 6,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "d13_r2_o",
+                                  "name": "d13_r2_o",
+                                  "content": "chenzizhen237-crypto/",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/muted"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d13_r2_n",
+                                  "name": "d13_r2_n",
+                                  "content": "git-graph",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 600,
+                                  "fill": "$text/primary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r2_d",
+                              "name": "d13_r2_d",
+                              "content": "A desktop commit graph for Git and GitHub",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r2_l",
+                          "name": "Language",
+                          "gap": 5,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "d13_r2_ld",
+                              "name": "dot",
+                              "width": 9,
+                              "height": 9,
+                              "fill": "#3178C6"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r2_lt",
+                              "name": "d13_r2_lt",
+                              "content": "TypeScript",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "d13_r2_a",
+                          "name": "d13_r2_a",
+                          "content": "2h",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 52,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d13_r3",
+                      "name": "Repo claude-mods",
+                      "width": "fill_container",
+                      "height": 56,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "gap": 12,
+                      "alignItems": "center",
+                      "cornerRadius": "$radius/lg",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d13_r3_ic",
+                          "name": "Icon",
+                          "width": 32,
+                          "height": 32,
+                          "cornerRadius": "$radius/md",
+                          "fill": "$bg/surface",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "d13_r3_i",
+                              "name": "icon lock",
+                              "library": "lucide",
+                              "icon": "lock",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r3_t",
+                          "name": "Text",
+                          "layout": "vertical",
+                          "width": "fill_container",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d13_r3_nr",
+                              "name": "Name",
+                              "gap": 6,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "d13_r3_o",
+                                  "name": "d13_r3_o",
+                                  "content": "chenzizhen237-crypto/",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/muted"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d13_r3_n",
+                                  "name": "d13_r3_n",
+                                  "content": "claude-mods",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 600,
+                                  "fill": "$text/primary"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "d13_r3_p",
+                                  "name": "Private",
+                                  "padding": [
+                                    0,
+                                    6
+                                  ],
+                                  "cornerRadius": 9,
+                                  "stroke": "$border/strong",
+                                  "strokeWidth": 1,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "d13_r3_pt",
+                                      "name": "d13_r3_pt",
+                                      "content": "Private",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": 10,
+                                      "fontWeight": 600,
+                                      "fill": "$text/muted"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r3_d",
+                              "name": "d13_r3_d",
+                              "content": "Mods for Claude Code: panes, pickers, live tasks",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r3_l",
+                          "name": "Language",
+                          "gap": 5,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "d13_r3_ld",
+                              "name": "dot",
+                              "width": 9,
+                              "height": 9,
+                              "fill": "#3178C6"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r3_lt",
+                              "name": "d13_r3_lt",
+                              "content": "TypeScript",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "d13_r3_a",
+                          "name": "d13_r3_a",
+                          "content": "5h",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 52,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d13_r4",
+                      "name": "Repo beat-ts",
+                      "width": "fill_container",
+                      "height": 56,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "gap": 12,
+                      "alignItems": "center",
+                      "cornerRadius": "$radius/lg",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d13_r4_ic",
+                          "name": "Icon",
+                          "width": 32,
+                          "height": 32,
+                          "cornerRadius": "$radius/md",
+                          "fill": "$bg/surface",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "d13_r4_i",
+                              "name": "icon lock",
+                              "library": "lucide",
+                              "icon": "lock",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r4_t",
+                          "name": "Text",
+                          "layout": "vertical",
+                          "width": "fill_container",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d13_r4_nr",
+                              "name": "Name",
+                              "gap": 6,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "d13_r4_o",
+                                  "name": "d13_r4_o",
+                                  "content": "chenzizhen237-crypto/",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/muted"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d13_r4_n",
+                                  "name": "d13_r4_n",
+                                  "content": "beat-ts",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 600,
+                                  "fill": "$text/primary"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "d13_r4_p",
+                                  "name": "Private",
+                                  "padding": [
+                                    0,
+                                    6
+                                  ],
+                                  "cornerRadius": 9,
+                                  "stroke": "$border/strong",
+                                  "strokeWidth": 1,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "d13_r4_pt",
+                                      "name": "d13_r4_pt",
+                                      "content": "Private",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": 10,
+                                      "fontWeight": 600,
+                                      "fill": "$text/muted"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r4_d",
+                              "name": "d13_r4_d",
+                              "content": "Rhythm game engine in TypeScript",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r4_l",
+                          "name": "Language",
+                          "gap": 5,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "d13_r4_ld",
+                              "name": "dot",
+                              "width": 9,
+                              "height": 9,
+                              "fill": "#3178C6"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r4_lt",
+                              "name": "d13_r4_lt",
+                              "content": "TypeScript",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "d13_r4_a",
+                          "name": "d13_r4_a",
+                          "content": "1d",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 52,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d13_r5",
+                      "name": "Repo danmu-collector",
+                      "width": "fill_container",
+                      "height": 56,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "gap": 12,
+                      "alignItems": "center",
+                      "cornerRadius": "$radius/lg",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d13_r5_ic",
+                          "name": "Icon",
+                          "width": 32,
+                          "height": 32,
+                          "cornerRadius": "$radius/md",
+                          "fill": "$bg/surface",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "d13_r5_i",
+                              "name": "icon lock",
+                              "library": "lucide",
+                              "icon": "lock",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r5_t",
+                          "name": "Text",
+                          "layout": "vertical",
+                          "width": "fill_container",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d13_r5_nr",
+                              "name": "Name",
+                              "gap": 6,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "d13_r5_o",
+                                  "name": "d13_r5_o",
+                                  "content": "chenzizhen237-crypto/",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/muted"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d13_r5_n",
+                                  "name": "d13_r5_n",
+                                  "content": "danmu-collector",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 600,
+                                  "fill": "$text/primary"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "d13_r5_p",
+                                  "name": "Private",
+                                  "padding": [
+                                    0,
+                                    6
+                                  ],
+                                  "cornerRadius": 9,
+                                  "stroke": "$border/strong",
+                                  "strokeWidth": 1,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "d13_r5_pt",
+                                      "name": "d13_r5_pt",
+                                      "content": "Private",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": 10,
+                                      "fontWeight": 600,
+                                      "fill": "$text/muted"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r5_d",
+                              "name": "d13_r5_d",
+                              "content": "Collects live-stream comments into a searchable hub",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r5_l",
+                          "name": "Language",
+                          "gap": 5,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "d13_r5_ld",
+                              "name": "dot",
+                              "width": 9,
+                              "height": 9,
+                              "fill": "#DEA584"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r5_lt",
+                              "name": "d13_r5_lt",
+                              "content": "Rust",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "d13_r5_a",
+                          "name": "d13_r5_a",
+                          "content": "3d",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 52,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d13_r6",
+                      "name": "Repo jap-learn",
+                      "width": "fill_container",
+                      "height": 56,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "gap": 12,
+                      "alignItems": "center",
+                      "cornerRadius": "$radius/lg",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d13_r6_ic",
+                          "name": "Icon",
+                          "width": 32,
+                          "height": 32,
+                          "cornerRadius": "$radius/md",
+                          "fill": "$bg/surface",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "d13_r6_i",
+                              "name": "icon book-marked",
+                              "library": "lucide",
+                              "icon": "book-marked",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r6_t",
+                          "name": "Text",
+                          "layout": "vertical",
+                          "width": "fill_container",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d13_r6_nr",
+                              "name": "Name",
+                              "gap": 6,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "d13_r6_o",
+                                  "name": "d13_r6_o",
+                                  "content": "chenzizhen237-crypto/",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/muted"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d13_r6_n",
+                                  "name": "d13_r6_n",
+                                  "content": "jap-learn",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 600,
+                                  "fill": "$text/primary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r6_d",
+                              "name": "d13_r6_d",
+                              "content": "Japanese vocabulary drills",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d13_r6_l",
+                          "name": "Language",
+                          "gap": 5,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "d13_r6_ld",
+                              "name": "dot",
+                              "width": 9,
+                              "height": 9,
+                              "fill": "#F05138"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d13_r6_lt",
+                              "name": "d13_r6_lt",
+                              "content": "Swift",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "d13_r6_a",
+                          "name": "d13_r6_a",
+                          "content": "1w",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 52,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d13_ft",
+                  "name": "Footer",
+                  "width": "fill_container",
+                  "padding": [
+                    14,
+                    22
+                  ],
+                  "gap": 10,
+                  "alignItems": "center",
+                  "fill": "$bg/surface",
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "top": 1
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d13_fl",
+                      "name": "d13_fl",
+                      "content": "Clone into",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 500,
+                      "fill": "$text/secondary"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d13_fi",
+                      "ref": "c_input",
+                      "descendants": {
+                        "in_text": {
+                          "content": "~/Downloads/Code/nib",
+                          "fontFamily": "$font/mono",
+                          "fontSize": 12
+                        }
+                      },
+                      "width": "fill_container"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d13_fb",
+                      "ref": "c_btn_secondary",
+                      "descendants": {
+                        "bs_icon": {
+                          "icon": "folder"
+                        },
+                        "bs_label": {
+                          "content": "Choose…"
+                        }
+                      }
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d13_go",
+                      "ref": "c_btn_primary",
+                      "descendants": {
+                        "bp_icon": {
+                          "icon": "cloud-download"
+                        },
+                        "bp_label": {
+                          "content": "Clone"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl14",
+          "name": "Label · 14 · Publish to GitHub",
+          "x": 1540,
+          "y": 7610,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl14_t",
+              "name": "dl14_t",
+              "content": "14 · Publish to GitHub",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl14_s",
+              "name": "dl14_s",
+              "content": "Light · for a repository without a remote · gh repo create --source --push",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_publish",
+          "name": "14 · Publish to GitHub — Light",
+          "x": 1540,
+          "y": 7700,
+          "width": 1440,
+          "height": 900,
+          "layout": "none",
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d14_win",
+              "ref": "c_win_history",
+              "descendants": {},
+              "x": 0,
+              "y": 0
+            },
+            {
+              "type": "rectangle",
+              "id": "d14_scrim",
+              "name": "Scrim",
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900,
+              "fill": "$bg/scrim",
+              "cornerRadius": 12
+            },
+            {
+              "type": "frame",
+              "id": "d14_dlg",
+              "name": "Publish dialog",
+              "x": 440,
+              "y": 150,
+              "width": 560,
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 24,
+              "fill": "$bg/elevated",
+              "cornerRadius": "$radius/xl",
+              "stroke": "$border/strong",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "offset": {
+                    "x": 0,
+                    "y": 24
+                  },
+                  "blur": 60,
+                  "spread": 0,
+                  "color": "$shadow"
+                }
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "d14_h",
+                  "name": "Header",
+                  "width": "fill_container",
+                  "gap": 12,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "d14_hi",
+                      "name": "Icon",
+                      "width": 36,
+                      "height": 36,
+                      "cornerRadius": "$radius/lg",
+                      "fill": "$bg/surface",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "d14_hii",
+                          "name": "icon cloud-upload",
+                          "library": "lucide",
+                          "icon": "cloud-upload",
+                          "width": 18,
+                          "height": 18,
+                          "fill": "$text/secondary"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d14_htx",
+                      "name": "Title",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "d14_ht",
+                          "name": "d14_ht",
+                          "content": "Publish to GitHub",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/xl",
+                          "fontWeight": 700,
+                          "fill": "$text/primary"
+                        },
+                        {
+                          "type": "text",
+                          "id": "d14_hs",
+                          "name": "d14_hs",
+                          "content": "claude-mods has no remote yet. This creates the repository and pushes main.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": "fill_container",
+                          "textGrowth": "fixed-width"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d14_owner",
+                  "name": "Owner",
+                  "width": "fill_container",
+                  "gap": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d14_owner_l",
+                      "name": "d14_owner_l",
+                      "content": "Owner",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 500,
+                      "fill": "$text/primary",
+                      "width": 110,
+                      "textGrowth": "fixed-width",
+                      "textAlign": "right"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d14_owner_c",
+                      "ref": "c_select",
+                      "descendants": {
+                        "se2_text": {
+                          "content": "chenzizhen237-crypto"
+                        }
+                      },
+                      "width": "fill_container"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d14_name",
+                  "name": "Name",
+                  "width": "fill_container",
+                  "gap": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d14_name_l",
+                      "name": "d14_name_l",
+                      "content": "Name",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 500,
+                      "fill": "$text/primary",
+                      "width": 110,
+                      "textGrowth": "fixed-width",
+                      "textAlign": "right"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d14_name_c",
+                      "ref": "c_input",
+                      "descendants": {
+                        "in_text": {
+                          "content": "claude-mods"
+                        }
+                      },
+                      "width": "fill_container"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d14_desc",
+                  "name": "Description",
+                  "width": "fill_container",
+                  "gap": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d14_desc_l",
+                      "name": "d14_desc_l",
+                      "content": "Description",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 500,
+                      "fill": "$text/primary",
+                      "width": 110,
+                      "textGrowth": "fixed-width",
+                      "textAlign": "right"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d14_desc_c",
+                      "ref": "c_input",
+                      "descendants": {
+                        "in_text": {
+                          "content": "Optional",
+                          "fill": "$text/faint"
+                        }
+                      },
+                      "width": "fill_container"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d14_vis",
+                  "name": "Visibility",
+                  "width": "fill_container",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d14_visl",
+                      "name": "d14_visl",
+                      "content": "Visibility",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 500,
+                      "fill": "$text/primary",
+                      "width": 110,
+                      "textGrowth": "fixed-width",
+                      "textAlign": "right"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "d14_visc",
+                      "name": "Options",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d14_v1",
+                          "name": "Private",
+                          "width": "fill_container",
+                          "padding": 12,
+                          "gap": 10,
+                          "cornerRadius": "$radius/lg",
+                          "stroke": "$border/focus",
+                          "strokeWidth": 1.5,
+                          "fill": "$bg/selected",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d14_v1_r",
+                              "name": "Radio",
+                              "width": 16,
+                              "height": 16,
+                              "cornerRadius": 8,
+                              "stroke": "$accent",
+                              "strokeWidth": 5,
+                              "fill": "$bg/app",
+                              "children": []
+                            },
+                            {
+                              "type": "frame",
+                              "id": "d14_v1_t",
+                              "name": "Text",
+                              "layout": "vertical",
+                              "gap": 2,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "d14_v1_tt",
+                                  "name": "Title",
+                                  "gap": 6,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "d14_v1_i",
+                                      "name": "icon lock",
+                                      "library": "lucide",
+                                      "icon": "lock",
+                                      "width": 14,
+                                      "height": 14,
+                                      "fill": "$text/secondary"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "d14_v1_tn",
+                                      "name": "d14_v1_tn",
+                                      "content": "Private",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 600,
+                                      "fill": "$text/primary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d14_v1_ts",
+                                  "name": "d14_v1_ts",
+                                  "content": "Only you and people you invite can see it.",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 400,
+                                  "fill": "$text/muted",
+                                  "width": "fill_container",
+                                  "textGrowth": "fixed-width"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "d14_v2",
+                          "name": "Public",
+                          "width": "fill_container",
+                          "padding": 12,
+                          "gap": 10,
+                          "cornerRadius": "$radius/lg",
+                          "stroke": "$border/strong",
+                          "strokeWidth": 1,
+                          "fill": "$bg/app",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "d14_v2_r",
+                              "name": "Radio",
+                              "width": 16,
+                              "height": 16,
+                              "cornerRadius": 8,
+                              "stroke": "$border/strong",
+                              "strokeWidth": 1.5,
+                              "fill": "$bg/app",
+                              "children": []
+                            },
+                            {
+                              "type": "frame",
+                              "id": "d14_v2_t",
+                              "name": "Text",
+                              "layout": "vertical",
+                              "gap": 2,
+                              "width": "fill_container",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "d14_v2_tt",
+                                  "name": "Title",
+                                  "gap": 6,
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "d14_v2_i",
+                                      "name": "icon globe",
+                                      "library": "lucide",
+                                      "icon": "globe",
+                                      "width": 14,
+                                      "height": 14,
+                                      "fill": "$text/secondary"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "d14_v2_tn",
+                                      "name": "d14_v2_tn",
+                                      "content": "Public",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fontWeight": 600,
+                                      "fill": "$text/primary"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d14_v2_ts",
+                                  "name": "d14_v2_ts",
+                                  "content": "Anyone on the internet can see it.",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/sm",
+                                  "fontWeight": 400,
+                                  "fill": "$text/muted",
+                                  "width": "fill_container",
+                                  "textGrowth": "fixed-width"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d14_remote",
+                  "name": "Remote name",
+                  "width": "fill_container",
+                  "gap": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "d14_remote_l",
+                      "name": "d14_remote_l",
+                      "content": "Remote name",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 500,
+                      "fill": "$text/primary",
+                      "width": 110,
+                      "textGrowth": "fixed-width",
+                      "textAlign": "right"
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d14_remote_c",
+                      "ref": "c_input",
+                      "descendants": {
+                        "in_text": {
+                          "content": "origin"
+                        }
+                      },
+                      "width": "fill_container"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d14_ft",
+                  "name": "Footer",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "justifyContent": "end",
+                  "padding": [
+                    8,
+                    0,
+                    0,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "ref",
+                      "id": "d14_cancel",
+                      "ref": "c_btn_secondary",
+                      "descendants": {
+                        "bs_icon": {
+                          "enabled": false
+                        },
+                        "bs_label": {
+                          "content": "Cancel"
+                        }
+                      }
+                    },
+                    {
+                      "type": "ref",
+                      "id": "d14_go",
+                      "ref": "c_btn_primary",
+                      "descendants": {
+                        "bp_icon": {
+                          "icon": "cloud-upload"
+                        },
+                        "bp_label": {
+                          "content": "Publish repository"
+                        }
+                      }
                     }
                   ]
                 }

@@ -8,7 +8,9 @@ import {
   ChevronDown,
   ChevronRight,
   ChevronsUpDown,
+  CirclePlay,
   Cloud,
+  CloudUpload,
   FileDiff,
   FolderGit2,
   GitBranch,
@@ -37,6 +39,7 @@ import { cx } from '../lib/cx'
 import { actions, openTerminal } from '../lib/git'
 import { t } from '../lib/i18n'
 import { isConflict } from '../lib/parse'
+import { useMenus } from './menus'
 import { type Settings, updateSettings, useSettings } from '../lib/settings'
 import { useApp } from '../state'
 import { Button, Chip, caps, IconButton, Kbd, StageDot, ToolButton } from './ui'
@@ -191,6 +194,7 @@ function Item({
   title,
   onClick,
   onDoubleClick,
+  onContextMenu,
 }: {
   icon: typeof GitBranch
   color: string
@@ -203,6 +207,7 @@ function Item({
   title?: string
   onClick?: () => void
   onDoubleClick?: () => void
+  onContextMenu?: (e: React.MouseEvent) => void
 }) {
   return (
     <button
@@ -210,6 +215,7 @@ function Item({
       className={cx('flex h-6.5 w-full items-center gap-1.75 rounded-md pr-2 text-left', indent ? 'pl-6.5' : 'pl-2.5', selected ? 'bg-selected' : 'hover:bg-hover')}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
+      onContextMenu={onContextMenu}
       title={title ?? label}
     >
       <Icon size={14} color={color} className="shrink-0" />
@@ -229,7 +235,8 @@ const trackMeta = (track?: string) => ({
 })
 
 export function Sidebar({ width }: { width: number }) {
-  const { repo, view, setView, query, setQuery, act, prompt } = useApp()
+  const { repo, view, setView, query, setQuery, act, prompt, openMenu, setPublishOpen } = useApp()
+  const menus = useMenus()
   const remotes = useMemo(() => {
     const groups = new Map<string, string[]>()
     for (const r of repo?.refs ?? []) {
@@ -290,6 +297,7 @@ export function Sidebar({ width }: { width: number }) {
           onClick={() => setView('pulls')}
           title={t('Pull requests (⌘4)')}
         />
+        <Item icon={CirclePlay} color="var(--status-renamed)" label={t('Actions')} selected={view === 'actions'} onClick={() => setView('actions')} title={t('Actions (⌘5)')} />
       </Section>
       <Section label={t('BRANCHES')} onAdd={() => void newBranch()}>
         {locals.map(b => {
@@ -307,10 +315,16 @@ export function Sidebar({ width }: { width: number }) {
               title={t('{name} — click to show its history, double-click to check out', { name: b.name })}
               onClick={() => scopeTo(b.name)}
               onDoubleClick={() => !b.isHead && checkout(b.name)}
+              onContextMenu={e => openMenu(e, menus.branch(b))}
             />
           )
         })}
       </Section>
+      {remotes.size === 0 && (
+        <Section label={t('REMOTES')}>
+          <Item icon={CloudUpload} color="var(--text-secondary)" label={t('Publish to GitHub…')} onClick={() => setPublishOpen(true)} />
+        </Section>
+      )}
       {remotes.size > 0 && (
         <Section label={t('REMOTES')}>
           {[...remotes].map(([remote, names]) => (
@@ -335,6 +349,10 @@ export function Sidebar({ width }: { width: number }) {
                     title={t('{remote}/{n} — click to show its history, double-click to check out a tracking branch', { remote, n })}
                     onClick={() => scopeTo(`${remote}/${n}`)}
                     onDoubleClick={() => void act('Checkout', actions.checkoutRemote(`${remote}/${n}`), { done: t('Tracking {remote}/{n}', { remote, n }) })}
+                    onContextMenu={e => {
+                      const ref = repo.refs.find(r => r.kind === 'remote' && r.name === `${remote}/${n}`)
+                      if (ref) openMenu(e, menus.branch(ref))
+                    }}
                   />
                 ))}
             </div>
@@ -352,6 +370,7 @@ export function Sidebar({ width }: { width: number }) {
               meta={tag.date.replace(/ ago$/, '')}
               selected={query.branch === `refs/tags/${tag.name}`}
               onClick={() => scopeTo(`refs/tags/${tag.name}`)}
+              onContextMenu={e => openMenu(e, menus.tag(tag.name))}
             />
           ))}
         </Section>

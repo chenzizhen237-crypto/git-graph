@@ -89,6 +89,10 @@ export async function runJobs(root: string, runId: number): Promise<Job[]> {
   return data.jobs
 }
 
+// biome-ignore lint/suspicious/noControlCharactersInRegex: matching terminal escape codes is the point
+const ANSI = /\x1b\[[0-9;]*[A-Za-z]/g
+const TOOL_ERROR = /^\s*(error\b|Error:|failed to |npm ERR!|\[ELIFECYCLE\])/
+
 export type LogSection = { title: string; lines: { n: number; text: string; error: boolean }[]; failed: boolean }
 
 /** A job's log split into the steps GitHub marks with `##[group]`, timestamps removed. */
@@ -97,16 +101,19 @@ export function parseJobLog(raw: string): LogSection[] {
   let cur: LogSection = { title: 'Set up job', lines: [], failed: false }
   let n = 0
   for (const rawLine of raw.split(/\r?\n/)) {
-    const line = rawLine.replace(/^﻿?\d{4}-\d\d-\d\dT[\d:.]+Z ?/, '')
+    // Drop the timestamp (and a leading byte-order mark) and terminal colour codes.
+    const line = rawLine.replace(/^\uFEFF?\d{4}-\d\d-\d\dT[\d:.]+Z ?/, '').replace(ANSI, '')
     if (line.startsWith('##[group]')) {
       if (cur.lines.length || sections.length) sections.push(cur)
       cur = { title: line.slice(9), lines: [], failed: false }
       continue
     }
     if (line.startsWith('##[endgroup]')) continue
-    const error = line.startsWith('##[error]')
-    if (error) cur.failed = true
-    cur.lines.push({ n: ++n, text: error ? line.slice(9) : line.replace(/^##\[\w+\]/, ''), error })
+    const marked = line.startsWith('##[error]')
+    if (marked) cur.failed = true
+    const text = marked ? line.slice(9) : line.replace(/^##\[\w+\]/, '')
+    // Tools print their own errors before GitHub's marker; light those up too.
+    cur.lines.push({ n: ++n, text, error: marked || TOOL_ERROR.test(text) })
   }
   sections.push(cur)
   return sections.filter(s => s.lines.length || s.title)
@@ -114,7 +121,8 @@ export function parseJobLog(raw: string): LogSection[] {
 
 export async function jobLog(root: string, jobId: number): Promise<LogSection[]> {
   const { owner, name } = await repoSlug(root)
-  return parseJobLog(await rest(`/repos/${owner}/${name}/actions/jobs/${jobId}/logs`, 'text/plain'))
+  // GitHub answers with a redirect to the plain-text log; the default JSON Accept header is required.
+  return parseJobLog(await rest(`/repos/${owner}/${name}/actions/jobs/${jobId}/logs`))
 }
 
 export const runActions = {

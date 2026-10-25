@@ -18,6 +18,8 @@ Pull requests use the [GitHub CLI](https://cli.github.com): run `gh auth login` 
 - **Changes**: stage / unstage / discard, resolve conflicts, commit, amend, commit & push.
 - **Stashes**: apply, pop, drop.
 - **Pull requests** (⌘4): list, conversation, review, merge, checks, files, new PR.
+- **Actions** (⌘5): workflow runs, jobs and step logs with errors highlighted; re-run failed jobs, cancel. CI status (✓ ✗ ●) beside every commit in History.
+- **GitHub repositories**: clone from your and your organisations' repositories, publish a local repository, fork; right-click commits, files, branches and tags to open them on GitHub or copy a permalink.
 - **Diffs**: unified or side by side, wrap, pop out to full window.
 - **Layout**: resizable panels, collapsible sidebar, overlay scrollbars.
 - **Settings** (⌘,): auto-fetch, proxy for git and GitHub, theme, English / 简体中文.
@@ -53,7 +55,7 @@ src/views/         History, Changes, Stashes, Pull requests, Welcome
 
 ## Keys
 
-⌘K palette · ⌘1–4 History / Changes / Stashes / Pull requests · ⌘, settings · ⌘\ sidebar · ⌘R refresh · ⌘O switch repository · ⌘⇧F fetch · ⌘⇧P push · ↑↓ / j k move · ⌘↩ commit
+⌘K palette · ⌘1–5 History / Changes / Stashes / Pull requests / Actions · ⌘, settings · ⌘\ sidebar · ⌘R refresh · ⌘O switch repository · ⌘⇧F fetch · ⌘⇧P push · ↑↓ / j k move · ⌘↩ commit
 
 ## License
 

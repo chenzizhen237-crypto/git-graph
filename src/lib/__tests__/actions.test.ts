@@ -33,3 +33,14 @@ test('durations and links', () => {
   expect(links.file(base, 'abc', 'src/a b.ts', 12)).toBe('https://github.com/o/r/blob/abc/src/a%20b.ts#L12')
   expect(links.branch(base, 'claude/x')).toBe('https://github.com/o/r/tree/claude/x')
 })
+
+test('colour codes are stripped and tool errors before the marker are lit', () => {
+  const raw = [
+    '2026-10-24T14:08:00.1Z \x1b[1m\x1b[92m    Finished\x1b[0m release',
+    '2026-10-24T14:08:01.1Z failed to bundle project: no .ico',
+    '2026-10-24T14:08:02.1Z all good',
+  ].join('\n')
+  const lines = parseJobLog(raw)[0]!.lines
+  expect(lines.map(l => l.text)).toEqual(['    Finished release', 'failed to bundle project: no .ico', 'all good'])
+  expect(lines.map(l => l.error)).toEqual([false, true, false])
+})
