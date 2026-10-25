@@ -49,7 +49,7 @@ export async function summarise(path: string, folder: string): Promise<LocalRepo
   const gh = /github\.com[:/]([^/]+\/[^/]+?)(?:\.git)?\/?$/.exec(remote.stdout.trim())?.[1]
   return {
     path,
-    name: path.slice(path.lastIndexOf('/') + 1),
+    name: path.split(/[\\/]/).pop() ?? path,
     folder,
     branch: st.branch.replace(/^No commits yet on /, ''),
     changes: st.changes.length,

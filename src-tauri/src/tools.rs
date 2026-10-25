@@ -26,9 +26,14 @@ const EDITORS: &[(&str, &str, &str)] = &[
 ];
 
 fn on_path(cmd: &str) -> bool {
-    crate::search_path()
-        .split(':')
-        .any(|dir| Path::new(dir).join(cmd).is_file())
+    let path = if cfg!(windows) {
+        std::env::var_os("PATH").unwrap_or_default()
+    } else {
+        crate::search_path().into()
+    };
+    // Windows installs editor commands as `code.cmd` and the like.
+    let names = [cmd.to_string(), format!("{cmd}.cmd"), format!("{cmd}.exe")];
+    std::env::split_paths(&path).any(|dir| names.iter().any(|n| dir.join(n).is_file()))
 }
 
 /// The editors from the list that are installed here.
@@ -79,8 +84,17 @@ pub fn open_in_editor(editor: String, path: String) -> Result<(), String> {
     } else if editor.is_empty() {
         return crate::open_with(&[&path]);
     } else if EDITORS.iter().any(|&(_, _, c)| c == editor) {
-        let mut c = Command::new(&editor);
-        c.arg(&path).env("PATH", crate::search_path());
+        // `code` and friends are .cmd scripts on Windows, which only cmd runs.
+        let mut c = if cfg!(windows) {
+            let mut c = Command::new("cmd");
+            c.args(["/C", &editor]);
+            c
+        } else {
+            let mut c = Command::new(&editor);
+            c.env("PATH", crate::search_path());
+            c
+        };
+        c.arg(&path);
         c
     } else {
         return Err(format!("unknown editor {editor}"));

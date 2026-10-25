@@ -136,7 +136,10 @@ mod tests {
         walk(&base, 3, &mut out);
         let names: Vec<String> = out
             .iter()
-            .map(|p| p.trim_start_matches(base.to_str().unwrap()).to_string())
+            .map(|p| {
+                p.trim_start_matches(base.to_str().unwrap())
+                    .replace('\\', "/")
+            })
             .collect();
         assert_eq!(names, vec!["/a", "/group/b"]);
         std::fs::remove_dir_all(&base).unwrap();

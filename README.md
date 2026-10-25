@@ -28,9 +28,10 @@ Pull requests use the [GitHub CLI](https://cli.github.com): run `gh auth login` 
 - **Pull requests** (⌘4): list, conversation, review, merge, checks, files, new PR.
 - **Actions** (⌘5): workflow runs, jobs and step logs with errors highlighted; re-run failed jobs, cancel. CI status (✓ ✗ ●) beside every commit in History.
 - **GitHub repositories**: clone from your and your organisations' repositories, publish a local repository, fork; right-click commits, files, branches and tags to open them on GitHub or copy a permalink.
-- **Diffs**: unified or side by side, wrap, pop out to full window.
+- **Diffs**: unified or side by side, wrap, ignore whitespace, pop out to full window; open files in your editor, diff tool or merge tool.
+- **Your repositories**: the Welcome screen lists the repositories already in your code folders, with branch, changes and last activity.
 - **Layout**: resizable panels, collapsible sidebar, overlay scrollbars.
-- **Settings** (⌘,): auto-fetch, proxy for git and GitHub, theme, English / 简体中文.
+- **Settings** (⌘,): git identity and commit signing (GPG / SSH), auto-stash, fonts and zoom, graph columns and date format, commit template and subject guide, external tools, desktop notifications (CI, new commits, updates), auto-fetch, proxy, theme, English / 简体中文.
 - ⌘K palette and shortcuts throughout.
 
 ## Build from source
