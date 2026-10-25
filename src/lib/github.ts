@@ -80,8 +80,8 @@ export type PrDetail = Omit<PrSummary, 'commentCount'> & {
 
 export type RepoInfo = { nameWithOwner: string; url: string; defaultBranchRef: { name: string }; viewerPermission: string }
 
-const graphql = <T>(query: string, variables: Record<string, unknown> = {}) => invoke<T>('github_graphql', { query, variables })
-const rest = (path: string, accept?: string) => invoke<string>('github_rest', { path, accept: accept ?? null })
+export const graphql = <T>(query: string, variables: Record<string, unknown> = {}) => invoke<T>('github_graphql', { query, variables })
+export const rest = (path: string, accept?: string) => invoke<string>('github_rest', { path, accept: accept ?? null })
 
 /** owner/name of the repository's GitHub remote (origin first). */
 const slugs = new Map<string, Promise<{ owner: string; name: string }>>()
