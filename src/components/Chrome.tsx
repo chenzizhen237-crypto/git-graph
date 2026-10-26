@@ -94,15 +94,21 @@ export function TitleBar({
   return (
     <div className={bar} data-tauri-drag-region>
       <IconButton icon={sidebar ? PanelLeftClose : PanelLeftOpen} onClick={onToggleSidebar} title={t(sidebar ? 'Hide sidebar (⌘\\)' : 'Show sidebar (⌘\\)')} />
-      <button type="button" className="flex items-center gap-1.75 rounded-md px-2 py-1 text-left hover:bg-hover" onClick={onSwitchRepo} title={t('Switch repository')}>
-        <img className="size-5.5 rounded-[5.5px]" src={appIcon} alt="" />
-        <div>
-          <div className="leading-tight font-bold">{repo.name}</div>
-          <div className="text-[10px] text-muted">{repo.root.replace(/^\/Users\/[^/]+/, '~')}</div>
+      <button
+        type="button"
+        className="flex max-w-60 min-w-0 items-center gap-1.75 rounded-md px-2 py-1 text-left hover:bg-hover"
+        onClick={onSwitchRepo}
+        title={`${t('Switch repository')}\n${repo.root}`}
+      >
+        <img className="size-5.5 shrink-0 rounded-[5.5px]" src={appIcon} alt="" />
+        {/* Long names and worktree paths cut off with an ellipsis instead of wrapping out of the bar. */}
+        <div className="min-w-0">
+          <div className="truncate leading-tight font-bold">{repo.name}</div>
+          <div className="truncate text-[10px] text-muted">{repo.root.replace(/^\/Users\/[^/]+/, '~')}</div>
         </div>
-        <ChevronsUpDown size={13} className="text-muted" />
+        <ChevronsUpDown size={13} className="shrink-0 text-muted" />
       </button>
-      <button type="button" onClick={() => setPaletteOpen(true)} title={t('Switch branch (⌘K)')}>
+      <button type="button" className="min-w-0" onClick={() => setPaletteOpen(true)} title={t('Switch branch (⌘K)')}>
         <Chip kind="head" name={detached ? t('detached {slice}', { slice: repo.head.slice(0, 7) }) : repo.branch} large icon={GitBranch} synced={!!repo.upstream} />
       </button>
       <div className="flex-1 self-stretch" data-tauri-drag-region />
@@ -133,9 +139,9 @@ export function TitleBar({
       />
       <div className="flex-1 self-stretch" data-tauri-drag-region />
       <IconButton icon={SettingsIcon} onClick={onSettings} title={t('Settings (⌘,)')} />
-      <button type="button" className="flex h-7 w-60 items-center gap-1.5 rounded-md bg-surface pr-1.5 pl-2 text-muted" onClick={() => setPaletteOpen(true)}>
-        <Search size={13} />
-        <span className="flex-1 text-left text-faint">{t('Search commits, branches')}</span>
+      <button type="button" className="flex h-7 w-60 min-w-32 items-center gap-1.5 rounded-md bg-surface pr-1.5 pl-2 text-muted" onClick={() => setPaletteOpen(true)}>
+        <Search size={13} className="shrink-0" />
+        <span className="min-w-0 flex-1 truncate text-left text-faint">{t('Search commits, branches')}</span>
         <Kbd>⌘K</Kbd>
       </button>
       <Button kind="primary" icon={primary.icon} onClick={primary.run} disabled={primary.disabled || !!busy}>

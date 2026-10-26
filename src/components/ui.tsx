@@ -14,7 +14,7 @@ export function ToolButton({ icon: Icon, label, busy, badge, ...rest }: { icon: 
   return (
     <button
       type="button"
-      className="relative flex min-w-10.5 flex-col items-center gap-0.5 rounded-md px-2 py-1 text-xs font-medium text-secondary enabled:hover:bg-hover disabled:opacity-40"
+      className="relative flex min-w-10.5 shrink-0 flex-col items-center gap-0.5 rounded-md px-2 py-1 text-xs font-medium whitespace-nowrap text-secondary enabled:hover:bg-hover disabled:opacity-40"
       {...rest}
     >
       {busy ? <Loader2 size={16} className="animate-spin" /> : <Icon size={16} />}
