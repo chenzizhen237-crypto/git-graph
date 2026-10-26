@@ -12,10 +12,11 @@ import { actions, findRoot } from './lib/git'
 import { t } from './lib/i18n'
 import { checkRuns, newerRelease, notify, REPO_SLUG } from './lib/notify'
 import { getSettings, stepZoom, useSettings } from './lib/settings'
-import { AppProvider, readRecents, rememberRepo, useApp } from './state'
+import { AppProvider, openNextIn, readRecents, rememberRepo, useApp, type View } from './state'
 import { ChangesView } from './views/Changes'
 import { ActionsView } from './views/Actions'
 import { HistoryView } from './views/History'
+import { OverviewView } from './views/Overview'
 import { PullRequestsView } from './views/PullRequests'
 import { StashesView } from './views/Stashes'
 import { Welcome } from './views/Welcome'
@@ -56,15 +57,22 @@ export function App() {
 
   if (!root) return <Welcome onOpen={setRoot} />
   return (
-    <AppProvider root={root}>
-      <Workspace onSwitchRepo={() => setRoot(null)} />
+    // Keyed by the repository, so switching straight from one to another starts afresh.
+    <AppProvider key={root} root={root}>
+      <Workspace
+        onSwitchRepo={() => setRoot(null)}
+        onOpenRepo={(path, view) => {
+          openNextIn(view)
+          setRoot(path)
+        }}
+      />
     </AppProvider>
   )
 }
 
 let updateChecked = false
 
-function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
+function Workspace({ onSwitchRepo, onOpenRepo }: { onSwitchRepo: () => void; onOpenRepo: (path: string, view: View) => void }) {
   const app = useApp()
   const { repo, view, setView, paletteOpen, setPaletteOpen, refresh, act } = app
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -151,6 +159,9 @@ function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
       } else if (k === '4') {
         handled()
         setView('pulls')
+      } else if (k === '6') {
+        handled()
+        setView('overview')
       } else if (k === '=' || k === '+' || k === '-' || k === '0') {
         handled()
         stepZoom(k === '0' ? 0 : k === '-' ? -1 : 1)
@@ -191,6 +202,7 @@ function Workspace({ onSwitchRepo }: { onSwitchRepo: () => void }) {
         {view === 'stashes' && <StashesView />}
         {view === 'pulls' && <PullRequestsView />}
         {view === 'actions' && <ActionsView />}
+        {view === 'overview' && <OverviewView onOpenRepo={path => (path === app.root ? setView('actions') : onOpenRepo(path, 'actions'))} />}
       </div>
       <StatusBar />
       {paletteOpen && <CommandPalette onSwitchRepo={onSwitchRepo} onSettings={() => setSettingsOpen(true)} />}
