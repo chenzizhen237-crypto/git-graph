@@ -40,7 +40,7 @@ The old flat names (`bg`, `ink`, `muted`, `head`…) are kept as aliases so the 
 
 - **Atoms**: Button/Toolbar · Primary · Secondary · Icon, Kbd, Avatar, Stage dot, Chip/Head · Local · Remote · Tag, Search field, Scope button, Segmented, Tab/Active · Inactive
 - **Graph/Cell**: one 4-lane cell. Each instance switches on the pieces it needs (`g_l*` full lane, `g_t*`/`g_b*` half lanes, `g_n*` nodes, `g_d**` curved edges, `g_ring` HEAD)
-- **Rows**: Row/Commit (with toggleable chip slots), Row/WIP, Row/Column header, Row/File, Menu/Item, Sidebar/Section, Sidebar/Item
+- **Rows**: Row/Commit (with toggleable chip slots), Row/WIP, Row/Column header, Row/File, Menu/Item, Menu/Context, Menu/Repositories (see `docs/repo-dropdown.md`), Sidebar/Section, Sidebar/Item
 - **Diff**: Diff/File header, Diff/Hunk, Diff/Context, Diff/Added, Diff/Removed
 - **Chrome**: Window/Title bar, Banner/Operation, Window/Status bar, Window/Sidebar, App icon (+ Small)
 - **Windows**: Window/History, Window/Changes, Window/Welcome, Command palette

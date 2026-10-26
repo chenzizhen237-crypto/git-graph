@@ -9,16 +9,19 @@ import {
   ChevronRight,
   ChevronsUpDown,
   CirclePlay,
+  CloudDownload,
   Cloud,
   CloudUpload,
   FileDiff,
   FolderGit2,
+  FolderOpen,
   GitBranch,
   GitGraph,
   GitMerge,
   GitPullRequest,
   House,
   LayoutDashboard,
+  LayoutGrid,
   Monitor,
   Moon,
   PanelLeftClose,
@@ -34,33 +37,33 @@ import {
   TriangleAlert,
   X,
 } from 'lucide-react'
-import { type ReactNode, useMemo, useState } from 'react'
+import { type KeyboardEvent, type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 
 import appIcon from '../../assets/icon/app-icon.svg'
 import { cx } from '../lib/cx'
-import { actions, openTerminal } from '../lib/git'
+import { actions, findRoot, openTerminal } from '../lib/git'
 import { openInEditor } from '../lib/tools'
 import { t } from '../lib/i18n'
 import { repoState, useOverview } from '../lib/overview'
 import { isConflict } from '../lib/parse'
 import { useMenus } from './menus'
 import { type Settings, updateSettings, useSettings } from '../lib/settings'
-import { useApp } from '../state'
+import { forgetRepo, type Recent, readRecents, useApp } from '../state'
 import { Button, Chip, caps, IconButton, Kbd, StageDot, ToolButton } from './ui'
 
 const Sep = () => <div className="h-6 w-px shrink-0 bg-strong" />
 
-export function TitleBar({
-  onSwitchRepo,
-  sidebar,
-  onToggleSidebar,
-  onSettings,
-}: {
-  onSwitchRepo: () => void
-  sidebar: boolean
-  onToggleSidebar: () => void
-  onSettings: () => void
-}) {
+/** What the repository dropdown can do; the window owns which repository is open. */
+export type RepoSwitch = {
+  /** Opens a repository root in this window. */
+  open: (root: string) => void
+  openFolder: () => void
+  clone: () => void
+  /** Back to the Welcome screen. */
+  all: () => void
+}
+
+export function TitleBar({ repos, sidebar, onToggleSidebar, onSettings }: { repos: RepoSwitch; sidebar: boolean; onToggleSidebar: () => void; onSettings: () => void }) {
   const app = useApp()
   const { repo, act, busy, prompt, setPaletteOpen } = app
   // Leaves room on the left for the native traffic lights.
@@ -95,20 +98,7 @@ export function TitleBar({
   return (
     <div className={bar} data-tauri-drag-region>
       <IconButton icon={sidebar ? PanelLeftClose : PanelLeftOpen} onClick={onToggleSidebar} title={t(sidebar ? 'Hide sidebar (⌘\\)' : 'Show sidebar (⌘\\)')} />
-      <button
-        type="button"
-        className="flex max-w-60 min-w-28 items-center gap-1.75 rounded-md px-2 py-1 text-left hover:bg-hover"
-        onClick={onSwitchRepo}
-        title={`${repo.name}\n${repo.root}\n${t('Switch repository')}`}
-      >
-        <img className="size-5.5 shrink-0 rounded-[5.5px]" src={appIcon} alt="" />
-        {/* Long names and worktree paths cut off with an ellipsis instead of wrapping out of the bar. */}
-        <div className="min-w-0">
-          <div className="truncate leading-tight font-bold">{repo.name}</div>
-          <div className="truncate text-[10px] text-muted">{repo.root.replace(/^\/Users\/[^/]+/, '~')}</div>
-        </div>
-        <ChevronsUpDown size={13} className="shrink-0 text-muted" />
-      </button>
+      <RepoPicker repos={repos} />
       <button type="button" className="flex max-w-55 min-w-24 shrink-[2]" onClick={() => setPaletteOpen(true)}>
         <Chip
           kind="head"
@@ -162,6 +152,159 @@ export function TitleBar({
       <Button kind="primary" className="shrink-0" icon={primary.icon} onClick={primary.run} disabled={primary.disabled || !!busy}>
         {primary.label}
       </Button>
+    </div>
+  )
+}
+
+const home = (p: string) => p.replace(/^\/Users\/[^/]+/, '~')
+
+/** The title bar's repo picker; it opens Menu/Repositories underneath. */
+function RepoPicker({ repos }: { repos: RepoSwitch }) {
+  const { repo } = useApp()
+  const button = useRef<HTMLButtonElement>(null)
+  const [anchor, setAnchor] = useState<DOMRect | null>(null)
+  if (!repo) return null
+  return (
+    <>
+      <button
+        ref={button}
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={!!anchor}
+        className={cx('flex max-w-60 min-w-28 items-center gap-1.75 rounded-md px-2 py-1 text-left hover:bg-hover', anchor && 'bg-hover')}
+        onClick={() => setAnchor(button.current?.getBoundingClientRect() ?? null)}
+        title={`${repo.name}\n${repo.root}\n${t('Switch repository')}`}
+      >
+        <img className="size-5.5 shrink-0 rounded-[5.5px]" src={appIcon} alt="" />
+        {/* Long names and worktree paths cut off with an ellipsis instead of wrapping out of the bar. */}
+        <div className="min-w-0">
+          <div className="truncate leading-tight font-bold">{repo.name}</div>
+          <div className="truncate text-[10px] text-muted">{home(repo.root)}</div>
+        </div>
+        <ChevronsUpDown size={13} className="shrink-0 text-muted" />
+      </button>
+      {anchor && <RepoMenu anchor={anchor} repos={repos} onClose={() => setAnchor(null)} />}
+    </>
+  )
+}
+
+type RepoEntry = { kind: 'repo'; recent: Recent } | { kind: 'action'; icon: typeof Check; label: string; kbd?: string; run: () => void }
+
+/** Menu/Repositories: the current and recent repositories, a filter, then open, clone and all. */
+function RepoMenu({ anchor, repos, onClose }: { anchor: DOMRect; repos: RepoSwitch; onClose: () => void }) {
+  const { repo, toast } = useApp()
+  const [filter, setFilter] = useState('')
+  const [at, setAt] = useState(0)
+
+  const entries = useMemo<RepoEntry[]>(() => {
+    if (!repo) return []
+    const q = filter.trim().toLowerCase()
+    const current: Recent = { path: repo.root, branch: repo.branch.startsWith('HEAD') ? undefined : repo.branch, at: Date.now() }
+    const recents = [current, ...readRecents().filter(r => r.path !== repo.root)]
+      .filter(r => !q || r.path.toLowerCase().includes(q))
+      .slice(0, 8)
+      .map(recent => ({ kind: 'repo' as const, recent }))
+    const action = (icon: typeof Check, label: string, run: () => void, kbd?: string): RepoEntry => ({ kind: 'action', icon, label, kbd, run })
+    return [
+      ...recents,
+      action(FolderOpen, t('Open repository…'), repos.openFolder, '⌘O'),
+      action(CloudDownload, t('Clone from GitHub…'), repos.clone),
+      action(LayoutGrid, t('All repositories'), repos.all, '⇧⌘O'),
+    ]
+  }, [repo, filter, repos])
+  const shown = entries.filter(e => e.kind === 'repo').length
+
+  useEffect(() => {
+    window.addEventListener('blur', onClose)
+    return () => window.removeEventListener('blur', onClose)
+  }, [onClose])
+
+  const pick = async (path: string) => {
+    if (path === repo?.root) return
+    const root = await findRoot(path).catch(() => null)
+    if (root) return repos.open(root)
+    forgetRepo(path)
+    toast({ kind: 'error', title: t('{path} is no longer a Git repository.', { path: home(path) }) })
+  }
+  const run = (e: RepoEntry | undefined) => {
+    if (!e) return
+    onClose()
+    if (e.kind === 'repo') void pick(e.recent.path)
+    else e.run()
+  }
+
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') onClose()
+    else if (e.key === 'ArrowDown') setAt(i => (i + 1) % entries.length)
+    else if (e.key === 'ArrowUp') setAt(i => (i - 1 + entries.length) % entries.length)
+    else if (e.key === 'Enter') run(entries[at])
+    else return
+    e.preventDefault()
+  }
+
+  return (
+    <div className="fixed inset-0 z-[65]" onMouseDown={onClose}>
+      <div
+        role="menu"
+        className="absolute flex w-85 flex-col gap-px rounded-lg border border-strong bg-elevated p-1.25 shadow-[0_12px_32px_var(--shadow)]"
+        style={{ left: anchor.left, top: anchor.bottom + 4 }}
+        onMouseDown={e => e.stopPropagation()}
+        onKeyDown={onKey}
+      >
+        <div className="flex h-7 shrink-0 items-center gap-1.5 rounded-md bg-surface px-2 text-muted focus-within:ring-1 focus-within:ring-focus">
+          <Search size={13} />
+          <input
+            autoFocus
+            className="min-w-0 flex-1 bg-transparent text-primary outline-none placeholder:text-faint"
+            placeholder={t('Filter repositories')}
+            value={filter}
+            onChange={e => {
+              setFilter(e.target.value)
+              setAt(0)
+            }}
+          />
+        </div>
+        <div className={cx(caps, 'px-2 pt-2 pb-1')}>{t('RECENT')}</div>
+        {!shown && <div className="px-2 py-2.5 text-muted">{t('No recent repository matches.')}</div>}
+        {entries.map((e, i) =>
+          e.kind === 'repo' ? (
+            <button
+              key={e.recent.path}
+              type="button"
+              role="menuitem"
+              className={cx('flex h-10 w-full shrink-0 items-center gap-2.5 rounded-md px-2 text-left', e.recent.path === repo?.root ? 'bg-selected' : i === at && 'bg-hover')}
+              onMouseEnter={() => setAt(i)}
+              onClick={() => run(e)}
+              title={e.recent.branch ? `${e.recent.path}\n${e.recent.branch}` : e.recent.path}
+            >
+              <span className={cx('flex size-6.5 shrink-0 items-center justify-center rounded-md text-secondary', e.recent.path === repo?.root ? 'bg-elevated' : 'bg-surface')}>
+                <FolderGit2 size={14} />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-semibold">{e.recent.path.split('/').pop()}</span>
+                <span className="block truncate text-xs text-muted">{home(e.recent.path)}</span>
+              </span>
+              {e.recent.branch && <Chip kind="local" name={e.recent.branch} className="max-w-36!" />}
+              <Check size={14} className={cx('shrink-0 text-accent', e.recent.path !== repo?.root && 'invisible')} />
+            </button>
+          ) : (
+            <div key={e.label} className="contents">
+              {i === shown && <div className="my-1 h-px shrink-0 bg-subtle" />}
+              <button
+                type="button"
+                role="menuitem"
+                className={cx('flex h-7 w-full shrink-0 items-center gap-2.5 rounded-md px-2.5 text-left', i === at && 'bg-selected')}
+                onMouseEnter={() => setAt(i)}
+                onClick={() => run(e)}
+              >
+                <e.icon size={15} className="text-secondary" />
+                <span className="flex-1">{e.label}</span>
+                {e.kbd && <Kbd>{e.kbd}</Kbd>}
+              </button>
+            </div>
+          ),
+        )}
+      </div>
     </div>
   )
 }

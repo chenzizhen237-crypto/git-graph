@@ -6370,6 +6370,45 @@
               "children": []
             },
             {
+              "type": "frame",
+              "id": "tl_update",
+              "name": "Update available",
+              "enabled": false,
+              "height": 24,
+              "padding": [
+                0,
+                9,
+                0,
+                7
+              ],
+              "gap": 5,
+              "alignItems": "center",
+              "cornerRadius": 999,
+              "fill": "$bg/selected",
+              "stroke": "$accent",
+              "strokeWidth": 1,
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "tlu_icon",
+                  "library": "lucide",
+                  "icon": "circle-arrow-down",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$accent"
+                },
+                {
+                  "type": "text",
+                  "id": "tlu_label",
+                  "content": "Update 0.5.0",
+                  "fontFamily": "$font/sans",
+                  "fontSize": 12,
+                  "fontWeight": 600,
+                  "fill": "$accent"
+                }
+              ]
+            },
+            {
               "type": "ref",
               "id": "tl_settings",
               "ref": "c_btn_icon",
@@ -13776,6 +13815,53 @@
             },
             {
               "type": "frame",
+              "id": "rc_rel",
+              "name": "Release",
+              "width": "fill_container",
+              "gap": 5,
+              "alignItems": "center",
+              "padding": [
+                0,
+                0,
+                0,
+                23
+              ],
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "rc_rel_i",
+                  "library": "lucide",
+                  "icon": "package",
+                  "width": 12,
+                  "height": 12,
+                  "fill": "$status/deleted"
+                },
+                {
+                  "type": "ref",
+                  "id": "rc_rel_tag",
+                  "ref": "c_chip_tag",
+                  "descendants": {
+                    "cht_label": {
+                      "content": "v0.3.0"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "rc_rel_t",
+                  "name": "rc_rel_t",
+                  "content": "release build failed · 2d · 12 commits since",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                }
+              ]
+            },
+            {
+              "type": "frame",
               "id": "rc_dep",
               "name": "Deployments",
               "width": "fill_container",
@@ -13867,6 +13953,490 @@
               ]
             }
           ]
+        },
+        {
+          "type": "frame",
+          "id": "c_toast_update",
+          "name": "Toast/Actions",
+          "reusable": true,
+          "x": 0,
+          "y": 5780,
+          "width": 400,
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            12,
+            12,
+            12,
+            12
+          ],
+          "cornerRadius": "$radius/lg",
+          "fill": "$bg/elevated",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 8
+            },
+            "blur": 24,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "frame",
+              "id": "tu_head",
+              "name": "Head",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "start",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "tu_badge",
+                  "name": "Icon",
+                  "width": 28,
+                  "height": 28,
+                  "cornerRadius": 999,
+                  "fill": "$bg/selected",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "tu_icon",
+                      "library": "lucide",
+                      "icon": "circle-arrow-down",
+                      "width": 16,
+                      "height": 16,
+                      "fill": "$accent"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "tu_text",
+                  "name": "Text",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "tu_title",
+                      "content": "Git Graph v0.5.0 is available",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "tu_detail",
+                      "content": "You have 0.4.0. Updating downloads the new version, quits Git Graph and opens it again.",
+                      "fontFamily": "$font/sans",
+                      "fontSize": 12,
+                      "fill": "$text/secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "lineHeight": 1.4
+                    }
+                  ]
+                },
+                {
+                  "type": "icon",
+                  "id": "tu_close",
+                  "name": "Close (later)",
+                  "library": "lucide",
+                  "icon": "x",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$text/muted"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "tu_actions",
+              "name": "Actions",
+              "width": "fill_container",
+              "gap": 8,
+              "alignItems": "center",
+              "padding": [
+                0,
+                0,
+                0,
+                38
+              ],
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "tu_update",
+                  "ref": "c_btn_primary",
+                  "descendants": {
+                    "bp_icon": {
+                      "icon": "download"
+                    },
+                    "bp_label": {
+                      "content": "Update now"
+                    }
+                  }
+                },
+                {
+                  "type": "ref",
+                  "id": "tu_notes",
+                  "ref": "c_btn_secondary",
+                  "descendants": {
+                    "bs_icon": {
+                      "icon": "file-text"
+                    },
+                    "bs_label": {
+                      "content": "Release notes"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "tu_foot",
+              "name": "Footer",
+              "width": "fill_container",
+              "gap": 6,
+              "alignItems": "center",
+              "padding": [
+                10,
+                0,
+                0,
+                38
+              ],
+              "stroke": "$border/subtle",
+              "strokeWidth": {
+                "top": 1
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "tu_later",
+                  "content": "Remind me later",
+                  "fontFamily": "$font/sans",
+                  "fontSize": 12,
+                  "fontWeight": 500,
+                  "fill": "$text/secondary"
+                },
+                {
+                  "type": "text",
+                  "id": "tu_dot",
+                  "content": "·",
+                  "fontFamily": "$font/sans",
+                  "fontSize": 12,
+                  "fill": "$text/faint"
+                },
+                {
+                  "type": "text",
+                  "id": "tu_never",
+                  "content": "Don't check for updates",
+                  "fontFamily": "$font/sans",
+                  "fontSize": 12,
+                  "fontWeight": 500,
+                  "fill": "$text/secondary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_toast_ok",
+          "name": "Toast/Success",
+          "reusable": true,
+          "x": 460,
+          "y": 5780,
+          "width": 400,
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 12,
+          "cornerRadius": "$radius/lg",
+          "fill": "$bg/elevated",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 8
+            },
+            "blur": 24,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "frame",
+              "id": "c_toast_ok_h",
+              "name": "Head",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "start",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "c_toast_ok_i",
+                  "library": "lucide",
+                  "icon": "circle-check",
+                  "width": 16,
+                  "height": 16,
+                  "fill": "$status/added"
+                },
+                {
+                  "type": "frame",
+                  "id": "c_toast_ok_t",
+                  "name": "Text",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "c_toast_ok_tt",
+                      "content": "Pushed to origin/main",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary"
+                    }
+                  ]
+                },
+                {
+                  "type": "icon",
+                  "id": "c_toast_ok_x",
+                  "library": "lucide",
+                  "icon": "x",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$text/muted"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_toast_err",
+          "name": "Toast/Error",
+          "reusable": true,
+          "x": 460,
+          "y": 5850,
+          "width": 400,
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 12,
+          "cornerRadius": "$radius/lg",
+          "fill": "$bg/elevated",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 8
+            },
+            "blur": 24,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "frame",
+              "id": "c_toast_err_h",
+              "name": "Head",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "start",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "c_toast_err_i",
+                  "library": "lucide",
+                  "icon": "circle-alert",
+                  "width": 16,
+                  "height": 16,
+                  "fill": "$status/deleted"
+                },
+                {
+                  "type": "frame",
+                  "id": "c_toast_err_t",
+                  "name": "Text",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "c_toast_err_tt",
+                      "content": "Push failed",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "c_toast_err_td",
+                      "content": "! [rejected] main -> main (fetch first)",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fill": "$text/secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "lineHeight": 1.4
+                    }
+                  ]
+                },
+                {
+                  "type": "icon",
+                  "id": "c_toast_err_x",
+                  "library": "lucide",
+                  "icon": "x",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$text/muted"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_toast_info",
+          "name": "Toast/Info · with action",
+          "reusable": true,
+          "x": 460,
+          "y": 5960,
+          "width": 400,
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 12,
+          "cornerRadius": "$radius/lg",
+          "fill": "$bg/elevated",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "offset": {
+              "x": 0,
+              "y": 8
+            },
+            "blur": 24,
+            "spread": 0,
+            "color": "$shadow"
+          },
+          "children": [
+            {
+              "type": "frame",
+              "id": "c_toast_info_h",
+              "name": "Head",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "start",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "c_toast_info_i",
+                  "library": "lucide",
+                  "icon": "bell",
+                  "width": 16,
+                  "height": 16,
+                  "fill": "$accent"
+                },
+                {
+                  "type": "frame",
+                  "id": "c_toast_info_t",
+                  "name": "Text",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "c_toast_info_tt",
+                      "content": "CI passed on claude/update-toasts",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "c_toast_info_td",
+                      "content": "Build · 2m 14s",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fill": "$text/secondary",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "lineHeight": 1.4
+                    }
+                  ]
+                },
+                {
+                  "type": "icon",
+                  "id": "c_toast_info_x",
+                  "library": "lucide",
+                  "icon": "x",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$text/muted"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "c_toast_info_a",
+              "name": "Actions",
+              "width": "fill_container",
+              "gap": 8,
+              "padding": [
+                0,
+                0,
+                0,
+                26
+              ],
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "c_toast_info_b",
+                  "ref": "c_btn_secondary",
+                  "descendants": {
+                    "bs_icon": {
+                      "icon": "play"
+                    },
+                    "bs_label": {
+                      "content": "Open run"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "c_toast_note",
+          "x": 0,
+          "y": 5740,
+          "content": "Toasts: one stack, bottom right. Success hides after 4 s, error after 9 s; toasts with actions stay until answered. One per key: a repeat replaces the old one.",
+          "fontFamily": "$font/sans",
+          "fontSize": 13,
+          "fill": "$text/muted",
+          "width": 860,
+          "textGrowth": "fixed-width"
         }
       ],
       "x": 3080,
@@ -24535,6 +25105,9 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -24578,6 +25151,9 @@
                               "enabled": false
                             },
                             "rc_dep": {
+                              "enabled": false
+                            },
+                            "rc_rel": {
                               "enabled": false
                             }
                           }
@@ -24635,6 +25211,19 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel_i": {
+                              "fill": "$status/added"
+                            },
+                            "rc_rel_tag": {
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v2.1.0"
+                                }
+                              }
+                            },
+                            "rc_rel_t": {
+                              "content": "3w · 4 commits since"
                             }
                           }
                         },
@@ -24685,6 +25274,9 @@
                             },
                             "rc_dep1_n": {
                               "content": "github-pages"
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -24729,6 +25321,9 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -24772,6 +25367,9 @@
                               "enabled": false
                             },
                             "rc_dep": {
+                              "enabled": false
+                            },
+                            "rc_rel": {
                               "enabled": false
                             }
                           }
@@ -24891,11 +25489,182 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "ovl_se",
+                          "id": "ovl_sr",
                           "name": "Section",
                           "width": "fill_container",
                           "padding": [
                             6,
+                            10,
+                            4,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_srl",
+                              "name": "ovl_srl",
+                              "content": "LATEST RELEASE",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.5
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_rel",
+                          "name": "Release",
+                          "width": "fill_container",
+                          "height": 30,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovl_rel_i",
+                              "library": "lucide",
+                              "icon": "package",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$status/deleted"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "ovl_rel_tag",
+                              "ref": "c_chip_tag",
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v0.3.0"
+                                }
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_rel_n",
+                              "name": "ovl_rel_n",
+                              "content": "local repositories, Fonts, Git…",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 400,
+                              "fill": "$text/primary",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_rel_w",
+                              "name": "ovl_rel_w",
+                              "content": "6 files · 2d",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ovl_rel_x",
+                              "library": "lucide",
+                              "icon": "external-link",
+                              "width": 13,
+                              "height": 13,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_rel_mw",
+                          "name": "Since",
+                          "width": "fill_container",
+                          "padding": [
+                            0,
+                            10,
+                            4,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_rel_m",
+                              "name": "ovl_rel_m",
+                              "content": "12 commits on main since this release",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "x": 0,
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_rc1",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (Windows)"
+                            },
+                            "jr_dur": {
+                              "content": "5m 12s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_rc2",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (macOS Apple Silicon)"
+                            },
+                            "jr_dur": {
+                              "content": "4m 2s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_rc3",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Publish release"
+                            },
+                            "jr_dur": {
+                              "content": "28s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_se",
+                          "name": "Section",
+                          "width": "fill_container",
+                          "padding": [
+                            14,
                             10,
                             4,
                             10
@@ -25914,6 +26683,9 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -25957,6 +26729,9 @@
                               "enabled": false
                             },
                             "rc_dep": {
+                              "enabled": false
+                            },
+                            "rc_rel": {
                               "enabled": false
                             }
                           }
@@ -26014,6 +26789,19 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel_i": {
+                              "fill": "$status/added"
+                            },
+                            "rc_rel_tag": {
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v2.1.0"
+                                }
+                              }
+                            },
+                            "rc_rel_t": {
+                              "content": "3w · 4 commits since"
                             }
                           }
                         },
@@ -26064,6 +26852,9 @@
                             },
                             "rc_dep1_n": {
                               "content": "github-pages"
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -26108,6 +26899,9 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -26151,6 +26945,9 @@
                               "enabled": false
                             },
                             "rc_dep": {
+                              "enabled": false
+                            },
+                            "rc_rel": {
                               "enabled": false
                             }
                           }
@@ -26270,11 +27067,182 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "ovd_se",
+                          "id": "ovd_sr",
                           "name": "Section",
                           "width": "fill_container",
                           "padding": [
                             6,
+                            10,
+                            4,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_srl",
+                              "name": "ovd_srl",
+                              "content": "LATEST RELEASE",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.5
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_rel",
+                          "name": "Release",
+                          "width": "fill_container",
+                          "height": 30,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovd_rel_i",
+                              "library": "lucide",
+                              "icon": "package",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$status/deleted"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "ovd_rel_tag",
+                              "ref": "c_chip_tag",
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v0.3.0"
+                                }
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_rel_n",
+                              "name": "ovd_rel_n",
+                              "content": "local repositories, Fonts, Git…",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 400,
+                              "fill": "$text/primary",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_rel_w",
+                              "name": "ovd_rel_w",
+                              "content": "6 files · 2d",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ovd_rel_x",
+                              "library": "lucide",
+                              "icon": "external-link",
+                              "width": 13,
+                              "height": 13,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_rel_mw",
+                          "name": "Since",
+                          "width": "fill_container",
+                          "padding": [
+                            0,
+                            10,
+                            4,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_rel_m",
+                              "name": "ovd_rel_m",
+                              "content": "12 commits on main since this release",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "x": 0,
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_rc1",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (Windows)"
+                            },
+                            "jr_dur": {
+                              "content": "5m 12s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_rc2",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (macOS Apple Silicon)"
+                            },
+                            "jr_dur": {
+                              "content": "4m 2s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_rc3",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Publish release"
+                            },
+                            "jr_dur": {
+                              "content": "28s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_se",
+                          "name": "Section",
+                          "width": "fill_container",
+                          "padding": [
+                            14,
                             10,
                             4,
                             10
@@ -26803,6 +27771,866 @@
                               "content": "3m 3s"
                             }
                           }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl27",
+          "name": "Label · 27 · Update available",
+          "x": 0,
+          "y": 12210,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl27_t",
+              "content": "27 · Update available",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl27_s",
+              "content": "Light · A newer release was found on launch: the title bar shows an Update pill and a toast stays until it is answered",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_update",
+          "name": "27 · Update available — Light",
+          "x": 0,
+          "y": 12300,
+          "width": 1440,
+          "height": 900,
+          "layout": "none",
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d27_win",
+              "ref": "c_win_history",
+              "x": 0,
+              "y": 0,
+              "descendants": {
+                "wh_title": {
+                  "descendants": {
+                    "tl_update": {
+                      "enabled": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "ref",
+              "id": "d27_toast",
+              "ref": "c_toast_update",
+              "x": 1024,
+              "y": 707
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl28",
+          "name": "Label · 28 · Settings — About",
+          "x": 1540,
+          "y": 12210,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl28_t",
+              "content": "28 · Settings — About",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl28_s",
+              "content": "Dark · Update now and Check for updates live here; the startup check can be switched back on after \"Don't check\"",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_set_about",
+          "name": "28 · Settings — About — Dark",
+          "x": 1540,
+          "y": 12300,
+          "width": 1440,
+          "height": 900,
+          "layout": "none",
+          "theme": {
+            "Mode": "Dark",
+            "Stage": "Clean"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d28_win",
+              "ref": "c_win_history",
+              "x": 0,
+              "y": 0,
+              "descendants": {
+                "wh_title": {
+                  "descendants": {
+                    "tl_update": {
+                      "enabled": true
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "rectangle",
+              "id": "d28_scrim",
+              "name": "Scrim",
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900,
+              "fill": "$bg/scrim",
+              "cornerRadius": 12
+            },
+            {
+              "type": "frame",
+              "id": "i2hi4",
+              "name": "Settings dialog",
+              "x": 230,
+              "y": 120,
+              "width": 980,
+              "height": 660,
+              "cornerRadius": "$radius/xl",
+              "clip": true,
+              "fill": "$bg/app",
+              "stroke": "$border/strong",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "offset": {
+                    "x": 0,
+                    "y": 24
+                  },
+                  "blur": 60,
+                  "spread": 0,
+                  "color": "$shadow"
+                }
+              ],
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "c3Kkz",
+                  "ref": "c_set_navlist",
+                  "height": "fill_container",
+                  "descendants": {
+                    "sni_general": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "settings"
+                        },
+                        "sn_label": {
+                          "content": "General"
+                        }
+                      }
+                    },
+                    "sni_appearance": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "palette"
+                        },
+                        "sn_label": {
+                          "content": "Appearance"
+                        }
+                      }
+                    },
+                    "sni_network": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "globe"
+                        },
+                        "sn_label": {
+                          "content": "Network"
+                        }
+                      }
+                    },
+                    "sni_github": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "github"
+                        },
+                        "sn_label": {
+                          "content": "GitHub"
+                        }
+                      }
+                    },
+                    "sni_diff": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "file-diff"
+                        },
+                        "sn_label": {
+                          "content": "Diff & editor"
+                        }
+                      }
+                    },
+                    "sni_keys": {
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "keyboard"
+                        },
+                        "sn_label": {
+                          "content": "Shortcuts"
+                        }
+                      }
+                    },
+                    "sni_about": {
+                      "fill": "$bg/selected",
+                      "descendants": {
+                        "sn_icon": {
+                          "icon": "info",
+                          "fill": "$ref/head"
+                        },
+                        "sn_label": {
+                          "content": "About",
+                          "fontWeight": 600
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "BLpHz",
+                  "name": "Content",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "gap": 22,
+                  "padding": [
+                    26,
+                    32,
+                    32,
+                    24
+                  ],
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "2Mhlz",
+                      "name": "Header",
+                      "width": "fill_container",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "IVHpj",
+                          "content": "About",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/2xl",
+                          "fill": "$text/primary",
+                          "fontWeight": 700,
+                          "width": "fill_container",
+                          "textGrowth": "fixed-width"
+                        },
+                        {
+                          "type": "ref",
+                          "id": "bh2EY",
+                          "ref": "c_btn_icon",
+                          "descendants": {
+                            "bi_icon": {
+                              "icon": "x"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "u28_ver",
+                      "name": "Settings/Row · Version",
+                      "width": "fill_container",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "u28_ver_lb",
+                          "name": "Label",
+                          "width": 200,
+                          "padding": [
+                            6,
+                            0,
+                            0,
+                            0
+                          ],
+                          "justifyContent": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "u28_ver_l",
+                              "content": "Version",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fill": "$text/primary",
+                              "fontWeight": 500,
+                              "width": 200,
+                              "textGrowth": "fixed-width",
+                              "textAlign": "right"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "u28_ver_b",
+                          "name": "Control",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "u28_ver_c",
+                              "name": "Controls",
+                              "gap": 10,
+                              "alignItems": "center",
+                              "height": 30,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "u28_v",
+                                  "content": "0.4.0",
+                                  "fontFamily": "$font/mono",
+                                  "fontSize": "$text/md",
+                                  "fill": "$text/primary"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "u28_upd",
+                      "name": "Settings/Row · Updates",
+                      "width": "fill_container",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "u28_upd_lb",
+                          "name": "Label",
+                          "width": 200,
+                          "padding": [
+                            6,
+                            0,
+                            0,
+                            0
+                          ],
+                          "justifyContent": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "u28_upd_l",
+                              "content": "Updates",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fill": "$text/primary",
+                              "fontWeight": 500,
+                              "width": 200,
+                              "textGrowth": "fixed-width",
+                              "textAlign": "right"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "u28_upd_b",
+                          "name": "Control",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "u28_upd_c",
+                              "name": "Controls",
+                              "gap": 10,
+                              "alignItems": "center",
+                              "height": 30,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "u28_b_up",
+                                  "name": "Update button · Update to 0.5.0",
+                                  "height": 28,
+                                  "padding": [
+                                    0,
+                                    10
+                                  ],
+                                  "gap": 6,
+                                  "alignItems": "center",
+                                  "cornerRadius": "$radius/md",
+                                  "fill": "$accent",
+                                  "strokeWidth": 0,
+                                  "opacity": 1,
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "u28_b_up_i",
+                                      "library": "lucide",
+                                      "icon": "download",
+                                      "width": 14,
+                                      "height": 14,
+                                      "fill": "$text/on-accent"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "u28_b_up_t",
+                                      "content": "Update to 0.5.0",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fill": "$text/on-accent",
+                                      "fontWeight": 600
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "u28_b_rel",
+                                  "name": "Update button · Release notes",
+                                  "height": 28,
+                                  "padding": [
+                                    0,
+                                    10
+                                  ],
+                                  "gap": 6,
+                                  "alignItems": "center",
+                                  "cornerRadius": "$radius/md",
+                                  "fill": "$bg/elevated",
+                                  "stroke": "$border/strong",
+                                  "strokeWidth": 1,
+                                  "opacity": 1,
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "u28_b_rel_i",
+                                      "library": "lucide",
+                                      "icon": "file-text",
+                                      "width": 14,
+                                      "height": 14,
+                                      "fill": "$text/secondary"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "u28_b_rel_t",
+                                      "content": "Release notes",
+                                      "fontFamily": "$font/sans",
+                                      "fontSize": "$text/md",
+                                      "fill": "$text/primary",
+                                      "fontWeight": 500
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "u28_upd_h",
+                              "content": "0.5.0 is available. Updating downloads it from GitHub, checks its signature, quits Git Graph and opens the new version.",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width",
+                              "lineHeight": 1.45
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "u28_states",
+                      "name": "Button states",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 10,
+                      "padding": [
+                        14,
+                        0,
+                        0,
+                        224
+                      ],
+                      "stroke": "$border/subtle",
+                      "strokeWidth": {
+                        "top": 1
+                      },
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "u28_st_l",
+                          "content": "The same button, through a check:",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fill": "$text/muted"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "u28_st_row",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "u28_s1",
+                              "name": "Update button · Check for updates",
+                              "height": 28,
+                              "padding": [
+                                0,
+                                10
+                              ],
+                              "gap": 6,
+                              "alignItems": "center",
+                              "cornerRadius": "$radius/md",
+                              "fill": "$bg/elevated",
+                              "stroke": "$border/strong",
+                              "strokeWidth": 1,
+                              "opacity": 1,
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "u28_s1_i",
+                                  "library": "lucide",
+                                  "icon": "refresh-ccw",
+                                  "width": 14,
+                                  "height": 14,
+                                  "fill": "$text/secondary"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "u28_s1_t",
+                                  "content": "Check for updates",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fill": "$text/primary",
+                                  "fontWeight": 500
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "u28_a1",
+                              "library": "lucide",
+                              "icon": "arrow-right",
+                              "width": 14,
+                              "height": 14,
+                              "fill": "$text/faint"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "u28_s2",
+                              "name": "Update button · Checking…",
+                              "height": 28,
+                              "padding": [
+                                0,
+                                10
+                              ],
+                              "gap": 6,
+                              "alignItems": "center",
+                              "cornerRadius": "$radius/md",
+                              "fill": "$bg/elevated",
+                              "stroke": "$border/strong",
+                              "strokeWidth": 1,
+                              "opacity": 0.55,
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "u28_s2_i",
+                                  "library": "lucide",
+                                  "icon": "loader-circle",
+                                  "width": 14,
+                                  "height": 14,
+                                  "fill": "$status/added"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "u28_s2_t",
+                                  "content": "Checking…",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fill": "$text/primary",
+                                  "fontWeight": 500
+                                }
+                              ]
+                            },
+                            {
+                              "type": "icon",
+                              "id": "u28_a2",
+                              "library": "lucide",
+                              "icon": "arrow-right",
+                              "width": 14,
+                              "height": 14,
+                              "fill": "$text/faint"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "u28_s3",
+                              "name": "Update button · Update to 0.5.0",
+                              "height": 28,
+                              "padding": [
+                                0,
+                                10
+                              ],
+                              "gap": 6,
+                              "alignItems": "center",
+                              "cornerRadius": "$radius/md",
+                              "fill": "$accent",
+                              "strokeWidth": 0,
+                              "opacity": 1,
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "u28_s3_i",
+                                  "library": "lucide",
+                                  "icon": "download",
+                                  "width": 14,
+                                  "height": 14,
+                                  "fill": "$text/on-accent"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "u28_s3_t",
+                                  "content": "Update to 0.5.0",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fill": "$text/on-accent",
+                                  "fontWeight": 600
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "u28_or",
+                              "content": "or",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "u28_s4",
+                              "name": "Update button · Already up to date",
+                              "height": 28,
+                              "padding": [
+                                0,
+                                10
+                              ],
+                              "gap": 6,
+                              "alignItems": "center",
+                              "cornerRadius": "$radius/md",
+                              "fill": "$bg/elevated",
+                              "stroke": "$border/strong",
+                              "strokeWidth": 1,
+                              "opacity": 0.55,
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "u28_s4_i",
+                                  "library": "lucide",
+                                  "icon": "circle-check",
+                                  "width": 14,
+                                  "height": 14,
+                                  "fill": "$status/added"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "u28_s4_t",
+                                  "content": "Already up to date",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fill": "$text/primary",
+                                  "fontWeight": 500
+                                }
+                              ]
+                            }
+                          ],
+                          "width": "fill_container",
+                          "wrap": true,
+                          "rowGap": 8
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "u28_auto",
+                      "name": "Settings/Row · ",
+                      "width": "fill_container",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "u28_auto_lb",
+                          "name": "Label",
+                          "width": 200,
+                          "padding": [
+                            6,
+                            0,
+                            0,
+                            0
+                          ],
+                          "justifyContent": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "u28_auto_l",
+                              "content": "",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fill": "$text/primary",
+                              "fontWeight": 500,
+                              "width": 200,
+                              "textGrowth": "fixed-width",
+                              "textAlign": "right"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "u28_auto_b",
+                          "name": "Control",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "u28_auto_c",
+                              "name": "Controls",
+                              "gap": 10,
+                              "alignItems": "center",
+                              "height": 30,
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "u28_chk",
+                                  "ref": "c_checkbox"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "u28_chk_t",
+                                  "content": "Also check on startup and show a notice",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fill": "$text/primary"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "u28_src",
+                      "name": "Settings/Row · Source",
+                      "width": "fill_container",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "u28_src_lb",
+                          "name": "Label",
+                          "width": 200,
+                          "padding": [
+                            6,
+                            0,
+                            0,
+                            0
+                          ],
+                          "justifyContent": "end",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "u28_src_l",
+                              "content": "Source",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fill": "$text/primary",
+                              "fontWeight": 500,
+                              "width": 200,
+                              "textGrowth": "fixed-width",
+                              "textAlign": "right"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "u28_src_b",
+                          "name": "Control",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "u28_src_c",
+                              "name": "Controls",
+                              "gap": 10,
+                              "alignItems": "center",
+                              "height": 30,
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "Mvird",
+                                  "ref": "c_btn_secondary",
+                                  "descendants": {
+                                    "bs_icon": {
+                                      "icon": "git-pull-request"
+                                    },
+                                    "bs_label": {
+                                      "content": "chenzizhen237-crypto/git-graph"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "u28_src_h",
+                              "content": "Open source under the MIT license.",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width",
+                              "lineHeight": 1.45
+                            }
+                          ]
                         }
                       ]
                     }

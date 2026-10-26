@@ -1,9 +1,10 @@
 import { invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { open } from '@tauri-apps/plugin-dialog'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { Banner, Sidebar, StatusBar, TitleBar } from './components/Chrome'
-import { PublishDialog } from './components/GitHubDialogs'
+import { Banner, type RepoSwitch, Sidebar, StatusBar, TitleBar } from './components/Chrome'
+import { CloneDialog, PublishDialog } from './components/GitHubDialogs'
 import { ContextMenu } from './components/Menu'
 import { CommandPalette, DialogHost, Toasts } from './components/Overlays'
 import { SettingsDialog } from './components/Settings'
@@ -60,11 +61,11 @@ export function App() {
     // Keyed by the repository, so switching straight from one to another starts afresh.
     <AppProvider key={root} root={root}>
       <Workspace
-        onSwitchRepo={() => setRoot(null)}
-        onOpenRepo={(path, view) => {
-          openNextIn(view)
+        onOpen={(path, view) => {
+          if (view) openNextIn(view)
           setRoot(path)
         }}
+        onHome={() => setRoot(null)}
       />
     </AppProvider>
   )
@@ -72,10 +73,28 @@ export function App() {
 
 let updateChecked = false
 
-function Workspace({ onSwitchRepo, onOpenRepo }: { onSwitchRepo: () => void; onOpenRepo: (path: string, view: View) => void }) {
+function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => void; onHome: () => void }) {
   const app = useApp()
-  const { repo, view, setView, paletteOpen, setPaletteOpen, refresh, act } = app
+  const { repo, view, setView, paletteOpen, setPaletteOpen, refresh, act, toast } = app
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [cloning, setCloning] = useState(false)
+
+  // The title bar's repository dropdown switches repositories in this window.
+  const repos = useMemo<RepoSwitch>(
+    () => ({
+      open: path => onOpen(path),
+      openFolder: async () => {
+        const dir = await open({ directory: true, title: t('Open repository') })
+        if (typeof dir !== 'string') return
+        const found = await findRoot(dir).catch(() => null)
+        if (found) onOpen(found)
+        else toast({ kind: 'error', title: t('{path} is not inside a Git repository.', { path: dir.replace(/^\/Users\/[^/]+/, '~') }) })
+      },
+      clone: () => setCloning(true),
+      all: onHome,
+    }),
+    [onOpen, onHome, toast],
+  )
   const { autoFetchMinutes } = useSettings()
 
   // Background fetch on the chosen interval, quietly: no busy state or toast unless it fails.
@@ -170,7 +189,8 @@ function Workspace({ onSwitchRepo, onOpenRepo }: { onSwitchRepo: () => void; onO
         void refresh()
       } else if (k === 'o') {
         handled()
-        onSwitchRepo()
+        if (e.shiftKey) repos.all()
+        else void repos.openFolder()
       } else if (k === '\\') {
         handled()
         toggleSidebar()
@@ -184,11 +204,11 @@ function Workspace({ onSwitchRepo, onOpenRepo }: { onSwitchRepo: () => void; onO
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [paletteOpen, setPaletteOpen, setView, refresh, onSwitchRepo, act, repo, toggleSidebar])
+  }, [paletteOpen, setPaletteOpen, setView, refresh, repos, act, repo, toggleSidebar])
 
   return (
     <div className="flex h-full flex-col bg-app">
-      <TitleBar onSwitchRepo={onSwitchRepo} sidebar={showSidebar} onToggleSidebar={toggleSidebar} onSettings={() => setSettingsOpen(true)} />
+      <TitleBar repos={repos} sidebar={showSidebar} onToggleSidebar={toggleSidebar} onSettings={() => setSettingsOpen(true)} />
       <Banner />
       <div className="flex min-h-0 flex-1">
         {showSidebar && (
@@ -202,13 +222,22 @@ function Workspace({ onSwitchRepo, onOpenRepo }: { onSwitchRepo: () => void; onO
         {view === 'stashes' && <StashesView />}
         {view === 'pulls' && <PullRequestsView />}
         {view === 'actions' && <ActionsView />}
-        {view === 'overview' && <OverviewView onOpenRepo={path => (path === app.root ? setView('actions') : onOpenRepo(path, 'actions'))} />}
+        {view === 'overview' && <OverviewView onOpenRepo={path => (path === app.root ? setView('actions') : onOpen(path, 'actions'))} />}
       </div>
       <StatusBar />
-      {paletteOpen && <CommandPalette onSwitchRepo={onSwitchRepo} onSettings={() => setSettingsOpen(true)} />}
+      {paletteOpen && <CommandPalette onSwitchRepo={() => void repos.openFolder()} onSettings={() => setSettingsOpen(true)} />}
       {settingsOpen && <SettingsDialog onClose={() => setSettingsOpen(false)} />}
       {app.menu && <ContextMenu menu={app.menu} onClose={app.closeMenu} />}
       {app.publishOpen && <PublishDialog onClose={() => app.setPublishOpen(false)} />}
+      {cloning && (
+        <CloneDialog
+          onClose={() => setCloning(false)}
+          onCloned={path => {
+            setCloning(false)
+            onOpen(path)
+          }}
+        />
+      )}
       <DialogHost />
       <Toasts />
     </div>
