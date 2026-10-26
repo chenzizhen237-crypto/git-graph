@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { Banner, Sidebar, StatusBar, TitleBar } from './components/Chrome'
 import { PublishDialog } from './components/GitHubDialogs'
@@ -9,8 +9,8 @@ import { CommandPalette, DialogHost, Toasts } from './components/Overlays'
 import { SettingsDialog } from './components/Settings'
 import { Resizer, usePanelSize } from './components/Split'
 import { actions, findRoot } from './lib/git'
-import { t } from './lib/i18n'
-import { checkRuns, newerRelease, notify, REPO_SLUG } from './lib/notify'
+import { checkRuns } from './lib/notify'
+import { checkOnStartup } from './lib/update'
 import { getSettings, stepZoom, useSettings } from './lib/settings'
 import { AppProvider, openNextIn, readRecents, rememberRepo, useApp, type View } from './state'
 import { ChangesView } from './views/Changes'
@@ -25,6 +25,8 @@ export function App() {
   const [root, setRoot] = useState<string | null>(null)
   // Subscribing here re-renders the whole tree when the language changes, so every t() call updates.
   useSettings()
+  // A newer release, once per launch: the title bar pill and a toast that stays until answered.
+  useEffect(checkOnStartup, [])
 
   // A repository passed on the command line opens straight away; otherwise the last one, if that is on.
   useEffect(() => {
@@ -55,22 +57,30 @@ export function App() {
       .catch(() => {})
   }, [root])
 
-  if (!root) return <Welcome onOpen={setRoot} />
+  // One toast stack for every screen, so a notice survives switching repositories.
+  if (!root)
+    return (
+      <>
+        <Welcome onOpen={setRoot} />
+        <Toasts />
+      </>
+    )
   return (
-    // Keyed by the repository, so switching straight from one to another starts afresh.
-    <AppProvider key={root} root={root}>
-      <Workspace
-        onSwitchRepo={() => setRoot(null)}
-        onOpenRepo={(path, view) => {
-          openNextIn(view)
-          setRoot(path)
-        }}
-      />
-    </AppProvider>
+    <>
+      {/* Keyed by the repository, so switching straight from one to another starts afresh. */}
+      <AppProvider key={root} root={root}>
+        <Workspace
+          onSwitchRepo={() => setRoot(null)}
+          onOpenRepo={(path, view) => {
+            openNextIn(view)
+            setRoot(path)
+          }}
+        />
+      </AppProvider>
+      <Toasts />
+    </>
   )
 }
-
-let updateChecked = false
 
 function Workspace({ onSwitchRepo, onOpenRepo }: { onSwitchRepo: () => void; onOpenRepo: (path: string, view: View) => void }) {
   const app = useApp()
@@ -102,19 +112,6 @@ function Workspace({ onSwitchRepo, onOpenRepo }: { onSwitchRepo: () => void; onO
     return () => window.clearInterval(id)
   }, [ciWatch, root, branch])
 
-  // A newer release, once per launch.
-  const toastRef = useRef(app.toast)
-  useEffect(() => {
-    if (!getSettings().notify.updates || updateChecked) return
-    updateChecked = true
-    void newerRelease(REPO_SLUG)
-      .then(r => {
-        if (!r) return
-        toastRef.current({ kind: 'ok', title: t('Git Graph {tag} is available', { tag: r.tag }), detail: t('Download it from Settings → About → Releases on GitHub.') })
-        void notify('updates', t('Git Graph {tag} is available', { tag: r.tag }))
-      })
-      .catch(() => {})
-  }, [])
   const sidebar = usePanelSize('sidebar', 248, 180, 480)
   const [showSidebar, setShowSidebar] = useState(() => localStorage.getItem('sidebar:hidden') !== '1')
   const toggleSidebar = useCallback(
@@ -210,7 +207,6 @@ function Workspace({ onSwitchRepo, onOpenRepo }: { onSwitchRepo: () => void; onO
       {app.menu && <ContextMenu menu={app.menu} onClose={app.closeMenu} />}
       {app.publishOpen && <PublishDialog onClose={() => app.setPublishOpen(false)} />}
       <DialogHost />
-      <Toasts />
     </div>
   )
 }

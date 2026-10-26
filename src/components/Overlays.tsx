@@ -1,6 +1,7 @@
 /** Command palette (⌘K), the ask/prompt dialog, and toasts. */
 import {
   Archive,
+  Bell,
   ArrowDown,
   ArrowUp,
   CircleAlert,
@@ -30,7 +31,7 @@ import {
   Tag,
   X,
 } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 
 import { cx } from '../lib/cx'
 import { repoActions, webUrl } from '../lib/actions'
@@ -39,6 +40,7 @@ import { openInEditor } from '../lib/tools'
 import { openUrl } from '../lib/github'
 import { t } from '../lib/i18n'
 import { getSettings, updateSettings } from '../lib/settings'
+import { dismissToast, type Toast, type ToastAction, useToasts } from '../lib/toasts'
 import { useApp } from '../state'
 import { Button, caps, Empty, Kbd } from './ui'
 
@@ -364,22 +366,77 @@ function AutoFocus() {
   return <span ref={ref} hidden />
 }
 
+const TOAST_ICON = { ok: CircleCheck, error: CircleAlert, info: Bell }
+const TOAST_COLOR = { ok: 'text-status-added', error: 'text-status-deleted', info: 'text-accent' }
+
+/** The app-wide toast stack (lib/toasts), mounted once at the root. */
 export function Toasts() {
-  const { toasts, dismissToast } = useApp()
+  const toasts = useToasts()
+  if (!toasts.length) return null
   return (
-    <div className="fixed right-4 bottom-10 z-60 flex max-w-115 flex-col gap-2">
-      {toasts.map(t => (
-        <div key={t.id} className="flex items-start gap-2.5 rounded-lg border border-strong bg-elevated px-3 py-2.5 text-sm shadow-[0_8px_24px_var(--shadow)]">
-          {t.kind === 'error' ? <CircleAlert size={16} className="shrink-0 text-status-deleted" /> : <CircleCheck size={16} className="shrink-0 text-status-added" />}
-          <div className="min-w-0 flex-1">
-            <div className="font-semibold">{t.title}</div>
-            {t.detail && <pre className="m-0 max-h-40 overflow-auto font-mono text-xs whitespace-pre-wrap text-secondary select-text">{t.detail}</pre>}
-          </div>
-          <button type="button" onClick={() => dismissToast(t.id)}>
-            <X size={14} className="text-muted" />
-          </button>
-        </div>
+    <div className="fixed right-4 bottom-10 z-60 flex w-100 max-w-[calc(100vw-2rem)] flex-col gap-2">
+      {toasts.map(item => (
+        <ToastCard key={item.id} item={item} />
       ))}
+    </div>
+  )
+}
+
+function ToastCard({ item }: { item: Toast }) {
+  const Icon = item.icon ?? TOAST_ICON[item.kind]
+  const mono = item.mono ?? item.kind === 'error'
+  const run = (a: ToastAction) => {
+    a.run()
+    if (!a.keep) dismissToast(item.id)
+  }
+  return (
+    <div
+      role={item.kind === 'error' ? 'alert' : 'status'}
+      className="flex flex-col gap-2.5 rounded-lg border border-strong bg-elevated p-3 text-sm shadow-[0_8px_24px_var(--shadow)]"
+    >
+      <div className="flex items-start gap-2.5">
+        <Icon size={16} className={cx('mt-px shrink-0', TOAST_COLOR[item.kind])} />
+        <div className="min-w-0 flex-1">
+          <div className="font-semibold break-words">{item.title}</div>
+          {item.detail &&
+            (mono ? (
+              <pre className="m-0 max-h-40 overflow-auto font-mono text-xs whitespace-pre-wrap text-secondary select-text">{item.detail}</pre>
+            ) : (
+              <div className="text-xs leading-normal text-secondary select-text">{item.detail}</div>
+            ))}
+        </div>
+        <button
+          type="button"
+          title={t('Close')}
+          onClick={() => {
+            item.onClose?.()
+            dismissToast(item.id)
+          }}
+        >
+          <X size={14} className="text-muted" />
+        </button>
+      </div>
+      {!!item.actions?.length && (
+        <div className="flex flex-wrap items-center gap-2 pl-6.5">
+          {item.actions.map(a => (
+            <Button key={a.label} kind={a.primary ? 'primary' : 'secondary'} icon={a.icon} busy={a.busy} disabled={a.busy} onClick={() => run(a)}>
+              {a.label}
+            </Button>
+          ))}
+        </div>
+      )}
+      {!!item.links?.length && (
+        <div className="flex flex-wrap items-center gap-1.5 border-t border-subtle pt-2.5 pl-6.5 text-xs font-medium text-secondary">
+          {item.links.map((a, i) => (
+            <Fragment key={a.label}>
+              {i > 0 && <span className="text-faint">·</span>}
+              <button type="button" className="hover:text-primary" onClick={() => run(a)}>
+                {a.label}
+              </button>
+            </Fragment>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

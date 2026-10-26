@@ -47,6 +47,7 @@ import { useMenus } from './menus'
 import { type Settings, updateSettings, useSettings } from '../lib/settings'
 import { useApp } from '../state'
 import { Button, Chip, caps, IconButton, Kbd, StageDot, ToolButton } from './ui'
+import { UpdatePill } from './Update'
 
 const Sep = () => <div className="h-6 w-px shrink-0 bg-strong" />
 
@@ -148,6 +149,7 @@ export function TitleBar({
         onClick={() => void openInEditor(repo.root).catch(e => app.toast({ kind: 'error', title: t('Open in editor failed'), detail: String(e) }))}
       />
       <div className="min-w-6 flex-1 self-stretch" data-tauri-drag-region />
+      <UpdatePill />
       <IconButton icon={SettingsIcon} onClick={onSettings} title={t('Settings (⌘,)')} />
       <button
         type="button"

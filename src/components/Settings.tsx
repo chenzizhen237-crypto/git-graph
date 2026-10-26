@@ -48,6 +48,7 @@ import { notify } from '../lib/notify'
 import { type Editor, editors, getGlobal, gitTools, setGlobal, TOOL_NAMES } from '../lib/tools'
 import { DEFAULT_FONTS, type Fonts as FontSettings, testConnection, updateSettings, useSettings, ZOOMS } from '../lib/settings'
 import { Button, IconButton, Kbd } from './ui'
+import { UpdateButton } from './Update'
 
 type Section = 'general' | 'appearance' | 'fonts' | 'git' | 'commits' | 'tools' | 'notify' | 'network' | 'github' | 'diff' | 'keys' | 'about'
 
@@ -681,7 +682,7 @@ function Notifications() {
       </Row>
       <Row label={t('Updates')}>
         <Check checked={n.updates} onChange={updates => set({ updates })}>
-          {t('Check for a new version on startup')}
+          {t('Check for a new version on startup and show a notice')}
         </Check>
       </Row>
     </>
@@ -864,18 +865,24 @@ function Shortcuts() {
 
 function About() {
   const t = useT()
+  const n = useSettings().notify
   return (
     <>
       <Row label={t('Version')}>
         <About.Version plain />
       </Row>
+      <Row label={t('Updates')}>
+        <UpdateButton />
+      </Row>
+      <Row>
+        <Check checked={n.updates} onChange={updates => updateSettings({ notify: { ...n, updates } })}>
+          {t('Check for a new version on startup and show a notice')}
+        </Check>
+      </Row>
       <Row label={t('Source')} help={t('Open source under the MIT license.')}>
         <Button icon={GitPullRequest} onClick={() => void openUrl(REPO_URL)}>
           chenzizhen237-crypto/git-graph
         </Button>
-      </Row>
-      <Row label={t('Updates')}>
-        <Button onClick={() => void openUrl(`${REPO_URL}/releases`)}>{t('Releases on GitHub')}</Button>
       </Row>
     </>
   )

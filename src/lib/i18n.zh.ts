@@ -532,7 +532,6 @@ const zh: Record<string, string> = {
   Notifications: '通知',
   'History · Changes · Stashes · Pull requests · Actions': '历史 · 更改 · 贮藏 · 拉取请求 · Actions',
   'Git Graph {tag} is available': 'Git Graph {tag} 已发布',
-  'Download it from Settings → About → Releases on GitHub.': '可在 设置 → 关于 → GitHub 上的发布版本 中下载。',
   Editor: '编辑器',
   'Open in editor failed': '在编辑器中打开失败',
   'Open in editor': '在编辑器中打开',
@@ -587,7 +586,6 @@ const zh: Record<string, string> = {
   'A long push, pull or clone finishes': '较长的推送、拉取或克隆完成',
   'CI is checked every minute while a repository is open.': '打开仓库时每分钟检查一次 CI。',
   'Only while Git Graph is in the background': '仅在 Git Graph 处于后台时',
-  'Check for a new version on startup': '启动时检查新版本',
   Whitespace: '空白字符',
   'Show all, ignore changes at line ends (including CR), or ignore all whitespace changes.': '显示全部、忽略行尾（含 CR）的变化，或忽略所有空白变化。',
   'Show all changes': '显示所有更改',
@@ -607,6 +605,22 @@ const zh: Record<string, string> = {
   'Bad signature': '签名无效',
   'Signed, but the key to check it is not here': '已签名，但本机没有用于验证的密钥',
   'The signature does not match': '签名不匹配',
+  'Update {v}': '更新 {v}',
+  'Update now': '立即更新',
+  'Update to {v}': '更新到 {v}',
+  'Release notes': '更新说明',
+  'Remind me later': '稍后提醒',
+  "Don't check for updates": '不再检查更新',
+  'Check for updates': '检查更新',
+  'Checking…': '正在检查…',
+  'Already up to date': '已是最新版本',
+  'Could not check for updates: {error}': '无法检查更新：{error}',
+  'Check for a new version on startup and show a notice': '启动时检查新版本并提示',
+  'Updating downloads the new version, quits Git Graph and opens it again.': '更新会下载新版本，退出 Git Graph 并重新打开。',
+  'The installer is running in Terminal. Git Graph quits and reopens when it is done.': '安装程序正在终端中运行，完成后 Git Graph 会退出并重新打开。',
+  '{v} is available. Updating downloads it from GitHub, checks its signature, quits Git Graph and opens the new version.':
+    '{v} 已发布。更新会从 GitHub 下载、校验签名，然后退出 Git Graph 并打开新版本。',
+  Close: '关闭',
 }
 
 export default zh
