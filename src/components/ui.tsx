@@ -94,7 +94,7 @@ const CHIP_STYLE: Record<ChipKind, string> = {
 }
 
 /** Chip/Head, Chip/Local, Chip/Remote, Chip/Tag. `synced` adds ⇅ when a remote twin is folded in. */
-export function Chip({ kind, name, synced, large, icon }: { kind: ChipKind; name: string; synced?: boolean; large?: boolean; icon?: LucideIcon }) {
+export function Chip({ kind, name, synced, large, icon, className }: { kind: ChipKind; name: string; synced?: boolean; large?: boolean; icon?: LucideIcon; className?: string }) {
   const Icon = icon ?? CHIP_ICON[kind]
   return (
     <span
@@ -102,6 +102,7 @@ export function Chip({ kind, name, synced, large, icon }: { kind: ChipKind; name
         'inline-flex max-w-55 shrink-0 items-center gap-1 rounded-sm font-semibold whitespace-nowrap',
         large ? 'px-2 py-1 text-sm' : 'px-1.5 py-0.5 text-xs',
         CHIP_STYLE[kind],
+        className,
       )}
       title={name}
     >

@@ -13019,6 +13019,567 @@
               "textAlign": "right"
             }
           ]
+        },
+        {
+          "type": "frame",
+          "id": "c_repo_menu",
+          "name": "Menu/Repositories",
+          "reusable": true,
+          "x": 0,
+          "y": 4800,
+          "width": 340,
+          "layout": "vertical",
+          "padding": 5,
+          "gap": 1,
+          "fill": "$bg/elevated",
+          "cornerRadius": "$radius/lg",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 12
+              },
+              "blur": 32,
+              "spread": 0,
+              "color": "$shadow"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "rm_filter",
+              "name": "Filter",
+              "width": "fill_container",
+              "height": 28,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 6,
+              "alignItems": "center",
+              "cornerRadius": "$radius/md",
+              "fill": "$bg/surface",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "rm_fi",
+                  "library": "lucide",
+                  "icon": "search",
+                  "width": 13,
+                  "height": 13,
+                  "fill": "$text/muted"
+                },
+                {
+                  "type": "text",
+                  "id": "rm_ft",
+                  "name": "rm_ft",
+                  "content": "Filter repositories",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/md",
+                  "fontWeight": 400,
+                  "fill": "$text/faint",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_cap",
+              "name": "Caption",
+              "width": "fill_container",
+              "padding": [
+                8,
+                8,
+                4,
+                8
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rm_cap_t",
+                  "name": "rm_cap_t",
+                  "content": "RECENT",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/xs",
+                  "fontWeight": 600,
+                  "fill": "$text/muted",
+                  "letterSpacing": 0.5
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_r1",
+              "name": "Repo item",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 10,
+              "alignItems": "center",
+              "cornerRadius": "$radius/md",
+              "fill": "$bg/selected",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rm_r1_ic",
+                  "name": "Icon",
+                  "width": 26,
+                  "height": 26,
+                  "cornerRadius": "$radius/md",
+                  "fill": "$bg/elevated",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "rm_r1_i",
+                      "library": "lucide",
+                      "icon": "folder-git-2",
+                      "width": 14,
+                      "height": 14,
+                      "fill": "$text/secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rm_r1_t",
+                  "name": "Text",
+                  "layout": "vertical",
+                  "width": "fill_container",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rm_r1_n",
+                      "name": "rm_r1_n",
+                      "content": "claude-mods",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 18
+                    },
+                    {
+                      "type": "text",
+                      "id": "rm_r1_p",
+                      "name": "rm_r1_p",
+                      "content": "~/Code/claude-mods",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/xs",
+                      "fontWeight": 400,
+                      "fill": "$text/muted",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 14
+                    }
+                  ],
+                  "clip": true
+                },
+                {
+                  "type": "ref",
+                  "id": "rm_r1_b",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "claude/git-graph-mod"
+                    }
+                  }
+                },
+                {
+                  "type": "icon",
+                  "id": "rm_r1_ck",
+                  "name": "check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$accent",
+                  "enabled": true
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_r2",
+              "name": "Repo item",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 10,
+              "alignItems": "center",
+              "cornerRadius": "$radius/md",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rm_r2_ic",
+                  "name": "Icon",
+                  "width": 26,
+                  "height": 26,
+                  "cornerRadius": "$radius/md",
+                  "fill": "$bg/surface",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "rm_r2_i",
+                      "library": "lucide",
+                      "icon": "folder-git-2",
+                      "width": 14,
+                      "height": 14,
+                      "fill": "$text/secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rm_r2_t",
+                  "name": "Text",
+                  "layout": "vertical",
+                  "width": "fill_container",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rm_r2_n",
+                      "name": "rm_r2_n",
+                      "content": "git-graph",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 18
+                    },
+                    {
+                      "type": "text",
+                      "id": "rm_r2_p",
+                      "name": "rm_r2_p",
+                      "content": "~/Downloads/Code/git-graph",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/xs",
+                      "fontWeight": 400,
+                      "fill": "$text/muted",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 14
+                    }
+                  ],
+                  "clip": true
+                },
+                {
+                  "type": "ref",
+                  "id": "rm_r2_b",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "main"
+                    }
+                  }
+                },
+                {
+                  "type": "icon",
+                  "id": "rm_r2_ck",
+                  "name": "check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$accent",
+                  "enabled": false
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_r3",
+              "name": "Repo item",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 10,
+              "alignItems": "center",
+              "cornerRadius": "$radius/md",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rm_r3_ic",
+                  "name": "Icon",
+                  "width": 26,
+                  "height": 26,
+                  "cornerRadius": "$radius/md",
+                  "fill": "$bg/surface",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "rm_r3_i",
+                      "library": "lucide",
+                      "icon": "folder-git-2",
+                      "width": 14,
+                      "height": 14,
+                      "fill": "$text/secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rm_r3_t",
+                  "name": "Text",
+                  "layout": "vertical",
+                  "width": "fill_container",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rm_r3_n",
+                      "name": "rm_r3_n",
+                      "content": "nib",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 18
+                    },
+                    {
+                      "type": "text",
+                      "id": "rm_r3_p",
+                      "name": "rm_r3_p",
+                      "content": "~/Code/nib",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/xs",
+                      "fontWeight": 400,
+                      "fill": "$text/muted",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 14
+                    }
+                  ],
+                  "clip": true
+                },
+                {
+                  "type": "ref",
+                  "id": "rm_r3_b",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "main"
+                    }
+                  }
+                },
+                {
+                  "type": "icon",
+                  "id": "rm_r3_ck",
+                  "name": "check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$accent",
+                  "enabled": false
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_r4",
+              "name": "Repo item",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 10,
+              "alignItems": "center",
+              "cornerRadius": "$radius/md",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rm_r4_ic",
+                  "name": "Icon",
+                  "width": 26,
+                  "height": 26,
+                  "cornerRadius": "$radius/md",
+                  "fill": "$bg/surface",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "rm_r4_i",
+                      "library": "lucide",
+                      "icon": "folder-git-2",
+                      "width": 14,
+                      "height": 14,
+                      "fill": "$text/secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rm_r4_t",
+                  "name": "Text",
+                  "layout": "vertical",
+                  "width": "fill_container",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rm_r4_n",
+                      "name": "rm_r4_n",
+                      "content": "dotfiles",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 18
+                    },
+                    {
+                      "type": "text",
+                      "id": "rm_r4_p",
+                      "name": "rm_r4_p",
+                      "content": "~/dotfiles",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/xs",
+                      "fontWeight": 400,
+                      "fill": "$text/muted",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 14
+                    }
+                  ],
+                  "clip": true
+                },
+                {
+                  "type": "ref",
+                  "id": "rm_r4_b",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "master"
+                    }
+                  }
+                },
+                {
+                  "type": "icon",
+                  "id": "rm_r4_ck",
+                  "name": "check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$accent",
+                  "enabled": false
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_sepw",
+              "name": "Separator",
+              "width": "fill_container",
+              "padding": [
+                4,
+                0
+              ],
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "rm_sep2",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "$border/subtle"
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "id": "rm_open",
+              "ref": "c_menu_item",
+              "width": "fill_container",
+              "height": 28,
+              "descendants": {
+                "mi_icon": {
+                  "icon": "folder-open"
+                },
+                "mi_label": {
+                  "content": "Open repository…"
+                },
+                "mi_kbd": {
+                  "descendants": {
+                    "kb_text": {
+                      "content": "⌘O"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "ref",
+              "id": "rm_clone",
+              "ref": "c_menu_item",
+              "width": "fill_container",
+              "height": 28,
+              "descendants": {
+                "mi_icon": {
+                  "icon": "cloud-download"
+                },
+                "mi_label": {
+                  "content": "Clone from GitHub…"
+                },
+                "mi_kbd": {
+                  "enabled": false
+                }
+              }
+            },
+            {
+              "type": "ref",
+              "id": "rm_all",
+              "ref": "c_menu_item",
+              "width": "fill_container",
+              "height": 28,
+              "descendants": {
+                "mi_icon": {
+                  "icon": "layout-grid"
+                },
+                "mi_label": {
+                  "content": "All repositories"
+                },
+                "mi_kbd": {
+                  "descendants": {
+                    "kb_text": {
+                      "content": "⇧⌘O"
+                    }
+                  }
+                }
+              }
+            }
+          ]
         }
       ],
       "x": 3080,
@@ -23137,6 +23698,72 @@
                   ]
                 }
               ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl24",
+          "name": "Label · 24 · Repository dropdown",
+          "x": 6600,
+          "y": 9810,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl24_t",
+              "name": "dl24_t",
+              "content": "24 · Repository dropdown",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl24_s",
+              "name": "dl24_s",
+              "content": "Light · the repo picker in the title bar opens a menu: current + recent repos, filter, open/clone/all",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_repo_menu",
+          "name": "24 · Repository dropdown — Light",
+          "x": 6600,
+          "y": 9900,
+          "width": 1440,
+          "height": 900,
+          "layout": "none",
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d24_win",
+              "ref": "c_win_history",
+              "x": 0,
+              "y": 0,
+              "descendants": {
+                "tl_repo": {
+                  "fill": "$bg/hover"
+                }
+              }
+            },
+            {
+              "type": "ref",
+              "id": "d24_menu",
+              "ref": "c_repo_menu",
+              "x": 94,
+              "y": 50
             }
           ]
         }
