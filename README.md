@@ -6,7 +6,7 @@ A desktop commit graph for Git and GitHub: history, changes, stashes and pull re
 
 ## Download
 
-Get the latest installer for macOS, Windows or Linux from **[Releases](https://github.com/chenzizhen237-crypto/git-graph/releases/latest)**.
+Git Graph is released for macOS. Get the latest app from **[Releases](https://github.com/chenzizhen237-crypto/git-graph/releases/latest)**.
 
 On macOS, double-click [`scripts/Update-Git-Graph.command`](scripts/Update-Git-Graph.command) to download and install the latest stable release into `/Applications`, then launch it. The standalone script selects Apple Silicon or Intel automatically, verifies the GitHub asset SHA-256 digest and app signature, and backs up the previous app under `~/Library/Application Support/Git Graph/Installer Backups`. It requires no Git, Node.js or GitHub account. It asks a running app to quit before replacing it and restores the previous app if replacement fails.
 
@@ -16,7 +16,7 @@ To download and validate without changing your installed app:
 ./scripts/Update-Git-Graph.command --prepare
 ```
 
-The builds are not signed with a paid certificate yet. On macOS, right-click the app and choose **Open** the first time (or run `xattr -cr "/Applications/Git Graph.app"`); on Windows choose **More info → Run anyway**.
+The builds are not signed with a paid certificate yet. Right-click the app and choose **Open** the first time (or run `xattr -cr "/Applications/Git Graph.app"`). On Windows or Linux, build from source.
 
 Pull requests use the [GitHub CLI](https://cli.github.com): run `gh auth login` once.
 
@@ -47,12 +47,25 @@ pnpm bundle                       # installers in src-tauri/target/release/bundl
 pnpm check                        # typecheck, lint, format check, tests
 ```
 
+## Releasing
+
+Releases are built and published locally on Jimmy's Mac mini, macOS only:
+
+1. Bump the version in `package.json`, `src-tauri/tauri.conf.json` and `src-tauri/Cargo.toml`, write `.github/release-notes/v<version>.md`, and merge to `main`.
+2. Run the release on Jimmy:
+
+```bash
+jimmy-test --ref main -- pnpm release
+```
+
+`scripts/release.sh` checks the versions and notes, runs `pnpm check`, builds the Apple Silicon app and DMG, and publishes them as the latest GitHub release with the tag `v<version>` at that commit. `pnpm release --dry-run` builds without publishing; `ARCHS="aarch64 x86_64"` adds an Intel build. The **Release** GitHub workflow is a manual fallback that builds the Mac app on GitHub's runners.
+
 ## How it's built
 
 - **Tauri 2** (Rust) runs `git` and `gh`, watches the repository, and talks to GitHub's API over one kept-alive connection. The GitHub token comes from `gh auth token` and never reaches the web view.
 - **React 19 + TypeScript**, styled with **Tailwind CSS 4**. The Tailwind theme is generated from the design file's variables (`pnpm tokens`), so utilities like `bg-sidebar` or `text-ref-head` are the design tokens.
 - The design lives in [`assets/design/Git Graph Desktop.nib`](assets/design); see [assets/README.md](assets/README.md).
-- **Prettier** formats, **Biome** lints, **Vitest** tests; GitHub Actions builds every platform on each tag.
+- **Prettier** formats, **Biome** lints, **Vitest** tests; GitHub Actions runs CI, and releases are built on Jimmy's Mac mini (see Releasing).
 
 ```
 assets/            design file (Nib), app icon, screens
