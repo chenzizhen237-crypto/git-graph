@@ -1,6 +1,6 @@
 /**
  * CI across repositories: the latest checks on each local repository's
- * default branch and current branch, for the CI overview. One GraphQL
+ * default branch and current branch, for the CI/CD view. One GraphQL
  * request covers 20 repositories, and it reads check runs and commit
  * statuses alike, so CI that is not GitHub Actions (Buildkite, CircleCI,
  * Vercel…) shows up too. The result is kept in a small store that the
@@ -24,8 +24,12 @@ export type RepoCi = {
   branch?: string
   main?: BranchCi
   current?: BranchCi
+  /** The latest deployment to each environment, newest first. */
+  deployments?: Deployment[]
   error?: string
 }
+
+export type Deployment = { environment: string; state: RunState; ref: string | null; sha: string; at: string; url: string | null }
 
 // ─── Reading GitHub's answer ───────────────────────────────────────────────
 
@@ -44,7 +48,53 @@ type CheckNode =
 
 type CommitNode = { oid: string; messageHeadline: string; committedDate: string; statusCheckRollup: { contexts: { nodes: CheckNode[] } } | null }
 type RefNode = { name: string; target: CommitNode | null } | null
-type RepoNode = { defaultBranchRef: RefNode; cur?: RefNode } | null
+type DeploymentNode = {
+  environment: string | null
+  commitOid: string
+  createdAt: string
+  ref: { name: string } | null
+  latestStatus: { state: string; createdAt: string; environmentUrl: string | null; logUrl: string | null } | null
+}
+type RepoNode = { defaultBranchRef: RefNode; cur?: RefNode; deployments?: { nodes: DeploymentNode[] } } | null
+
+/** GitHub's deployment states; a deployment a newer one replaced (INACTIVE) went fine. */
+export function deploymentState(state?: string | null): RunState {
+  switch (state) {
+    case 'SUCCESS':
+    case 'ACTIVE':
+    case 'INACTIVE':
+      return 'pass'
+    case 'IN_PROGRESS':
+      return 'running'
+    case 'FAILURE':
+    case 'ERROR':
+      return 'fail'
+    case 'DESTROYED':
+      return 'cancelled'
+    default:
+      // PENDING, QUEUED, WAITING (for approval), or no status yet.
+      return 'queued'
+  }
+}
+
+/** The newest deployment per environment, newest first. */
+export function readDeployments(nodes: DeploymentNode[]): Deployment[] {
+  const seen = new Map<string, Deployment>()
+  for (const d of [...nodes].sort((a, b) => b.createdAt.localeCompare(a.createdAt))) {
+    const environment = d.environment ?? 'default'
+    if (seen.has(environment)) continue
+    const s = d.latestStatus
+    seen.set(environment, {
+      environment,
+      state: deploymentState(s?.state),
+      ref: d.ref?.name ?? null,
+      sha: d.commitOid,
+      at: s?.createdAt ?? d.createdAt,
+      url: s?.environmentUrl || s?.logUrl || null,
+    })
+  }
+  return [...seen.values()]
+}
 
 /** A check run (named after its workflow, as GitHub's checks list does) or a commit status. */
 export function readCheck(n: CheckNode): Check {
@@ -86,9 +136,17 @@ export function branchState(b?: BranchCi): RepoState {
   return b.checks.some(c => c.state === 'pass') ? 'pass' : 'none'
 }
 
-/** A repository is as bad as the worse of its two branches. */
+/** What the latest deployments add up to, read like checks. */
+export const deployState = (deps?: Deployment[]): RepoState =>
+  branchState(
+    deps?.length
+      ? { branch: '', sha: '', subject: '', at: '', checks: deps.map(d => ({ name: d.environment, state: d.state, started: null, completed: null, url: null })) }
+      : undefined,
+  )
+
+/** A repository is as bad as the worst of its two branches and its deployments. */
 export function repoState(r: RepoCi): RepoState {
-  const states = [branchState(r.main), branchState(r.current)]
+  const states = [branchState(r.main), branchState(r.current), deployState(r.deployments)]
   for (const s of ['fail', 'running', 'pass'] as const) if (states.includes(s)) return s
   return 'none'
 }
@@ -105,7 +163,7 @@ export function summary(b?: BranchCi) {
 }
 
 const RANK: Record<RepoState, number> = { fail: 0, running: 1, pass: 2, none: 3 }
-const latest = (r: RepoCi) => Math.max(...[r.main, r.current].map(b => (b ? new Date(b.at).getTime() : 0)))
+const latest = (r: RepoCi) => Math.max(...[r.main, r.current, ...(r.deployments ?? [])].map(b => (b ? new Date(b.at).getTime() : 0)))
 
 /** Failing first, then running, passing, and repositories without CI; newest first within each. */
 export const sortRepos = (list: RepoCi[]) => [...list].sort((a, b) => RANK[repoState(a)] - RANK[repoState(b)] || latest(b) - latest(a) || a.name.localeCompare(b.name))
@@ -119,6 +177,9 @@ const COMMIT = `fragment C on Commit {
     ... on StatusContext { context state targetUrl createdAt }
   } } }
 }`
+
+/** Enough recent deployments to find the latest one in each environment. */
+const DEPLOYMENTS = `deployments(last: 30, orderBy: { field: CREATED_AT, direction: ASC }) { nodes { environment commitOid createdAt ref { name } latestStatus { state createdAt environmentUrl logUrl } } }`
 
 type Want = { owner: string; name: string; branch?: string }
 
@@ -136,7 +197,7 @@ export function overviewQuery(want: Want[]) {
       params.push(`$b${i}: String!`)
       cur = ` cur: ref(qualifiedName: $b${i}) { name target { ...C } }`
     }
-    return `r${i}: repository(owner: $o${i}, name: $n${i}) { defaultBranchRef { name target { ...C } }${cur} }`
+    return `r${i}: repository(owner: $o${i}, name: $n${i}) { defaultBranchRef { name target { ...C } }${cur} ${DEPLOYMENTS} }`
   })
   return { query: `query(${params.join(', ')}) {\n${fields.join('\n')}\n}\n${COMMIT}`, variables: vars }
 }
@@ -174,6 +235,7 @@ export async function loadOverview(repos: LocalRepo[]): Promise<RepoCi[]> {
         // The current branch only when it differs from the default one (and is on GitHub).
         const cur = readBranch(a.cur ?? null)
         if (cur && cur.branch !== r.main?.branch) r.current = cur
+        r.deployments = readDeployments(a.deployments?.nodes ?? [])
       }
     })
   }

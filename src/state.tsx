@@ -17,7 +17,7 @@ import type { LogQuery, RepoData } from './lib/types'
 
 export type View = 'history' | 'changes' | 'stashes' | 'pulls' | 'actions' | 'overview'
 
-/** The view the next repository opens in (the CI overview opens one straight in Actions). */
+/** The view the next repository opens in (the CI/CD view opens one straight in Actions). */
 let startView: View | null = null
 export const openNextIn = (view: View) => {
   startView = view

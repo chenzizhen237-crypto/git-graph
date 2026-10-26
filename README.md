@@ -27,7 +27,7 @@ Pull requests use the [GitHub CLI](https://cli.github.com): run `gh auth login` 
 - **Stashes**: apply, pop, drop.
 - **Pull requests** (⌘4): list, conversation, review, merge, checks, files, new PR.
 - **Actions** (⌘5): workflow runs, jobs and step logs with errors highlighted; re-run failed jobs, cancel. CI status (✓ ✗ ●) beside every commit in History.
-- **CI overview** (⌘6): every repository on this Mac in one list, failing first, with the latest checks on its default and current branch, from GitHub Actions or any CI that reports to GitHub; open one straight in Actions.
+- **CI/CD** (⌘6): every repository on this Mac in one list, failing first, with the latest checks on its default and current branch, from GitHub Actions or any CI that reports to GitHub, and the latest deployment to each environment; open one straight in Actions.
 - **GitHub repositories**: clone from your and your organisations' repositories, publish a local repository, fork; right-click commits, files, branches and tags to open them on GitHub or copy a permalink.
 - **Diffs**: unified or side by side, wrap, ignore whitespace, pop out to full window; open files in your editor, diff tool or merge tool.
 - **Your repositories**: the Welcome screen lists the repositories already in your code folders, with branch, changes and last activity.

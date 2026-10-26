@@ -269,7 +269,7 @@ const trackMeta = (track?: string) => ({
 export function Sidebar({ width }: { width: number }) {
   const { repo, view, setView, query, setQuery, act, prompt, openMenu, setPublishOpen } = useApp()
   const menus = useMenus()
-  // Known once the CI overview has loaded; it keeps polling only while open.
+  // Known once the CI/CD view has loaded; it keeps polling only while open.
   const { repos: ci } = useOverview()
   const failing = ci?.filter(r => repoState(r) === 'fail').length ?? 0
   const remotes = useMemo(() => {
@@ -336,12 +336,12 @@ export function Sidebar({ width }: { width: number }) {
         <Item
           icon={LayoutDashboard}
           color="var(--status-renamed)"
-          label={t('CI overview')}
+          label={t('CI/CD')}
           meta={failing || ''}
           metaColor="var(--status-deleted)"
           selected={view === 'overview'}
           onClick={() => setView('overview')}
-          title={t('CI overview (⌘6)')}
+          title={t('CI/CD (⌘6)')}
         />
       </Section>
       <Section label={t('BRANCHES')} onAdd={() => void newBranch()}>
