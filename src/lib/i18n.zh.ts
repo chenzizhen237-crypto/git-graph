@@ -358,10 +358,10 @@ const zh: Record<string, string> = {
   'Actions (⌘5)': '工作流 (⌘5)',
   'Show Actions': '显示工作流',
 
-  // CI overview
-  'CI overview': 'CI 总览',
-  'CI overview (⌘6)': 'CI 总览 (⌘6)',
-  'Show CI overview': '显示 CI 总览',
+  // CI/CD
+  'CI/CD': 'CI/CD',
+  'CI/CD (⌘6)': 'CI/CD (⌘6)',
+  'Show CI/CD': '显示 CI/CD',
   Failing: '失败',
   Passing: '通过',
   'Filter repositories': '筛选仓库',
@@ -377,6 +377,12 @@ const zh: Record<string, string> = {
   '{n} of {total} running': '{total} 项中 {n} 项运行中',
   '{n} passed': '{n} 项通过',
   'Open in Actions': '在工作流中打开',
+  ENVIRONMENTS: '环境',
+  'deployed {when}': '部署于{when}',
+  'failed {when}': '失败于{when}',
+  'removed {when}': '移除于{when}',
+  deploying: '部署中',
+  waiting: '等待中',
   'Open on GitHub': '在 GitHub 上打开',
   'This repository has no GitHub remote, so there are no checks to show.': '此仓库没有 GitHub 远程，因此没有可显示的检查。',
   'No commits on GitHub yet.': 'GitHub 上还没有提交。',

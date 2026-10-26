@@ -9072,7 +9072,7 @@
                   "fill": "$status/renamed"
                 },
                 "si_label": {
-                  "content": "CI overview"
+                  "content": "CI/CD"
                 },
                 "si_meta": {
                   "content": "2",
@@ -13771,6 +13771,98 @@
                   "fill": "$text/muted",
                   "width": "fill_container",
                   "textGrowth": "fixed-width"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rc_dep",
+              "name": "Deployments",
+              "width": "fill_container",
+              "gap": 10,
+              "alignItems": "center",
+              "padding": [
+                0,
+                0,
+                0,
+                23
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rc_dep1",
+                  "name": "Environment",
+                  "gap": 5,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "rc_dep1_i",
+                      "library": "lucide",
+                      "icon": "rocket",
+                      "width": 12,
+                      "height": 12,
+                      "fill": "$status/added"
+                    },
+                    {
+                      "type": "text",
+                      "id": "rc_dep1_n",
+                      "name": "rc_dep1_n",
+                      "content": "production",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 600,
+                      "fill": "$text/secondary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "rc_dep1_m",
+                      "name": "rc_dep1_m",
+                      "content": "v0.3.0 · 2h",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/muted"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rc_dep2",
+                  "name": "Environment",
+                  "gap": 5,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "rc_dep2_i",
+                      "library": "lucide",
+                      "icon": "rocket",
+                      "width": 12,
+                      "height": 12,
+                      "fill": "$status/modified"
+                    },
+                    {
+                      "type": "text",
+                      "id": "rc_dep2_n",
+                      "name": "rc_dep2_n",
+                      "content": "staging",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 600,
+                      "fill": "$text/secondary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "rc_dep2_m",
+                      "name": "rc_dep2_m",
+                      "content": "8d2f1aa · deploying",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/muted"
+                    }
+                  ]
                 }
               ]
             }
@@ -23965,7 +24057,7 @@
         {
           "type": "frame",
           "id": "dl25",
-          "name": "Label · 25 · CI overview",
+          "name": "Label · 25 · CI/CD",
           "x": 0,
           "y": 11010,
           "layout": "vertical",
@@ -23975,7 +24067,7 @@
               "type": "text",
               "id": "dl25_t",
               "name": "dl25_t",
-              "content": "25 · CI overview",
+              "content": "25 · CI/CD",
               "fontFamily": "$font/sans",
               "fontSize": 22,
               "fontWeight": 700,
@@ -23985,7 +24077,7 @@
               "type": "text",
               "id": "dl25_s",
               "name": "dl25_s",
-              "content": "Light · ⌘6 · every repository on this Mac: latest checks on the default and current branch, failing first; any CI that reports to GitHub",
+              "content": "Light · ⌘6 · every repository on this Mac: latest checks on the default and current branch, failing first, plus the latest deployment per environment",
               "fontFamily": "$font/sans",
               "fontSize": 14,
               "fontWeight": 400,
@@ -23996,7 +24088,7 @@
         {
           "type": "frame",
           "id": "d_ovl",
-          "name": "25 · CI overview — Light",
+          "name": "25 · CI/CD — Light",
           "x": 0,
           "y": 11100,
           "width": 1440,
@@ -24056,7 +24148,7 @@
                           "fill": "$status/renamed"
                         },
                         "si_label": {
-                          "content": "CI overview",
+                          "content": "CI/CD",
                           "fontWeight": 600
                         },
                         "si_meta": {
@@ -24102,7 +24194,7 @@
                           "type": "text",
                           "id": "ovl_lt",
                           "name": "ovl_lt",
-                          "content": "CI overview",
+                          "content": "CI/CD",
                           "fontFamily": "$font/sans",
                           "fontSize": "$text/lg",
                           "fontWeight": 700,
@@ -24440,6 +24532,9 @@
                             },
                             "rc_cur": {
                               "enabled": false
+                            },
+                            "rc_dep": {
+                              "enabled": false
                             }
                           }
                         },
@@ -24480,6 +24575,9 @@
                               "content": "List variable font axes"
                             },
                             "rc_cur": {
+                              "enabled": false
+                            },
+                            "rc_dep": {
                               "enabled": false
                             }
                           }
@@ -24534,6 +24632,9 @@
                             },
                             "rc_cur_text": {
                               "content": "6 passed"
+                            },
+                            "rc_dep": {
+                              "enabled": false
                             }
                           }
                         },
@@ -24575,6 +24676,15 @@
                             },
                             "rc_cur": {
                               "enabled": false
+                            },
+                            "rc_dep2": {
+                              "enabled": false
+                            },
+                            "rc_dep1_m": {
+                              "content": "7aa31c0 · 3d"
+                            },
+                            "rc_dep1_n": {
+                              "content": "github-pages"
                             }
                           }
                         },
@@ -24616,6 +24726,9 @@
                             },
                             "rc_cur": {
                               "enabled": false
+                            },
+                            "rc_dep": {
+                              "enabled": false
                             }
                           }
                         },
@@ -24656,6 +24769,9 @@
                               "content": "try the new graph layout"
                             },
                             "rc_cur": {
+                              "enabled": false
+                            },
+                            "rc_dep": {
                               "enabled": false
                             }
                           }
@@ -24775,11 +24891,251 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "ovl_s1",
+                          "id": "ovl_se",
                           "name": "Section",
                           "width": "fill_container",
                           "padding": [
                             6,
+                            10,
+                            4,
+                            10
+                          ],
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_sel",
+                              "name": "ovl_sel",
+                              "content": "ENVIRONMENTS",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.5
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_e1",
+                          "name": "Row/Environment",
+                          "width": "fill_container",
+                          "height": 30,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 8,
+                          "alignItems": "center",
+                          "cornerRadius": "$radius/md",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovl_e1_i",
+                              "library": "lucide",
+                              "icon": "circle-check",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$status/added"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_e1_n",
+                              "name": "ovl_e1_n",
+                              "content": "production",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 400,
+                              "fill": "$text/primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_e1_r",
+                              "name": "ovl_e1_r",
+                              "content": "v0.3.0 · 1797054",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ovl_e1_sp",
+                              "width": "fill_container",
+                              "height": 1,
+                              "children": []
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_e1_w",
+                              "name": "ovl_e1_w",
+                              "content": "deployed 2h ago",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ovl_e1_x",
+                              "library": "lucide",
+                              "icon": "external-link",
+                              "width": 13,
+                              "height": 13,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_e2",
+                          "name": "Row/Environment",
+                          "width": "fill_container",
+                          "height": 30,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 8,
+                          "alignItems": "center",
+                          "cornerRadius": "$radius/md",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovl_e2_i",
+                              "library": "lucide",
+                              "icon": "loader-circle",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$status/modified"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_e2_n",
+                              "name": "ovl_e2_n",
+                              "content": "staging",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 400,
+                              "fill": "$text/primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_e2_r",
+                              "name": "ovl_e2_r",
+                              "content": "8d2f1aa",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ovl_e2_sp",
+                              "width": "fill_container",
+                              "height": 1,
+                              "children": []
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_e2_w",
+                              "name": "ovl_e2_w",
+                              "content": "deploying · 1m 12s",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ovl_e2_x",
+                              "library": "lucide",
+                              "icon": "external-link",
+                              "width": 13,
+                              "height": 13,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_e3",
+                          "name": "Row/Environment",
+                          "width": "fill_container",
+                          "height": 30,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 8,
+                          "alignItems": "center",
+                          "cornerRadius": "$radius/md",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovl_e3_i",
+                              "library": "lucide",
+                              "icon": "circle-x",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$status/deleted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_e3_n",
+                              "name": "ovl_e3_n",
+                              "content": "preview",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 400,
+                              "fill": "$text/primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_e3_r",
+                              "name": "ovl_e3_r",
+                              "content": "c5c0244",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ovl_e3_sp",
+                              "width": "fill_container",
+                              "height": 1,
+                              "children": []
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_e3_w",
+                              "name": "ovl_e3_w",
+                              "content": "failed 5h ago",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ovl_e3_x",
+                              "library": "lucide",
+                              "icon": "external-link",
+                              "width": 13,
+                              "height": 13,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_s1",
+                          "name": "Section",
+                          "width": "fill_container",
+                          "padding": [
+                            14,
                             10,
                             4,
                             10
@@ -24969,7 +25325,7 @@
                               "type": "text",
                               "id": "ovl_s2t",
                               "name": "ovl_s2t",
-                              "content": "CI overview across repositories",
+                              "content": "CI/CD across repositories",
                               "fontFamily": "$font/sans",
                               "fontSize": "$text/xs",
                               "fontWeight": 400,
@@ -25080,7 +25436,7 @@
         {
           "type": "frame",
           "id": "dl26",
-          "name": "Label · 26 · CI overview — Dark",
+          "name": "Label · 26 · CI/CD — Dark",
           "x": 1540,
           "y": 11010,
           "layout": "vertical",
@@ -25090,7 +25446,7 @@
               "type": "text",
               "id": "dl26_t",
               "name": "dl26_t",
-              "content": "26 · CI overview",
+              "content": "26 · CI/CD",
               "fontFamily": "$font/sans",
               "fontSize": 22,
               "fontWeight": 700,
@@ -25111,7 +25467,7 @@
         {
           "type": "frame",
           "id": "d_ovd",
-          "name": "25 · CI overview — Dark",
+          "name": "25 · CI/CD — Dark",
           "x": 1540,
           "y": 11100,
           "width": 1440,
@@ -25171,7 +25527,7 @@
                           "fill": "$status/renamed"
                         },
                         "si_label": {
-                          "content": "CI overview",
+                          "content": "CI/CD",
                           "fontWeight": 600
                         },
                         "si_meta": {
@@ -25217,7 +25573,7 @@
                           "type": "text",
                           "id": "ovd_lt",
                           "name": "ovd_lt",
-                          "content": "CI overview",
+                          "content": "CI/CD",
                           "fontFamily": "$font/sans",
                           "fontSize": "$text/lg",
                           "fontWeight": 700,
@@ -25555,6 +25911,9 @@
                             },
                             "rc_cur": {
                               "enabled": false
+                            },
+                            "rc_dep": {
+                              "enabled": false
                             }
                           }
                         },
@@ -25595,6 +25954,9 @@
                               "content": "List variable font axes"
                             },
                             "rc_cur": {
+                              "enabled": false
+                            },
+                            "rc_dep": {
                               "enabled": false
                             }
                           }
@@ -25649,6 +26011,9 @@
                             },
                             "rc_cur_text": {
                               "content": "6 passed"
+                            },
+                            "rc_dep": {
+                              "enabled": false
                             }
                           }
                         },
@@ -25690,6 +26055,15 @@
                             },
                             "rc_cur": {
                               "enabled": false
+                            },
+                            "rc_dep2": {
+                              "enabled": false
+                            },
+                            "rc_dep1_m": {
+                              "content": "7aa31c0 · 3d"
+                            },
+                            "rc_dep1_n": {
+                              "content": "github-pages"
                             }
                           }
                         },
@@ -25731,6 +26105,9 @@
                             },
                             "rc_cur": {
                               "enabled": false
+                            },
+                            "rc_dep": {
+                              "enabled": false
                             }
                           }
                         },
@@ -25771,6 +26148,9 @@
                               "content": "try the new graph layout"
                             },
                             "rc_cur": {
+                              "enabled": false
+                            },
+                            "rc_dep": {
                               "enabled": false
                             }
                           }
@@ -25890,11 +26270,251 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "ovd_s1",
+                          "id": "ovd_se",
                           "name": "Section",
                           "width": "fill_container",
                           "padding": [
                             6,
+                            10,
+                            4,
+                            10
+                          ],
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_sel",
+                              "name": "ovd_sel",
+                              "content": "ENVIRONMENTS",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.5
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_e1",
+                          "name": "Row/Environment",
+                          "width": "fill_container",
+                          "height": 30,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 8,
+                          "alignItems": "center",
+                          "cornerRadius": "$radius/md",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovd_e1_i",
+                              "library": "lucide",
+                              "icon": "circle-check",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$status/added"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_e1_n",
+                              "name": "ovd_e1_n",
+                              "content": "production",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 400,
+                              "fill": "$text/primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_e1_r",
+                              "name": "ovd_e1_r",
+                              "content": "v0.3.0 · 1797054",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ovd_e1_sp",
+                              "width": "fill_container",
+                              "height": 1,
+                              "children": []
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_e1_w",
+                              "name": "ovd_e1_w",
+                              "content": "deployed 2h ago",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ovd_e1_x",
+                              "library": "lucide",
+                              "icon": "external-link",
+                              "width": 13,
+                              "height": 13,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_e2",
+                          "name": "Row/Environment",
+                          "width": "fill_container",
+                          "height": 30,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 8,
+                          "alignItems": "center",
+                          "cornerRadius": "$radius/md",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovd_e2_i",
+                              "library": "lucide",
+                              "icon": "loader-circle",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$status/modified"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_e2_n",
+                              "name": "ovd_e2_n",
+                              "content": "staging",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 400,
+                              "fill": "$text/primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_e2_r",
+                              "name": "ovd_e2_r",
+                              "content": "8d2f1aa",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ovd_e2_sp",
+                              "width": "fill_container",
+                              "height": 1,
+                              "children": []
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_e2_w",
+                              "name": "ovd_e2_w",
+                              "content": "deploying · 1m 12s",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ovd_e2_x",
+                              "library": "lucide",
+                              "icon": "external-link",
+                              "width": 13,
+                              "height": 13,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_e3",
+                          "name": "Row/Environment",
+                          "width": "fill_container",
+                          "height": 30,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 8,
+                          "alignItems": "center",
+                          "cornerRadius": "$radius/md",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovd_e3_i",
+                              "library": "lucide",
+                              "icon": "circle-x",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$status/deleted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_e3_n",
+                              "name": "ovd_e3_n",
+                              "content": "preview",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 400,
+                              "fill": "$text/primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_e3_r",
+                              "name": "ovd_e3_r",
+                              "content": "c5c0244",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ovd_e3_sp",
+                              "width": "fill_container",
+                              "height": 1,
+                              "children": []
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_e3_w",
+                              "name": "ovd_e3_w",
+                              "content": "failed 5h ago",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ovd_e3_x",
+                              "library": "lucide",
+                              "icon": "external-link",
+                              "width": 13,
+                              "height": 13,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_s1",
+                          "name": "Section",
+                          "width": "fill_container",
+                          "padding": [
+                            14,
                             10,
                             4,
                             10
@@ -26084,7 +26704,7 @@
                               "type": "text",
                               "id": "ovd_s2t",
                               "name": "ovd_s2t",
-                              "content": "CI overview across repositories",
+                              "content": "CI/CD across repositories",
                               "fontFamily": "$font/sans",
                               "fontSize": "$text/xs",
                               "fontWeight": 400,

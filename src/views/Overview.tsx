@@ -1,19 +1,19 @@
 /**
- * The CI overview (Nib: Desktop 25/26): every repository on this Mac with
- * the latest checks on its default branch and its current branch, failing
- * first. Selecting one lists its checks; Open in Actions switches to that
+ * The CI/CD view (Nib: Desktop 25/26): every repository on this Mac with
+ * the latest checks on its default branch and its current branch, and the
+ * latest deployment to each environment, failing first. Selecting one lists its checks; Open in Actions switches to that
  * repository's Actions view. Refreshes every minute, every 15 s while
  * something runs.
  */
-import { CircleDashed, CirclePlay, ExternalLink, RefreshCcw, Search } from 'lucide-react'
+import { CircleDashed, CirclePlay, ExternalLink, RefreshCcw, Rocket, Search } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 
 import { Button, Chip, Count, caps, Empty, IconButton } from '../components/ui'
-import { duration } from '../lib/actions'
+import { duration, type RunState } from '../lib/actions'
 import { cx } from '../lib/cx'
 import { openUrl } from '../lib/github'
 import { t, timeAgo } from '../lib/i18n'
-import { type BranchCi, branchState, pollEvery, type RepoCi, type RepoState, refreshOverview, repoState, summary, useOverview } from '../lib/overview'
+import { type BranchCi, branchState, type Deployment, pollEvery, type RepoCi, type RepoState, refreshOverview, repoState, summary, useOverview } from '../lib/overview'
 import { readRecents } from '../state'
 import { StateIcon } from './Actions'
 
@@ -35,6 +35,34 @@ function RepoIcon({ state, size = 15 }: { state: RepoState; size?: number }) {
   if (state === 'none') return <CircleDashed size={size} className="shrink-0 text-faint" aria-label={t('No checks')} />
   return <StateIcon state={state} size={size} />
 }
+
+const DEPLOY_COLOR: Record<RunState, string> = {
+  pass: 'text-status-added',
+  fail: 'text-status-deleted',
+  running: 'text-status-modified',
+  queued: 'text-muted',
+  cancelled: 'text-muted',
+  skipped: 'text-muted',
+}
+
+const DEPLOY_VERB: Record<RunState, string> = {
+  pass: 'deployed {when}',
+  fail: 'failed {when}',
+  running: 'deploying',
+  queued: 'waiting',
+  cancelled: 'removed {when}',
+  skipped: 'deployed {when}',
+}
+
+/** "deployed 2 hours ago" in the pane; just "2h"-style relative time in a row, unless it is still going. */
+const deployWhen = (d: Deployment, long = false) => {
+  const when = timeAgo(new Date(d.at).getTime())
+  if (d.state === 'running' || d.state === 'queued') return t(DEPLOY_VERB[d.state])
+  return long ? t(DEPLOY_VERB[d.state], { when }) : when
+}
+
+const deployTitle = (d: Deployment) =>
+  `${d.environment}\n${d.ref ? `${d.ref} · ` : ''}${d.sha}\n${t(DEPLOY_VERB[d.state], { when: new Date(d.at).toLocaleString() })}${d.url ? `\n${d.url}` : ''}`
 
 const summaryText = (b?: BranchCi) => {
   const s = summary(b)
@@ -79,7 +107,7 @@ export function OverviewView({ onOpenRepo }: { onOpenRepo: (path: string) => voi
     <>
       <div className="flex min-w-0 flex-1 flex-col border-r border-subtle">
         <div className="flex h-11 shrink-0 items-center gap-2 border-b border-subtle pr-2.5 pl-3.5">
-          <span className="text-lg font-bold">{t('CI overview')}</span>
+          <span className="text-lg font-bold">{t('CI/CD')}</span>
           <Count>{counts.all}</Count>
           <span className="min-w-4 flex-1" />
           {at && (
@@ -159,6 +187,19 @@ function RepoRow({ repo: r, selected, onSelect }: { repo: RepoCi; selected: bool
           <span className="min-w-0 flex-1 truncate">{summaryText(r.current)}</span>
         </span>
       )}
+      {!!r.deployments?.length && (
+        <span className="flex w-full min-w-0 items-center gap-2.5 overflow-hidden pl-5.75 text-sm text-muted">
+          {r.deployments.slice(0, 3).map(d => (
+            <span key={d.environment} className="flex min-w-0 shrink items-center gap-1.25" title={deployTitle(d)}>
+              <Rocket size={12} className={cx('shrink-0', DEPLOY_COLOR[d.state])} />
+              <span className="truncate font-semibold text-secondary">{d.environment}</span>
+              <span className="shrink-0 whitespace-nowrap">
+                {d.ref ?? d.sha.slice(0, 7)} · {deployWhen(d)}
+              </span>
+            </span>
+          ))}
+        </span>
+      )}
     </button>
   )
 }
@@ -193,6 +234,30 @@ function RepoPane({ repo: r, onOpen }: { repo: RepoCi; onOpen: () => void }) {
         {!r.slug && <Empty>{t('This repository has no GitHub remote, so there are no checks to show.')}</Empty>}
         {r.error && <Empty>{r.error}</Empty>}
         {r.slug && !r.error && !branches.length && <Empty>{t('No commits on GitHub yet.')}</Empty>}
+        {!!r.deployments?.length && (
+          <div className="mb-3">
+            <div className={cx(caps, 'px-2.5 pt-1.5 pb-1')}>{t('ENVIRONMENTS')}</div>
+            {r.deployments.map(d => (
+              <button
+                key={d.environment}
+                type="button"
+                disabled={!d.url}
+                onClick={() => d.url && void openUrl(d.url)}
+                title={deployTitle(d)}
+                className="flex h-7.5 w-full items-center gap-2 rounded-md px-2.5 text-left enabled:hover:bg-hover"
+              >
+                <StateIcon state={d.state} />
+                <span className="max-w-40 truncate">{d.environment}</span>
+                <span className="min-w-0 flex-1 truncate font-mono text-sm text-link">
+                  {d.ref && d.ref !== d.sha ? `${d.ref} · ` : ''}
+                  {d.sha.slice(0, 7)}
+                </span>
+                <span className="shrink-0 text-sm whitespace-nowrap text-muted">{deployWhen(d, true)}</span>
+                {d.url && <ExternalLink size={13} className="shrink-0 text-muted" />}
+              </button>
+            ))}
+          </div>
+        )}
         {branches.map((b, i) => (
           <div key={b.branch} className={cx(i > 0 && 'mt-3')}>
             <div className="flex items-center gap-1.5 px-2.5 pt-1.5 pb-1">

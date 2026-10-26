@@ -170,7 +170,7 @@ export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () 
         { id: 'a:stashes', group: 'ACTIONS', icon: Archive, color: 'var(--text-secondary)', label: t('Show Stashes'), kbd: '⌘3', run: () => setView('stashes') },
         { id: 'a:pulls', group: 'ACTIONS', icon: GitPullRequest, color: 'var(--text-secondary)', label: t('Show Pull requests'), kbd: '⌘4', run: () => setView('pulls') },
         { id: 'a:actions', group: 'ACTIONS', icon: CirclePlay, color: 'var(--text-secondary)', label: t('Show Actions'), kbd: '⌘5', run: () => setView('actions') },
-        { id: 'a:overview', group: 'ACTIONS', icon: LayoutDashboard, color: 'var(--text-secondary)', label: t('Show CI overview'), kbd: '⌘6', run: () => setView('overview') },
+        { id: 'a:overview', group: 'ACTIONS', icon: LayoutDashboard, color: 'var(--text-secondary)', label: t('Show CI/CD'), kbd: '⌘6', run: () => setView('overview') },
         {
           id: 'a:web',
           group: 'ACTIONS',

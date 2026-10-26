@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import { type BranchCi, type Check, overviewQuery, pollEvery, type RepoCi, readCheck, repoState, sortRepos, summary } from '../overview'
+import { type BranchCi, type Check, deploymentState, overviewQuery, pollEvery, type RepoCi, readCheck, readDeployments, repoState, sortRepos, summary } from '../overview'
 
 const check = (state: Check['state']): Check => ({ name: state, state, started: null, completed: null, url: null })
 const branch = (states: Check['state'][], at = '2026-10-26T10:00:00Z'): BranchCi => ({ branch: 'main', sha: 'abc', subject: 's', at, checks: states.map(check) })
@@ -62,7 +62,39 @@ test('the query passes names as variables and asks for the current branch only w
   ])
   expect(variables).toEqual({ o0: 'o', n0: 'a', b0: 'refs/heads/claude/x"y', o1: 'o', n1: 'b' })
   expect(query).toContain('r0: repository(owner: $o0, name: $n0) { defaultBranchRef { name target { ...C } } cur: ref(qualifiedName: $b0)')
-  expect(query).toContain('r1: repository(owner: $o1, name: $n1) { defaultBranchRef { name target { ...C } } }')
+  expect(query).toContain('r1: repository(owner: $o1, name: $n1) { defaultBranchRef { name target { ...C } } deployments(')
+  expect(query.match(/cur: ref/g)).toHaveLength(1)
   expect(query).not.toContain('claude/x')
   expect(query).toContain('$b0: String!')
+})
+
+test('deployments keep the newest per environment, and a failed one makes the repository fail', () => {
+  const dep = (environment: string, createdAt: string, state: string | null) => ({
+    environment,
+    commitOid: `sha-${createdAt}`,
+    createdAt,
+    ref: { name: 'main' },
+    latestStatus: state ? { state, createdAt, environmentUrl: null, logUrl: 'log' } : null,
+  })
+  const deps = readDeployments([
+    dep('production', '2026-10-25T00:00:00Z', 'FAILURE'),
+    dep('production', '2026-10-26T00:00:00Z', 'SUCCESS'),
+    dep('staging', '2026-10-24T00:00:00Z', 'FAILURE'),
+    dep('preview', '2026-10-23T00:00:00Z', null),
+  ])
+  expect(deps.map(d => [d.environment, d.state])).toEqual([
+    ['production', 'pass'],
+    ['staging', 'fail'],
+    ['preview', 'queued'],
+  ])
+  expect(deps[0]!.url).toBe('log')
+  expect(deploymentState('INACTIVE')).toBe('pass')
+  expect(deploymentState('IN_PROGRESS')).toBe('running')
+  expect(deploymentState('WAITING')).toBe('queued')
+  expect(repoState({ ...repo('a', branch(['pass'])), deployments: deps })).toBe('fail')
+  expect(repoState({ ...repo('a', branch(['pass'])), deployments: deps.slice(0, 1) })).toBe('pass')
+})
+
+test('the query asks for deployments', () => {
+  expect(overviewQuery([{ owner: 'o', name: 'a' }]).query).toContain('deployments(last: 30')
 })
