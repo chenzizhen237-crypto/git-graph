@@ -20,6 +20,8 @@ TAG="v$VERSION"
 NOTES=".github/release-notes/$TAG.md"
 ARCHS="${ARCHS:-aarch64}"
 OUT="release/$TAG"
+# From package.json, since checkouts such as jimmy-test's have no git remote for gh to read.
+export GH_REPO="$(jq -r .repository package.json | sed 's/^github://')"
 
 echo "[1/4] Checking $TAG..."
 [[ "$(jq -r .version src-tauri/tauri.conf.json)" == "$VERSION" ]] || { echo "tauri.conf.json version is not $VERSION."; exit 1; }
@@ -28,7 +30,7 @@ grep -q "^version = \"$VERSION\"$" src-tauri/Cargo.toml || { echo "Cargo.toml ve
 SHA="$(git rev-parse HEAD)"
 if [[ "$DRY_RUN" == 0 ]]; then
   [[ -z "$(git status --porcelain)" ]] || { echo "The working tree has uncommitted changes."; exit 1; }
-  gh api "repos/{owner}/{repo}/commits/$SHA" --silent 2>/dev/null || { echo "HEAD ($SHA) is not on GitHub; push it first."; exit 1; }
+  gh api "repos/$GH_REPO/commits/$SHA" --silent 2>/dev/null || { echo "HEAD ($SHA) is not on GitHub; push it first."; exit 1; }
   if gh release view "$TAG" >/dev/null 2>&1; then echo "Release $TAG already exists."; exit 1; fi
 fi
 
