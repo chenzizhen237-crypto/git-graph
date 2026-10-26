@@ -352,6 +352,24 @@ fn open_terminal(path: String, app: Option<String>) -> Result<(), String> {
     }
 }
 
+/// Installs the latest release: the bundled installer runs in Terminal, where it can
+/// show progress and ask for an administrator password, then quits and reopens the app.
+#[tauri::command]
+fn install_update() -> Result<(), String> {
+    #[cfg(target_os = "macos")]
+    {
+        use std::os::unix::fs::PermissionsExt;
+        const SCRIPT: &str = include_str!("../../scripts/Update-Git-Graph.command");
+        let path = std::env::temp_dir().join("Update-Git-Graph.command");
+        std::fs::write(&path, SCRIPT).map_err(|e| e.to_string())?;
+        std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o755))
+            .map_err(|e| e.to_string())?;
+        open_with(&["-a", "Terminal", &path.to_string_lossy()])
+    }
+    #[cfg(not(target_os = "macos"))]
+    Err("updating from inside the app is only available on macOS".into())
+}
+
 #[tauri::command]
 fn reveal(path: String) -> Result<(), String> {
     open_with(&[&path])
@@ -391,6 +409,7 @@ pub fn run() {
             watch_repo,
             open_terminal,
             reveal,
+            install_update,
             initial_repo
         ])
         .run(tauri::generate_context!())

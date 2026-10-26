@@ -12,6 +12,7 @@ import { t } from './lib/i18n'
 import { notify } from './lib/notify'
 import { isConflict } from './lib/parse'
 import { getSettings } from './lib/settings'
+import { toast } from './lib/toasts'
 import type { Stage } from './lib/tokens'
 import type { LogQuery, RepoData } from './lib/types'
 
@@ -22,8 +23,6 @@ let startView: View | null = null
 export const openNextIn = (view: View) => {
   startView = view
 }
-
-export type Toast = { id: number; kind: 'ok' | 'error'; title: string; detail?: string }
 
 type Ask = { title: string; text?: string; confirm: string; danger?: boolean }
 type Prompt = { title: string; placeholder?: string; initial?: string; confirm: string; /** An empty answer is allowed. */ optional?: boolean }
@@ -53,7 +52,6 @@ function useAppState(root: string) {
   const [selected, setSelected] = useState<string | undefined>()
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)
-  const [toasts, setToasts] = useState<Toast[]>([])
   const [dialog, setDialog] = useState<Dialog | null>(null)
   const [menu, setMenu] = useState<MenuState>(null)
   const [publishOpen, setPublishOpen] = useState(false)
@@ -61,12 +59,6 @@ function useAppState(root: string) {
   const queryRef = useRef(query)
   queryRef.current = query
   const loading = useRef(0)
-
-  const toast = useCallback((t: Omit<Toast, 'id'>) => {
-    const id = Date.now() + Math.random()
-    setToasts(ts => [...ts.slice(-3), { ...t, id }])
-    setTimeout(() => setToasts(ts => ts.filter(x => x.id !== id)), t.kind === 'error' ? 9000 : 3500)
-  }, [])
 
   const refreshNow = useCallback(async () => {
     const ticket = ++loading.current
@@ -168,7 +160,7 @@ function useAppState(root: string) {
         void refresh()
       }
     },
-    [busy, root, refresh, toast, repo],
+    [busy, root, refresh, repo],
   )
 
   const stage = stageOf(repo)
@@ -188,9 +180,8 @@ function useAppState(root: string) {
     setPaletteOpen,
     busy,
     act,
+    /** The app-wide toast stack (lib/toasts), here for components that already use the context. */
     toast,
-    toasts,
-    dismissToast: (id: number) => setToasts(ts => ts.filter(t => t.id !== id)),
     dialog,
     menu,
     closeMenu: () => setMenu(null),

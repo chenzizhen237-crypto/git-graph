@@ -10,6 +10,7 @@ import { listRuns, type Run } from './actions'
 import { rest } from './github'
 import { t } from './i18n'
 import { getSettings, type Notify } from './settings'
+import { type Toast, toast } from './toasts'
 
 /** This app's GitHub repository, for the update check. */
 export const REPO_SLUG = 'chenzizhen237-crypto/git-graph'
@@ -19,12 +20,18 @@ async function allowed() {
   return (await requestPermission()) === 'granted'
 }
 
-/** Shows a notification if `kind` is switched on (and, if asked, only while the window is in the background). */
-export async function notify(kind: keyof Notify | 'test', title: string, body?: string) {
+/**
+ * Shows a notification if `kind` is switched on. With "only while in the background",
+ * a notice that comes while Git Graph is in front shows as a toast instead.
+ */
+export async function notify(kind: keyof Notify | 'test', title: string, body?: string, level: Toast['kind'] = 'info') {
   const n = getSettings().notify
   if (kind !== 'test') {
     if (!n.enabled || !n[kind]) return
-    if (kind !== 'updates' && n.backgroundOnly && (await getCurrentWindow().isFocused())) return
+    if (kind !== 'updates' && n.backgroundOnly && (await getCurrentWindow().isFocused())) {
+      toast({ kind: level, title, detail: body })
+      return
+    }
   }
   if (await allowed()) sendNotification({ title, body })
 }
@@ -47,7 +54,7 @@ export async function checkRuns(root: string, branch: string) {
   }
   for (const r of finished) {
     const ok = r.conclusion === 'success'
-    await notify('ci', t(ok ? '{name} passed on {branch}' : '{name} failed on {branch}', { name: r.name, branch }), r.display_title)
+    await notify('ci', t(ok ? '{name} passed on {branch}' : '{name} failed on {branch}', { name: r.name, branch }), r.display_title, ok ? 'ok' : 'error')
   }
   return live.size > 0
 }
