@@ -13776,6 +13776,53 @@
             },
             {
               "type": "frame",
+              "id": "rc_rel",
+              "name": "Release",
+              "width": "fill_container",
+              "gap": 5,
+              "alignItems": "center",
+              "padding": [
+                0,
+                0,
+                0,
+                23
+              ],
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "rc_rel_i",
+                  "library": "lucide",
+                  "icon": "package",
+                  "width": 12,
+                  "height": 12,
+                  "fill": "$status/deleted"
+                },
+                {
+                  "type": "ref",
+                  "id": "rc_rel_tag",
+                  "ref": "c_chip_tag",
+                  "descendants": {
+                    "cht_label": {
+                      "content": "v0.3.0"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "rc_rel_t",
+                  "name": "rc_rel_t",
+                  "content": "release build failed · 2d · 12 commits since",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                }
+              ]
+            },
+            {
+              "type": "frame",
               "id": "rc_dep",
               "name": "Deployments",
               "width": "fill_container",
@@ -24535,6 +24582,9 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -24578,6 +24628,9 @@
                               "enabled": false
                             },
                             "rc_dep": {
+                              "enabled": false
+                            },
+                            "rc_rel": {
                               "enabled": false
                             }
                           }
@@ -24635,6 +24688,19 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel_i": {
+                              "fill": "$status/added"
+                            },
+                            "rc_rel_tag": {
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v2.1.0"
+                                }
+                              }
+                            },
+                            "rc_rel_t": {
+                              "content": "3w · 4 commits since"
                             }
                           }
                         },
@@ -24685,6 +24751,9 @@
                             },
                             "rc_dep1_n": {
                               "content": "github-pages"
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -24729,6 +24798,9 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -24772,6 +24844,9 @@
                               "enabled": false
                             },
                             "rc_dep": {
+                              "enabled": false
+                            },
+                            "rc_rel": {
                               "enabled": false
                             }
                           }
@@ -24891,11 +24966,182 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "ovl_se",
+                          "id": "ovl_sr",
                           "name": "Section",
                           "width": "fill_container",
                           "padding": [
                             6,
+                            10,
+                            4,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_srl",
+                              "name": "ovl_srl",
+                              "content": "LATEST RELEASE",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.5
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_rel",
+                          "name": "Release",
+                          "width": "fill_container",
+                          "height": 30,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovl_rel_i",
+                              "library": "lucide",
+                              "icon": "package",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$status/deleted"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "ovl_rel_tag",
+                              "ref": "c_chip_tag",
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v0.3.0"
+                                }
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_rel_n",
+                              "name": "ovl_rel_n",
+                              "content": "local repositories, Fonts, Git…",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 400,
+                              "fill": "$text/primary",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_rel_w",
+                              "name": "ovl_rel_w",
+                              "content": "6 files · 2d",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ovl_rel_x",
+                              "library": "lucide",
+                              "icon": "external-link",
+                              "width": 13,
+                              "height": 13,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_rel_mw",
+                          "name": "Since",
+                          "width": "fill_container",
+                          "padding": [
+                            0,
+                            10,
+                            4,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_rel_m",
+                              "name": "ovl_rel_m",
+                              "content": "12 commits on main since this release",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "x": 0,
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_rc1",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (Windows)"
+                            },
+                            "jr_dur": {
+                              "content": "5m 12s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_rc2",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (macOS Apple Silicon)"
+                            },
+                            "jr_dur": {
+                              "content": "4m 2s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_rc3",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Publish release"
+                            },
+                            "jr_dur": {
+                              "content": "28s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_se",
+                          "name": "Section",
+                          "width": "fill_container",
+                          "padding": [
+                            14,
                             10,
                             4,
                             10
@@ -25914,6 +26160,9 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -25957,6 +26206,9 @@
                               "enabled": false
                             },
                             "rc_dep": {
+                              "enabled": false
+                            },
+                            "rc_rel": {
                               "enabled": false
                             }
                           }
@@ -26014,6 +26266,19 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel_i": {
+                              "fill": "$status/added"
+                            },
+                            "rc_rel_tag": {
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v2.1.0"
+                                }
+                              }
+                            },
+                            "rc_rel_t": {
+                              "content": "3w · 4 commits since"
                             }
                           }
                         },
@@ -26064,6 +26329,9 @@
                             },
                             "rc_dep1_n": {
                               "content": "github-pages"
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -26108,6 +26376,9 @@
                             },
                             "rc_dep": {
                               "enabled": false
+                            },
+                            "rc_rel": {
+                              "enabled": false
                             }
                           }
                         },
@@ -26151,6 +26422,9 @@
                               "enabled": false
                             },
                             "rc_dep": {
+                              "enabled": false
+                            },
+                            "rc_rel": {
                               "enabled": false
                             }
                           }
@@ -26270,11 +26544,182 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "ovd_se",
+                          "id": "ovd_sr",
                           "name": "Section",
                           "width": "fill_container",
                           "padding": [
                             6,
+                            10,
+                            4,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_srl",
+                              "name": "ovd_srl",
+                              "content": "LATEST RELEASE",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.5
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_rel",
+                          "name": "Release",
+                          "width": "fill_container",
+                          "height": 30,
+                          "padding": [
+                            0,
+                            10
+                          ],
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovd_rel_i",
+                              "library": "lucide",
+                              "icon": "package",
+                              "width": 15,
+                              "height": 15,
+                              "fill": "$status/deleted"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "ovd_rel_tag",
+                              "ref": "c_chip_tag",
+                              "descendants": {
+                                "cht_label": {
+                                  "content": "v0.3.0"
+                                }
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_rel_n",
+                              "name": "ovd_rel_n",
+                              "content": "local repositories, Fonts, Git…",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/md",
+                              "fontWeight": 400,
+                              "fill": "$text/primary",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_rel_w",
+                              "name": "ovd_rel_w",
+                              "content": "6 files · 2d",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ovd_rel_x",
+                              "library": "lucide",
+                              "icon": "external-link",
+                              "width": 13,
+                              "height": 13,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_rel_mw",
+                          "name": "Since",
+                          "width": "fill_container",
+                          "padding": [
+                            0,
+                            10,
+                            4,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_rel_m",
+                              "name": "ovd_rel_m",
+                              "content": "12 commits on main since this release",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "x": 0,
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_rc1",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (Windows)"
+                            },
+                            "jr_dur": {
+                              "content": "5m 12s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_rc2",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (macOS Apple Silicon)"
+                            },
+                            "jr_dur": {
+                              "content": "4m 2s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_rc3",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Publish release"
+                            },
+                            "jr_dur": {
+                              "content": "28s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_se",
+                          "name": "Section",
+                          "width": "fill_container",
+                          "padding": [
+                            14,
                             10,
                             4,
                             10
