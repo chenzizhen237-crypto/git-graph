@@ -15,7 +15,13 @@ import { getSettings } from './lib/settings'
 import type { Stage } from './lib/tokens'
 import type { LogQuery, RepoData } from './lib/types'
 
-export type View = 'history' | 'changes' | 'stashes' | 'pulls' | 'actions'
+export type View = 'history' | 'changes' | 'stashes' | 'pulls' | 'actions' | 'overview'
+
+/** The view the next repository opens in (the CI overview opens one straight in Actions). */
+let startView: View | null = null
+export const openNextIn = (view: View) => {
+  startView = view
+}
 
 export type Toast = { id: number; kind: 'ok' | 'error'; title: string; detail?: string }
 
@@ -40,7 +46,10 @@ function useAppState(root: string) {
   const [repo, setRepo] = useState<RepoData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [query, setQueryState] = useState<LogQuery>(defaultQuery)
-  const [view, setView] = useState<View>('history')
+  const [view, setView] = useState<View>(() => startView ?? 'history')
+  useEffect(() => {
+    startView = null
+  }, [])
   const [selected, setSelected] = useState<string | undefined>()
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)

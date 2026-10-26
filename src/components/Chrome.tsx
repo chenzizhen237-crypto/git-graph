@@ -18,6 +18,7 @@ import {
   GitMerge,
   GitPullRequest,
   House,
+  LayoutDashboard,
   Monitor,
   Moon,
   PanelLeftClose,
@@ -40,6 +41,7 @@ import { cx } from '../lib/cx'
 import { actions, openTerminal } from '../lib/git'
 import { openInEditor } from '../lib/tools'
 import { t } from '../lib/i18n'
+import { repoState, useOverview } from '../lib/overview'
 import { isConflict } from '../lib/parse'
 import { useMenus } from './menus'
 import { type Settings, updateSettings, useSettings } from '../lib/settings'
@@ -244,6 +246,9 @@ const trackMeta = (track?: string) => ({
 export function Sidebar({ width }: { width: number }) {
   const { repo, view, setView, query, setQuery, act, prompt, openMenu, setPublishOpen } = useApp()
   const menus = useMenus()
+  // Known once the CI overview has loaded; it keeps polling only while open.
+  const { repos: ci } = useOverview()
+  const failing = ci?.filter(r => repoState(r) === 'fail').length ?? 0
   const remotes = useMemo(() => {
     const groups = new Map<string, string[]>()
     for (const r of repo?.refs ?? []) {
@@ -305,6 +310,16 @@ export function Sidebar({ width }: { width: number }) {
           title={t('Pull requests (⌘4)')}
         />
         <Item icon={CirclePlay} color="var(--status-renamed)" label={t('Actions')} selected={view === 'actions'} onClick={() => setView('actions')} title={t('Actions (⌘5)')} />
+        <Item
+          icon={LayoutDashboard}
+          color="var(--status-renamed)"
+          label={t('CI overview')}
+          meta={failing || ''}
+          metaColor="var(--status-deleted)"
+          selected={view === 'overview'}
+          onClick={() => setView('overview')}
+          title={t('CI overview (⌘6)')}
+        />
       </Section>
       <Section label={t('BRANCHES')} onAdd={() => void newBranch()}>
         {locals.map(b => {

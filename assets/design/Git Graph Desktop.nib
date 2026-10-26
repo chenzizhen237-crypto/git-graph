@@ -9062,6 +9062,25 @@
               "width": "fill_container"
             },
             {
+              "type": "ref",
+              "id": "sd_overview",
+              "ref": "c_side_item",
+              "width": "fill_container",
+              "descendants": {
+                "si_icon": {
+                  "icon": "layout-dashboard",
+                  "fill": "$status/renamed"
+                },
+                "si_label": {
+                  "content": "CI overview"
+                },
+                "si_meta": {
+                  "content": "2",
+                  "fill": "$status/deleted"
+                }
+              }
+            },
+            {
               "type": "frame",
               "id": "sd_gap1",
               "name": "Gap",
@@ -13017,6 +13036,743 @@
               "width": 40,
               "textGrowth": "fixed-width",
               "textAlign": "right"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_repo_menu",
+          "name": "Menu/Repositories",
+          "reusable": true,
+          "x": 0,
+          "y": 4800,
+          "width": 340,
+          "layout": "vertical",
+          "padding": 5,
+          "gap": 1,
+          "fill": "$bg/elevated",
+          "cornerRadius": "$radius/lg",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 12
+              },
+              "blur": 32,
+              "spread": 0,
+              "color": "$shadow"
+            }
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "rm_filter",
+              "name": "Filter",
+              "width": "fill_container",
+              "height": 28,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 6,
+              "alignItems": "center",
+              "cornerRadius": "$radius/md",
+              "fill": "$bg/surface",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "rm_fi",
+                  "library": "lucide",
+                  "icon": "search",
+                  "width": 13,
+                  "height": 13,
+                  "fill": "$text/muted"
+                },
+                {
+                  "type": "text",
+                  "id": "rm_ft",
+                  "name": "rm_ft",
+                  "content": "Filter repositories",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/md",
+                  "fontWeight": 400,
+                  "fill": "$text/faint",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_cap",
+              "name": "Caption",
+              "width": "fill_container",
+              "padding": [
+                8,
+                8,
+                4,
+                8
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rm_cap_t",
+                  "name": "rm_cap_t",
+                  "content": "RECENT",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/xs",
+                  "fontWeight": 600,
+                  "fill": "$text/muted",
+                  "letterSpacing": 0.5
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_r1",
+              "name": "Repo item",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 10,
+              "alignItems": "center",
+              "cornerRadius": "$radius/md",
+              "fill": "$bg/selected",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rm_r1_ic",
+                  "name": "Icon",
+                  "width": 26,
+                  "height": 26,
+                  "cornerRadius": "$radius/md",
+                  "fill": "$bg/elevated",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "rm_r1_i",
+                      "library": "lucide",
+                      "icon": "folder-git-2",
+                      "width": 14,
+                      "height": 14,
+                      "fill": "$text/secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rm_r1_t",
+                  "name": "Text",
+                  "layout": "vertical",
+                  "width": "fill_container",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rm_r1_n",
+                      "name": "rm_r1_n",
+                      "content": "claude-mods",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 18
+                    },
+                    {
+                      "type": "text",
+                      "id": "rm_r1_p",
+                      "name": "rm_r1_p",
+                      "content": "~/Code/claude-mods",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/xs",
+                      "fontWeight": 400,
+                      "fill": "$text/muted",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 14
+                    }
+                  ],
+                  "clip": true
+                },
+                {
+                  "type": "ref",
+                  "id": "rm_r1_b",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "claude/git-graph-mod"
+                    }
+                  }
+                },
+                {
+                  "type": "icon",
+                  "id": "rm_r1_ck",
+                  "name": "check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$accent",
+                  "enabled": true
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_r2",
+              "name": "Repo item",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 10,
+              "alignItems": "center",
+              "cornerRadius": "$radius/md",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rm_r2_ic",
+                  "name": "Icon",
+                  "width": 26,
+                  "height": 26,
+                  "cornerRadius": "$radius/md",
+                  "fill": "$bg/surface",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "rm_r2_i",
+                      "library": "lucide",
+                      "icon": "folder-git-2",
+                      "width": 14,
+                      "height": 14,
+                      "fill": "$text/secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rm_r2_t",
+                  "name": "Text",
+                  "layout": "vertical",
+                  "width": "fill_container",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rm_r2_n",
+                      "name": "rm_r2_n",
+                      "content": "git-graph",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 18
+                    },
+                    {
+                      "type": "text",
+                      "id": "rm_r2_p",
+                      "name": "rm_r2_p",
+                      "content": "~/Downloads/Code/git-graph",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/xs",
+                      "fontWeight": 400,
+                      "fill": "$text/muted",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 14
+                    }
+                  ],
+                  "clip": true
+                },
+                {
+                  "type": "ref",
+                  "id": "rm_r2_b",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "main"
+                    }
+                  }
+                },
+                {
+                  "type": "icon",
+                  "id": "rm_r2_ck",
+                  "name": "check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$accent",
+                  "enabled": false
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_r3",
+              "name": "Repo item",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 10,
+              "alignItems": "center",
+              "cornerRadius": "$radius/md",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rm_r3_ic",
+                  "name": "Icon",
+                  "width": 26,
+                  "height": 26,
+                  "cornerRadius": "$radius/md",
+                  "fill": "$bg/surface",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "rm_r3_i",
+                      "library": "lucide",
+                      "icon": "folder-git-2",
+                      "width": 14,
+                      "height": 14,
+                      "fill": "$text/secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rm_r3_t",
+                  "name": "Text",
+                  "layout": "vertical",
+                  "width": "fill_container",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rm_r3_n",
+                      "name": "rm_r3_n",
+                      "content": "nib",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 18
+                    },
+                    {
+                      "type": "text",
+                      "id": "rm_r3_p",
+                      "name": "rm_r3_p",
+                      "content": "~/Code/nib",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/xs",
+                      "fontWeight": 400,
+                      "fill": "$text/muted",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 14
+                    }
+                  ],
+                  "clip": true
+                },
+                {
+                  "type": "ref",
+                  "id": "rm_r3_b",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "main"
+                    }
+                  }
+                },
+                {
+                  "type": "icon",
+                  "id": "rm_r3_ck",
+                  "name": "check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$accent",
+                  "enabled": false
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_r4",
+              "name": "Repo item",
+              "width": "fill_container",
+              "height": 40,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 10,
+              "alignItems": "center",
+              "cornerRadius": "$radius/md",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rm_r4_ic",
+                  "name": "Icon",
+                  "width": 26,
+                  "height": 26,
+                  "cornerRadius": "$radius/md",
+                  "fill": "$bg/surface",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "rm_r4_i",
+                      "library": "lucide",
+                      "icon": "folder-git-2",
+                      "width": 14,
+                      "height": 14,
+                      "fill": "$text/secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rm_r4_t",
+                  "name": "Text",
+                  "layout": "vertical",
+                  "width": "fill_container",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rm_r4_n",
+                      "name": "rm_r4_n",
+                      "content": "dotfiles",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 18
+                    },
+                    {
+                      "type": "text",
+                      "id": "rm_r4_p",
+                      "name": "rm_r4_p",
+                      "content": "~/dotfiles",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/xs",
+                      "fontWeight": 400,
+                      "fill": "$text/muted",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width-height",
+                      "height": 14
+                    }
+                  ],
+                  "clip": true
+                },
+                {
+                  "type": "ref",
+                  "id": "rm_r4_b",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "master"
+                    }
+                  }
+                },
+                {
+                  "type": "icon",
+                  "id": "rm_r4_ck",
+                  "name": "check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 14,
+                  "height": 14,
+                  "fill": "$accent",
+                  "enabled": false
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rm_sepw",
+              "name": "Separator",
+              "width": "fill_container",
+              "padding": [
+                4,
+                0
+              ],
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "id": "rm_sep2",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "$border/subtle"
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "id": "rm_open",
+              "ref": "c_menu_item",
+              "width": "fill_container",
+              "height": 28,
+              "descendants": {
+                "mi_icon": {
+                  "icon": "folder-open"
+                },
+                "mi_label": {
+                  "content": "Open repository…"
+                },
+                "mi_kbd": {
+                  "descendants": {
+                    "kb_text": {
+                      "content": "⌘O"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "ref",
+              "id": "rm_clone",
+              "ref": "c_menu_item",
+              "width": "fill_container",
+              "height": 28,
+              "descendants": {
+                "mi_icon": {
+                  "icon": "cloud-download"
+                },
+                "mi_label": {
+                  "content": "Clone from GitHub…"
+                },
+                "mi_kbd": {
+                  "enabled": false
+                }
+              }
+            },
+            {
+              "type": "ref",
+              "id": "rm_all",
+              "ref": "c_menu_item",
+              "width": "fill_container",
+              "height": 28,
+              "descendants": {
+                "mi_icon": {
+                  "icon": "layout-grid"
+                },
+                "mi_label": {
+                  "content": "All repositories"
+                },
+                "mi_kbd": {
+                  "descendants": {
+                    "kb_text": {
+                      "content": "⇧⌘O"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "c_repo_ci",
+          "name": "Row/Repo CI",
+          "reusable": true,
+          "x": 600,
+          "y": 4700,
+          "width": 600,
+          "layout": "vertical",
+          "gap": 4,
+          "padding": [
+            9,
+            12
+          ],
+          "cornerRadius": "$radius/md",
+          "children": [
+            {
+              "type": "frame",
+              "id": "rc_top",
+              "name": "Top",
+              "width": "fill_container",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "rc_status",
+                  "name": "Status",
+                  "library": "lucide",
+                  "icon": "circle-x",
+                  "width": 15,
+                  "height": 15,
+                  "fill": "$status/deleted"
+                },
+                {
+                  "type": "text",
+                  "id": "rc_name",
+                  "name": "rc_name",
+                  "content": "git-graph",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/md",
+                  "fontWeight": 600,
+                  "fill": "$text/primary"
+                },
+                {
+                  "type": "text",
+                  "id": "rc_slug",
+                  "name": "rc_slug",
+                  "content": "chenzizhen237-crypto/git-graph",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                },
+                {
+                  "type": "text",
+                  "id": "rc_sum",
+                  "name": "rc_sum",
+                  "content": "1 of 6 failed",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 500,
+                  "fill": "$status/deleted"
+                },
+                {
+                  "type": "text",
+                  "id": "rc_time",
+                  "name": "rc_time",
+                  "content": "2h",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rc_meta",
+              "name": "Default branch",
+              "width": "fill_container",
+              "gap": 6,
+              "alignItems": "center",
+              "padding": [
+                0,
+                0,
+                0,
+                23
+              ],
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "rc_branch",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "main"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "rc_sha",
+                  "name": "rc_sha",
+                  "content": "c5c0244",
+                  "fontFamily": "$font/mono",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 500,
+                  "fill": "$text/link"
+                },
+                {
+                  "type": "text",
+                  "id": "rc_subject",
+                  "name": "rc_subject",
+                  "content": "Bundle: include the .ico icon",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/secondary",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rc_cur",
+              "name": "Current branch",
+              "width": "fill_container",
+              "gap": 6,
+              "alignItems": "center",
+              "padding": [
+                0,
+                0,
+                0,
+                23
+              ],
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "rc_cur_status",
+                  "name": "Status",
+                  "library": "lucide",
+                  "icon": "loader-circle",
+                  "width": 12,
+                  "height": 12,
+                  "fill": "$status/modified"
+                },
+                {
+                  "type": "ref",
+                  "id": "rc_cur_branch",
+                  "ref": "c_chip_local",
+                  "descendants": {
+                    "chl_label": {
+                      "content": "claude/cicd-monitoring"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "rc_cur_text",
+                  "name": "rc_cur_text",
+                  "content": "3 of 5 running",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/sm",
+                  "fontWeight": 400,
+                  "fill": "$text/muted",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                }
+              ]
             }
           ]
         }
@@ -23133,6 +23889,2302 @@
                       "fontSize": "$text/sm",
                       "fontWeight": 600,
                       "fill": "$status/modified"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl24",
+          "name": "Label · 24 · Repository dropdown",
+          "x": 6600,
+          "y": 9810,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl24_t",
+              "name": "dl24_t",
+              "content": "24 · Repository dropdown",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl24_s",
+              "name": "dl24_s",
+              "content": "Light · the repo picker in the title bar opens a menu: current + recent repos, filter, open/clone/all",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_repo_menu",
+          "name": "24 · Repository dropdown — Light",
+          "x": 6600,
+          "y": 9900,
+          "width": 1440,
+          "height": 900,
+          "layout": "none",
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "children": [
+            {
+              "type": "ref",
+              "id": "d24_win",
+              "ref": "c_win_history",
+              "x": 0,
+              "y": 0,
+              "descendants": {
+                "tl_repo": {
+                  "fill": "$bg/hover"
+                }
+              }
+            },
+            {
+              "type": "ref",
+              "id": "d24_menu",
+              "ref": "c_repo_menu",
+              "x": 94,
+              "y": 50
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl25",
+          "name": "Label · 25 · CI overview",
+          "x": 0,
+          "y": 11010,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl25_t",
+              "name": "dl25_t",
+              "content": "25 · CI overview",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl25_s",
+              "name": "dl25_s",
+              "content": "Light · ⌘6 · every repository on this Mac: latest checks on the default and current branch, failing first; any CI that reports to GitHub",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_ovl",
+          "name": "25 · CI overview — Light",
+          "x": 0,
+          "y": 11100,
+          "width": 1440,
+          "height": 900,
+          "layout": "vertical",
+          "theme": {
+            "Mode": "Light",
+            "Stage": "Clean"
+          },
+          "fill": "$bg/app",
+          "cornerRadius": 12,
+          "clip": true,
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "children": [
+            {
+              "type": "ref",
+              "id": "ovl_title",
+              "ref": "c_titlebar",
+              "width": "fill_container",
+              "descendants": {}
+            },
+            {
+              "type": "frame",
+              "id": "ovl_body",
+              "name": "Body",
+              "width": "fill_container",
+              "height": "fill_container",
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "ovl_side",
+                  "ref": "c_sidebar",
+                  "height": "fill_container",
+                  "descendants": {
+                    "sd_si3": {
+                      "fill": "#00000000",
+                      "descendants": {
+                        "si_icon": {
+                          "icon": "git-graph",
+                          "fill": "$ref/head"
+                        },
+                        "si_label": {
+                          "content": "History",
+                          "fontWeight": 400
+                        },
+                        "si_meta": {
+                          "content": ""
+                        }
+                      }
+                    },
+                    "sd_overview": {
+                      "fill": "$bg/selected",
+                      "descendants": {
+                        "si_icon": {
+                          "icon": "layout-dashboard",
+                          "fill": "$status/renamed"
+                        },
+                        "si_label": {
+                          "content": "CI overview",
+                          "fontWeight": 600
+                        },
+                        "si_meta": {
+                          "content": "2",
+                          "fill": "$status/deleted"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "ovl_list",
+                  "name": "Repositories",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "right": 1
+                  },
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ovl_lh",
+                      "name": "Header",
+                      "width": "fill_container",
+                      "height": 44,
+                      "padding": [
+                        0,
+                        10,
+                        0,
+                        14
+                      ],
+                      "gap": 8,
+                      "alignItems": "center",
+                      "stroke": "$border/subtle",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ovl_lt",
+                          "name": "ovl_lt",
+                          "content": "CI overview",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/lg",
+                          "fontWeight": 700,
+                          "fill": "$text/primary"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_lc",
+                          "name": "Count",
+                          "fill": "$bg/surface",
+                          "cornerRadius": 9,
+                          "padding": [
+                            1,
+                            6
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_lcn",
+                              "name": "ovl_lcn",
+                              "content": "7",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_lsp",
+                          "name": "Spacer",
+                          "width": "fill_container",
+                          "height": 1,
+                          "children": []
+                        },
+                        {
+                          "type": "text",
+                          "id": "ovl_upd",
+                          "name": "ovl_upd",
+                          "content": "Updated 20s ago · refreshes every minute, every 15s while running",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted"
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_lr",
+                          "ref": "c_btn_icon",
+                          "descendants": {
+                            "bi_icon": {
+                              "icon": "refresh-ccw"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ovl_lf",
+                      "name": "Filters",
+                      "width": "fill_container",
+                      "padding": 8,
+                      "gap": 4,
+                      "alignItems": "center",
+                      "stroke": "$border/subtle",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ovl_f1",
+                          "name": "All",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "gap": 6,
+                          "cornerRadius": "$radius/md",
+                          "alignItems": "center",
+                          "fill": "$bg/selected",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_f1_t",
+                              "name": "ovl_f1_t",
+                              "content": "All",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 600,
+                              "fill": "$ref/head"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_f1_n",
+                              "name": "ovl_f1_n",
+                              "content": "7",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_f2",
+                          "name": "Failing",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "gap": 6,
+                          "cornerRadius": "$radius/md",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_f2_t",
+                              "name": "ovl_f2_t",
+                              "content": "Failing",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_f2_n",
+                              "name": "ovl_f2_n",
+                              "content": "2",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$status/deleted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_f3",
+                          "name": "Running",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "gap": 6,
+                          "cornerRadius": "$radius/md",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_f3_t",
+                              "name": "ovl_f3_t",
+                              "content": "Running",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_f3_n",
+                              "name": "ovl_f3_n",
+                              "content": "1",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_f4",
+                          "name": "Passing",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "gap": 6,
+                          "cornerRadius": "$radius/md",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_f4_t",
+                              "name": "ovl_f4_t",
+                              "content": "Passing",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_f4_n",
+                              "name": "ovl_f4_n",
+                              "content": "3",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_fsp",
+                          "name": "Spacer",
+                          "width": "fill_container",
+                          "height": 1,
+                          "children": []
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_fs",
+                          "ref": "c_search",
+                          "width": 240,
+                          "descendants": {
+                            "se_text": {
+                              "content": "Filter repositories"
+                            },
+                            "se_kbd": {
+                              "enabled": false
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ovl_rows",
+                      "name": "List",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "padding": 6,
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "ref",
+                          "id": "ovl_row0",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "fill": "$bg/selected",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "rc_name": {
+                              "content": "git-graph"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/git-graph"
+                            },
+                            "rc_sum": {
+                              "content": "1 of 6 failed",
+                              "fill": "$status/deleted"
+                            },
+                            "rc_time": {
+                              "content": "2h"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "c5c0244"
+                            },
+                            "rc_subject": {
+                              "content": "Bundle: include the .ico icon"
+                            },
+                            "rc_cur": {},
+                            "rc_cur_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "rc_cur_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "claude/cicd-monitoring"
+                                }
+                              }
+                            },
+                            "rc_cur_text": {
+                              "content": "3 of 5 running"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_row1",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "rc_name": {
+                              "content": "claude-mods"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/claude-mods"
+                            },
+                            "rc_sum": {
+                              "content": "buildkite failed",
+                              "fill": "$status/deleted"
+                            },
+                            "rc_time": {
+                              "content": "5h"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "9e1d07a"
+                            },
+                            "rc_subject": {
+                              "content": "Slots: render libraries lazily"
+                            },
+                            "rc_cur": {
+                              "enabled": false
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_row2",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "rc_name": {
+                              "content": "tauri-plugin-fonts"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/tauri-plugin-fonts"
+                            },
+                            "rc_sum": {
+                              "content": "2 of 4 running",
+                              "fill": "$status/modified"
+                            },
+                            "rc_time": {
+                              "content": "now"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "41b8c2f"
+                            },
+                            "rc_subject": {
+                              "content": "List variable font axes"
+                            },
+                            "rc_cur": {
+                              "enabled": false
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_row3",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rc_name": {
+                              "content": "nvim-config"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/nvim-config"
+                            },
+                            "rc_sum": {
+                              "content": "6 passed",
+                              "fill": "$text/muted"
+                            },
+                            "rc_time": {
+                              "content": "1d"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "f03a9d1"
+                            },
+                            "rc_subject": {
+                              "content": "git-graph pane: open on <leader>gg"
+                            },
+                            "rc_cur": {},
+                            "rc_cur_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rc_cur_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "lsp-tweaks"
+                                }
+                              }
+                            },
+                            "rc_cur_text": {
+                              "content": "6 passed"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_row4",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rc_name": {
+                              "content": "website"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/website"
+                            },
+                            "rc_sum": {
+                              "content": "2 passed",
+                              "fill": "$text/muted"
+                            },
+                            "rc_time": {
+                              "content": "3d"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "7aa31c0"
+                            },
+                            "rc_subject": {
+                              "content": "Post: shipping Git Graph 0.3"
+                            },
+                            "rc_cur": {
+                              "enabled": false
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_row5",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rc_name": {
+                              "content": "dotfiles"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/dotfiles"
+                            },
+                            "rc_sum": {
+                              "content": "1 passed",
+                              "fill": "$text/muted"
+                            },
+                            "rc_time": {
+                              "content": "1w"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "2c9e4b8"
+                            },
+                            "rc_subject": {
+                              "content": "zsh: prefer eza and bat"
+                            },
+                            "rc_cur": {
+                              "enabled": false
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_row6",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-dashed",
+                              "fill": "$text/faint"
+                            },
+                            "rc_name": {
+                              "content": "scratch"
+                            },
+                            "rc_slug": {
+                              "content": "Local only · no GitHub remote"
+                            },
+                            "rc_sum": {
+                              "content": "No checks",
+                              "fill": "$text/muted"
+                            },
+                            "rc_time": {
+                              "content": ""
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "b81f2e0"
+                            },
+                            "rc_subject": {
+                              "content": "try the new graph layout"
+                            },
+                            "rc_cur": {
+                              "enabled": false
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ovl_det",
+                  "name": "Repository",
+                  "width": 460,
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ovl_dh",
+                      "name": "Header",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": [
+                        16,
+                        20,
+                        14,
+                        20
+                      ],
+                      "stroke": "$border/subtle",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ovl_dht",
+                          "name": "Title",
+                          "width": "fill_container",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovl_ds",
+                              "library": "lucide",
+                              "icon": "circle-x",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$status/deleted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_dtt",
+                              "name": "ovl_dtt",
+                              "content": "git-graph",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xl",
+                              "fontWeight": 600,
+                              "fill": "$text/primary",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "ovl_open",
+                              "ref": "c_btn_primary",
+                              "descendants": {
+                                "bp_icon": {
+                                  "icon": "circle-play"
+                                },
+                                "bp_label": {
+                                  "content": "Open in Actions"
+                                }
+                              }
+                            },
+                            {
+                              "type": "ref",
+                              "id": "ovl_gh",
+                              "ref": "c_btn_secondary",
+                              "descendants": {
+                                "bs_icon": {
+                                  "icon": "external-link"
+                                },
+                                "bs_label": {
+                                  "content": "GitHub"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "ovl_dm",
+                          "name": "ovl_dm",
+                          "content": "chenzizhen237-crypto/git-graph · ~/Code/git-graph",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "padding": 0
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ovl_dc",
+                      "name": "Checks",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "padding": [
+                        10,
+                        8
+                      ],
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ovl_s1",
+                          "name": "Section",
+                          "width": "fill_container",
+                          "padding": [
+                            6,
+                            10,
+                            4,
+                            10
+                          ],
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_s1l",
+                              "name": "ovl_s1l",
+                              "content": "MAIN",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.5
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_s1s",
+                              "name": "ovl_s1s",
+                              "content": "c5c0244",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 400,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_s1t",
+                              "name": "ovl_s1t",
+                              "content": "Bundle: include the .ico icon",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c1",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (Windows)"
+                            },
+                            "jr_dur": {
+                              "content": "5m 12s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c2",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (macOS Apple Silicon)"
+                            },
+                            "jr_dur": {
+                              "content": "4m 2s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c3",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (macOS Intel)"
+                            },
+                            "jr_dur": {
+                              "content": "4m 31s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c4",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (Linux)"
+                            },
+                            "jr_dur": {
+                              "content": "3m 50s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c5",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "CI / check"
+                            },
+                            "jr_dur": {
+                              "content": "1m 48s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c6",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Vercel – docs preview"
+                            },
+                            "jr_dur": {
+                              "content": ""
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovl_s2",
+                          "name": "Section",
+                          "width": "fill_container",
+                          "padding": [
+                            14,
+                            10,
+                            4,
+                            10
+                          ],
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovl_s2l",
+                              "name": "ovl_s2l",
+                              "content": "CLAUDE/CICD-MONITORING",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.5
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_s2s",
+                              "name": "ovl_s2s",
+                              "content": "8d2f1aa",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 400,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovl_s2t",
+                              "name": "ovl_s2t",
+                              "content": "CI overview across repositories",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c7",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "jr_name": {
+                              "content": "CI / check"
+                            },
+                            "jr_dur": {
+                              "content": "1m 2s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c8",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "jr_name": {
+                              "content": "CI / test (ubuntu)"
+                            },
+                            "jr_dur": {
+                              "content": "58s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c9",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "jr_name": {
+                              "content": "CI / test (windows)"
+                            },
+                            "jr_dur": {
+                              "content": "41s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c10",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "CodeQL"
+                            },
+                            "jr_dur": {
+                              "content": "2m 10s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovl_c11",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "buildkite/git-graph"
+                            },
+                            "jr_dur": {
+                              "content": "3m 3s"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dl26",
+          "name": "Label · 26 · CI overview — Dark",
+          "x": 1540,
+          "y": 11010,
+          "layout": "vertical",
+          "gap": 4,
+          "children": [
+            {
+              "type": "text",
+              "id": "dl26_t",
+              "name": "dl26_t",
+              "content": "26 · CI overview",
+              "fontFamily": "$font/sans",
+              "fontSize": 22,
+              "fontWeight": 700,
+              "fill": "$text/primary"
+            },
+            {
+              "type": "text",
+              "id": "dl26_s",
+              "name": "dl26_s",
+              "content": "Dark · same view; Open in Actions switches to that repository’s Actions (⌘5)",
+              "fontFamily": "$font/sans",
+              "fontSize": 14,
+              "fontWeight": 400,
+              "fill": "$text/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d_ovd",
+          "name": "25 · CI overview — Dark",
+          "x": 1540,
+          "y": 11100,
+          "width": 1440,
+          "height": 900,
+          "layout": "vertical",
+          "theme": {
+            "Mode": "Dark",
+            "Stage": "Clean"
+          },
+          "fill": "$bg/app",
+          "cornerRadius": 12,
+          "clip": true,
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "children": [
+            {
+              "type": "ref",
+              "id": "ovd_title",
+              "ref": "c_titlebar",
+              "width": "fill_container",
+              "descendants": {}
+            },
+            {
+              "type": "frame",
+              "id": "ovd_body",
+              "name": "Body",
+              "width": "fill_container",
+              "height": "fill_container",
+              "children": [
+                {
+                  "type": "ref",
+                  "id": "ovd_side",
+                  "ref": "c_sidebar",
+                  "height": "fill_container",
+                  "descendants": {
+                    "sd_si3": {
+                      "fill": "#00000000",
+                      "descendants": {
+                        "si_icon": {
+                          "icon": "git-graph",
+                          "fill": "$ref/head"
+                        },
+                        "si_label": {
+                          "content": "History",
+                          "fontWeight": 400
+                        },
+                        "si_meta": {
+                          "content": ""
+                        }
+                      }
+                    },
+                    "sd_overview": {
+                      "fill": "$bg/selected",
+                      "descendants": {
+                        "si_icon": {
+                          "icon": "layout-dashboard",
+                          "fill": "$status/renamed"
+                        },
+                        "si_label": {
+                          "content": "CI overview",
+                          "fontWeight": 600
+                        },
+                        "si_meta": {
+                          "content": "2",
+                          "fill": "$status/deleted"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "ovd_list",
+                  "name": "Repositories",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "right": 1
+                  },
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ovd_lh",
+                      "name": "Header",
+                      "width": "fill_container",
+                      "height": 44,
+                      "padding": [
+                        0,
+                        10,
+                        0,
+                        14
+                      ],
+                      "gap": 8,
+                      "alignItems": "center",
+                      "stroke": "$border/subtle",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ovd_lt",
+                          "name": "ovd_lt",
+                          "content": "CI overview",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/lg",
+                          "fontWeight": 700,
+                          "fill": "$text/primary"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_lc",
+                          "name": "Count",
+                          "fill": "$bg/surface",
+                          "cornerRadius": 9,
+                          "padding": [
+                            1,
+                            6
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_lcn",
+                              "name": "ovd_lcn",
+                              "content": "7",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_lsp",
+                          "name": "Spacer",
+                          "width": "fill_container",
+                          "height": 1,
+                          "children": []
+                        },
+                        {
+                          "type": "text",
+                          "id": "ovd_upd",
+                          "name": "ovd_upd",
+                          "content": "Updated 20s ago · refreshes every minute, every 15s while running",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted"
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_lr",
+                          "ref": "c_btn_icon",
+                          "descendants": {
+                            "bi_icon": {
+                              "icon": "refresh-ccw"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ovd_lf",
+                      "name": "Filters",
+                      "width": "fill_container",
+                      "padding": 8,
+                      "gap": 4,
+                      "alignItems": "center",
+                      "stroke": "$border/subtle",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ovd_f1",
+                          "name": "All",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "gap": 6,
+                          "cornerRadius": "$radius/md",
+                          "alignItems": "center",
+                          "fill": "$bg/selected",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_f1_t",
+                              "name": "ovd_f1_t",
+                              "content": "All",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 600,
+                              "fill": "$ref/head"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_f1_n",
+                              "name": "ovd_f1_n",
+                              "content": "7",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_f2",
+                          "name": "Failing",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "gap": 6,
+                          "cornerRadius": "$radius/md",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_f2_t",
+                              "name": "ovd_f2_t",
+                              "content": "Failing",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_f2_n",
+                              "name": "ovd_f2_n",
+                              "content": "2",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$status/deleted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_f3",
+                          "name": "Running",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "gap": 6,
+                          "cornerRadius": "$radius/md",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_f3_t",
+                              "name": "ovd_f3_t",
+                              "content": "Running",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_f3_n",
+                              "name": "ovd_f3_n",
+                              "content": "1",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_f4",
+                          "name": "Passing",
+                          "height": 24,
+                          "padding": [
+                            0,
+                            8
+                          ],
+                          "gap": 6,
+                          "cornerRadius": "$radius/md",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_f4_t",
+                              "name": "ovd_f4_t",
+                              "content": "Passing",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/sm",
+                              "fontWeight": 400,
+                              "fill": "$text/secondary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_f4_n",
+                              "name": "ovd_f4_n",
+                              "content": "3",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_fsp",
+                          "name": "Spacer",
+                          "width": "fill_container",
+                          "height": 1,
+                          "children": []
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_fs",
+                          "ref": "c_search",
+                          "width": 240,
+                          "descendants": {
+                            "se_text": {
+                              "content": "Filter repositories"
+                            },
+                            "se_kbd": {
+                              "enabled": false
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ovd_rows",
+                      "name": "List",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "padding": 6,
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "ref",
+                          "id": "ovd_row0",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "fill": "$bg/selected",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "rc_name": {
+                              "content": "git-graph"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/git-graph"
+                            },
+                            "rc_sum": {
+                              "content": "1 of 6 failed",
+                              "fill": "$status/deleted"
+                            },
+                            "rc_time": {
+                              "content": "2h"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "c5c0244"
+                            },
+                            "rc_subject": {
+                              "content": "Bundle: include the .ico icon"
+                            },
+                            "rc_cur": {},
+                            "rc_cur_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "rc_cur_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "claude/cicd-monitoring"
+                                }
+                              }
+                            },
+                            "rc_cur_text": {
+                              "content": "3 of 5 running"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_row1",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "rc_name": {
+                              "content": "claude-mods"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/claude-mods"
+                            },
+                            "rc_sum": {
+                              "content": "buildkite failed",
+                              "fill": "$status/deleted"
+                            },
+                            "rc_time": {
+                              "content": "5h"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "9e1d07a"
+                            },
+                            "rc_subject": {
+                              "content": "Slots: render libraries lazily"
+                            },
+                            "rc_cur": {
+                              "enabled": false
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_row2",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "rc_name": {
+                              "content": "tauri-plugin-fonts"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/tauri-plugin-fonts"
+                            },
+                            "rc_sum": {
+                              "content": "2 of 4 running",
+                              "fill": "$status/modified"
+                            },
+                            "rc_time": {
+                              "content": "now"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "41b8c2f"
+                            },
+                            "rc_subject": {
+                              "content": "List variable font axes"
+                            },
+                            "rc_cur": {
+                              "enabled": false
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_row3",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rc_name": {
+                              "content": "nvim-config"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/nvim-config"
+                            },
+                            "rc_sum": {
+                              "content": "6 passed",
+                              "fill": "$text/muted"
+                            },
+                            "rc_time": {
+                              "content": "1d"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "f03a9d1"
+                            },
+                            "rc_subject": {
+                              "content": "git-graph pane: open on <leader>gg"
+                            },
+                            "rc_cur": {},
+                            "rc_cur_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rc_cur_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "lsp-tweaks"
+                                }
+                              }
+                            },
+                            "rc_cur_text": {
+                              "content": "6 passed"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_row4",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rc_name": {
+                              "content": "website"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/website"
+                            },
+                            "rc_sum": {
+                              "content": "2 passed",
+                              "fill": "$text/muted"
+                            },
+                            "rc_time": {
+                              "content": "3d"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "7aa31c0"
+                            },
+                            "rc_subject": {
+                              "content": "Post: shipping Git Graph 0.3"
+                            },
+                            "rc_cur": {
+                              "enabled": false
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_row5",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "rc_name": {
+                              "content": "dotfiles"
+                            },
+                            "rc_slug": {
+                              "content": "chenzizhen237-crypto/dotfiles"
+                            },
+                            "rc_sum": {
+                              "content": "1 passed",
+                              "fill": "$text/muted"
+                            },
+                            "rc_time": {
+                              "content": "1w"
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "2c9e4b8"
+                            },
+                            "rc_subject": {
+                              "content": "zsh: prefer eza and bat"
+                            },
+                            "rc_cur": {
+                              "enabled": false
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_row6",
+                          "ref": "c_repo_ci",
+                          "width": "fill_container",
+                          "descendants": {
+                            "rc_status": {
+                              "icon": "circle-dashed",
+                              "fill": "$text/faint"
+                            },
+                            "rc_name": {
+                              "content": "scratch"
+                            },
+                            "rc_slug": {
+                              "content": "Local only · no GitHub remote"
+                            },
+                            "rc_sum": {
+                              "content": "No checks",
+                              "fill": "$text/muted"
+                            },
+                            "rc_time": {
+                              "content": ""
+                            },
+                            "rc_branch": {
+                              "descendants": {
+                                "chl_label": {
+                                  "content": "main"
+                                }
+                              }
+                            },
+                            "rc_sha": {
+                              "content": "b81f2e0"
+                            },
+                            "rc_subject": {
+                              "content": "try the new graph layout"
+                            },
+                            "rc_cur": {
+                              "enabled": false
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ovd_det",
+                  "name": "Repository",
+                  "width": 460,
+                  "height": "fill_container",
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ovd_dh",
+                      "name": "Header",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": [
+                        16,
+                        20,
+                        14,
+                        20
+                      ],
+                      "stroke": "$border/subtle",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ovd_dht",
+                          "name": "Title",
+                          "width": "fill_container",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ovd_ds",
+                              "library": "lucide",
+                              "icon": "circle-x",
+                              "width": 18,
+                              "height": 18,
+                              "fill": "$status/deleted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_dtt",
+                              "name": "ovd_dtt",
+                              "content": "git-graph",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xl",
+                              "fontWeight": 600,
+                              "fill": "$text/primary",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            },
+                            {
+                              "type": "ref",
+                              "id": "ovd_open",
+                              "ref": "c_btn_primary",
+                              "descendants": {
+                                "bp_icon": {
+                                  "icon": "circle-play"
+                                },
+                                "bp_label": {
+                                  "content": "Open in Actions"
+                                }
+                              }
+                            },
+                            {
+                              "type": "ref",
+                              "id": "ovd_gh",
+                              "ref": "c_btn_secondary",
+                              "descendants": {
+                                "bs_icon": {
+                                  "icon": "external-link"
+                                },
+                                "bs_label": {
+                                  "content": "GitHub"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "ovd_dm",
+                          "name": "ovd_dm",
+                          "content": "chenzizhen237-crypto/git-graph · ~/Code/git-graph",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "padding": 0
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ovd_dc",
+                      "name": "Checks",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "layout": "vertical",
+                      "padding": [
+                        10,
+                        8
+                      ],
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ovd_s1",
+                          "name": "Section",
+                          "width": "fill_container",
+                          "padding": [
+                            6,
+                            10,
+                            4,
+                            10
+                          ],
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_s1l",
+                              "name": "ovd_s1l",
+                              "content": "MAIN",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.5
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_s1s",
+                              "name": "ovd_s1s",
+                              "content": "c5c0244",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 400,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_s1t",
+                              "name": "ovd_s1t",
+                              "content": "Bundle: include the .ico icon",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c1",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-x",
+                              "fill": "$status/deleted"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (Windows)"
+                            },
+                            "jr_dur": {
+                              "content": "5m 12s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c2",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (macOS Apple Silicon)"
+                            },
+                            "jr_dur": {
+                              "content": "4m 2s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c3",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (macOS Intel)"
+                            },
+                            "jr_dur": {
+                              "content": "4m 31s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c4",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Release / Build (Linux)"
+                            },
+                            "jr_dur": {
+                              "content": "3m 50s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c5",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "CI / check"
+                            },
+                            "jr_dur": {
+                              "content": "1m 48s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c6",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "Vercel – docs preview"
+                            },
+                            "jr_dur": {
+                              "content": ""
+                            }
+                          }
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ovd_s2",
+                          "name": "Section",
+                          "width": "fill_container",
+                          "padding": [
+                            14,
+                            10,
+                            4,
+                            10
+                          ],
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ovd_s2l",
+                              "name": "ovd_s2l",
+                              "content": "CLAUDE/CICD-MONITORING",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 600,
+                              "fill": "$text/muted",
+                              "letterSpacing": 0.5
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_s2s",
+                              "name": "ovd_s2s",
+                              "content": "8d2f1aa",
+                              "fontFamily": "$font/mono",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 400,
+                              "fill": "$text/link"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ovd_s2t",
+                              "name": "ovd_s2t",
+                              "content": "CI overview across repositories",
+                              "fontFamily": "$font/sans",
+                              "fontSize": "$text/xs",
+                              "fontWeight": 400,
+                              "fill": "$text/muted",
+                              "width": "fill_container",
+                              "textGrowth": "fixed-width"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c7",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "jr_name": {
+                              "content": "CI / check"
+                            },
+                            "jr_dur": {
+                              "content": "1m 2s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c8",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "jr_name": {
+                              "content": "CI / test (ubuntu)"
+                            },
+                            "jr_dur": {
+                              "content": "58s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c9",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "loader-circle",
+                              "fill": "$status/modified"
+                            },
+                            "jr_name": {
+                              "content": "CI / test (windows)"
+                            },
+                            "jr_dur": {
+                              "content": "41s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c10",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "CodeQL"
+                            },
+                            "jr_dur": {
+                              "content": "2m 10s"
+                            }
+                          }
+                        },
+                        {
+                          "type": "ref",
+                          "id": "ovd_c11",
+                          "ref": "c_job_row",
+                          "width": "fill_container",
+                          "descendants": {
+                            "jr_status": {
+                              "icon": "circle-check",
+                              "fill": "$status/added"
+                            },
+                            "jr_name": {
+                              "content": "buildkite/git-graph"
+                            },
+                            "jr_dur": {
+                              "content": "3m 3s"
+                            }
+                          }
+                        }
+                      ]
                     }
                   ]
                 }

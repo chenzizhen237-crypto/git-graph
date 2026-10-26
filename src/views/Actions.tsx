@@ -36,7 +36,7 @@ const STATE: Record<RunState, { icon: LucideIcon; className: string; label: stri
   skipped: { icon: CircleSlash, className: 'text-muted', label: 'Skipped' },
 }
 
-function StateIcon({ state, size = 15 }: { state: RunState; size?: number }) {
+export function StateIcon({ state, size = 15 }: { state: RunState; size?: number }) {
   const s = STATE[state]
   return <s.icon size={size} className={cx('shrink-0', s.className)} aria-label={t(s.label)} />
 }
