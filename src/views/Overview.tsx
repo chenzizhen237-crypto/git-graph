@@ -83,7 +83,7 @@ export function OverviewView({ onOpenRepo }: { onOpenRepo: (path: string) => voi
           <Count>{counts.all}</Count>
           <span className="flex-1" />
           {at && (
-            <span className="truncate text-sm text-muted">
+            <span className="truncate text-sm text-muted" title={new Date(at).toLocaleString()}>
               {t('Updated {when}', { when: timeAgo(at) })} · {t(every === 15 ? 'refreshes every 15s while running' : 'refreshes every minute')}
             </span>
           )}
@@ -134,8 +134,12 @@ function RepoRow({ repo: r, selected, onSelect }: { repo: RepoCi; selected: bool
     <button type="button" onClick={onSelect} className={cx('flex w-full flex-col gap-1 rounded-md px-3 py-2.25 text-left', selected ? 'bg-selected' : 'hover:bg-hover')}>
       <span className="flex w-full items-center gap-2">
         <RepoIcon state={state} />
-        <span className="font-semibold">{r.name}</span>
-        <span className="min-w-0 flex-1 truncate text-sm text-muted">{r.error ? r.error : (r.slug ?? t('Local only · no GitHub remote'))}</span>
+        <span className="max-w-60 truncate font-semibold" title={r.name}>
+          {r.name}
+        </span>
+        <span className="min-w-0 flex-1 truncate text-sm text-muted" title={`${r.error ?? r.slug ?? t('Local only · no GitHub remote')}\n${r.path}`}>
+          {r.error ? r.error : (r.slug ?? t('Local only · no GitHub remote'))}
+        </span>
         <span className={cx('text-sm font-medium whitespace-nowrap', SUMMARY_COLOR[branchState(main)])}>{r.slug && !r.error ? summaryText(main) : ''}</span>
         {lead && <span className="text-sm whitespace-nowrap text-muted">{timeAgo(new Date(lead.at).getTime())}</span>}
       </span>
@@ -143,7 +147,9 @@ function RepoRow({ repo: r, selected, onSelect }: { repo: RepoCi; selected: bool
         <span className="flex w-full items-center gap-1.5 pl-5.75 text-sm">
           <Chip kind="local" name={main.branch} />
           <span className="font-mono font-medium text-link">{main.sha.slice(0, 7)}</span>
-          <span className="min-w-0 flex-1 truncate text-secondary">{main.subject}</span>
+          <span className="min-w-0 flex-1 truncate text-secondary" title={main.subject}>
+            {main.subject}
+          </span>
         </span>
       )}
       {r.current && (
@@ -164,7 +170,9 @@ function RepoPane({ repo: r, onOpen }: { repo: RepoCi; onOpen: () => void }) {
       <div className="flex shrink-0 flex-col gap-2 border-b border-subtle px-5 pt-4 pb-3.5">
         <div className="flex items-center gap-2.5">
           <RepoIcon state={repoState(r)} size={18} />
-          <h2 className="m-0 min-w-0 flex-1 truncate text-xl font-semibold">{r.name}</h2>
+          <h2 className="m-0 min-w-0 flex-1 truncate text-xl font-semibold" title={r.name}>
+            {r.name}
+          </h2>
           {r.slug && (
             <>
               <Button kind="primary" icon={CirclePlay} onClick={onOpen}>
@@ -176,7 +184,7 @@ function RepoPane({ repo: r, onOpen }: { repo: RepoCi; onOpen: () => void }) {
             </>
           )}
         </div>
-        <div className="truncate text-sm text-muted">
+        <div className="truncate text-sm text-muted" title={`${r.slug ? `${r.slug}\n` : ''}${r.path}`}>
           {r.slug ? `${r.slug} · ` : ''}
           {home(r.path)}
         </div>
@@ -188,9 +196,15 @@ function RepoPane({ repo: r, onOpen }: { repo: RepoCi; onOpen: () => void }) {
         {branches.map((b, i) => (
           <div key={b.branch} className={cx(i > 0 && 'mt-3')}>
             <div className="flex items-center gap-1.5 px-2.5 pt-1.5 pb-1">
-              <span className={cx(caps, 'uppercase')}>{b.branch}</span>
-              <span className="font-mono text-xs text-link">{b.sha.slice(0, 7)}</span>
-              <span className="min-w-0 flex-1 truncate text-xs text-muted">{b.subject}</span>
+              <span className={cx(caps, 'max-w-50 truncate uppercase')} title={b.branch}>
+                {b.branch}
+              </span>
+              <span className="font-mono text-xs text-link" title={b.sha}>
+                {b.sha.slice(0, 7)}
+              </span>
+              <span className="min-w-0 flex-1 truncate text-xs text-muted" title={b.subject}>
+                {b.subject}
+              </span>
             </div>
             {!b.checks.length && <div className="px-2.5 py-1.5 text-sm text-faint">{t('No checks on this commit.')}</div>}
             {b.checks.map((c, k) => (
@@ -199,7 +213,7 @@ function RepoPane({ repo: r, onOpen }: { repo: RepoCi; onOpen: () => void }) {
                 type="button"
                 disabled={!c.url}
                 onClick={() => c.url && void openUrl(c.url)}
-                title={c.url ? t('Open on GitHub') : c.name}
+                title={c.url ? `${c.name}\n${t('Open on GitHub')}` : c.name}
                 className="flex h-7.5 w-full items-center gap-2 rounded-md px-2.5 text-left enabled:hover:bg-hover"
               >
                 <StateIcon state={c.state} />
