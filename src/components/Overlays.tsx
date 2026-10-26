@@ -281,6 +281,7 @@ export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () 
                   className={cx('flex h-8 w-full items-center gap-2.5 rounded-md px-2.5 text-left', i === at && 'bg-selected')}
                   onMouseMove={() => setAt(i)}
                   onClick={() => run(item)}
+                  title={item.hint ? `${item.label}\n${item.hint}` : item.label}
                 >
                   <Icon size={15} color={item.color} className="shrink-0" />
                   <span className="flex-1 truncate">{highlight(item.label, q.trim())}</span>
@@ -302,7 +303,7 @@ export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () 
           <span>
             <Kbd>esc</Kbd> Close
           </span>
-          <span className="flex-1" />
+          <span className="min-w-4 flex-1" />
           {items.length} results
         </div>
       </div>

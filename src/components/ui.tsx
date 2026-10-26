@@ -226,7 +226,7 @@ export const fileRowClass = (selected: boolean) => cx('group flex h-7 w-full ite
 
 export function FilePath({ name, dir }: { name: string; dir?: string }) {
   return (
-    <span className="flex min-w-0 flex-1 items-baseline gap-1.5 overflow-hidden whitespace-nowrap">
+    <span className="flex min-w-0 flex-1 items-baseline gap-1.5 overflow-hidden whitespace-nowrap" title={dir ? `${dir}/${name}` : name}>
       <span className="font-medium">{name}</span>
       {dir && <span className="truncate text-sm text-muted">{dir}</span>}
     </span>

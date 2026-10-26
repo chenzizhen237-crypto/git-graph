@@ -33,7 +33,7 @@ export function PaneHead({ title, count, children }: { title: string; count: num
     <div className="flex h-11 shrink-0 items-center gap-2 border-b border-subtle pr-2.5 pl-3.5">
       <span className="text-lg font-bold">{title}</span>
       <Count>{count}</Count>
-      <span className="flex-1" />
+      <span className="min-w-4 flex-1" />
       {children}
     </div>
   )
@@ -334,7 +334,7 @@ function Composer({ staged, conflicts, busy, descHeight }: { staged: number; con
           <input type="checkbox" className="m-0 accent-accent" checked={noVerify} onChange={e => setNoVerify(e.target.checked)} />
           {t('Skip hooks')}
         </label>
-        <span className="flex-1" />
+        <span className="min-w-4 flex-1" />
         <span className={cx(prefs.subjectGuide && summary.length > prefs.subjectGuide ? 'font-semibold text-status-modified' : 'text-faint')}>
           {summary.length ? (prefs.subjectGuide ? `${summary.length} / ${prefs.subjectGuide}` : summary.length) : ''}
         </span>

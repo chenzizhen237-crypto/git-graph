@@ -144,7 +144,9 @@ function FilterBar({
   return (
     <div className="relative flex h-11 shrink-0 items-center gap-2 px-3">
       <FilterButton icon={GitFork} open={picker} onClick={() => setPicker(!picker)} title={t('Which branches the log shows')}>
-        <span className="truncate">{scopeLabel(query.branch)}</span>
+        <span className="truncate" title={scopeLabel(query.branch)}>
+          {scopeLabel(query.branch)}
+        </span>
         {scoped ? (
           <X
             size={13}
@@ -203,7 +205,7 @@ function FilterBar({
         </FilterButton>
       )}
 
-      <span className="flex-1" />
+      <span className="min-w-4 flex-1" />
       {repo && (
         <span className="hidden text-sm whitespace-nowrap text-muted 2xl:inline">
           {repo.rows.length.toLocaleString()}
@@ -299,7 +301,7 @@ function RefPickRow({ item, q, on, onPick }: { item: PickItem; q: string; on: bo
   return (
     <button type="button" className={cx('flex h-7 w-full items-center gap-2 rounded-md px-2 text-left hover:bg-hover', on && 'bg-hover')} onClick={onPick}>
       <Icon size={13} color={color} className="shrink-0" />
-      <span className="min-w-0 flex-1 truncate">
+      <span className="min-w-0 flex-1 truncate" title={r.name}>
         {nameParts(r.name, q).map((p, i) => (
           <span key={i} className={cx(p.dim && 'text-muted', p.hit && 'rounded-xs bg-ref-tag-soft')}>
             {p.text}
@@ -447,6 +449,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
     const kind = nodeKind(r, repo!.head)
     const chips = refChips(r.refs, remotes).filter(c => cols.tags || c.kind !== 'tag')
     const on = r.hash === selected
+    const message = r.body ? `${r.subject}\n\n${r.body}` : r.subject
     items.push(
       <div
         key={r.hash}
@@ -463,13 +466,21 @@ function LogList({ showGraph }: { showGraph: boolean }) {
           {chips.map(c => (
             <Chip key={c.kind + c.name} kind={c.kind} name={c.name} synced={c.synced} />
           ))}
-          <span className={cx('min-w-24 truncate', kind === 'head' && 'font-semibold', kind === 'merge' && 'text-secondary')}>{r.subject}</span>
-          {r.body && <span className="min-w-0 shrink-[4] truncate text-muted">{r.body}</span>}
+          <span className={cx('min-w-24 truncate', kind === 'head' && 'font-semibold', kind === 'merge' && 'text-secondary')} title={message}>
+            {r.subject}
+          </span>
+          {r.body && (
+            <span className="min-w-0 shrink-[4] truncate text-muted" title={message}>
+              {r.body}
+            </span>
+          )}
         </div>
         {cols.author && (
           <div className="flex w-32.5 shrink-0 items-center gap-1.5 text-sm text-secondary">
             <Avatar name={r.author} />
-            <span className="truncate">{r.author}</span>
+            <span className="truncate" title={r.author}>
+              {r.author}
+            </span>
           </div>
         )}
         {cols.date && (
@@ -680,7 +691,7 @@ function Inspector({ width }: { width: number }) {
               toast({ kind: 'ok', title: t('SHA copied') })
             }}
           />
-          <span className="flex-1" />
+          <span className="min-w-4 flex-1" />
           <IconButton icon={LogIn} title={t('Check out')} onClick={() => void checkout()} />
           <IconButton icon={GitBranchPlus} title={t('New branch here')} onClick={() => void newBranch()} />
           <IconButton icon={Tag} title={t('Tag this commit')} onClick={() => void newTag()} />
@@ -700,15 +711,22 @@ function Inspector({ width }: { width: number }) {
             }}
           />
         </div>
-        <div className={cx('leading-snug font-semibold select-text', compact ? 'truncate' : 'text-lg')}>{subject}</div>
+        <div className={cx('leading-snug font-semibold select-text', compact ? 'truncate' : 'text-lg')} title={compact ? subject : undefined}>
+          {subject}
+        </div>
         {!compact && message && <div className="max-h-30 overflow-y-auto leading-normal whitespace-pre-wrap text-secondary select-text">{message}</div>}
         {!compact && (
           <>
             <div className="flex items-center gap-2.5">
               <Avatar name={authorName} size={28} />
               <div className="min-w-0">
-                <div className="truncate font-semibold">{authorName}</div>
-                <div className="truncate text-sm text-muted">
+                <div className="truncate font-semibold" title={authorName}>
+                  {authorName}
+                </div>
+                <div
+                  className="truncate text-sm text-muted"
+                  title={`${detail.date}${detail.committer && detail.committer !== authorName ? t(' · committed by {committer}', { committer: detail.committer }) : ''}`}
+                >
                   {detail.date}
                   {detail.committer && detail.committer !== authorName ? t(' · committed by {committer}', { committer: detail.committer }) : ''}
                 </div>
