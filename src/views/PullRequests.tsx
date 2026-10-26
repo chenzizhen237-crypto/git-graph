@@ -192,6 +192,7 @@ export function PullRequestsView() {
             type="button"
             className="m-2 mb-0 flex items-center gap-2 rounded-md border border-dashed border-strong px-2.5 py-2 text-left text-sm hover:bg-hover"
             onClick={() => setSelected('new')}
+            title={`Open a pull request for ${repo.branch}`}
           >
             <GitPullRequest size={14} className="shrink-0 text-status-added" />
             <span className="min-w-0 flex-1 truncate">
@@ -341,7 +342,7 @@ function PrPane({ number, me, onChanged }: { number: number; me: string; onChang
             {pr.state === 'MERGED' ? 'merged' : pr.state === 'CLOSED' ? 'proposed' : 'wants to merge'} {pr.commits.length} commit{pr.commits.length === 1 ? '' : 's'} · opened{' '}
             {relTime(pr.createdAt)}
           </span>
-          <span className="flex-1" />
+          <span className="min-w-4 flex-1" />
           <LineStats added={pr.additions} deleted={pr.deletions} />
         </div>
         <div className="flex min-w-0 items-center gap-1.5 text-sm text-muted">
@@ -426,7 +427,7 @@ function Conversation({ pr, run, ask, own }: { pr: PrDetail; run: Run; ask: Retu
                 </Button>
               )
             )}
-            <span className="flex-1" />
+            <span className="min-w-4 flex-1" />
             {/* GitHub does not let authors review their own pull requests. */}
             {!own && pr.state === 'OPEN' && (
               <>
@@ -532,7 +533,7 @@ function MergeBox({ pr, run, ask }: { pr: PrDetail; run: Run; ask: ReturnType<ty
             <input type="checkbox" className="m-0 accent-accent" checked={del} onChange={e => setDel(e.target.checked)} />
             {t('Delete branch')}
           </label>
-          <span className="flex-1" />
+          <span className="min-w-4 flex-1" />
           <Button small onClick={() => void run('Convert to draft', prActions.draft(pr.number), { done: t('Converted to draft') })}>
             {t('Convert to draft')}
           </Button>
@@ -564,8 +565,12 @@ function Commits({ pr }: { pr: PrDetail }) {
             className="flex h-9 w-full items-center gap-2.5 rounded-md px-2.5 text-left enabled:hover:bg-hover"
           >
             <GitCommitHorizontal size={14} className="shrink-0 text-muted" />
-            <span className={cx('min-w-0 flex-1 truncate', !local && 'text-secondary')}>{c.messageHeadline}</span>
-            <span className="max-w-40 shrink truncate text-sm text-muted">{c.authors.map(a => a.login || a.name).join(', ')}</span>
+            <span className={cx('min-w-0 flex-1 truncate', !local && 'text-secondary')} title={c.messageHeadline}>
+              {c.messageHeadline}
+            </span>
+            <span className="max-w-40 shrink truncate text-sm text-muted" title={c.authors.map(a => a.login || a.name).join(', ')}>
+              {c.authors.map(a => a.login || a.name).join(', ')}
+            </span>
             <span className="w-24 shrink-0 text-right text-sm text-muted">{relTime(c.authoredDate)}</span>
             <span className="w-16 shrink-0 text-right font-mono text-sm font-medium text-link">{c.oid.slice(0, 7)}</span>
           </button>
@@ -618,7 +623,7 @@ function Checks({ pr }: { pr: PrDetail }) {
         return (
           <div key={i} className="flex h-10 items-center gap-2.5 rounded-md px-2.5 hover:bg-hover">
             <ChecksIcon checks={[c]} size={15} />
-            <span className="min-w-0 flex-1 truncate">
+            <span className="min-w-0 flex-1 truncate" title={`${c.workflowName ? `${c.workflowName} / ` : ''}${c.name || c.context}`}>
               {c.workflowName && <span className="text-muted">{c.workflowName} / </span>}
               <span className="font-medium">{c.name || c.context}</span>
             </span>
@@ -756,7 +761,7 @@ function CreatePr({ info, openHeads, onCancel, onCreated }: { info: RepoInfo; op
             <input type="checkbox" className="m-0 accent-accent" checked={draft} onChange={e => setDraft(e.target.checked)} />
             {t('Create as draft')}
           </label>
-          <span className="flex-1" />
+          <span className="min-w-4 flex-1" />
           <Button onClick={onCancel}>{t('Cancel')}</Button>
           <Button kind="primary" icon={GitPullRequest} disabled={!title.trim() || !head || head === base || existing !== undefined} onClick={() => void create()}>
             {draft ? t('Create draft') : t('Create pull request')}

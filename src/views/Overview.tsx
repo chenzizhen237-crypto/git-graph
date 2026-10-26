@@ -81,7 +81,7 @@ export function OverviewView({ onOpenRepo }: { onOpenRepo: (path: string) => voi
         <div className="flex h-11 shrink-0 items-center gap-2 border-b border-subtle pr-2.5 pl-3.5">
           <span className="text-lg font-bold">{t('CI overview')}</span>
           <Count>{counts.all}</Count>
-          <span className="flex-1" />
+          <span className="min-w-4 flex-1" />
           {at && (
             <span className="truncate text-sm text-muted" title={new Date(at).toLocaleString()}>
               {t('Updated {when}', { when: timeAgo(at) })} · {t(every === 15 ? 'refreshes every 15s while running' : 'refreshes every minute')}
@@ -101,7 +101,7 @@ export function OverviewView({ onOpenRepo }: { onOpenRepo: (path: string) => voi
               <span className={cx('text-xs font-semibold', v === 'fail' && counts.fail ? 'text-status-deleted' : 'text-muted')}>{counts[v]}</span>
             </button>
           ))}
-          <span className="flex-1" />
+          <span className="min-w-4 flex-1" />
           <div className="flex h-7 w-60 items-center gap-1.5 rounded-md bg-surface px-2 text-muted focus-within:ring-1 focus-within:ring-focus">
             <Search size={13} />
             <input

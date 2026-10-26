@@ -48,7 +48,9 @@ export function StashesView() {
               <div className="flex items-center gap-2">
                 <Archive size={14} className="shrink-0 text-ref-tag-text" />
                 <span className="font-mono text-sm font-semibold text-ref-tag-text">{s.ref}</span>
-                <span className="flex-1 truncate">{s.subject}</span>
+                <span className="flex-1 truncate" title={s.subject}>
+                  {s.subject}
+                </span>
                 <span className="text-sm text-muted">{s.when.replace(/ ago$/, '')}</span>
               </div>
               {s.ref === sel && (

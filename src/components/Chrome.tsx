@@ -187,7 +187,9 @@ export function Banner() {
   return (
     <div className="flex h-9 shrink-0 items-center gap-2.5 border-b border-subtle bg-stage-banner-bg px-4 font-medium text-stage-banner-fg">
       <TriangleAlert size={15} />
-      <span className="flex-1 truncate">{text}</span>
+      <span className="flex-1 truncate" title={text}>
+        {text}
+      </span>
       <Button small icon={X} onClick={() => void abort()}>
         Abort {op}
       </Button>
@@ -477,7 +479,7 @@ export function StatusBar() {
         </span>
       )}
       {lastFetch && <span>Fetched {ago(lastFetch)}</span>}
-      <span className="flex-1" />
+      <span className="min-w-4 flex-1" />
       <button type="button" className="hover:text-primary" onClick={() => void refresh()} title={t('Refresh (⌘R)')}>
         {repo.totalCommits.toLocaleString()} commits · {repo.refs.length} refs
       </button>

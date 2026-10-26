@@ -151,7 +151,7 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
               </button>
             ))}
           </div>
-          <span className="flex-1" />
+          <span className="min-w-4 flex-1" />
           <div className="flex h-7 w-50 items-center gap-1.5 rounded-md bg-surface px-2 text-muted focus-within:ring-1 focus-within:ring-focus">
             <Search size={13} />
             <input
@@ -171,12 +171,13 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
                   type="button"
                   className="group flex h-12 w-full shrink-0 items-center gap-3 rounded-lg px-3 text-left hover:bg-selected"
                   onClick={() => void openPath(r.path)}
+                  title={r.path}
                 >
                   <span className="flex size-7.5 shrink-0 items-center justify-center rounded-md bg-surface text-secondary">
                     <FolderGit2 size={15} />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block font-semibold">{r.path.split('/').pop()}</span>
+                    <span className="block truncate font-semibold">{r.path.split('/').pop()}</span>
                     <span className="block truncate text-sm text-muted">{home(r.path)}</span>
                   </span>
                   {r.branch && <Chip kind="local" name={r.branch} />}
@@ -217,9 +218,11 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
                 <div key={folder} className="flex flex-col gap-0.5">
                   <div className="flex h-7 shrink-0 items-center gap-1.5 pr-1 pl-3 text-sm">
                     <Folder size={13} className="text-muted" />
-                    <span className="font-semibold text-secondary">{home(folder)}</span>
+                    <span className="min-w-0 truncate font-semibold text-secondary" title={folder}>
+                      {home(folder)}
+                    </span>
                     <span className="text-muted">· {repos.length}</span>
-                    <span className="flex-1" />
+                    <span className="min-w-4 flex-1" />
                     <IconButton icon={RefreshCcw} small size={13} title={t('Scan again')} onClick={() => void rescan()} />
                   </div>
                   {repos.map(r => (
@@ -228,13 +231,13 @@ export function Welcome({ onOpen }: { onOpen: (root: string) => void }) {
                       type="button"
                       className="flex h-12 w-full shrink-0 items-center gap-3 rounded-lg px-3 text-left hover:bg-selected"
                       onClick={() => void openPath(r.path)}
-                      title={r.path}
+                      title={r.subject ? `${r.path}\n${r.subject}` : r.path}
                     >
                       <span className="flex size-7.5 shrink-0 items-center justify-center rounded-md bg-surface text-secondary">
                         <FolderGit2 size={15} />
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block font-semibold">{r.name}</span>
+                        <span className="block truncate font-semibold">{r.name}</span>
                         <span className="block truncate text-sm text-muted">{r.subject || home(r.path)}</span>
                       </span>
                       {r.branch && <Chip kind="local" name={r.branch} />}

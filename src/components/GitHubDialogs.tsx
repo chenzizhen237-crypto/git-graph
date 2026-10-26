@@ -116,14 +116,18 @@ export function CloneDialog({ onClose, onCloned }: { onClose: () => void; onClon
           {full?.isPrivate ? <Lock size={15} /> : <BookMarked size={15} />}
         </span>
         <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="flex items-center gap-1.5">
-            <span className="text-muted">{o}/</span>
-            <span className="font-semibold">{n}</span>
+          <span className="flex min-w-0 items-center gap-1.5" title={r.nameWithOwner}>
+            <span className="min-w-0 truncate">
+              <span className="text-muted">{o}/</span>
+              <span className="font-semibold">{n}</span>
+            </span>
             {full?.isPrivate && <span className="rounded-full border border-strong px-1.5 text-[10px] font-semibold text-muted">{t('Private')}</span>}
             {full?.isFork && <span className="rounded-full border border-strong px-1.5 text-[10px] font-semibold text-muted">{t('Fork')}</span>}
             {local.has(r.nameWithOwner.toLowerCase()) && <span className="rounded-full bg-ref-local-soft px-1.5 text-[10px] font-semibold text-ref-local">{t('On this Mac')}</span>}
           </span>
-          <span className="truncate text-sm text-muted">{full ? full.description || t('No description') : t('Clone {name} from GitHub', { name: r.nameWithOwner })}</span>
+          <span className="truncate text-sm text-muted" title={full?.description ?? undefined}>
+            {full ? full.description || t('No description') : t('Clone {name} from GitHub', { name: r.nameWithOwner })}
+          </span>
         </span>
         {full?.primaryLanguage && (
           <span className="flex shrink-0 items-center gap-1.25 text-sm whitespace-nowrap text-secondary">
@@ -178,7 +182,9 @@ export function CloneDialog({ onClose, onCloned }: { onClose: () => void; onClon
                 )}
               >
                 <Avatar name={o} />
-                <span className="truncate">{o}</span>
+                <span className="truncate" title={o}>
+                  {o}
+                </span>
               </button>
             ))}
           </>

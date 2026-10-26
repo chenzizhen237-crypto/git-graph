@@ -136,7 +136,9 @@ export function ActionsView() {
               >
                 <span className="flex w-full items-center gap-2">
                   <StateIcon state={runState(r)} />
-                  <span className="min-w-0 flex-1 truncate font-medium">{r.display_title}</span>
+                  <span className="min-w-0 flex-1 truncate font-medium" title={r.display_title}>
+                    {r.display_title}
+                  </span>
                 </span>
                 <span className="flex w-full items-center gap-1.5 pl-5.75 text-sm text-muted">
                   <span className="font-semibold text-secondary">{r.name}</span>
@@ -144,7 +146,7 @@ export function ActionsView() {
                   <span>
                     #{r.run_number} · {r.event}
                   </span>
-                  <span className="flex-1" />
+                  <span className="min-w-4 flex-1" />
                   <span className="whitespace-nowrap">
                     {duration(r.run_started_at, r.status === 'completed' ? r.updated_at : null)} · {timeAgo(new Date(r.run_started_at).getTime())}
                   </span>
@@ -186,7 +188,9 @@ function RunPane({ run, onAction }: { run: Run; onAction: (label: string, args: 
       <div className="flex shrink-0 flex-col gap-2 border-b border-subtle px-5 pt-4 pb-3.5">
         <div className="flex items-center gap-2.5">
           <StateIcon state={state} size={18} />
-          <h2 className="m-0 min-w-0 flex-1 truncate text-xl font-semibold">{run.display_title}</h2>
+          <h2 className="m-0 min-w-0 flex-1 truncate text-xl font-semibold" title={run.display_title}>
+            {run.display_title}
+          </h2>
           {state === 'running' || state === 'queued' ? (
             <Button icon={CircleStop} onClick={() => void onAction('Cancel run', runActions.cancel(run.id), 'Run cancelled')}>
               {t('Cancel')}
@@ -299,7 +303,9 @@ function JobLog({ job, onRerun }: { job: Job; onRerun: () => void }) {
     <div className="flex-1 overflow-auto">
       <div className="sticky top-0 z-10 flex h-9 items-center gap-2 border-b border-subtle bg-app px-3">
         <StateIcon state={runState(job)} />
-        <span className="min-w-0 flex-1 truncate font-medium">{job.name}</span>
+        <span className="min-w-0 flex-1 truncate font-medium" title={job.name}>
+          {job.name}
+        </span>
         {runState(job) === 'fail' && (
           <Button small icon={RotateCcw} onClick={onRerun}>
             {t('Re-run job')}
@@ -323,7 +329,9 @@ function JobLog({ job, onRerun }: { job: Job; onRerun: () => void }) {
             >
               {isOpen ? <ChevronDown size={13} className="text-muted" /> : <ChevronRight size={13} className="text-muted" />}
               {s.failed ? <CircleX size={15} className="text-status-deleted" /> : <CircleCheck size={15} className="text-status-added" />}
-              <span className="min-w-0 flex-1 truncate font-medium">{s.title}</span>
+              <span className="min-w-0 flex-1 truncate font-medium" title={s.title}>
+                {s.title}
+              </span>
               <span className="text-sm text-muted">{s.lines.length}</span>
             </button>
             {isOpen && (

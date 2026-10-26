@@ -193,7 +193,7 @@ export function SettingsDialog({ onClose, initial = 'general' }: { onClose: () =
               {t(s.label)}
             </button>
           ))}
-          <span className="flex-1" />
+          <span className="min-w-4 flex-1" />
           <About.Version />
         </nav>
         <div className="flex min-w-0 flex-1 flex-col overflow-y-auto px-8 pt-6.5 pb-8">
@@ -261,7 +261,9 @@ function RepoFolders() {
           {folders.map(f => (
             <div key={f} className="flex h-8.5 items-center gap-2 border-b border-subtle px-2.5 last:border-b-0">
               <Folder size={14} className="shrink-0 text-secondary" />
-              <span className="min-w-0 flex-1 truncate font-mono text-sm font-medium">{f}</span>
+              <span className="min-w-0 flex-1 truncate font-mono text-sm font-medium" title={f}>
+                {f}
+              </span>
               <span className={cx('text-sm', counts[f] ? 'text-muted' : 'text-faint')}>
                 {counts[f] === undefined ? '…' : counts[f] ? t(counts[f] === 1 ? '{n} repository' : '{n} repositories', { n: counts[f] }) : t('none yet')}
               </span>
