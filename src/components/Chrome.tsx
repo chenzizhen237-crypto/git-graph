@@ -48,7 +48,7 @@ import { type Settings, updateSettings, useSettings } from '../lib/settings'
 import { useApp } from '../state'
 import { Button, Chip, caps, IconButton, Kbd, StageDot, ToolButton } from './ui'
 
-const Sep = () => <div className="h-6 w-px bg-strong" />
+const Sep = () => <div className="h-6 w-px shrink-0 bg-strong" />
 
 export function TitleBar({
   onSwitchRepo,
@@ -96,7 +96,7 @@ export function TitleBar({
       <IconButton icon={sidebar ? PanelLeftClose : PanelLeftOpen} onClick={onToggleSidebar} title={t(sidebar ? 'Hide sidebar (⌘\\)' : 'Show sidebar (⌘\\)')} />
       <button
         type="button"
-        className="flex max-w-60 min-w-0 items-center gap-1.75 rounded-md px-2 py-1 text-left hover:bg-hover"
+        className="flex max-w-60 min-w-28 items-center gap-1.75 rounded-md px-2 py-1 text-left hover:bg-hover"
         onClick={onSwitchRepo}
         title={`${t('Switch repository')}\n${repo.root}`}
       >
@@ -108,17 +108,25 @@ export function TitleBar({
         </div>
         <ChevronsUpDown size={13} className="shrink-0 text-muted" />
       </button>
-      <button type="button" className="min-w-0" onClick={() => setPaletteOpen(true)} title={t('Switch branch (⌘K)')}>
-        <Chip kind="head" name={detached ? t('detached {slice}', { slice: repo.head.slice(0, 7) }) : repo.branch} large icon={GitBranch} synced={!!repo.upstream} />
+      <button type="button" className="flex max-w-55 min-w-24 shrink-[2]" onClick={() => setPaletteOpen(true)} title={t('Switch branch (⌘K)')}>
+        <Chip
+          kind="head"
+          name={detached ? t('detached {slice}', { slice: repo.head.slice(0, 7) }) : repo.branch}
+          large
+          icon={GitBranch}
+          synced={!!repo.upstream}
+          className="max-w-full min-w-0 shrink"
+        />
       </button>
-      <div className="flex-1 self-stretch" data-tauri-drag-region />
-      <div className="flex items-center gap-0.5">
+      {/* Spacers keep the groups apart when the window is narrow: the repository, branch and search shrink first. */}
+      <div className="min-w-6 flex-1 self-stretch" data-tauri-drag-region />
+      <div className="flex shrink-0 items-center gap-0.5">
         <ToolButton icon={RefreshCcw} label={t('Fetch')} busy={busy === 'Fetch'} onClick={() => void act('Fetch', actions.fetch(), { done: t('Fetched') })} />
         <ToolButton icon={ArrowDown} label={t('Pull')} badge={repo.behind} busy={busy === 'Pull'} onClick={() => void act('Pull', actions.pull(), { done: t('Pulled') })} />
         <ToolButton icon={ArrowUp} label={t('Push')} badge={repo.ahead} busy={busy === 'Push'} onClick={() => void act('Push', actions.push(repo), { done: t('Pushed') })} />
       </div>
       <Sep />
-      <div className="flex items-center gap-0.5">
+      <div className="flex shrink-0 items-center gap-0.5">
         <ToolButton icon={GitBranch} label={t('Branch')} onClick={() => void newBranch()} />
         <ToolButton icon={GitMerge} label={t('Merge')} onClick={() => void merge()} />
         <ToolButton icon={Archive} label={t('Stash')} disabled={!repo.changes.length} busy={busy === 'Stash'} onClick={() => void stash()} />
@@ -137,14 +145,14 @@ export function TitleBar({
         label={t('Editor')}
         onClick={() => void openInEditor(repo.root).catch(e => app.toast({ kind: 'error', title: t('Open in editor failed'), detail: String(e) }))}
       />
-      <div className="flex-1 self-stretch" data-tauri-drag-region />
+      <div className="min-w-6 flex-1 self-stretch" data-tauri-drag-region />
       <IconButton icon={SettingsIcon} onClick={onSettings} title={t('Settings (⌘,)')} />
       <button type="button" className="flex h-7 w-60 min-w-32 items-center gap-1.5 rounded-md bg-surface pr-1.5 pl-2 text-muted" onClick={() => setPaletteOpen(true)}>
         <Search size={13} className="shrink-0" />
         <span className="min-w-0 flex-1 truncate text-left text-faint">{t('Search commits, branches')}</span>
         <Kbd>⌘K</Kbd>
       </button>
-      <Button kind="primary" icon={primary.icon} onClick={primary.run} disabled={primary.disabled || !!busy}>
+      <Button kind="primary" className="shrink-0" icon={primary.icon} onClick={primary.run} disabled={primary.disabled || !!busy}>
         {primary.label}
       </Button>
     </div>
