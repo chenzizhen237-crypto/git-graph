@@ -68,6 +68,7 @@ export function TitleBar({
   if (!repo) return <div className={bar} data-tauri-drag-region />
   const conflicts = repo.changes.filter(isConflict).length
   const detached = repo.branch.startsWith('HEAD')
+  const branchLabel = detached ? t('detached {slice}', { slice: repo.head.slice(0, 7) }) : repo.branch
 
   const newBranch = async () => {
     const name = await prompt({ title: t('New branch'), placeholder: 'feature/name', confirm: t('Create and switch') })
@@ -98,7 +99,7 @@ export function TitleBar({
         type="button"
         className="flex max-w-60 min-w-28 items-center gap-1.75 rounded-md px-2 py-1 text-left hover:bg-hover"
         onClick={onSwitchRepo}
-        title={`${t('Switch repository')}\n${repo.root}`}
+        title={`${repo.name}\n${repo.root}\n${t('Switch repository')}`}
       >
         <img className="size-5.5 shrink-0 rounded-[5.5px]" src={appIcon} alt="" />
         {/* Long names and worktree paths cut off with an ellipsis instead of wrapping out of the bar. */}
@@ -108,14 +109,15 @@ export function TitleBar({
         </div>
         <ChevronsUpDown size={13} className="shrink-0 text-muted" />
       </button>
-      <button type="button" className="flex max-w-55 min-w-24 shrink-[2]" onClick={() => setPaletteOpen(true)} title={t('Switch branch (⌘K)')}>
+      <button type="button" className="flex max-w-55 min-w-24 shrink-[2]" onClick={() => setPaletteOpen(true)}>
         <Chip
           kind="head"
-          name={detached ? t('detached {slice}', { slice: repo.head.slice(0, 7) }) : repo.branch}
+          name={branchLabel}
           large
           icon={GitBranch}
           synced={!!repo.upstream}
           className="max-w-full min-w-0 shrink"
+          title={`${branchLabel}${repo.upstream ? ` ⇅ ${repo.upstream}` : ''}\n${t('Switch branch (⌘K)')}`}
         />
       </button>
       {/* Spacers keep the groups apart when the window is narrow: the repository, branch and search shrink first. */}
@@ -147,7 +149,12 @@ export function TitleBar({
       />
       <div className="min-w-6 flex-1 self-stretch" data-tauri-drag-region />
       <IconButton icon={SettingsIcon} onClick={onSettings} title={t('Settings (⌘,)')} />
-      <button type="button" className="flex h-7 w-60 min-w-32 items-center gap-1.5 rounded-md bg-surface pr-1.5 pl-2 text-muted" onClick={() => setPaletteOpen(true)}>
+      <button
+        type="button"
+        className="flex h-7 w-60 min-w-32 items-center gap-1.5 rounded-md bg-surface pr-1.5 pl-2 text-muted"
+        onClick={() => setPaletteOpen(true)}
+        title={`${t('Search commits, branches')} (⌘K)`}
+      >
         <Search size={13} className="shrink-0" />
         <span className="min-w-0 flex-1 truncate text-left text-faint">{t('Search commits, branches')}</span>
         <Kbd>⌘K</Kbd>
