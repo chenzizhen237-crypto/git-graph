@@ -1,6 +1,20 @@
 import { expect, test } from 'vitest'
 
-import { type BranchCi, type Check, deploymentState, overviewQuery, pollEvery, type RepoCi, readCheck, readDeployments, repoState, sortRepos, summary } from '../overview'
+import {
+  type BranchCi,
+  type Check,
+  deploymentState,
+  overviewQuery,
+  pollEvery,
+  type RepoCi,
+  readCheck,
+  readDeployments,
+  readRelease,
+  releaseState,
+  repoState,
+  sortRepos,
+  summary,
+} from '../overview'
 
 const check = (state: Check['state']): Check => ({ name: state, state, started: null, completed: null, url: null })
 const branch = (states: Check['state'][], at = '2026-10-26T10:00:00Z'): BranchCi => ({ branch: 'main', sha: 'abc', subject: 's', at, checks: states.map(check) })
@@ -97,4 +111,32 @@ test('deployments keep the newest per environment, and a failed one makes the re
 
 test('the query asks for deployments', () => {
   expect(overviewQuery([{ owner: 'o', name: 'a' }]).query).toContain('deployments(last: 30')
+})
+
+test('a release is as good as its build, and a draft is still waiting', () => {
+  const node = (isDraft: boolean, conclusion: string | null) => ({
+    tagName: 'v1.0.0',
+    name: '',
+    isDraft,
+    isPrerelease: false,
+    publishedAt: isDraft ? null : '2026-10-26T00:00:00Z',
+    createdAt: '2026-10-25T00:00:00Z',
+    url: 'u',
+    releaseAssets: { totalCount: 3 },
+    tagCommit: {
+      oid: 'abc',
+      statusCheckRollup: conclusion
+        ? { contexts: { nodes: [{ __typename: 'CheckRun' as const, name: 'Build', status: 'COMPLETED', conclusion, startedAt: null, completedAt: null, detailsUrl: null }] } }
+        : null,
+    },
+  })
+  const ok = readRelease(node(false, 'SUCCESS'))!
+  expect(ok).toMatchObject({ tag: 'v1.0.0', name: 'v1.0.0', at: '2026-10-26T00:00:00Z', assets: 3, sha: 'abc' })
+  expect(releaseState(ok)).toBe('pass')
+  expect(releaseState(readRelease(node(false, 'FAILURE')))).toBe('fail')
+  expect(releaseState(readRelease(node(true, null)))).toBe('running')
+  expect(readRelease(node(true, null))!.at).toBe('2026-10-25T00:00:00Z')
+  expect(readRelease(undefined)).toBeUndefined()
+  expect(repoState({ ...repo('a', branch(['pass'])), release: readRelease(node(false, 'FAILURE')) })).toBe('fail')
+  expect(overviewQuery([{ owner: 'o', name: 'a' }]).query).toContain('releases(first: 1')
 })

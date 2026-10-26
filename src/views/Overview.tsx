@@ -5,7 +5,7 @@
  * repository's Actions view. Refreshes every minute, every 15 s while
  * something runs.
  */
-import { CircleDashed, CirclePlay, ExternalLink, RefreshCcw, Rocket, Search } from 'lucide-react'
+import { CircleDashed, CirclePlay, ExternalLink, Package, RefreshCcw, Rocket, Search } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 
 import { Button, Chip, Count, caps, Empty, IconButton } from '../components/ui'
@@ -13,7 +13,21 @@ import { duration, type RunState } from '../lib/actions'
 import { cx } from '../lib/cx'
 import { openUrl } from '../lib/github'
 import { t, timeAgo } from '../lib/i18n'
-import { type BranchCi, branchState, type Deployment, pollEvery, type RepoCi, type RepoState, refreshOverview, repoState, summary, useOverview } from '../lib/overview'
+import {
+  type BranchCi,
+  branchState,
+  type Check,
+  type Deployment,
+  pollEvery,
+  type Release,
+  type RepoCi,
+  type RepoState,
+  refreshOverview,
+  releaseState,
+  repoState,
+  summary,
+  useOverview,
+} from '../lib/overview'
 import { readRecents } from '../state'
 import { StateIcon } from './Actions'
 
@@ -63,6 +77,50 @@ const deployWhen = (d: Deployment, long = false) => {
 
 const deployTitle = (d: Deployment) =>
   `${d.environment}\n${d.ref ? `${d.ref} · ` : ''}${d.sha}\n${t(DEPLOY_VERB[d.state], { when: new Date(d.at).toLocaleString() })}${d.url ? `\n${d.url}` : ''}`
+
+const RELEASE_COLOR: Record<RepoState, string> = { pass: 'text-status-added', fail: 'text-status-deleted', running: 'text-status-modified', none: 'text-muted' }
+
+/** "release build failed · 2 days ago · 12 commits since" for a row. */
+function releaseLine(r: Release) {
+  const state = releaseState(r)
+  const parts = [
+    r.draft ? t('draft') : r.prerelease ? t('pre-release') : '',
+    state === 'fail' ? t('release build failed') : state === 'running' && !r.draft ? t('release build running') : '',
+    timeAgo(new Date(r.at).getTime()),
+    r.since ? t(r.since === 1 ? '{n} commit since' : '{n} commits since', { n: r.since }) : '',
+  ]
+  return parts.filter(Boolean).join(' · ')
+}
+
+/** "9 files · 2 days ago" for the pane. */
+const releaseMeta = (r: Release) =>
+  [r.draft ? t('draft') : r.prerelease ? t('pre-release') : '', t(r.assets === 1 ? '{n} file' : '{n} files', { n: r.assets }), timeAgo(new Date(r.at).getTime())]
+    .filter(Boolean)
+    .join(' · ')
+
+const releaseTitle = (r: Release) =>
+  `${r.tag} · ${r.name}\n${r.sha ?? ''}\n${new Date(r.at).toLocaleString()}\n${t(r.assets === 1 ? '{n} file' : '{n} files', { n: r.assets })}\n${r.url}`
+
+/** One check per row; clicking opens it on GitHub. */
+function CheckRows({ checks }: { checks: Check[] }) {
+  return checks.map((c, k) => (
+    <button
+      key={`${c.name}-${k}`}
+      type="button"
+      disabled={!c.url}
+      onClick={() => c.url && void openUrl(c.url)}
+      title={c.url ? `${c.name}\n${t('Open on GitHub')}` : c.name}
+      className="flex h-7.5 w-full items-center gap-2 rounded-md px-2.5 text-left enabled:hover:bg-hover"
+    >
+      <StateIcon state={c.state} />
+      <span className="min-w-0 flex-1 truncate">{c.name}</span>
+      <span className="text-sm text-muted">
+        {/* Commit statuses carry no end time; only check runs get a duration. */}
+        {c.completed || c.state === 'running' ? duration(c.started, c.completed) : '—'}
+      </span>
+    </button>
+  ))
+}
 
 const summaryText = (b?: BranchCi) => {
   const s = summary(b)
@@ -187,6 +245,13 @@ function RepoRow({ repo: r, selected, onSelect }: { repo: RepoCi; selected: bool
           <span className="min-w-0 flex-1 truncate">{summaryText(r.current)}</span>
         </span>
       )}
+      {r.release && (
+        <span className="flex w-full items-center gap-1.25 pl-5.75 text-sm text-muted" title={releaseTitle(r.release)}>
+          <Package size={12} className={cx('shrink-0', RELEASE_COLOR[releaseState(r.release)])} />
+          <Chip kind="tag" name={r.release.tag} />
+          <span className="min-w-0 flex-1 truncate">{releaseLine(r.release)}</span>
+        </span>
+      )}
       {!!r.deployments?.length && (
         <span className="flex w-full min-w-0 items-center gap-2.5 overflow-hidden pl-5.75 text-sm text-muted">
           {r.deployments.slice(0, 3).map(d => (
@@ -234,6 +299,34 @@ function RepoPane({ repo: r, onOpen }: { repo: RepoCi; onOpen: () => void }) {
         {!r.slug && <Empty>{t('This repository has no GitHub remote, so there are no checks to show.')}</Empty>}
         {r.error && <Empty>{r.error}</Empty>}
         {r.slug && !r.error && !branches.length && <Empty>{t('No commits on GitHub yet.')}</Empty>}
+        {r.release && (
+          <div className="mb-3">
+            <div className={cx(caps, 'px-2.5 pt-1.5 pb-1')}>{t('LATEST RELEASE')}</div>
+            <button
+              type="button"
+              onClick={() => void openUrl(r.release!.url)}
+              title={releaseTitle(r.release)}
+              className="flex h-7.5 w-full items-center gap-2 rounded-md px-2.5 text-left hover:bg-hover"
+            >
+              <Package size={15} className={cx('shrink-0', RELEASE_COLOR[releaseState(r.release)])} />
+              <Chip kind="tag" name={r.release.tag} />
+              <span className="min-w-0 flex-1 truncate">{r.release.name}</span>
+              <span className="shrink-0 text-sm whitespace-nowrap text-muted">{releaseMeta(r.release)}</span>
+              <ExternalLink size={13} className="shrink-0 text-muted" />
+            </button>
+            {r.release.since !== undefined && (
+              <div className="px-2.5 pb-1 text-sm text-muted">
+                {r.release.since === 0
+                  ? t('{branch} has nothing new since this release', { branch: r.main?.branch ?? '' })
+                  : t(r.release.since === 1 ? '{n} commit on {branch} since this release' : '{n} commits on {branch} since this release', {
+                      n: r.release.since,
+                      branch: r.main?.branch ?? '',
+                    })}
+              </div>
+            )}
+            <CheckRows checks={r.release.checks} />
+          </div>
+        )}
         {!!r.deployments?.length && (
           <div className="mb-3">
             <div className={cx(caps, 'px-2.5 pt-1.5 pb-1')}>{t('ENVIRONMENTS')}</div>
@@ -272,23 +365,7 @@ function RepoPane({ repo: r, onOpen }: { repo: RepoCi; onOpen: () => void }) {
               </span>
             </div>
             {!b.checks.length && <div className="px-2.5 py-1.5 text-sm text-faint">{t('No checks on this commit.')}</div>}
-            {b.checks.map((c, k) => (
-              <button
-                key={`${c.name}-${k}`}
-                type="button"
-                disabled={!c.url}
-                onClick={() => c.url && void openUrl(c.url)}
-                title={c.url ? `${c.name}\n${t('Open on GitHub')}` : c.name}
-                className="flex h-7.5 w-full items-center gap-2 rounded-md px-2.5 text-left enabled:hover:bg-hover"
-              >
-                <StateIcon state={c.state} />
-                <span className="min-w-0 flex-1 truncate">{c.name}</span>
-                <span className="text-sm text-muted">
-                  {/* Commit statuses carry no end time; only check runs get a duration. */}
-                  {c.completed || c.state === 'running' ? duration(c.started, c.completed) : '—'}
-                </span>
-              </button>
-            ))}
+            <CheckRows checks={b.checks} />
           </div>
         ))}
       </div>

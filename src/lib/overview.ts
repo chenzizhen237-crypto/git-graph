@@ -9,6 +9,7 @@
 import { useSyncExternalStore } from 'react'
 
 import type { RunState } from './actions'
+import { run } from './git'
 import { graphql } from './github'
 import { cachedLocalRepos, type LocalRepo, localRepos, summarise } from './local'
 
@@ -26,7 +27,24 @@ export type RepoCi = {
   current?: BranchCi
   /** The latest deployment to each environment, newest first. */
   deployments?: Deployment[]
+  release?: Release
   error?: string
+}
+
+export type Release = {
+  tag: string
+  name: string
+  draft: boolean
+  prerelease: boolean
+  /** Published, or created for a draft. */
+  at: string
+  url: string
+  assets: number
+  /** The tagged commit and its checks: the release build. */
+  sha: string | null
+  checks: Check[]
+  /** Commits on the default branch since the tag, counted by local git; missing when the tag is not here. */
+  since?: number
 }
 
 export type Deployment = { environment: string; state: RunState; ref: string | null; sha: string; at: string; url: string | null }
@@ -55,7 +73,42 @@ type DeploymentNode = {
   ref: { name: string } | null
   latestStatus: { state: string; createdAt: string; environmentUrl: string | null; logUrl: string | null } | null
 }
-type RepoNode = { defaultBranchRef: RefNode; cur?: RefNode; deployments?: { nodes: DeploymentNode[] } } | null
+type ReleaseNode = {
+  tagName: string
+  name: string | null
+  isDraft: boolean
+  isPrerelease: boolean
+  publishedAt: string | null
+  createdAt: string
+  url: string
+  releaseAssets: { totalCount: number }
+  tagCommit: Pick<CommitNode, 'oid' | 'statusCheckRollup'> | null
+}
+type RepoNode = { defaultBranchRef: RefNode; cur?: RefNode; deployments?: { nodes: DeploymentNode[] }; releases?: { nodes: ReleaseNode[] } } | null
+
+export function readRelease(n?: ReleaseNode | null): Release | undefined {
+  if (!n) return undefined
+  const checks = (n.tagCommit?.statusCheckRollup?.contexts.nodes ?? []).map(readCheck).sort((a, b) => ORDER[a.state] - ORDER[b.state])
+  return {
+    tag: n.tagName,
+    name: n.name || n.tagName,
+    draft: n.isDraft,
+    prerelease: n.isPrerelease,
+    at: n.publishedAt ?? n.createdAt,
+    url: n.url,
+    assets: n.releaseAssets.totalCount,
+    sha: n.tagCommit?.oid ?? null,
+    checks,
+  }
+}
+
+/** A release is as good as its build; a draft is still waiting to go out. */
+export function releaseState(r?: Release): RepoState {
+  if (!r) return 'none'
+  const build = branchState({ branch: '', sha: '', subject: '', at: '', checks: r.checks })
+  if (build === 'fail' || build === 'running') return build
+  return r.draft ? 'running' : 'pass'
+}
 
 /** GitHub's deployment states; a deployment a newer one replaced (INACTIVE) went fine. */
 export function deploymentState(state?: string | null): RunState {
@@ -146,7 +199,7 @@ export const deployState = (deps?: Deployment[]): RepoState =>
 
 /** A repository is as bad as the worst of its two branches and its deployments. */
 export function repoState(r: RepoCi): RepoState {
-  const states = [branchState(r.main), branchState(r.current), deployState(r.deployments)]
+  const states = [branchState(r.main), branchState(r.current), deployState(r.deployments), releaseState(r.release)]
   for (const s of ['fail', 'running', 'pass'] as const) if (states.includes(s)) return s
   return 'none'
 }
@@ -181,6 +234,11 @@ const COMMIT = `fragment C on Commit {
 /** Enough recent deployments to find the latest one in each environment. */
 const DEPLOYMENTS = `deployments(last: 30, orderBy: { field: CREATED_AT, direction: ASC }) { nodes { environment commitOid createdAt ref { name } latestStatus { state createdAt environmentUrl logUrl } } }`
 
+/** The newest release, drafts included (GitHub shows those only to people who can push). */
+const RELEASES = `releases(first: 1, orderBy: { field: CREATED_AT, direction: DESC }) { nodes { tagName name isDraft isPrerelease publishedAt createdAt url releaseAssets { totalCount } tagCommit { oid statusCheckRollup { contexts(first: 50) { nodes { __typename
+  ... on CheckRun { name status conclusion startedAt completedAt detailsUrl checkSuite { workflowRun { workflow { name } } } }
+  ... on StatusContext { context state targetUrl createdAt } } } } } } }`
+
 type Want = { owner: string; name: string; branch?: string }
 
 /** One aliased `repository` field per repository; names travel as variables. */
@@ -197,7 +255,7 @@ export function overviewQuery(want: Want[]) {
       params.push(`$b${i}: String!`)
       cur = ` cur: ref(qualifiedName: $b${i}) { name target { ...C } }`
     }
-    return `r${i}: repository(owner: $o${i}, name: $n${i}) { defaultBranchRef { name target { ...C } }${cur} ${DEPLOYMENTS} }`
+    return `r${i}: repository(owner: $o${i}, name: $n${i}) { defaultBranchRef { name target { ...C } }${cur} ${DEPLOYMENTS} ${RELEASES} }`
   })
   return { query: `query(${params.join(', ')}) {\n${fields.join('\n')}\n}\n${COMMIT}`, variables: vars }
 }
@@ -236,9 +294,19 @@ export async function loadOverview(repos: LocalRepo[]): Promise<RepoCi[]> {
         const cur = readBranch(a.cur ?? null)
         if (cur && cur.branch !== r.main?.branch) r.current = cur
         r.deployments = readDeployments(a.deployments?.nodes ?? [])
+        r.release = readRelease(a.releases?.nodes[0])
       }
     })
   }
+  // Unreleased work, from local git: no GitHub request, and nothing when the tag was never fetched.
+  await Promise.all(
+    base.map(async r => {
+      if (!r.release || r.release.draft || !r.main) return
+      const out = await run(r.path, ['rev-list', '--count', `refs/tags/${r.release.tag}..${r.main.sha}`]).catch(() => null)
+      const n = out?.code === 0 ? Number(out.stdout.trim()) : Number.NaN
+      if (Number.isFinite(n)) r.release.since = n
+    }),
+  )
   return sortRepos(base)
 }
 
