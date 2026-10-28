@@ -8,6 +8,7 @@ import { CloneDialog, PublishDialog } from './components/GitHubDialogs'
 import { ContextMenu } from './components/Menu'
 import { CommandPalette, DialogHost, Toasts } from './components/Overlays'
 import { SettingsDialog } from './components/Settings'
+import { Sheets } from './components/Sheets'
 import { Resizer, usePanelSize } from './components/Split'
 import { TerminalPanel, TerminalSlot } from './components/Terminal'
 import { actions, findRoot } from './lib/git'
@@ -15,11 +16,14 @@ import { t } from './lib/i18n'
 import { checkRuns } from './lib/notify'
 import { checkOnStartup } from './lib/update'
 import { getSettings, stepZoom, useSettings } from './lib/settings'
+import { closeSheet } from './lib/sheets'
 import { closeTerminal, toggleTerminal } from './lib/terminal'
 import { AppProvider, openNextIn, readRecents, rememberRepo, useApp, type View } from './state'
 import { ChangesView } from './views/Changes'
 import { ActionsView } from './views/Actions'
+import { AgentsView } from './views/Agents'
 import { HistoryView } from './views/History'
+import { IssuesView } from './views/Issues'
 import { OverviewView } from './views/Overview'
 import { PullRequestsView } from './views/PullRequests'
 import { StashesView } from './views/Stashes'
@@ -137,7 +141,13 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
   const sidebar = usePanelSize('sidebar', 248, 180, 480)
   const terminal = usePanelSize('terminal', 260, 120, 720)
   // The shells belong to this repository: end them when the window switches to another one.
-  useEffect(() => closeTerminal, [])
+  useEffect(
+    () => () => {
+      closeTerminal()
+      closeSheet()
+    },
+    [],
+  )
   const [showSidebar, setShowSidebar] = useState(() => localStorage.getItem('sidebar:hidden') !== '1')
   const toggleSidebar = useCallback(
     () =>
@@ -164,6 +174,15 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
         return
       }
       if (!e.metaKey && !e.ctrlKey) return
+      // ⌘Z / ⇧⌘Z undo git actions, except where ⌘Z means undo typing.
+      if (e.metaKey && e.key.toLowerCase() === 'z') {
+        const el = e.target as HTMLElement | null
+        if (el?.closest?.('input, textarea, [contenteditable], .xterm')) return
+        e.preventDefault()
+        if (e.shiftKey) app.redo()
+        else app.undo()
+        return
+      }
       // Keys typed into the terminal belong to the shell (⌃R, ⌃O…), not to the app.
       if (e.ctrlKey && !e.metaKey && (e.target as HTMLElement | null)?.closest?.('.xterm')) return
       const k = e.key.toLowerCase()
@@ -192,6 +211,12 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
       } else if (k === '6') {
         handled()
         setView('overview')
+      } else if (k === '7') {
+        handled()
+        setView('issues')
+      } else if (k === '8') {
+        handled()
+        setView('agents')
       } else if (k === '=' || k === '+' || k === '-' || k === '0') {
         handled()
         stepZoom(k === '0' ? 0 : k === '-' ? -1 : 1)
@@ -215,7 +240,7 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [paletteOpen, setPaletteOpen, setView, refresh, repos, act, repo, toggleSidebar])
+  }, [paletteOpen, setPaletteOpen, setView, refresh, repos, act, repo, toggleSidebar, app])
 
   return (
     <div className="flex h-full flex-col bg-app">
@@ -235,6 +260,8 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
             {view === 'stashes' && <StashesView />}
             {view === 'pulls' && <PullRequestsView />}
             {view === 'actions' && <ActionsView />}
+            {view === 'issues' && <IssuesView />}
+            {view === 'agents' && <AgentsView />}
             {view === 'overview' && <OverviewView onOpenRepo={path => (path === app.root ? setView('actions') : onOpen(path, 'actions'))} />}
           </div>
           {/* History docks the terminal under its graph, beside the inspector; other views under the whole view. */}
@@ -256,6 +283,7 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
           }}
         />
       )}
+      <Sheets />
       <DialogHost />
     </div>
   )

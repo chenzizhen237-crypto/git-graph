@@ -1,8 +1,9 @@
 /** The Changes view: conflicts, staged, unstaged and untracked files, the diff, and the commit composer. */
-import { ArrowUp, Check, ChevronDown, ChevronRight, Minus, Plus, Undo2 } from 'lucide-react'
+import { ArrowUp, Check, ChevronDown, ChevronRight, GitMerge, Minus, Plus, Undo2 } from 'lucide-react'
 import { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { DiffView } from '../components/Diff'
+import { type Hunk, hunkPatch } from '../lib/diff'
 import { Resizer, usePanelSize } from '../components/Split'
 import { Button, Count, caps, Empty, FilePath, fileRowClass, IconButton, LineStats, StatusBadge, splitPath } from '../components/ui'
 import { cx } from '../lib/cx'
@@ -10,6 +11,7 @@ import { useMenus } from '../components/menus'
 import { actions, git, run, workFileDiff, workStats } from '../lib/git'
 import { t } from '../lib/i18n'
 import { isConflict, isStaged, isUnstaged } from '../lib/parse'
+import { openSheet } from '../lib/sheets'
 import { getSettings, useSettings } from '../lib/settings'
 import type { FileChange } from '../lib/types'
 import { useApp } from '../state'
@@ -100,10 +102,48 @@ export function ChangesView() {
     if (await act(t('Use {side}', { side }), ['checkout', `--${side}`, '--', c.path])) await act('Mark resolved', actions.stage([c.path]))
   }
 
+  // Stage, unstage or discard one hunk, or the lines picked in it. Only for plain edits:
+  // a renamed file's patch needs both names, and a whitespace-filtered diff would not apply.
+  const renamed = !!repo.changes.find(c => c.path === sel?.path)?.orig
+  const partial = !!sel && (sel.kind === 'staged' || sel.kind === 'unstaged') && !renamed && diffWhitespace === 'all'
+  const applyHunk = async (hunk: Hunk, lines: Set<number> | null, how: 'stage' | 'unstage' | 'discard', done: () => void) => {
+    if (!sel) return
+    const what = lines ? t('lines') : t('hunk')
+    if (
+      how === 'discard' &&
+      !(await ask({ title: t('Discard this {what}?', { what }), text: t('Your edits to these lines are lost. This cannot be undone.'), confirm: t('Discard'), danger: true }))
+    )
+      return
+    const patch = hunkPatch(sel.path, hunk, lines, how === 'stage' ? 'forward' : 'reverse')
+    const args = ['apply', '--recount', ...(how === 'discard' ? [] : ['--cached']), ...(how === 'stage' ? [] : ['--reverse']), '-']
+    const label = { stage: lines ? 'Stage lines' : 'Stage hunk', unstage: lines ? 'Unstage lines' : 'Unstage hunk', discard: lines ? 'Discard lines' : 'Discard hunk' }[how]
+    if (await act(label, args, { stdin: patch })) done()
+  }
+  const hunkTools = partial
+    ? (hunk: Hunk, lines: Set<number> | null, done: () => void) =>
+        sel.kind === 'staged' ? (
+          <Button small icon={Minus} onClick={() => void applyHunk(hunk, lines, 'unstage', done)}>
+            {lines ? t('Unstage lines') : t('Unstage hunk')}
+          </Button>
+        ) : (
+          <>
+            <Button small icon={Undo2} onClick={() => void applyHunk(hunk, lines, 'discard', done)}>
+              {lines ? t('Discard lines') : t('Discard hunk')}
+            </Button>
+            <Button small kind="primary" icon={Plus} onClick={() => void applyHunk(hunk, lines, 'stage', done)}>
+              {lines ? t('Stage lines') : t('Stage hunk')}
+            </Button>
+          </>
+        )
+    : undefined
+
   const rowActions = (c: FileChange, kind: Kind) => {
     if (kind === 'conflict')
       return (
         <>
+          <Button small kind="primary" icon={GitMerge} onClick={() => openSheet({ kind: 'conflict', path: c.path })}>
+            {t('Resolve…')}
+          </Button>
           <Button small onClick={() => void resolveWith(c, 'ours')}>
             {t('Ours')}
           </Button>
@@ -179,7 +219,7 @@ export function ChangesView() {
       <Resizer panel={list} />
       <div className="flex min-w-0 flex-1 flex-col">
         {sel ? (
-          <DiffView path={sel.path} text={diff.text} loading={diff.loading} empty={sel.kind === 'untracked' ? t('Empty file') : undefined} />
+          <DiffView path={sel.path} text={diff.text} loading={diff.loading} empty={sel.kind === 'untracked' ? t('Empty file') : undefined} hunkTools={hunkTools} />
         ) : (
           <Empty>{t('Select a file to see its changes')}</Empty>
         )}

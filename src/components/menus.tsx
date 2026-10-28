@@ -1,9 +1,27 @@
 /** Right-click menus for commits, files, branches and tags: GitHub links first, then git actions. */
-import { CherryIcon, Code2, Copy, ExternalLink, FileDiff, FolderSearch, GitBranchPlus, GitCompareArrows, GitMerge, Link, LogIn, Tag, Undo2 } from 'lucide-react'
+import {
+  CherryIcon,
+  Code2,
+  Copy,
+  ExternalLink,
+  FileClock,
+  FileDiff,
+  FolderSearch,
+  GitBranchPlus,
+  GitCompareArrows,
+  GitMerge,
+  Link,
+  ListRestart,
+  LogIn,
+  ScanText,
+  Tag,
+  Undo2,
+} from 'lucide-react'
 
 import { links, webUrl } from '../lib/actions'
 import { actions, reveal } from '../lib/git'
 import { openUrl } from '../lib/github'
+import { openSheet } from '../lib/sheets'
 import { t } from '../lib/i18n'
 import { openDiffTool, openInEditor, openMergeTool } from '../lib/tools'
 import type { BranchRef, LogRow } from '../lib/types'
@@ -38,6 +56,10 @@ export function useMenus() {
     }
   }
   const full = (path: string) => `${root}/${path}`
+  const historyItems = (path: string): MenuItem[] => [
+    { icon: FileClock, label: t('File history'), run: () => openSheet({ kind: 'history', path, tab: 'history' }) },
+    { icon: ScanText, label: t('Blame'), run: () => openSheet({ kind: 'history', path, tab: 'blame' }) },
+  ]
   const editorItem = (path: string): MenuItem => ({ icon: Code2, label: t('Open in editor'), run: external('Open in editor', () => openInEditor(full(path))) })
   const permalink = (make: (base: string) => string) => async () => make(await webUrl(root))
 
@@ -78,6 +100,12 @@ export function useMenus() {
       run: () => void act('Cherry-pick', actions.cherryPick(row.hash), { done: t('Cherry-picked') }),
     },
     {
+      icon: ListRestart,
+      label: t('Interactive rebase from here…'),
+      disabled: row.hash === repo?.head || !repo?.branch || repo.branch.startsWith('HEAD'),
+      run: () => openSheet({ kind: 'rebase', base: row.hash }),
+    },
+    {
       icon: Undo2,
       label: t('Revert'),
       run: async () => {
@@ -99,6 +127,7 @@ export function useMenus() {
     },
     { icon: Copy, label: t('Copy path'), run: copy(path, 'Path') },
     'separator',
+    ...historyItems(path),
     { icon: FileDiff, label: t('Open in diff tool'), run: external('Open in diff tool', () => openDiffTool(root, path, { commit: sha })) },
     editorItem(path),
   ]
@@ -106,10 +135,14 @@ export function useMenus() {
   /** A file in the Changes list. */
   const workFile = (path: string, kind: 'staged' | 'unstaged' | 'untracked' | 'conflict'): MenuItem[] => [
     ...(kind === 'conflict'
-      ? [{ icon: GitMerge, label: t('Open in merge tool'), run: external('Open in merge tool', () => openMergeTool(root, path)) }]
+      ? [
+          { icon: GitMerge, label: t('Resolve in Git Graph…'), run: () => openSheet({ kind: 'conflict', path }) },
+          { icon: GitMerge, label: t('Open in merge tool'), run: external('Open in merge tool', () => openMergeTool(root, path)) },
+        ]
       : kind === 'untracked'
         ? []
         : [{ icon: FileDiff, label: t('Open in diff tool'), run: external('Open in diff tool', () => openDiffTool(root, path, { staged: kind === 'staged' })) }]),
+    ...(kind === 'untracked' ? [] : historyItems(path)),
     editorItem(path),
     { icon: FolderSearch, label: t('Reveal in Finder'), run: external('Reveal in Finder', () => reveal(full(path).replace(/\/[^/]*$/, ''))) },
     { icon: Copy, label: t('Copy path'), run: copy(path, 'Path') },

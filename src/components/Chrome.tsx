@@ -1,5 +1,7 @@
 /** Window/Title bar, Banner/Operation, Window/Sidebar and Window/Status bar. */
 import {
+  Bot,
+  CircleDot,
   Archive,
   ArchiveRestore,
   ArrowDown,
@@ -28,6 +30,7 @@ import {
   PanelLeftOpen,
   Plus,
   RefreshCcw,
+  Redo2,
   Search,
   Settings as SettingsIcon,
   SquareTerminal,
@@ -35,6 +38,7 @@ import {
   Sun,
   Tag,
   TriangleAlert,
+  Undo2,
   X,
 } from 'lucide-react'
 import { type KeyboardEvent, type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
@@ -115,6 +119,23 @@ export function TitleBar({ repos, sidebar, onToggleSidebar, onSettings }: { repo
       </button>
       {/* Spacers keep the groups apart when the window is narrow: the repository, branch and search shrink first. */}
       <div className="min-w-6 flex-1 self-stretch" data-tauri-drag-region />
+      <div className="flex shrink-0 items-center gap-0.5">
+        <ToolButton
+          icon={Undo2}
+          label={t('Undo')}
+          disabled={!app.undoEntry || !!busy}
+          title={app.undoEntry ? `${t('Undo {label}', { label: t(app.undoEntry.label) })} (⌘Z)` : t('Nothing to undo')}
+          onClick={app.undo}
+        />
+        <ToolButton
+          icon={Redo2}
+          label={t('Redo')}
+          disabled={!app.redoEntry || !!busy}
+          title={app.redoEntry ? `${t('Redo {label}', { label: t(app.redoEntry.label) })} (⇧⌘Z)` : t('Nothing to redo')}
+          onClick={app.redo}
+        />
+      </div>
+      <Sep />
       <div className="flex shrink-0 items-center gap-0.5">
         <ToolButton icon={RefreshCcw} label={t('Fetch')} busy={busy === 'Fetch'} onClick={() => void act('Fetch', actions.fetch(), { done: t('Fetched') })} />
         <ToolButton icon={ArrowDown} label={t('Pull')} badge={repo.behind} busy={busy === 'Pull'} onClick={() => void act('Pull', actions.pull(), { done: t('Pulled') })} />
@@ -481,6 +502,8 @@ export function Sidebar({ width }: { width: number }) {
           title={t('Pull requests (⌘4)')}
         />
         <Item icon={CirclePlay} color="var(--status-renamed)" label={t('Actions')} selected={view === 'actions'} onClick={() => setView('actions')} title={t('Actions (⌘5)')} />
+        <Item icon={CircleDot} color="var(--status-added)" label={t('Issues')} selected={view === 'issues'} onClick={() => setView('issues')} title={t('Issues (⌘7)')} />
+        <Item icon={Bot} color="var(--accent)" label={t('Agents')} selected={view === 'agents'} onClick={() => setView('agents')} title={t('Agents (⌘8)')} />
         <Item
           icon={LayoutDashboard}
           color="var(--status-renamed)"

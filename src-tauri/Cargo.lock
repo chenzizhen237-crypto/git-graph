@@ -1490,6 +1490,7 @@ version = "0.5.0"
 dependencies = [
  "base64 0.22.1",
  "fontdb",
+ "libc",
  "notify",
  "portable-pty",
  "reqwest",
