@@ -40,12 +40,17 @@ export type Toast = {
 export type ToastInput = Omit<Toast, 'id'>
 
 const MAX = 4
-const LIFETIME = { ok: 4000, info: 6000, error: 9000 }
+export const LIFETIME = { ok: 4000, info: 6000, error: 9000 }
 
 let toasts: Toast[] = []
 const timers = new Map<number, ReturnType<typeof setTimeout>>()
 const listeners = new Set<() => void>()
 let next = 1
+/** Plays a toast's sound; the app wires it to lib/sound so this module stays free of settings. */
+let chime: (kind: Toast['kind']) => void = () => {}
+export const setToastSound = (play: typeof chime) => {
+  chime = play
+}
 
 function emit() {
   for (const l of listeners) l()
@@ -56,6 +61,8 @@ export function toast(input: ToastInput): number {
   const old = input.key ? toasts.find(x => x.key === input.key) : undefined
   const id = old?.id ?? next++
   const item = { ...input, id }
+  // New toasts make a sound; one updating in place only when its kind changes (a busy notice that failed).
+  if (!old || old.kind !== item.kind) chime(item.kind)
   if (old) toasts = toasts.map(x => (x.id === id ? item : x))
   else {
     // Drop the oldest toasts that would hide on their own anyway; sticky ones stay.
@@ -77,7 +84,7 @@ export function toast(input: ToastInput): number {
   return id
 }
 
-const isSticky = (t: Toast) => t.sticky ?? !!t.actions?.length
+export const isSticky = (t: Toast) => t.sticky ?? !!t.actions?.length
 
 function clearTimer(id: number) {
   const timer = timers.get(id)

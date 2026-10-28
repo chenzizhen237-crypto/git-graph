@@ -32,6 +32,7 @@ import { DiffView } from '../components/Diff'
 import { useMenus } from '../components/menus'
 import { GraphCell, graphWidth, type NodeKind, ROW_H } from '../components/GraphCell'
 import { Resizer, usePanelSize } from '../components/Split'
+import { TerminalSlot } from '../components/Terminal'
 import { Avatar, Chip, CiIcon, Count, caps, Empty, FilePath, fileRowClass, IconButton, LineStats, refChips, Segmented, StageDot, StatusBadge, splitPath } from '../components/ui'
 import { cachedCi, type CiState, commitStates } from '../lib/actions'
 import { cx } from '../lib/cx'
@@ -62,6 +63,7 @@ export function HistoryView() {
       <div className="flex min-w-0 flex-1 flex-col">
         <FilterBar layout={layout} setLayout={setLayout} showGraph={showGraph} setShowGraph={setShowGraph} />
         <LogList showGraph={showGraph} />
+        <TerminalSlot />
       </div>
       {layout === 'split' && (
         <>

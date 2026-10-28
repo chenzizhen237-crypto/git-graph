@@ -10,6 +10,7 @@ import { listRuns, type Run } from './actions'
 import { rest } from './github'
 import { t } from './i18n'
 import { getSettings, type Notify } from './settings'
+import { playSound } from './sound'
 import { type Toast, toast } from './toasts'
 
 /** This app's GitHub repository, for the update check. */
@@ -33,7 +34,10 @@ export async function notify(kind: keyof Notify | 'test', title: string, body?: 
       return
     }
   }
-  if (await allowed()) sendNotification({ title, body })
+  if (await allowed()) {
+    sendNotification({ title, body })
+    playSound(level)
+  }
 }
 
 /** Run ids already seen finishing, so each is announced once. */

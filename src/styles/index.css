@@ -44,6 +44,27 @@
 
 @plugin '@tailwindcss/typography';
 
+/* Toasts slide in from the right; the time-left bar runs down over the toast's lifetime. */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px) scale(0.98);
+  }
+}
+@keyframes toast-life {
+  to {
+    transform: scaleX(0);
+  }
+}
+@utility animate-toast-in {
+  animation: toast-in 220ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-toast-in {
+    animation: none;
+  }
+}
+
 /* Diffs and logs: the code size from Settings → Fonts. */
 @utility text-code {
   font-size: var(--fs-code, var(--fs-sm));

@@ -13965,27 +13965,63 @@
           "layout": "vertical",
           "gap": 12,
           "padding": [
-            12,
-            12,
-            12,
-            12
+            14,
+            14,
+            14,
+            17
           ],
           "cornerRadius": "$radius/lg",
           "fill": "$bg/elevated",
           "stroke": "$border/strong",
           "strokeWidth": 1,
-          "effect": {
-            "type": "shadow",
-            "shadowType": "outer",
-            "offset": {
-              "x": 0,
-              "y": 8
+          "effect": [
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 12
+              },
+              "blur": 32,
+              "spread": 0,
+              "color": "$shadow"
             },
-            "blur": 24,
-            "spread": 0,
-            "color": "$shadow"
-          },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 2
+              },
+              "blur": 6,
+              "spread": 0,
+              "color": "$shadow"
+            }
+          ],
           "children": [
+            {
+              "type": "rectangle",
+              "id": "c_toast_update_wash",
+              "name": "Wash",
+              "layoutPosition": "absolute",
+              "x": 0,
+              "y": 0,
+              "width": 400,
+              "height": 400,
+              "fill": "$accent",
+              "opacity": 0.07
+            },
+            {
+              "type": "rectangle",
+              "id": "c_toast_update_bar",
+              "name": "Accent",
+              "layoutPosition": "absolute",
+              "x": 0,
+              "y": 0,
+              "width": 3,
+              "height": 400,
+              "fill": "$accent"
+            },
             {
               "type": "frame",
               "id": "tu_head",
@@ -14146,7 +14182,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "clip": true
         },
         {
           "type": "frame",
@@ -14158,23 +14195,77 @@
           "width": 400,
           "layout": "vertical",
           "gap": 10,
-          "padding": 12,
+          "padding": [
+            14,
+            14,
+            14,
+            17
+          ],
           "cornerRadius": "$radius/lg",
           "fill": "$bg/elevated",
           "stroke": "$border/strong",
           "strokeWidth": 1,
-          "effect": {
-            "type": "shadow",
-            "shadowType": "outer",
-            "offset": {
-              "x": 0,
-              "y": 8
+          "effect": [
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 12
+              },
+              "blur": 32,
+              "spread": 0,
+              "color": "$shadow"
             },
-            "blur": 24,
-            "spread": 0,
-            "color": "$shadow"
-          },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 2
+              },
+              "blur": 6,
+              "spread": 0,
+              "color": "$shadow"
+            }
+          ],
           "children": [
+            {
+              "type": "rectangle",
+              "id": "c_toast_ok_wash",
+              "name": "Wash",
+              "layoutPosition": "absolute",
+              "x": 0,
+              "y": 0,
+              "width": 400,
+              "height": 400,
+              "fill": "$status/added",
+              "opacity": 0.07
+            },
+            {
+              "type": "rectangle",
+              "id": "c_toast_ok_bar",
+              "name": "Accent",
+              "layoutPosition": "absolute",
+              "x": 0,
+              "y": 0,
+              "width": 3,
+              "height": 400,
+              "fill": "$status/added"
+            },
+            {
+              "type": "rectangle",
+              "id": "c_toast_ok_life",
+              "name": "Time left",
+              "layoutPosition": "absolute",
+              "x": 3,
+              "y": 54,
+              "width": 240,
+              "height": 2,
+              "fill": "$status/added",
+              "opacity": 0.5,
+              "constraintV": "bottom"
+            },
             {
               "type": "frame",
               "id": "c_toast_ok_h",
@@ -14184,13 +14275,36 @@
               "alignItems": "start",
               "children": [
                 {
-                  "type": "icon",
-                  "id": "c_toast_ok_i",
-                  "library": "lucide",
-                  "icon": "circle-check",
-                  "width": 16,
-                  "height": 16,
-                  "fill": "$status/added"
+                  "type": "frame",
+                  "id": "c_toast_ok_badge",
+                  "name": "Badge",
+                  "width": 28,
+                  "height": 28,
+                  "cornerRadius": 14,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "c_toast_ok_badge_bg",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "fill": "$status/added",
+                      "opacity": 0.16
+                    },
+                    {
+                      "type": "icon",
+                      "id": "c_toast_ok_i",
+                      "library": "lucide",
+                      "icon": "circle-check",
+                      "x": 5,
+                      "y": 5,
+                      "width": 18,
+                      "height": 18,
+                      "fill": "$status/added"
+                    }
+                  ]
                 },
                 {
                   "type": "frame",
@@ -14209,6 +14323,12 @@
                       "fontWeight": 600,
                       "fill": "$text/primary"
                     }
+                  ],
+                  "padding": [
+                    5,
+                    0,
+                    0,
+                    0
                   ]
                 },
                 {
@@ -14222,7 +14342,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "clip": true
         },
         {
           "type": "frame",
@@ -14234,23 +14355,77 @@
           "width": 400,
           "layout": "vertical",
           "gap": 10,
-          "padding": 12,
+          "padding": [
+            14,
+            14,
+            14,
+            17
+          ],
           "cornerRadius": "$radius/lg",
           "fill": "$bg/elevated",
           "stroke": "$border/strong",
           "strokeWidth": 1,
-          "effect": {
-            "type": "shadow",
-            "shadowType": "outer",
-            "offset": {
-              "x": 0,
-              "y": 8
+          "effect": [
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 12
+              },
+              "blur": 32,
+              "spread": 0,
+              "color": "$shadow"
             },
-            "blur": 24,
-            "spread": 0,
-            "color": "$shadow"
-          },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 2
+              },
+              "blur": 6,
+              "spread": 0,
+              "color": "$shadow"
+            }
+          ],
           "children": [
+            {
+              "type": "rectangle",
+              "id": "c_toast_err_wash",
+              "name": "Wash",
+              "layoutPosition": "absolute",
+              "x": 0,
+              "y": 0,
+              "width": 400,
+              "height": 400,
+              "fill": "$status/deleted",
+              "opacity": 0.07
+            },
+            {
+              "type": "rectangle",
+              "id": "c_toast_err_bar",
+              "name": "Accent",
+              "layoutPosition": "absolute",
+              "x": 0,
+              "y": 0,
+              "width": 3,
+              "height": 400,
+              "fill": "$status/deleted"
+            },
+            {
+              "type": "rectangle",
+              "id": "c_toast_err_life",
+              "name": "Time left",
+              "layoutPosition": "absolute",
+              "x": 3,
+              "y": 66,
+              "width": 240,
+              "height": 2,
+              "fill": "$status/deleted",
+              "opacity": 0.5,
+              "constraintV": "bottom"
+            },
             {
               "type": "frame",
               "id": "c_toast_err_h",
@@ -14260,13 +14435,36 @@
               "alignItems": "start",
               "children": [
                 {
-                  "type": "icon",
-                  "id": "c_toast_err_i",
-                  "library": "lucide",
-                  "icon": "circle-alert",
-                  "width": 16,
-                  "height": 16,
-                  "fill": "$status/deleted"
+                  "type": "frame",
+                  "id": "c_toast_err_badge",
+                  "name": "Badge",
+                  "width": 28,
+                  "height": 28,
+                  "cornerRadius": 14,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "c_toast_err_badge_bg",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "fill": "$status/deleted",
+                      "opacity": 0.16
+                    },
+                    {
+                      "type": "icon",
+                      "id": "c_toast_err_i",
+                      "library": "lucide",
+                      "icon": "circle-alert",
+                      "x": 5,
+                      "y": 5,
+                      "width": 18,
+                      "height": 18,
+                      "fill": "$status/deleted"
+                    }
+                  ]
                 },
                 {
                   "type": "frame",
@@ -14296,6 +14494,12 @@
                       "width": "fill_container",
                       "lineHeight": 1.4
                     }
+                  ],
+                  "padding": [
+                    5,
+                    0,
+                    0,
+                    0
                   ]
                 },
                 {
@@ -14309,7 +14513,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "clip": true
         },
         {
           "type": "frame",
@@ -14321,23 +14526,64 @@
           "width": 400,
           "layout": "vertical",
           "gap": 10,
-          "padding": 12,
+          "padding": [
+            14,
+            14,
+            14,
+            17
+          ],
           "cornerRadius": "$radius/lg",
           "fill": "$bg/elevated",
           "stroke": "$border/strong",
           "strokeWidth": 1,
-          "effect": {
-            "type": "shadow",
-            "shadowType": "outer",
-            "offset": {
-              "x": 0,
-              "y": 8
+          "effect": [
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 12
+              },
+              "blur": 32,
+              "spread": 0,
+              "color": "$shadow"
             },
-            "blur": 24,
-            "spread": 0,
-            "color": "$shadow"
-          },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "offset": {
+                "x": 0,
+                "y": 2
+              },
+              "blur": 6,
+              "spread": 0,
+              "color": "$shadow"
+            }
+          ],
           "children": [
+            {
+              "type": "rectangle",
+              "id": "c_toast_info_wash",
+              "name": "Wash",
+              "layoutPosition": "absolute",
+              "x": 0,
+              "y": 0,
+              "width": 400,
+              "height": 400,
+              "fill": "$accent",
+              "opacity": 0.07
+            },
+            {
+              "type": "rectangle",
+              "id": "c_toast_info_bar",
+              "name": "Accent",
+              "layoutPosition": "absolute",
+              "x": 0,
+              "y": 0,
+              "width": 3,
+              "height": 400,
+              "fill": "$accent"
+            },
             {
               "type": "frame",
               "id": "c_toast_info_h",
@@ -14347,13 +14593,36 @@
               "alignItems": "start",
               "children": [
                 {
-                  "type": "icon",
-                  "id": "c_toast_info_i",
-                  "library": "lucide",
-                  "icon": "bell",
-                  "width": 16,
-                  "height": 16,
-                  "fill": "$accent"
+                  "type": "frame",
+                  "id": "c_toast_info_badge",
+                  "name": "Badge",
+                  "width": 28,
+                  "height": 28,
+                  "cornerRadius": 14,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "c_toast_info_badge_bg",
+                      "x": 0,
+                      "y": 0,
+                      "width": 28,
+                      "height": 28,
+                      "fill": "$accent",
+                      "opacity": 0.16
+                    },
+                    {
+                      "type": "icon",
+                      "id": "c_toast_info_i",
+                      "library": "lucide",
+                      "icon": "bell",
+                      "x": 5,
+                      "y": 5,
+                      "width": 18,
+                      "height": 18,
+                      "fill": "$accent"
+                    }
+                  ]
                 },
                 {
                   "type": "frame",
@@ -14383,6 +14652,12 @@
                       "width": "fill_container",
                       "lineHeight": 1.4
                     }
+                  ],
+                  "padding": [
+                    5,
+                    0,
+                    0,
+                    0
                   ]
                 },
                 {
@@ -14424,7 +14699,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "clip": true
         },
         {
           "type": "text",
@@ -14437,6 +14713,332 @@
           "fill": "$text/muted",
           "width": 860,
           "textGrowth": "fixed-width"
+        },
+        {
+          "type": "text",
+          "id": "c_term_note",
+          "x": 0,
+          "y": 6140,
+          "width": 860,
+          "textGrowth": "fixed-width",
+          "fontFamily": "$font/sans",
+          "fontSize": 13,
+          "fill": "$text/muted",
+          "content": "Terminal panel: in History it docks under the graph column only — the inspector on the right keeps its full height. Other views dock it under the whole view. Opened by the toolbar Terminal button or ⌃`; drag the top edge to resize; hiding keeps the shells running across view switches. Each tab is a login shell in the repository root. \"Open in external terminal\" is on the panel bar and in the command palette."
+        },
+        {
+          "type": "frame",
+          "id": "c_term",
+          "name": "Terminal panel",
+          "reusable": true,
+          "x": 0,
+          "y": 6190,
+          "width": 860,
+          "height": 240,
+          "layout": "vertical",
+          "fill": "$bg/surface",
+          "stroke": "$border/subtle",
+          "strokeWidth": 1,
+          "children": [
+            {
+              "type": "frame",
+              "id": "c_term_bar",
+              "name": "Tab bar",
+              "width": "fill_container",
+              "height": 32,
+              "padding": [
+                0,
+                6,
+                0,
+                8
+              ],
+              "gap": 4,
+              "alignItems": "center",
+              "fill": "$bg/titlebar",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "c_term_tab",
+                  "name": "Tab (active)",
+                  "height": 24,
+                  "padding": [
+                    0,
+                    6,
+                    0,
+                    8
+                  ],
+                  "gap": 6,
+                  "alignItems": "center",
+                  "cornerRadius": "$radius/md",
+                  "fill": "$bg/selected",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "c_term_tab_i",
+                      "library": "lucide",
+                      "icon": "square-terminal",
+                      "width": 13,
+                      "height": 13,
+                      "fill": "$text/secondary"
+                    },
+                    {
+                      "type": "text",
+                      "id": "c_term_tab_t",
+                      "content": "zsh — nib",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 500,
+                      "fill": "$text/primary"
+                    },
+                    {
+                      "type": "icon",
+                      "id": "c_term_tab_x",
+                      "library": "lucide",
+                      "icon": "x",
+                      "width": 12,
+                      "height": 12,
+                      "fill": "$text/muted"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_term_tab2",
+                  "name": "Tab",
+                  "height": 24,
+                  "padding": [
+                    0,
+                    8,
+                    0,
+                    8
+                  ],
+                  "gap": 6,
+                  "alignItems": "center",
+                  "cornerRadius": "$radius/md",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "c_term_tab2_i",
+                      "library": "lucide",
+                      "icon": "square-terminal",
+                      "width": 13,
+                      "height": 13,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "c_term_tab2_t",
+                      "content": "zsh 2",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fill": "$text/secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "ref",
+                  "id": "c_term_new",
+                  "name": "New tab",
+                  "ref": "c_btn_icon",
+                  "descendants": {
+                    "bi_icon": {
+                      "icon": "plus"
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "c_term_sp",
+                  "width": "fill_container",
+                  "height": 1
+                },
+                {
+                  "type": "ref",
+                  "id": "c_term_ext",
+                  "name": "Open in external terminal",
+                  "ref": "c_btn_icon",
+                  "descendants": {
+                    "bi_icon": {
+                      "icon": "external-link"
+                    }
+                  }
+                },
+                {
+                  "type": "ref",
+                  "id": "c_term_clear",
+                  "name": "Clear",
+                  "ref": "c_btn_icon",
+                  "descendants": {
+                    "bi_icon": {
+                      "icon": "trash-2"
+                    }
+                  }
+                },
+                {
+                  "type": "ref",
+                  "id": "c_term_min",
+                  "name": "Collapse",
+                  "ref": "c_btn_icon",
+                  "descendants": {
+                    "bi_icon": {
+                      "icon": "chevron-down"
+                    }
+                  }
+                },
+                {
+                  "type": "ref",
+                  "id": "c_term_close",
+                  "name": "Close panel",
+                  "ref": "c_btn_icon",
+                  "descendants": {
+                    "bi_icon": {
+                      "icon": "x"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "c_term_body",
+              "name": "Screen",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 3,
+              "padding": [
+                10,
+                14
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "c_term_l1",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "c_term_l1_0",
+                      "content": "nib",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fontWeight": 600,
+                      "fill": "$status/renamed"
+                    },
+                    {
+                      "type": "text",
+                      "id": "c_term_l1_1",
+                      "content": " on ",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fontWeight": 400,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "text",
+                      "id": "c_term_l1_2",
+                      "content": "main",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fontWeight": 600,
+                      "fill": "$status/added"
+                    },
+                    {
+                      "type": "text",
+                      "id": "c_term_l1_3",
+                      "content": " [?]",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fontWeight": 400,
+                      "fill": "$status/deleted"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_term_l2",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "c_term_l2_0",
+                      "content": "❯ ",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fontWeight": 700,
+                      "fill": "$status/added"
+                    },
+                    {
+                      "type": "text",
+                      "id": "c_term_l2_1",
+                      "content": "git status -sb",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fontWeight": 400,
+                      "fill": "$text/primary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_term_l3",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "c_term_l3_0",
+                      "content": "## main...origin/main",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fontWeight": 400,
+                      "fill": "$text/secondary"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_term_l4",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "c_term_l4_0",
+                      "content": "?? outputs/reviews/review-regressions.test.ts",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fontWeight": 400,
+                      "fill": "$status/deleted"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c_term_l5",
+                  "gap": 0,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "c_term_l5_0",
+                      "content": "❯ ",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fontWeight": 700,
+                      "fill": "$status/added"
+                    },
+                    {
+                      "type": "text",
+                      "id": "c_term_l5_1",
+                      "content": "▍",
+                      "fontFamily": "$font/mono",
+                      "fontSize": 12,
+                      "fontWeight": 400,
+                      "fill": "$text/primary"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ],
       "x": 3080,
@@ -23781,6 +24383,110 @@
                           "id": "n_bg_h",
                           "name": "n_bg_h",
                           "content": "CI is checked every minute while a run on your branch is going.",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/sm",
+                          "fontWeight": 400,
+                          "fill": "$text/muted",
+                          "width": 440,
+                          "textGrowth": "fixed-width",
+                          "lineHeight": 1.45
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "n_snd",
+                  "name": "Sound",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "n_snd_lb",
+                      "name": "Label",
+                      "width": 180,
+                      "padding": [
+                        6,
+                        0,
+                        0,
+                        0
+                      ],
+                      "justifyContent": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "n_snd_l",
+                          "content": "Sound",
+                          "fontFamily": "$font/sans",
+                          "fontSize": "$text/md",
+                          "fontWeight": 500,
+                          "fill": "$text/primary",
+                          "width": 180,
+                          "textGrowth": "fixed-width",
+                          "textAlign": "right"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "n_snd_b",
+                      "name": "Control",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "n_snd_c",
+                          "name": "Controls",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "n_sndc",
+                              "name": "Check Play a sound",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "ref",
+                                  "id": "n_sndc_cb",
+                                  "ref": "c_checkbox",
+                                  "descendants": {}
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "n_sndc_t",
+                                  "content": "Play a sound with notifications and notices",
+                                  "fontFamily": "$font/sans",
+                                  "fontSize": "$text/md",
+                                  "fontWeight": 400,
+                                  "fill": "$text/secondary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "ref",
+                              "id": "n_snd_test",
+                              "ref": "c_btn_secondary",
+                              "descendants": {
+                                "bs_icon": {
+                                  "icon": "volume-2"
+                                },
+                                "bs_label": {
+                                  "content": "Play"
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "n_snd_h",
+                          "content": "A soft chime for successes and news, a lower tone for errors.",
                           "fontFamily": "$font/sans",
                           "fontSize": "$text/sm",
                           "fontWeight": 400,

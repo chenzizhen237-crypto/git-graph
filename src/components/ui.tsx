@@ -10,11 +10,14 @@ import { STATUS_COLORS } from '../lib/parse'
 type Click = { onClick?: () => void; disabled?: boolean; title?: string; type?: 'button' | 'submit' }
 
 /** Button/Toolbar: icon over a small label. */
-export function ToolButton({ icon: Icon, label, busy, badge, ...rest }: { icon: LucideIcon; label: string; busy?: boolean; badge?: number } & Click) {
+export function ToolButton({ icon: Icon, label, busy, badge, active, ...rest }: { icon: LucideIcon; label: string; busy?: boolean; badge?: number; active?: boolean } & Click) {
   return (
     <button
       type="button"
-      className="relative flex min-w-10.5 shrink-0 flex-col items-center gap-0.5 rounded-md px-2 py-1 text-xs font-medium whitespace-nowrap text-secondary enabled:hover:bg-hover disabled:opacity-40"
+      className={cx(
+        'relative flex min-w-10.5 shrink-0 flex-col items-center gap-0.5 rounded-md px-2 py-1 text-xs font-medium whitespace-nowrap disabled:opacity-40',
+        active ? 'bg-selected text-ref-head' : 'text-secondary enabled:hover:bg-hover',
+      )}
       {...rest}
     >
       {busy ? <Loader2 size={16} className="animate-spin" /> : <Icon size={16} />}

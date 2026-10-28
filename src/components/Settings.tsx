@@ -34,6 +34,7 @@ import {
   SquareTerminal,
   TriangleAlert,
   Type,
+  Volume2,
   X,
 } from 'lucide-react'
 import { type ReactNode, useCallback, useEffect, useState } from 'react'
@@ -45,6 +46,7 @@ import { openUrl } from '../lib/github'
 import { timeAgo, useT } from '../lib/i18n'
 import { formatDate } from '../lib/dates'
 import { notify } from '../lib/notify'
+import { playSound } from '../lib/sound'
 import { type Editor, editors, getGlobal, gitTools, setGlobal, TOOL_NAMES } from '../lib/tools'
 import { DEFAULT_FONTS, type Fonts as FontSettings, testConnection, updateSettings, useSettings, ZOOMS } from '../lib/settings'
 import { Button, IconButton, Kbd } from './ui'
@@ -640,7 +642,7 @@ function ExternalTools() {
         <Select width="w-65" value={s.tools.mergeTool} options={toolOptions(merges, s.tools.mergeTool)} onChange={mergeTool => set({ mergeTool })} />
       </Row>
       {isMac && (
-        <Row label={t('Terminal')} help={t('Opened by the Terminal button in the toolbar.')}>
+        <Row label={t('Terminal')} help={t('Used by Open in external terminal; the Terminal button opens the panel inside Git Graph.')}>
           <Select width="w-65" value={s.terminal} options={TERMINALS.map(v => ({ value: v, label: v }))} onChange={v => updateSettings({ terminal: v })} />
         </Row>
       )}
@@ -679,6 +681,14 @@ function Notifications() {
         <Check checked={n.backgroundOnly} onChange={backgroundOnly => set({ backgroundOnly })}>
           {t('Only while Git Graph is in the background')}
         </Check>
+      </Row>
+      <Row label={t('Sound')} help={t('A soft chime for successes and news, a lower tone for errors.')}>
+        <Check checked={n.sound} onChange={sound => set({ sound })}>
+          {t('Play a sound with notifications and notices')}
+        </Check>
+        <Button icon={Volume2} onClick={() => playSound('ok', true)}>
+          {t('Play')}
+        </Button>
       </Row>
       <Row label={t('Updates')}>
         <Check checked={n.updates} onChange={updates => set({ updates })}>
