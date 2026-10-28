@@ -21,3 +21,5 @@ reqwest = { version = "0.13", features = ["json", "gzip"] }
 fontdb = "0.23"
 ttf-parser = "0.25"
 tauri-plugin-notification = "2"
+portable-pty = "0.9"
+base64 = "0.22"

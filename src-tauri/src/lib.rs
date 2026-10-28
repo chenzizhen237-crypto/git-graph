@@ -5,6 +5,7 @@
 mod fonts;
 mod github;
 mod scan;
+mod term;
 mod tools;
 
 use notify::{RecursiveMode, Watcher};
@@ -391,6 +392,7 @@ pub fn run() {
         .plugin(tauri_plugin_notification::init())
         .manage(WatchState::default())
         .manage(github::GitHub::default())
+        .manage(term::Terminals::default())
         .invoke_handler(tauri::generate_handler![
             git,
             gh,
@@ -408,6 +410,10 @@ pub fn run() {
             read_git_file,
             watch_repo,
             open_terminal,
+            term::term_open,
+            term::term_write,
+            term::term_resize,
+            term::term_close,
             reveal,
             install_update,
             initial_repo

@@ -41,7 +41,8 @@ import { type KeyboardEvent, type ReactNode, useEffect, useMemo, useRef, useStat
 
 import appIcon from '../../assets/icon/app-icon.svg'
 import { cx } from '../lib/cx'
-import { actions, findRoot, openTerminal } from '../lib/git'
+import { actions, findRoot } from '../lib/git'
+import { toggleTerminal, useTerminal } from '../lib/terminal'
 import { openInEditor } from '../lib/tools'
 import { t } from '../lib/i18n'
 import { repoState, useOverview } from '../lib/overview'
@@ -67,6 +68,7 @@ export type RepoSwitch = {
 export function TitleBar({ repos, sidebar, onToggleSidebar, onSettings }: { repos: RepoSwitch; sidebar: boolean; onToggleSidebar: () => void; onSettings: () => void }) {
   const app = useApp()
   const { repo, act, busy, prompt, setPaletteOpen } = app
+  const terminalOpen = useTerminal().open
   // Leaves room on the left for the native traffic lights.
   const bar = 'flex h-titlebar shrink-0 items-center gap-2.5 border-b border-subtle bg-titlebar pr-3.5 pl-22'
   if (!repo) return <div className={bar} data-tauri-drag-region />
@@ -132,7 +134,7 @@ export function TitleBar({ repos, sidebar, onToggleSidebar, onSettings }: { repo
         />
       </div>
       <Sep />
-      <ToolButton icon={SquareTerminal} label={t('Terminal')} onClick={() => void openTerminal(repo.root)} />
+      <ToolButton icon={SquareTerminal} label={t('Terminal')} active={terminalOpen} title={t('Terminal (⌃`)')} onClick={toggleTerminal} />
       <ToolButton
         icon={Code2}
         label={t('Editor')}
@@ -349,7 +351,7 @@ function Section({ label, children, onAdd, defaultOpen = true }: { label: string
   const [open, setOpen] = useState(defaultOpen)
   return (
     <>
-      <div className={cx('mt-2 flex h-6.5 items-center gap-1 pr-2 pl-2.5 first:mt-0', caps)}>
+      <div className={cx('mt-2 flex h-6.5 shrink-0 items-center gap-1 pr-2 pl-2.5 first:mt-0', caps)}>
         <span className="flex-1">{label}</span>
         {onAdd && <IconButton icon={Plus} size={13} className="size-4.5! text-muted" onClick={onAdd} title={`New ${label.toLowerCase().replace(/s$/, '')}`} />}
         <IconButton icon={open ? ChevronDown : ChevronRight} size={13} className="size-4.5! text-muted" onClick={() => setOpen(!open)} />
@@ -389,7 +391,8 @@ function Item({
   return (
     <button
       type="button"
-      className={cx('flex h-6.5 w-full items-center gap-1.75 rounded-md pr-2 text-left', indent ? 'pl-6.5' : 'pl-2.5', selected ? 'bg-selected' : 'hover:bg-hover')}
+      // shrink-0: the sidebar scrolls, so rows must not squeeze when it overflows.
+      className={cx('flex h-6.5 w-full shrink-0 items-center gap-1.75 rounded-md pr-2 text-left', indent ? 'pl-6.5' : 'pl-2.5', selected ? 'bg-selected' : 'hover:bg-hover')}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu}

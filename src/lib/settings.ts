@@ -61,7 +61,7 @@ export type Graph = {
 }
 export type CommitPrefs = { subjectGuide: number; template: string; skipHooks: boolean }
 export type Tools = { editor: string; diffTool: string; mergeTool: string }
-export type Notify = { enabled: boolean; ci: boolean; fetch: boolean; long: boolean; backgroundOnly: boolean; updates: boolean }
+export type Notify = { enabled: boolean; ci: boolean; fetch: boolean; long: boolean; backgroundOnly: boolean; updates: boolean; sound: boolean }
 
 export const DEFAULT_FONTS: Fonts = { ui: '', uiSize: 13, mono: '', monoSize: 12, monoOnly: true, ligatures: false, tabWidth: 4, zoom: 1 }
 export const ZOOMS = [0.8, 0.9, 1, 1.1, 1.25, 1.5]
@@ -86,7 +86,7 @@ export const DEFAULTS: Settings = {
   commit: { subjectGuide: 72, template: '', skipHooks: false },
   diffWhitespace: 'all',
   tools: { editor: '', diffTool: '', mergeTool: '' },
-  notify: { enabled: true, ci: true, fetch: true, long: false, backgroundOnly: true, updates: true },
+  notify: { enabled: true, ci: true, fetch: true, long: false, backgroundOnly: true, updates: true, sound: true },
 }
 
 /** Grouped settings (proxy, fonts…) merge key by key so new keys get their defaults. */

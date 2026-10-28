@@ -9,11 +9,13 @@ import { ContextMenu } from './components/Menu'
 import { CommandPalette, DialogHost, Toasts } from './components/Overlays'
 import { SettingsDialog } from './components/Settings'
 import { Resizer, usePanelSize } from './components/Split'
+import { TerminalPanel, TerminalSlot } from './components/Terminal'
 import { actions, findRoot } from './lib/git'
 import { t } from './lib/i18n'
 import { checkRuns } from './lib/notify'
 import { checkOnStartup } from './lib/update'
 import { getSettings, stepZoom, useSettings } from './lib/settings'
+import { closeTerminal, toggleTerminal } from './lib/terminal'
 import { AppProvider, openNextIn, readRecents, rememberRepo, useApp, type View } from './state'
 import { ChangesView } from './views/Changes'
 import { ActionsView } from './views/Actions'
@@ -133,6 +135,9 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
   }, [ciWatch, root, branch])
 
   const sidebar = usePanelSize('sidebar', 248, 180, 480)
+  const terminal = usePanelSize('terminal', 260, 120, 720)
+  // The shells belong to this repository: end them when the window switches to another one.
+  useEffect(() => closeTerminal, [])
   const [showSidebar, setShowSidebar] = useState(() => localStorage.getItem('sidebar:hidden') !== '1')
   const toggleSidebar = useCallback(
     () =>
@@ -152,7 +157,15 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
   // Global shortcuts.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // ⌃` shows and hides the terminal, as in VS Code.
+      if (e.ctrlKey && !e.metaKey && e.code === 'Backquote') {
+        e.preventDefault()
+        toggleTerminal()
+        return
+      }
       if (!e.metaKey && !e.ctrlKey) return
+      // Keys typed into the terminal belong to the shell (⌃R, ⌃O…), not to the app.
+      if (e.ctrlKey && !e.metaKey && (e.target as HTMLElement | null)?.closest?.('.xterm')) return
       const k = e.key.toLowerCase()
       const handled = () => e.preventDefault()
       if (k === 'k') {
@@ -215,12 +228,19 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
             <Resizer panel={sidebar} />
           </>
         )}
-        {view === 'history' && <HistoryView />}
-        {view === 'changes' && <ChangesView />}
-        {view === 'stashes' && <StashesView />}
-        {view === 'pulls' && <PullRequestsView />}
-        {view === 'actions' && <ActionsView />}
-        {view === 'overview' && <OverviewView onOpenRepo={path => (path === app.root ? setView('actions') : onOpen(path, 'actions'))} />}
+        <div className="flex min-w-0 flex-1 flex-col">
+          <div className="flex min-h-0 flex-1">
+            {view === 'history' && <HistoryView />}
+            {view === 'changes' && <ChangesView />}
+            {view === 'stashes' && <StashesView />}
+            {view === 'pulls' && <PullRequestsView />}
+            {view === 'actions' && <ActionsView />}
+            {view === 'overview' && <OverviewView onOpenRepo={path => (path === app.root ? setView('actions') : onOpen(path, 'actions'))} />}
+          </div>
+          {/* History docks the terminal under its graph, beside the inspector; other views under the whole view. */}
+          {view !== 'history' && <TerminalSlot />}
+          <TerminalPanel cwd={app.root} panel={terminal} />
+        </div>
       </div>
       <StatusBar />
       {paletteOpen && <CommandPalette onSwitchRepo={() => void repos.openFolder()} onSettings={() => setSettingsOpen(true)} />}

@@ -31,16 +31,17 @@ import {
   Tag,
   X,
 } from 'lucide-react'
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import { type CSSProperties, Fragment, useEffect, useMemo, useRef, useState } from 'react'
 
 import { cx } from '../lib/cx'
 import { repoActions, webUrl } from '../lib/actions'
 import { actions, openTerminal } from '../lib/git'
+import { toggleTerminal } from '../lib/terminal'
 import { openInEditor } from '../lib/tools'
 import { openUrl } from '../lib/github'
 import { t } from '../lib/i18n'
 import { getSettings, updateSettings } from '../lib/settings'
-import { dismissToast, type Toast, type ToastAction, useToasts } from '../lib/toasts'
+import { dismissToast, isSticky, LIFETIME, type Toast, type ToastAction, useToasts } from '../lib/toasts'
 import { useApp } from '../state'
 import { Button, caps, Empty, Kbd } from './ui'
 
@@ -198,7 +199,15 @@ export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () 
               await act('Fork', repoActions.fork(), { tool: 'gh', done: t('Forked — origin is now your fork') })
           },
         },
-        { id: 'a:term', group: 'ACTIONS', icon: SquareTerminal, color: 'var(--text-secondary)', label: t('Open in Terminal'), run: () => void openTerminal(repo.root) },
+        { id: 'a:term', group: 'ACTIONS', icon: SquareTerminal, color: 'var(--text-secondary)', label: t('Show or hide terminal'), kbd: '⌃`', run: toggleTerminal },
+        {
+          id: 'a:term-ext',
+          group: 'ACTIONS',
+          icon: SquareTerminal,
+          color: 'var(--text-secondary)',
+          label: t('Open in external terminal'),
+          run: () => void openTerminal(repo.root),
+        },
         { id: 'a:editor', group: 'ACTIONS', icon: Code2, color: 'var(--text-secondary)', label: t('Open in editor'), run: () => void openInEditor(repo.root).catch(() => {}) },
         { id: 'a:repo', group: 'ACTIONS', icon: FolderOpen, color: 'var(--text-secondary)', label: t('Open another repository…'), kbd: '⌘O', run: onSwitchRepo },
         { id: 'a:settings', group: 'ACTIONS', icon: SettingsIcon, color: 'var(--text-secondary)', label: t('Settings…'), kbd: '⌘,', run: onSettings },
@@ -367,7 +376,8 @@ function AutoFocus() {
 }
 
 const TOAST_ICON = { ok: CircleCheck, error: CircleAlert, info: Bell }
-const TOAST_COLOR = { ok: 'text-status-added', error: 'text-status-deleted', info: 'text-accent' }
+/** Each kind's colour: the accent bar, the icon, the wash behind the card and the time-left bar. */
+const TOAST_TONE = { ok: 'var(--status-added)', error: 'var(--status-deleted)', info: 'var(--accent)' }
 
 /** The app-wide toast stack (lib/toasts), mounted once at the root. */
 export function Toasts() {
@@ -392,11 +402,23 @@ function ToastCard({ item }: { item: Toast }) {
   return (
     <div
       role={item.kind === 'error' ? 'alert' : 'status'}
-      className="flex flex-col gap-2.5 rounded-lg border border-strong bg-elevated p-3 text-sm shadow-[0_8px_24px_var(--shadow)]"
+      style={{ '--tone': TOAST_TONE[item.kind] } as CSSProperties}
+      className="relative flex animate-toast-in flex-col gap-2.5 overflow-hidden rounded-lg border border-strong bg-[color-mix(in_srgb,var(--tone)_8%,var(--bg-elevated))] py-3.5 pr-3.5 pl-4.25 text-sm shadow-[0_12px_32px_var(--shadow),0_2px_6px_var(--shadow)]"
     >
+      <span className="absolute inset-y-0 left-0 w-0.75 bg-(--tone)" />
+      {!isSticky(item) && (
+        <span
+          // Keyed by the toast's content, so a replaced toast starts its bar again.
+          key={`${item.kind}:${item.title}:${item.detail ?? ''}`}
+          className="absolute bottom-0 left-0.75 h-0.5 w-full origin-left bg-(--tone) opacity-50"
+          style={{ animation: `toast-life ${LIFETIME[item.kind]}ms linear forwards` }}
+        />
+      )}
       <div className="flex items-start gap-2.5">
-        <Icon size={16} className={cx('mt-px shrink-0', TOAST_COLOR[item.kind])} />
-        <div className="min-w-0 flex-1">
+        <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--tone)_16%,transparent)] text-(--tone)">
+          <Icon size={17} />
+        </span>
+        <div className="min-w-0 flex-1 pt-1">
           <div className="font-semibold break-words">{item.title}</div>
           {item.detail &&
             (mono ? (
@@ -417,7 +439,7 @@ function ToastCard({ item }: { item: Toast }) {
         </button>
       </div>
       {!!item.actions?.length && (
-        <div className="flex flex-wrap items-center gap-2 pl-6.5">
+        <div className="flex flex-wrap items-center gap-2 pl-9.5">
           {item.actions.map(a => (
             <Button key={a.label} kind={a.primary ? 'primary' : 'secondary'} icon={a.icon} busy={a.busy} disabled={a.busy} onClick={() => run(a)}>
               {a.label}
@@ -426,7 +448,7 @@ function ToastCard({ item }: { item: Toast }) {
         </div>
       )}
       {!!item.links?.length && (
-        <div className="flex flex-wrap items-center gap-1.5 border-t border-subtle pt-2.5 pl-6.5 text-xs font-medium text-secondary">
+        <div className="flex flex-wrap items-center gap-1.5 border-t border-subtle pt-2.5 pl-9.5 text-xs font-medium text-secondary">
           {item.links.map((a, i) => (
             <Fragment key={a.label}>
               {i > 0 && <span className="text-faint">·</span>}
