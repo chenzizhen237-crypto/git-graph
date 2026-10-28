@@ -63,3 +63,29 @@ export function pairLines(lines: DiffLine[]): [DiffLine | null, DiffLine | null]
   }
   return rows
 }
+
+/**
+ * A patch for `git apply --recount` holding one hunk, or only `selected` lines of it
+ * (indexes into hunk.lines). `forward` applies the change (stage); `reverse` is for
+ * `--reverse` (unstage, discard). Lines left out keep the side the patch applies to:
+ * forward, an unselected removal stays as context and an unselected addition is
+ * dropped; reverse, the other way round.
+ */
+export function hunkPatch(path: string, hunk: Hunk, selected: Set<number> | null, direction: 'forward' | 'reverse') {
+  const out: string[] = []
+  let kept = true
+  hunk.lines.forEach((l, i) => {
+    const take = !selected || selected.has(i)
+    if (l.kind === 'meta') {
+      // "\ No newline at end of file" belongs to the line before it.
+      if (kept) out.push(`\\ ${l.text}`)
+      return
+    }
+    kept = true
+    if (l.kind === 'ctx') out.push(` ${l.text}`)
+    else if (take) out.push(`${l.kind === 'add' ? '+' : '-'}${l.text}`)
+    else if ((l.kind === 'del') === (direction === 'forward')) out.push(` ${l.text}`)
+    else kept = false
+  })
+  return `diff --git a/${path} b/${path}\n--- a/${path}\n+++ b/${path}\n${hunk.header}\n${out.join('\n')}\n`
+}

@@ -15,8 +15,9 @@ import { getSettings } from './lib/settings'
 import { toast } from './lib/toasts'
 import type { Stage } from './lib/tokens'
 import type { LogQuery, RepoData } from './lib/types'
+import { blocked, nameOf, redoCommands, type Spot, type UndoEntry, undoCommands, undoKind } from './lib/undo'
 
-export type View = 'history' | 'changes' | 'stashes' | 'pulls' | 'actions' | 'overview'
+export type View = 'history' | 'changes' | 'stashes' | 'pulls' | 'actions' | 'overview' | 'issues' | 'agents'
 
 /** The view the next repository opens in (the CI/CD view opens one straight in Actions). */
 let startView: View | null = null
@@ -56,6 +57,9 @@ function useAppState(root: string) {
   const [menu, setMenu] = useState<MenuState>(null)
   const [publishOpen, setPublishOpen] = useState(false)
   const [lastFetch, setLastFetch] = useState<number | null>(null)
+  // Undo / redo of git actions (lib/undo): newest last.
+  const [undoStack, setUndoStack] = useState<UndoEntry[]>([])
+  const [redoStack, setRedoStack] = useState<UndoEntry[]>([])
   const queryRef = useRef(query)
   queryRef.current = query
   const loading = useRef(0)
@@ -121,9 +125,15 @@ function useAppState(root: string) {
   const ask = useCallback((a: Ask) => new Promise<boolean>(resolve => setDialog({ ...a, kind: 'ask', resolve })), [])
   const prompt = useCallback((p: Prompt) => new Promise<string | null>(resolve => setDialog({ ...p, kind: 'prompt', resolve })), [])
 
+  /** Where HEAD stands now, for undo. */
+  const spot = useCallback(async (): Promise<Spot> => {
+    const [sha, branch] = await Promise.all([run(root, ['rev-parse', 'HEAD']), run(root, ['symbolic-ref', '-q', '--short', 'HEAD'])])
+    return { sha: sha.stdout.trim(), branch: branch.stdout.trim() || null }
+  }, [root])
+
   /** Runs a git (or gh) action: one at a time, failures as a toast, then a refresh. */
   const act = useCallback(
-    async (label: string, args: string[], opts: { stdin?: string; done?: string; tool?: 'git' | 'gh'; quiet?: boolean } = {}) => {
+    async (label: string, args: string[], opts: { stdin?: string; done?: string; tool?: 'git' | 'gh'; quiet?: boolean; record?: boolean } = {}) => {
       if (busy) return false
       if (!opts.quiet) setBusy(label)
       const isGit = opts.tool !== 'gh'
@@ -133,8 +143,13 @@ function useAppState(root: string) {
       const stashing = autoStash && verb === 'switch' && !!repo?.changes.some(c => c.x !== '?' && c.y !== '?')
       const argv = autoStash && verb === 'pull' ? [...args, '--autostash'] : args
       // Upstream before a fetch, to tell how many commits it brought.
-      const before = verb === 'fetch' ? (await run(root, ['rev-parse', '--verify', '-q', '@{u}'])).stdout.trim() : ''
+      const upstreamBefore = verb === 'fetch' ? (await run(root, ['rev-parse', '--verify', '-q', '@{u}'])).stdout.trim() : ''
       const started = Date.now()
+      // Record undoable actions: where HEAD (and the named ref) stood before.
+      const kind = isGit && opts.record !== false ? undoKind(args) : null
+      const name = kind ? nameOf(args, kind) : undefined
+      const before = kind ? await spot() : null
+      const deleted = kind === 'delete-branch' && name ? (await run(root, ['rev-parse', '--verify', '-q', name])).stdout.trim() : undefined
       try {
         if (stashing) await git(root, ['stash', 'push', '-m', 'git-graph: auto-stash before switching'])
         try {
@@ -142,10 +157,20 @@ function useAppState(root: string) {
         } finally {
           if (stashing) await git(root, ['stash', 'pop'])
         }
+        if (kind && before) {
+          const after = await spot()
+          const target = kind === 'tag' && name ? (await run(root, ['rev-parse', '--verify', '-q', `${name}^{commit}`])).stdout.trim() : deleted
+          // An action that changed nothing (switching to the branch you are on) is not worth undoing.
+          const moved = kind === 'delete-branch' || kind === 'tag' || kind === 'create' || after.sha !== before.sha || after.branch !== before.branch
+          if (moved) {
+            setUndoStack(st => [...st.slice(-49), { label, kind, before, after, name, target }])
+            setRedoStack([])
+          }
+        }
         if (opts.done) toast({ kind: 'ok', title: t(opts.done) })
         if (verb === 'fetch' || verb === 'pull') setLastFetch(Date.now())
-        if (before) {
-          const n = Number((await run(root, ['rev-list', '--count', `${before}..@{u}`])).stdout.trim()) || 0
+        if (upstreamBefore) {
+          const n = Number((await run(root, ['rev-list', '--count', `${upstreamBefore}..@{u}`])).stdout.trim()) || 0
           if (n) void notify('fetch', t(n === 1 ? '{n} new commit on {branch}' : '{n} new commits on {branch}', { n, branch: repo?.upstream ?? '' }), repo?.name)
         }
         if (['push', 'pull', 'fetch', 'clone'].includes(verb) && !opts.quiet && Date.now() - started > 15_000)
@@ -160,8 +185,50 @@ function useAppState(root: string) {
         void refresh()
       }
     },
-    [busy, root, refresh, repo],
+    [busy, root, refresh, repo, spot],
   )
+
+  /** Undoes (or redoes) the newest recorded action, if HEAD is still where it left it. */
+  const step = useCallback(
+    async (undo: boolean) => {
+      const stack = undo ? undoStack : redoStack
+      const e = stack.at(-1)
+      if (!e || busy) return
+      const why = blocked(e, await spot(), undo)
+      const title = undo ? t('Undo {label}', { label: t(e.label) }) : t('Redo {label}', { label: t(e.label) })
+      if (why) {
+        toast({ kind: 'error', title: t('Cannot {action}', { action: title }), detail: t(why) })
+        if (undo) setUndoStack(s => s.slice(0, -1))
+        else setRedoStack(s => s.slice(0, -1))
+        return
+      }
+      setBusy(title)
+      try {
+        for (const cmd of undo ? undoCommands(e) : redoCommands(e)) await git(root, cmd)
+        if (undo) {
+          setUndoStack(s => s.slice(0, -1))
+          setRedoStack(s => [...s, e])
+        } else {
+          setRedoStack(s => s.slice(0, -1))
+          setUndoStack(s => [...s, e])
+        }
+        toast({
+          kind: 'ok',
+          key: 'undo',
+          title: undo ? t('Undid {label}', { label: t(e.label) }) : t('Redid {label}', { label: t(e.label) }),
+          links: undo ? [{ label: t('Redo'), run: () => void stepRef.current(false) }] : undefined,
+        })
+      } catch (err) {
+        toast({ kind: 'error', title: t('{label} failed', { label: title }), detail: err instanceof Error ? err.message : String(err) })
+      } finally {
+        setBusy(null)
+        void refresh()
+      }
+    },
+    [undoStack, redoStack, busy, spot, root, refresh],
+  )
+  const stepRef = useRef(step)
+  stepRef.current = step
 
   const stage = stageOf(repo)
 
@@ -180,6 +247,11 @@ function useAppState(root: string) {
     setPaletteOpen,
     busy,
     act,
+    /** The newest undoable and redoable actions, for the toolbar's tooltips. */
+    undoEntry: undoStack.at(-1),
+    redoEntry: redoStack.at(-1),
+    undo: () => void step(true),
+    redo: () => void step(false),
     /** The app-wide toast stack (lib/toasts), here for components that already use the context. */
     toast,
     dialog,

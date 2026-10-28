@@ -136,7 +136,8 @@ export async function loadRepo(root: string, q: LogQuery): Promise<RepoData> {
 
 /** Message, author, parents and changed files of one commit (against its first parent). */
 export async function commitDetail(root: string, hash: string): Promise<CommitDetail> {
-  const diffArgs = ['diff-tree', '-r', '-z', '-M', '--root', '--no-commit-id', '-m', '--first-parent']
+  // Merges against their first parent only: `-m` alone lists each file once per parent it differs from.
+  const diffArgs = ['diff-tree', '-r', '-z', '-M', '--root', '--no-commit-id', '--diff-merges=first-parent']
   const [show, names, nums] = await Promise.all([
     git(root, ['show', '-s', `--format=${SHOW_FORMAT}`, '--date=format:%Y-%m-%d %H:%M', hash]),
     git(root, [...diffArgs, '--name-status', hash]),

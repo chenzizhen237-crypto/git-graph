@@ -115,3 +115,38 @@ pub fn term_close(state: State<'_, Terminals>, id: u32) {
         let _ = s.child.wait();
     }
 }
+
+/// Which of `names` the user's login shell can run (agent CLIs live in places
+/// only the shell's own PATH knows: ~/.claude/local, fnm, bun…).
+#[tauri::command]
+pub async fn installed_commands(names: Vec<String>) -> Result<Vec<String>, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let names: Vec<String> = names
+            .into_iter()
+            .filter(|n| {
+                n.chars()
+                    .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
+            })
+            .collect();
+        if names.is_empty() {
+            return Ok(vec![]);
+        }
+        let shell = std::env::var("SHELL").unwrap_or_else(|_| "/bin/zsh".into());
+        let script = names
+            .iter()
+            .map(|n| format!("command -v {n} >/dev/null 2>&1 && echo {n}"))
+            .collect::<Vec<_>>()
+            .join("; ");
+        let out = std::process::Command::new(shell)
+            .args(["-l", "-c", &script])
+            .stdin(std::process::Stdio::null())
+            .output()
+            .map_err(|e| e.to_string())?;
+        Ok(String::from_utf8_lossy(&out.stdout)
+            .lines()
+            .map(str::to_owned)
+            .collect())
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}

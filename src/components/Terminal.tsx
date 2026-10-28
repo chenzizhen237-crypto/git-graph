@@ -109,7 +109,7 @@ export function TerminalPanel({ cwd, panel }: { cwd: string; panel: PanelSize })
               </button>
             </div>
           ))}
-          <IconButton icon={Plus} size={14} small title={t('New terminal tab')} onClick={newTab} />
+          <IconButton icon={Plus} size={14} small title={t('New terminal tab')} onClick={() => newTab()} />
           <span className="min-w-2 flex-1" />
           <IconButton icon={ExternalLink} size={14} small title={t('Open in external terminal')} onClick={() => void openTerminal(cwd)} />
           <IconButton icon={Trash2} size={14} small title={t('Clear')} onClick={() => window.dispatchEvent(new CustomEvent('term:clear', { detail: active }))} />
@@ -118,7 +118,7 @@ export function TerminalPanel({ cwd, panel }: { cwd: string; panel: PanelSize })
         </div>
         <div className="relative min-h-0 flex-1">
           {tabs.map(tab => (
-            <Screen key={tab.key} tabKey={tab.key} cwd={cwd} visible={open && tab.key === active} />
+            <Screen key={tab.key} tabKey={tab.key} cwd={tab.cwd ?? cwd} command={tab.command} visible={open && tab.key === active} />
           ))}
         </div>
       </section>
@@ -128,7 +128,7 @@ export function TerminalPanel({ cwd, panel }: { cwd: string; panel: PanelSize })
 }
 
 /** One shell: an xterm bound to a backend pseudo-terminal for as long as the tab lives. */
-function Screen({ tabKey, cwd, visible }: { tabKey: number; cwd: string; visible: boolean }) {
+function Screen({ tabKey, cwd, command, visible }: { tabKey: number; cwd: string; command?: string; visible: boolean }) {
   const host = useRef<HTMLDivElement>(null)
   const term = useRef<XTerm | null>(null)
   const fit = useRef<FitAddon | null>(null)
@@ -167,6 +167,8 @@ function Screen({ tabKey, cwd, visible }: { tabKey: number; cwd: string; visible
         if (dead) return void termClose(newId)
         id = newId
         unlisten.push(await onTermOutput(id, bytes => xterm.write(bytes)))
+        // Typed once the shell is listening; the shell buffers it until its prompt is up.
+        if (command) void termWrite(id, `${command}\r`)
         unlisten.push(
           await onTermExit(id, () => {
             xterm.write(`\r\n\x1b[2m${t('[Process ended]')}\x1b[0m\r\n`)

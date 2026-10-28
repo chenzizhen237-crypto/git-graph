@@ -7,7 +7,14 @@ import { invoke } from '@tauri-apps/api/core'
 import { listen } from '@tauri-apps/api/event'
 import { useSyncExternalStore } from 'react'
 
-export type TermTab = { key: number; title: string }
+export type TermTab = {
+  key: number
+  title: string
+  /** Where the shell starts; the repository root when unset. */
+  cwd?: string
+  /** Typed into the shell once it starts (an agent CLI, for the Agents view). */
+  command?: string
+}
 type State = { open: boolean; tabs: TermTab[]; active: number }
 
 let state: State = { open: false, tabs: [], active: 0 }
@@ -29,11 +36,17 @@ export function useTerminal() {
   )
 }
 
-export function newTab() {
+/** Opens a new shell tab and shows it. */
+export function newTab(opts: { cwd?: string; command?: string; title?: string } = {}) {
   const key = nextKey++
   const n = state.tabs.length
-  set({ open: true, tabs: [...state.tabs, { key, title: n ? `zsh ${n + 1}` : 'zsh' }], active: key })
+  const title = opts.title ?? (n ? `zsh ${n + 1}` : 'zsh')
+  set({ open: true, tabs: [...state.tabs, { key, title, cwd: opts.cwd, command: opts.command }], active: key })
+  return key
 }
+
+/** Shows a tab that is already open. */
+export const showTab = (key: number) => set({ open: true, active: key })
 
 /** Shows or hides the panel; hiding keeps the shells running. Opening it the first time starts a shell. */
 export function toggleTerminal() {

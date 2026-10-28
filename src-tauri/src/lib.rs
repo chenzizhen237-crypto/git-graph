@@ -224,6 +224,33 @@ async fn read_git_file(repo: String, name: String) -> Result<Option<String>, Str
     .map_err(|e| e.to_string())?
 }
 
+/// A path inside the work tree, refusing anything that resolves outside it.
+fn work_path(repo: &str, path: &str) -> Result<PathBuf, String> {
+    let root = Path::new(repo).canonicalize().map_err(|e| e.to_string())?;
+    let full = root.join(path);
+    let parent = full
+        .parent()
+        .ok_or("invalid path")?
+        .canonicalize()
+        .map_err(|e| e.to_string())?;
+    if !parent.starts_with(&root) || path.contains("..") {
+        return Err("path is outside the repository".into());
+    }
+    Ok(full)
+}
+
+/// Reads a work-tree file as text (the conflict editor's merged file).
+#[tauri::command]
+fn read_work_file(repo: String, path: String) -> Result<String, String> {
+    std::fs::read_to_string(work_path(&repo, &path)?).map_err(|e| e.to_string())
+}
+
+/// Writes a work-tree file (the conflict editor's result).
+#[tauri::command]
+fn write_work_file(repo: String, path: String, contents: String) -> Result<(), String> {
+    std::fs::write(work_path(&repo, &path)?, contents).map_err(|e| e.to_string())
+}
+
 /// A merge, rebase, cherry-pick or revert stopped midway, read straight from
 /// the git dir in one call instead of a git process per marker file.
 #[derive(Serialize, Default)]
@@ -385,8 +412,29 @@ fn initial_repo() -> Option<String> {
         .map(|p| p.to_string_lossy().into_owned())
 }
 
+/// Apps opened from Finder get a soft limit of 256 open files. Welcome checks every
+/// repository it finds with a few git processes each (three pipes apiece), which
+/// ran past it and made git fail to start ("Too many open files"). Raise it.
+#[cfg(unix)]
+fn raise_open_file_limit() {
+    let mut r = libc::rlimit {
+        rlim_cur: 0,
+        rlim_max: 0,
+    };
+    // SAFETY: plain libc calls on a local struct.
+    unsafe {
+        if libc::getrlimit(libc::RLIMIT_NOFILE, &mut r) == 0 {
+            // macOS refuses more than OPEN_MAX (10240) for the soft limit.
+            r.rlim_cur = r.rlim_max.min(10240).max(r.rlim_cur);
+            libc::setrlimit(libc::RLIMIT_NOFILE, &r);
+        }
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    #[cfg(unix)]
+    raise_open_file_limit();
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_notification::init())
@@ -408,6 +456,9 @@ pub fn run() {
             tools::open_in_editor,
             open_url,
             read_git_file,
+            read_work_file,
+            write_work_file,
+            term::installed_commands,
             watch_repo,
             open_terminal,
             term::term_open,
