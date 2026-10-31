@@ -53,7 +53,6 @@ import { toggleTerminal, useTerminal } from '../lib/terminal'
 import { openInEditor } from '../lib/tools'
 import { t } from '../lib/i18n'
 import { repoState, useOverview } from '../lib/overview'
-import { ROUTES } from '../lib/motion'
 import { isConflict } from '../lib/parse'
 import { useMenus } from './menus'
 import { type Settings, toggleInspector, updateSettings, useSettings } from '../lib/settings'
@@ -447,6 +446,8 @@ function Item({
   )
 }
 
+/** The Workspace rows in order, for the selection pill that moves between them. */
+const WORKSPACE_VIEWS = ['changes', 'history', 'stashes', 'pulls', 'actions', 'issues', 'agents', 'overview']
 /** A row's 26 px and the 1 px gap. */
 const WORKSPACE_ROW = 27
 
@@ -472,7 +473,7 @@ export function Sidebar({ width }: { width: number }) {
     return groups
   }, [repo?.refs])
   const [openRemotes, setOpenRemotes] = useState<Set<string>>(new Set(['origin']))
-  const workspaceRow = ROUTES.indexOf(view)
+  const workspaceRow = WORKSPACE_VIEWS.indexOf(view)
   const shell = 'flex shrink-0 flex-col gap-px overflow-y-auto border-r border-subtle bg-sidebar px-2 py-2.5'
   if (!repo) return <nav className={shell} style={{ width }} />
   const locals = repo.refs.filter(r => r.kind === 'local').sort((a, b) => Number(b.isHead) - Number(a.isHead))

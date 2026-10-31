@@ -3,7 +3,7 @@
  * `data-exit` element is put back as it leaves, fades out, then goes for good.
  * Only for elements that are `fixed` to the window, since they lose their parent.
  */
-const FALLBACK_MS = 420
+const FALLBACK_MS = 300
 
 export function animateExits() {
   new MutationObserver(records => {

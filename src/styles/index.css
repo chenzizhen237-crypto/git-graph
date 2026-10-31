@@ -44,219 +44,110 @@
 
 @plugin '@tailwindcss/typography';
 
-/*
- * Motion, from the Motion spec in the Nib file. Everything is a physical object:
- * it arrives from somewhere and leaves to somewhere, and never just appears.
- */
-:root {
-  /* A heavy sheet: arrives with momentum, and air and friction bring it to rest. */
-  --curve-settle: cubic-bezier(0.16, 0.84, 0.24, 1);
-  /* Gravity: starts slowly and keeps accelerating. */
-  --curve-fall: cubic-bezier(0.6, 0.02, 0.9, 0.4);
-  /* A part on a rail: inertia at both ends. */
-  --curve-glide: cubic-bezier(0.62, 0.02, 0.16, 1);
-  /* A light card: passes its mark slightly and drops back. */
-  --curve-float: cubic-bezier(0.2, 1.14, 0.34, 1);
-  /* A key going down, then springing back. */
-  --curve-press: cubic-bezier(0.3, 0, 0.2, 1);
-  --curve-rebound: cubic-bezier(0.18, 1.6, 0.4, 1);
-  --route-dir: 1;
-}
-
-/* Route change: the old sheet stays and falls away while the new one settles, so the screen is never empty. */
-.route {
-  view-transition-name: route;
-}
-::view-transition {
-  pointer-events: none;
-}
-::view-transition-old(root) {
-  display: none;
-}
-::view-transition-new(root) {
-  animation: none;
-}
-::view-transition-group(route) {
-  overflow: clip;
-  animation: none;
-}
-::view-transition-old(route),
-::view-transition-new(route) {
-  mix-blend-mode: normal;
-}
-::view-transition-old(route) {
-  animation: sheet-out var(--motion-base) var(--curve-fall) forwards;
-}
-::view-transition-new(route) {
-  animation: sheet-in var(--motion-slow) var(--curve-settle) var(--motion-stagger) backwards;
-}
-@keyframes sheet-out {
-  to {
-    opacity: 0;
-    filter: blur(3px);
-    transform: translateY(calc(var(--route-dir) * -12px)) scale(0.992);
-  }
-}
-@keyframes sheet-in {
-  from {
-    opacity: 0;
-    filter: blur(6px);
-    transform: translateY(calc(var(--route-dir) * var(--motion-shift)));
-  }
-}
-
-/* Atmosphere: each place has its own light, which changes after the sheets have moved. */
-@property --route-tone {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: transparent;
-}
-.ambient {
-  view-transition-name: ambient;
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  pointer-events: none;
-  background: radial-gradient(70% 55% at 72% -8%, color-mix(in srgb, var(--route-tone) 9%, transparent), transparent);
-  transition: --route-tone 900ms var(--curve-glide);
-}
-::view-transition-group(ambient),
-::view-transition-new(ambient) {
-  animation: none;
-}
-::view-transition-old(ambient) {
-  display: none;
-}
-.dust {
-  view-transition-name: dust;
-  position: fixed;
-  inset: 0;
-  z-index: 45;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-::view-transition-group(dust),
-::view-transition-new(dust) {
-  animation: none;
-}
-::view-transition-old(dust) {
-  display: none;
-}
-
-/* Depth: a dialog is nearer to you, so the app behind steps back and goes slightly out of focus. */
-.depth-stage {
-  transition:
-    transform var(--motion-glide) var(--curve-glide),
-    filter var(--motion-glide) var(--curve-glide);
-}
-body:has(.bg-scrim:not([data-leaving])) .depth-stage {
-  filter: brightness(0.94) saturate(0.9) blur(1px);
-  transform: scale(0.986);
-}
-.bg-scrim {
-  backdrop-filter: blur(3px);
-}
-
+/* Motion, from the design's Motion spec. The app shell stays still, so only what changed moves. */
 @keyframes fade-in {
   from {
     opacity: 0;
   }
 }
-@keyframes leave {
+@keyframes fade-out {
   to {
     opacity: 0;
   }
 }
-@keyframes drop {
-  to {
-    transform: translateY(10px) scale(0.985);
+@keyframes route-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-shift));
   }
 }
 @keyframes pop-in {
   from {
     opacity: 0;
-    filter: blur(2px);
-    transform: translateY(-6px) scale(0.94);
+    transform: scale(0.97);
   }
 }
 @keyframes dialog-in {
   from {
     opacity: 0;
-    filter: blur(3px);
-    transform: translateY(14px) scale(0.94);
+    transform: scale(0.96);
   }
 }
-@keyframes toast-in {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
+:root {
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --spring-quick: cubic-bezier(0.2, 0.9, 0.3, 1.05);
+  --spring-gentle: cubic-bezier(0.2, 0.8, 0.3, 1);
 }
-/* The toast's time-left bar runs down over its lifetime. */
-@keyframes toast-life {
-  to {
-    transform: scaleX(0);
-  }
+/* Each pane of a new route enters a little after the one before it. */
+.route > * {
+  animation: route-in var(--motion-base) var(--ease-out) backwards;
+}
+.route > :nth-child(n + 2) {
+  animation-delay: var(--motion-stagger);
+}
+.route > :nth-child(n + 3) {
+  animation-delay: calc(var(--motion-stagger) * 2);
 }
 [data-exit] {
-  animation: fade-in var(--motion-base) var(--curve-settle);
+  animation: fade-in var(--motion-fast) var(--ease-out);
 }
 [data-leaving] {
   pointer-events: none;
-  animation: leave var(--motion-base) var(--curve-fall) forwards;
-}
-[data-leaving] > * {
-  animation: drop var(--motion-base) var(--curve-fall) forwards;
+  animation: fade-out var(--motion-fast) ease-in forwards;
 }
 @utility animate-pop-in {
-  animation: pop-in var(--motion-float) var(--curve-float);
+  animation: pop-in 160ms var(--spring-quick);
 }
 @utility animate-dialog-in {
-  animation: dialog-in var(--motion-float) var(--curve-float);
-}
-@utility animate-toast-in {
-  animation: toast-in var(--motion-slow) var(--curve-float);
+  animation: dialog-in 240ms var(--spring-quick);
 }
 .press {
-  transition: transform 360ms var(--curve-rebound);
+  transition: transform var(--motion-fast) var(--ease-out);
 }
 .press:not(:disabled):active {
-  transform: scale(0.95);
-  transition: transform var(--motion-fast) var(--curve-press);
+  transform: scale(0.96);
 }
 .panel-slide {
-  transition: width var(--motion-glide) var(--curve-glide);
+  transition: width var(--motion-base) var(--ease-out);
 }
 /* A dragged panel follows the pointer. */
 body[data-resizing] .panel-slide {
   transition: none;
 }
 .selection-pill {
-  transition: transform var(--motion-glide) var(--curve-glide);
+  transition: transform var(--motion-base) var(--ease-out);
 }
-/* Fades only: nothing travels, scales or changes focus. */
+
+/* Toasts slide in from the right; the time-left bar runs down over the toast's lifetime. */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+@keyframes toast-life {
+  to {
+    transform: scaleX(0);
+  }
+}
+@utility animate-toast-in {
+  animation: toast-in var(--motion-slow) var(--spring-gentle);
+}
+/* Fades only: nothing moves or scales. */
 @media (prefers-reduced-motion: reduce) {
+  .route > *,
   .animate-pop-in,
   .animate-dialog-in,
   .animate-toast-in {
-    animation: fade-in var(--motion-fast) linear;
-  }
-  [data-leaving] > * {
-    animation: none;
+    animation: fade-in var(--motion-fast) var(--ease-out);
+    animation-delay: 0ms;
   }
   .press:not(:disabled):active {
     transform: none;
   }
   .panel-slide,
-  .selection-pill,
-  .depth-stage,
-  .ambient {
+  .selection-pill {
     transition: none;
-  }
-  body:has(.bg-scrim:not([data-leaving])) .depth-stage {
-    filter: none;
-    transform: none;
   }
 }
 
