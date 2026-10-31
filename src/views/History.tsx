@@ -601,7 +601,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
       >
         <div className="relative" style={{ height: total * ROW_H + (repo?.hasMore ? 40 : 0) }}>
           {ghosts.map(g => (
-            <div key={`ghost-${g.key}`} ref={el => launchGhost(el, g)} className={cx('morph-ghost pointer-events-none absolute inset-0', g.travel !== 0 && 'z-2')}>
+            <div key={`ghost-${g.key}`} ref={el => launchGhost(el, g)} className="pointer-events-none absolute inset-0">
               {g.node}
             </div>
           ))}

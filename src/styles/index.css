@@ -105,21 +105,6 @@
 }
 
 /* List change: lib/listMorph moves the rows; these are the parts that change inside them. */
-/* Rows are opaque cards while they change, so text never mixes. Travelling rows pass over the rest. */
-[data-morph],
-.morph-ghost [data-row] {
-  background-color: var(--bg-app);
-}
-[data-morph].bg-selected,
-.morph-ghost [data-row].bg-selected {
-  background-image: linear-gradient(var(--bg-selected), var(--bg-selected));
-}
-[data-morph='new'] {
-  z-index: 1;
-}
-[data-morph='travel'] {
-  z-index: 2;
-}
 @keyframes row-leave {
   to {
     opacity: 0;

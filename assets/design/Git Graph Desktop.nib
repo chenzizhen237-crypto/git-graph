@@ -30384,7 +30384,7 @@
                       "type": "text",
                       "id": "ms3_r0c",
                       "name": "The log keeps every commit that is in both lists. Those rows travel to their new place, and only the graph cells that changed redraw. Commits that leave fade where they are, and new ones fade in once the rest have started moving.",
-                      "content": "One list maps onto the other, and rows are opaque cards, so text never shows through. A commit in both lists travels on top along its path from A to B. A new commit wipes across its slot as a solid strip, staggered down the list, covering the old row. The time grows with distance, cubic-bezier(0.42, 0, 0.14, 1).",
+                      "content": "One list maps onto the other. Every visible commit in both lists has a path from A to B, even if B is off screen. The time grows with the distance, cubic-bezier(0.42, 0, 0.14, 1): it eases away, travels, then lands softly. Commits with no partner fade slowly in place, and only graph cells that changed redraw.",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 400,
