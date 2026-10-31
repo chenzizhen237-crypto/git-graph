@@ -1,0 +1,1 @@
+claude/justfile 695ef8a: OVERRIDE, tests skipped: Jimmy unreachable, then lost GitHub and SSH; just check and Vitest passed on the laptop, as the user asked
