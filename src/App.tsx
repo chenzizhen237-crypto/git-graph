@@ -15,7 +15,7 @@ import { actions, findRoot } from './lib/git'
 import { t } from './lib/i18n'
 import { checkRuns } from './lib/notify'
 import { checkOnStartup } from './lib/update'
-import { getSettings, stepZoom, useSettings } from './lib/settings'
+import { getSettings, stepZoom, toggleInspector, useSettings } from './lib/settings'
 import { closeSheet } from './lib/sheets'
 import { closeTerminal, toggleTerminal } from './lib/terminal'
 import { AppProvider, openNextIn, readRecents, rememberRepo, useApp, type View } from './state'
@@ -227,6 +227,9 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
         handled()
         if (e.shiftKey) repos.all()
         else void repos.openFolder()
+      } else if (e.code === 'Backslash' && e.shiftKey) {
+        handled()
+        toggleInspector()
       } else if (k === '\\') {
         handled()
         toggleSidebar()

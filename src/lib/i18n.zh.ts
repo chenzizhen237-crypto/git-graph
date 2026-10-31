@@ -24,6 +24,9 @@ const zh: Record<string, string> = {
   'Show or hide the sidebar': '显示或隐藏侧边栏',
   'Hide sidebar (⌘\\)': '隐藏侧边栏 (⌘\\)',
   'Show sidebar (⌘\\)': '显示侧边栏 (⌘\\)',
+  'Hide details (⇧⌘\\)': '隐藏详情 (⇧⌘\\)',
+  'Show details (⇧⌘\\)': '显示详情 (⇧⌘\\)',
+  'Show or hide the details': '显示或隐藏详情',
 
   // Toolbar and actions
   Fetch: '抓取',

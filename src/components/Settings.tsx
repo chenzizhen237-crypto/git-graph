@@ -854,6 +854,7 @@ const KEYS: [string, string][] = [
   ['⌘1 · ⌘2 · ⌘3 · ⌘4 · ⌘5', 'History · Changes · Stashes · Pull requests · Actions'],
   ['⌘,', 'Settings'],
   ['⌘\\', 'Show or hide the sidebar'],
+  ['⇧⌘\\', 'Show or hide the details'],
   ['⌘+ · ⌘− · ⌘0', 'Zoom in · Zoom out · Actual size'],
   ['⌘R', 'Refresh'],
   ['⌘O', 'Switch repository'],
