@@ -39,10 +39,10 @@ const FONTS: Record<string, string> = {
   'JetBrains Mono': `'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, monospace`,
 }
 
-/** A value as CSS: aliases become var(), numbers become px. */
-function css(v: Value, type: Variable['type']): string {
+/** A value as CSS: aliases become var(), numbers become px, and durations ms. */
+function css(v: Value, type: Variable['type'], name: string): string {
   if (typeof v === 'string' && v.startsWith('$')) return `var(${cssName(v.slice(1))})`
-  if (type === 'number') return `${v}px`
+  if (type === 'number') return `${v}${name.startsWith('motion/') && name !== 'motion/shift' ? 'ms' : 'px'}`
   if (type === 'string') return FONTS[v as string] ?? JSON.stringify(v)
   return String(v)
 }
@@ -76,7 +76,7 @@ for (const [name, v] of Object.entries(doc.variables)) {
   if (v.type === 'string' && !['sans', 'mono', 'font/sans', 'font/mono'].includes(name)) continue
   if (v.type === 'boolean') continue
   for (const t of variants(v)) {
-    const line = `  ${cssName(name)}: ${css(t.value, v.type)};`
+    const line = `  ${cssName(name)}: ${css(t.value, v.type, name)};`
     if (t.theme?.Mode === 'Dark') dark.push(line)
     else if (t.theme?.Stage) addTo(stages, t.theme.Stage, line)
     else if (t.theme?.Language) addTo(langs, LANG_ATTR[t.theme.Language] ?? t.theme.Language, line)
