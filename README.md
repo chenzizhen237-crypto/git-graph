@@ -47,6 +47,10 @@ pnpm bundle                       # installers in src-tauri/target/release/bundl
 pnpm check                        # typecheck, lint, format check, tests
 ```
 
+## Landing
+
+Changes reach `main` through `pnpm land <branch>`: it merges the branch onto `main`, runs `jimmy-test ci` on that merge, and pushes only if it passes. A local pre-push hook refuses other pushes to `main`. `pnpm land <branch> --override "reason"` skips the tests when Jimmy is down and records why. GitHub CI starts by hand, for a Linux or Windows pass before a release.
+
 ## Releasing
 
 Releases are built and published locally on Jimmy's Mac mini, macOS only:
@@ -65,7 +69,7 @@ jimmy-test --ref main -- pnpm release
 - **Tauri 2** (Rust) runs `git` and `gh`, watches the repository, and talks to GitHub's API over one kept-alive connection. The GitHub token comes from `gh auth token` and never reaches the web view.
 - **React 19 + TypeScript**, styled with **Tailwind CSS 4**. The Tailwind theme is generated from the design file's variables (`pnpm tokens`), so utilities like `bg-sidebar` or `text-ref-head` are the design tokens.
 - The design lives in [`assets/design/Git Graph Desktop.nib`](assets/design); see [assets/README.md](assets/README.md).
-- **Prettier** formats, **Biome** lints, **Vitest** tests; GitHub Actions runs CI, and releases are built on Jimmy's Mac mini (see Releasing).
+- **Prettier** formats, **Biome** lints, **Vitest** tests; `jimmy-test ci` runs CI, and releases are built on Jimmy's Mac mini (see Releasing).
 
 ```
 assets/            design file (Nib), app icon, screens

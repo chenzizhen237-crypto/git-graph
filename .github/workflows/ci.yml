@@ -1,9 +1,8 @@
 name: CI
 
+# Started by hand. Everyday checks run on Jimmy through `pnpm land`.
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}

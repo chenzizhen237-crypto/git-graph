@@ -4621,6 +4621,18 @@
               "fontWeight": 700,
               "fill": "$text/muted",
               "letterSpacing": 0.7,
+              "width": "fit_content",
+              "textGrowth": "auto"
+            },
+            {
+              "type": "text",
+              "id": "ss_count",
+              "name": "Count",
+              "content": "4",
+              "fontFamily": "$font/sans",
+              "fontSize": "$text/sm",
+              "fontWeight": 500,
+              "fill": "$text/muted",
               "width": "fill_container",
               "textGrowth": "fixed-width"
             },
@@ -9003,6 +9015,9 @@
                 },
                 "ss_add": {
                   "enabled": false
+                },
+                "ss_count": {
+                  "content": ""
                 }
               },
               "width": "fill_container"
@@ -9102,6 +9117,42 @@
             },
             {
               "type": "ref",
+              "id": "sd_issues",
+              "ref": "c_side_item",
+              "width": "fill_container",
+              "descendants": {
+                "si_icon": {
+                  "icon": "circle-dot",
+                  "fill": "$status/added"
+                },
+                "si_label": {
+                  "content": "Issues"
+                },
+                "si_meta": {
+                  "content": "5"
+                }
+              }
+            },
+            {
+              "type": "ref",
+              "id": "sd_agents",
+              "ref": "c_side_item",
+              "width": "fill_container",
+              "descendants": {
+                "si_icon": {
+                  "icon": "bot",
+                  "fill": "$accent"
+                },
+                "si_label": {
+                  "content": "Agents"
+                },
+                "si_meta": {
+                  "content": "3"
+                }
+              }
+            },
+            {
+              "type": "ref",
               "id": "sd_overview",
               "ref": "c_side_item",
               "width": "fill_container",
@@ -9134,6 +9185,9 @@
               "descendants": {
                 "ss_label": {
                   "content": "BRANCHES"
+                },
+                "ss_count": {
+                  "content": "4"
                 }
               },
               "width": "fill_container"
@@ -9264,6 +9318,9 @@
               "descendants": {
                 "ss_label": {
                   "content": "REMOTES"
+                },
+                "ss_count": {
+                  "content": "1"
                 }
               },
               "width": "fill_container"
@@ -9374,6 +9431,9 @@
               "descendants": {
                 "ss_label": {
                   "content": "TAGS"
+                },
+                "ss_count": {
+                  "content": "3"
                 }
               },
               "width": "fill_container"
@@ -9429,6 +9489,9 @@
               "descendants": {
                 "ss_label": {
                   "content": "WORKTREES"
+                },
+                "ss_count": {
+                  "content": "3"
                 }
               },
               "width": "fill_container"

@@ -44,6 +44,7 @@ import {
 import { type KeyboardEvent, type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 
 import appIcon from '../../assets/icon/app-icon.svg'
+import { useSidebarCounts } from '../lib/counts'
 import { cx } from '../lib/cx'
 import { actions, findRoot } from '../lib/git'
 import { toggleTerminal, useTerminal } from '../lib/terminal'
@@ -368,12 +369,13 @@ export function Banner() {
   )
 }
 
-function Section({ label, children, onAdd, defaultOpen = true }: { label: string; children: ReactNode; onAdd?: () => void; defaultOpen?: boolean }) {
+function Section({ label, count, children, onAdd, defaultOpen = true }: { label: string; count?: number; children: ReactNode; onAdd?: () => void; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
     <>
       <div className={cx('mt-2 flex h-6.5 shrink-0 items-center gap-1 pr-2 pl-2.5 first:mt-0', caps)}>
-        <span className="flex-1">{label}</span>
+        <span>{label}</span>
+        <span className="flex-1 pl-0.5 text-sm font-medium tracking-normal">{count}</span>
         {onAdd && <IconButton icon={Plus} size={13} className="size-4.5! text-muted" onClick={onAdd} title={`New ${label.toLowerCase().replace(/s$/, '')}`} />}
         <IconButton icon={open ? ChevronDown : ChevronRight} size={13} className="size-4.5! text-muted" onClick={() => setOpen(!open)} />
       </div>
@@ -436,8 +438,9 @@ const trackMeta = (track?: string) => ({
 })
 
 export function Sidebar({ width }: { width: number }) {
-  const { repo, view, setView, query, setQuery, act, prompt, openMenu, setPublishOpen } = useApp()
+  const { root, repo, view, setView, query, setQuery, act, prompt, openMenu, setPublishOpen } = useApp()
   const menus = useMenus()
+  const counts = useSidebarCounts(root, repo?.branch, view)
   // Known once the CI/CD view has loaded; it keeps polling only while open.
   const { repos: ci } = useOverview()
   const failing = ci?.filter(r => repoState(r) === 'fail').length ?? 0
@@ -488,7 +491,7 @@ export function Sidebar({ width }: { width: number }) {
           icon={Archive}
           color="var(--text-muted)"
           label={t('Stashes')}
-          meta={repo.stashes.length || ''}
+          meta={repo.stashes.length}
           selected={view === 'stashes'}
           onClick={() => setView('stashes')}
           title={t('Stashes (⌘3)')}
@@ -497,13 +500,39 @@ export function Sidebar({ width }: { width: number }) {
           icon={GitPullRequest}
           color="var(--status-added)"
           label={t('Pull requests')}
+          meta={counts.pulls}
           selected={view === 'pulls'}
           onClick={() => setView('pulls')}
           title={t('Pull requests (⌘4)')}
         />
-        <Item icon={CirclePlay} color="var(--status-renamed)" label={t('Actions')} selected={view === 'actions'} onClick={() => setView('actions')} title={t('Actions (⌘5)')} />
-        <Item icon={CircleDot} color="var(--status-added)" label={t('Issues')} selected={view === 'issues'} onClick={() => setView('issues')} title={t('Issues (⌘7)')} />
-        <Item icon={Bot} color="var(--accent)" label={t('Agents')} selected={view === 'agents'} onClick={() => setView('agents')} title={t('Agents (⌘8)')} />
+        <Item
+          icon={CirclePlay}
+          color="var(--status-renamed)"
+          label={t('Actions')}
+          meta={counts.failing || ''}
+          metaColor="var(--status-deleted)"
+          selected={view === 'actions'}
+          onClick={() => setView('actions')}
+          title={t('Actions (⌘5)')}
+        />
+        <Item
+          icon={CircleDot}
+          color="var(--status-added)"
+          label={t('Issues')}
+          meta={counts.issues}
+          selected={view === 'issues'}
+          onClick={() => setView('issues')}
+          title={t('Issues (⌘7)')}
+        />
+        <Item
+          icon={Bot}
+          color="var(--accent)"
+          label={t('Agents')}
+          meta={repo.worktrees.length}
+          selected={view === 'agents'}
+          onClick={() => setView('agents')}
+          title={t('Agents (⌘8)')}
+        />
         <Item
           icon={LayoutDashboard}
           color="var(--status-renamed)"
@@ -515,7 +544,7 @@ export function Sidebar({ width }: { width: number }) {
           title={t('CI/CD (⌘6)')}
         />
       </Section>
-      <Section label={t('BRANCHES')} onAdd={() => void newBranch()}>
+      <Section label={t('BRANCHES')} count={locals.length} onAdd={() => void newBranch()}>
         {locals.map(b => {
           const { ahead, behind } = trackMeta(b.track)
           return (
@@ -542,7 +571,7 @@ export function Sidebar({ width }: { width: number }) {
         </Section>
       )}
       {remotes.size > 0 && (
-        <Section label={t('REMOTES')}>
+        <Section label={t('REMOTES')} count={remotes.size}>
           {[...remotes].map(([remote, names]) => (
             <div key={remote}>
               <Item
@@ -576,7 +605,7 @@ export function Sidebar({ width }: { width: number }) {
         </Section>
       )}
       {tags.length > 0 && (
-        <Section label={t('TAGS')} defaultOpen={tags.length <= 12}>
+        <Section label={t('TAGS')} count={tags.length} defaultOpen={tags.length <= 12}>
           {tags.map(tag => (
             <Item
               key={tag.name}
@@ -592,7 +621,7 @@ export function Sidebar({ width }: { width: number }) {
         </Section>
       )}
       {repo.worktrees.length > 1 && (
-        <Section label={t('WORKTREES')}>
+        <Section label={t('WORKTREES')} count={repo.worktrees.length}>
           {repo.worktrees.map(w => (
             <Item key={w.path} icon={FolderGit2} color="var(--text-muted)" label={w.path.split('/').pop() ?? w.path} meta={w.branch} strong={w.path === repo.root} title={w.path} />
           ))}
