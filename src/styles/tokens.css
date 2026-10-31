@@ -243,10 +243,10 @@
   --avatar-lucas: var(--blue-500);
   --avatar-claude: #D97757;
   --ref-tag-text: var(--amber-600);
-  --motion-fast: 120px;
-  --motion-base: 200px;
-  --motion-slow: 320px;
-  --motion-stagger: 40px;
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 320ms;
+  --motion-stagger: 40ms;
   --motion-shift: 8px;
 }
 

@@ -1,5 +1,8 @@
 # Git Graph tasks. `just` lists them.
 
+# Hands arguments on intact, so a quoted --override reason stays one argument.
+set positional-arguments
+
 [private]
 default:
     @just --list
@@ -36,7 +39,7 @@ check-rust:
 
 # Unit tests on Jimmy: `just test src/lib/__tests__/counts.test.ts`
 test *args:
-    jimmy-test -- pnpm exec vitest run {{args}}
+    jimmy-test -- pnpm exec vitest run "$@"
 
 # Everything CI runs, on Jimmy
 ci:
@@ -58,7 +61,7 @@ design:
 
 # Merge a branch onto main, test that merge on Jimmy, and push main if it passes: `just land <branch>`
 land *args:
-    bash scripts/land.sh {{args}}
+    bash scripts/land.sh "$@"
 
 # Build and publish a release on Jimmy from main
 release:
