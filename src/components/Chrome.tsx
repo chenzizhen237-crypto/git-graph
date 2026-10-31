@@ -181,10 +181,13 @@ export function TitleBar({ repos, sidebar, onToggleSidebar, onSettings }: { repo
       <Button kind="primary" className="shrink-0" icon={primary.icon} onClick={primary.run} disabled={primary.disabled || !!busy}>
         {primary.label}
       </Button>
-      {/* Only History has a right sidebar. */}
-      {app.view === 'history' && (
-        <IconButton icon={inspector ? PanelRightClose : PanelRightOpen} onClick={toggleInspector} title={t(inspector ? 'Hide details (⇧⌘\\)' : 'Show details (⇧⌘\\)')} />
-      )}
+      {/* Only History has a right sidebar; the slot stays so the toolbar never shifts between views. */}
+      <IconButton
+        icon={inspector ? PanelRightClose : PanelRightOpen}
+        className={app.view === 'history' ? undefined : 'invisible'}
+        onClick={toggleInspector}
+        title={t(inspector ? 'Hide details (⇧⌘\\)' : 'Show details (⇧⌘\\)')}
+      />
     </div>
   )
 }
