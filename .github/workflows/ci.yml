@@ -1,6 +1,6 @@
 name: CI
 
-# Started by hand. Everyday checks run on Jimmy through `pnpm land`.
+# Started by hand. Everyday checks run on Jimmy through `just land`.
 on:
   workflow_dispatch:
 

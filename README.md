@@ -45,11 +45,12 @@ pnpm app                          # run in development
 pnpm tauri dev -- -- ~/code/repo  # open a repository straight away
 pnpm bundle                       # installers in src-tauri/target/release/bundle
 pnpm check                        # typecheck, lint, format check, tests
+just                              # list the common tasks
 ```
 
 ## Landing
 
-Changes reach `main` through `pnpm land <branch>`: it merges the branch onto `main`, runs `jimmy-test ci` on that merge, and pushes only if it passes. A local pre-push hook refuses other pushes to `main`. `pnpm land <branch> --override "reason"` skips the tests when Jimmy is down and records why. GitHub CI starts by hand, for a Linux or Windows pass before a release.
+Changes reach `main` through `just land <branch>`: it merges the branch onto `main`, runs `jimmy-test ci` on that merge, and pushes only if it passes. A local pre-push hook refuses other pushes to `main`. `just land <branch> --override "reason"` skips the tests when Jimmy is down and records why. GitHub CI starts by hand, for a Linux or Windows pass before a release.
 
 ## Releasing
 
