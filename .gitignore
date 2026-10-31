@@ -6,3 +6,4 @@ src-tauri/gen
 
 # Local release builds (scripts/release.sh)
 /release
+outputs/recordings/

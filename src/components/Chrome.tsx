@@ -26,6 +26,7 @@ import {
   LayoutGrid,
   Monitor,
   Moon,
+  Loader2,
   PanelLeftClose,
   PanelLeftOpen,
   PanelRightClose,
@@ -67,6 +68,8 @@ const Sep = () => <div className="h-6 w-px shrink-0 bg-strong" />
 export type RepoSwitch = {
   /** Opens a repository root in this window. */
   open: (root: string) => void
+  /** The next repository is still loading. */
+  switching: boolean
   openFolder: () => void
   clone: () => void
   /** Back to the Welcome screen. */
@@ -218,7 +221,7 @@ function RepoPicker({ repos }: { repos: RepoSwitch }) {
           <div className="truncate leading-tight font-bold">{repo.name}</div>
           <div className="truncate text-[10px] text-muted">{home(repo.root)}</div>
         </div>
-        <ChevronsUpDown size={13} className="shrink-0 text-muted" />
+        {repos.switching ? <Loader2 size={13} className="shrink-0 animate-spin text-accent" /> : <ChevronsUpDown size={13} className="shrink-0 text-muted" />}
       </button>
       {anchor && <RepoMenu anchor={anchor} repos={repos} onClose={() => setAnchor(null)} />}
     </>

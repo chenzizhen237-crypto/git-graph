@@ -41,12 +41,19 @@ async function readCounts(root: string, branch?: string): Promise<SidebarCounts>
   return { ...(open.status === 'fulfilled' ? open.value : {}), ...(runs.status === 'fulfilled' ? { failing: failingRuns(runs.value) } : {}) }
 }
 
+/** The last numbers per repository, so a repository's rows don't start empty when the window switches to it. */
+const known = new Map<string, SidebarCounts>()
+
 export function useSidebarCounts(root: string, branch: string | undefined, view: string) {
-  const [counts, setCounts] = useState<SidebarCounts>({})
+  const [counts, setCounts] = useState<SidebarCounts>(() => known.get(root) ?? {})
   // biome-ignore lint/correctness/useExhaustiveDependencies: leaving a view is when its list may have changed
   useEffect(() => {
     let live = true
-    const load = () => void readCounts(root, branch).then(c => live && setCounts(c))
+    const load = () =>
+      void readCounts(root, branch).then(c => {
+        known.set(root, c)
+        if (live) setCounts(c)
+      })
     load()
     const id = window.setInterval(load, REFRESH_MS)
     return () => {
@@ -54,7 +61,5 @@ export function useSidebarCounts(root: string, branch: string | undefined, view:
       window.clearInterval(id)
     }
   }, [root, branch, view])
-  // biome-ignore lint/correctness/useExhaustiveDependencies: another repository's numbers must not linger
-  useEffect(() => setCounts({}), [root])
   return counts
 }
