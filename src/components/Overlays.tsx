@@ -251,9 +251,9 @@ export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () 
 
   let lastGroup = ''
   return (
-    <div data-exit className={scrim} onMouseDown={close}>
+    <div className={scrim} onMouseDown={close}>
       <div
-        className="flex max-h-130 w-150 origin-top animate-pop-in flex-col overflow-hidden rounded-xl border border-strong bg-elevated shadow-[0_20px_50px_var(--shadow),0_2px_6px_var(--shadow)]"
+        className="flex max-h-130 w-150 flex-col overflow-hidden rounded-xl border border-strong bg-elevated shadow-[0_20px_50px_var(--shadow),0_2px_6px_var(--shadow)]"
         onMouseDown={e => e.stopPropagation()}
       >
         <div className="flex h-13 shrink-0 items-center gap-2.5 border-b border-subtle px-4 text-muted">
@@ -333,9 +333,9 @@ export function DialogHost() {
     else dialog.resolve(ok ? value : null)
   }
   return (
-    <div data-exit className={scrim} onMouseDown={() => done(false)}>
+    <div className={scrim} onMouseDown={() => done(false)}>
       <form
-        className="mt-15 flex w-105 animate-dialog-in flex-col gap-3 rounded-xl border border-strong bg-elevated p-4.5 shadow-[0_20px_50px_var(--shadow)]"
+        className="mt-15 flex w-105 flex-col gap-3 rounded-xl border border-strong bg-elevated p-4.5 shadow-[0_20px_50px_var(--shadow)]"
         onMouseDown={e => e.stopPropagation()}
         onSubmit={e => {
           e.preventDefault()

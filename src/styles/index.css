@@ -44,231 +44,24 @@
 
 @plugin '@tailwindcss/typography';
 
-/*
- * Motion, from the Motion spec in the Nib file. Everything is a physical object:
- * it arrives from somewhere and leaves to somewhere, and never just appears.
- */
-:root {
-  /* A heavy sheet: arrives with momentum, and air and friction bring it to rest. */
-  --curve-settle: cubic-bezier(0.16, 0.84, 0.24, 1);
-  /* Gravity: starts slowly and keeps accelerating. */
-  --curve-fall: cubic-bezier(0.6, 0.02, 0.9, 0.4);
-  /* A part on a rail: inertia at both ends. */
-  --curve-glide: cubic-bezier(0.62, 0.02, 0.16, 1);
-  /* A light card: passes its mark slightly and drops back. */
-  --curve-float: cubic-bezier(0.2, 1.14, 0.34, 1);
-  /* One list mapping onto another: eases away, travels, then lands softly. */
-  --curve-map: cubic-bezier(0.42, 0, 0.14, 1);
-  /* A key going down, then springing back. */
-  --curve-press: cubic-bezier(0.3, 0, 0.2, 1);
-  --curve-rebound: cubic-bezier(0.18, 1.6, 0.4, 1);
-}
-
-/* Route change: a plain crossfade. Nothing moves, and the old view stays solid underneath, so nothing flashes. */
-.route {
-  view-transition-name: route;
-}
-::view-transition {
-  pointer-events: none;
-}
-::view-transition-old(root) {
-  display: none;
-}
-::view-transition-new(root) {
-  animation: none;
-}
-::view-transition-group(route) {
-  animation: none;
-}
-::view-transition-old(route),
-::view-transition-new(route) {
-  mix-blend-mode: normal;
-}
-::view-transition-old(route) {
-  animation: none;
-}
-::view-transition-new(route) {
-  animation: fade-in var(--motion-route) ease-out;
-}
-
-/* Repository change: the new repository fades in over the whole window, on top of the old one. */
-.window-fade .route {
-  view-transition-name: none;
-}
-.window-fade::view-transition-old(root) {
-  display: block;
-  animation: none;
-}
-.window-fade::view-transition-new(root) {
-  mix-blend-mode: normal;
-  animation: fade-in var(--motion-window) ease-out;
-}
-
-/* List change: lib/listMorph moves the rows; these are the parts that change inside them. */
-/* Rows are opaque cards while they change, so text never mixes. Travelling rows pass over the rest. */
-[data-morph],
-.morph-ghost [data-row] {
-  background-color: var(--bg-app);
-}
-[data-morph].bg-selected,
-.morph-ghost [data-row].bg-selected {
-  background-image: linear-gradient(var(--bg-selected), var(--bg-selected));
-}
-[data-morph='new'] {
-  z-index: 1;
-}
-[data-morph='travel'] {
-  z-index: 2;
-}
-@keyframes row-leave {
-  to {
-    opacity: 0;
-  }
-}
-.graph-out {
-  animation: row-leave var(--morph-ms, 800ms) var(--curve-map) forwards;
-}
-.graph-in {
-  animation: fade-in var(--morph-ms, 800ms) var(--curve-map);
-}
-@keyframes node-slide {
-  from {
-    transform: translateX(var(--slide));
-  }
-}
-.node-slide {
-  animation: node-slide var(--morph-ms, 800ms) var(--curve-map);
-}
-/* A column opens from zero width, and the description gives up or takes the room. */
-.col {
-  transition:
-    width var(--motion-glide) var(--curve-glide),
-    margin-left var(--motion-glide) var(--curve-glide),
-    opacity var(--motion-glide) var(--curve-settle);
-}
-.col-hidden {
-  margin-left: -8px;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 0;
-}
-body[data-resizing] .col {
-  transition: none;
-}
-
-/* Depth: a dialog is nearer to you, so the app behind steps back and goes slightly out of focus. */
-.depth-stage {
-  transition:
-    transform var(--motion-glide) var(--curve-glide),
-    filter var(--motion-glide) var(--curve-glide);
-}
-body:has(.bg-scrim:not([data-leaving])) .depth-stage {
-  filter: brightness(0.94) saturate(0.9) blur(1px);
-  transform: scale(0.986);
-}
-.bg-scrim {
-  backdrop-filter: blur(3px);
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-}
-@keyframes leave {
-  to {
-    opacity: 0;
-  }
-}
-@keyframes drop {
-  to {
-    transform: translateY(10px) scale(0.985);
-  }
-}
-@keyframes pop-in {
-  from {
-    opacity: 0;
-    filter: blur(2px);
-    transform: translateY(-6px) scale(0.94);
-  }
-}
-@keyframes dialog-in {
-  from {
-    opacity: 0;
-    filter: blur(3px);
-    transform: translateY(14px) scale(0.94);
-  }
-}
+/* Toasts slide in from the right; the time-left bar runs down over the toast's lifetime. */
 @keyframes toast-in {
   from {
     opacity: 0;
-    transform: translateX(40px);
+    transform: translateX(24px) scale(0.98);
   }
 }
-/* The toast's time-left bar runs down over its lifetime. */
 @keyframes toast-life {
   to {
     transform: scaleX(0);
   }
 }
-[data-exit] {
-  animation: fade-in var(--motion-base) var(--curve-settle);
-}
-[data-leaving] {
-  pointer-events: none;
-  animation: leave var(--motion-base) var(--curve-fall) forwards;
-}
-[data-leaving] > * {
-  animation: drop var(--motion-base) var(--curve-fall) forwards;
-}
-@utility animate-pop-in {
-  animation: pop-in var(--motion-float) var(--curve-float);
-}
-@utility animate-dialog-in {
-  animation: dialog-in var(--motion-float) var(--curve-float);
-}
 @utility animate-toast-in {
-  animation: toast-in var(--motion-slow) var(--curve-float);
+  animation: toast-in 220ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
 }
-.press {
-  transition: transform 360ms var(--curve-rebound);
-}
-.press:not(:disabled):active {
-  transform: scale(0.95);
-  transition: transform var(--motion-fast) var(--curve-press);
-}
-.panel-slide {
-  transition: width var(--motion-glide) var(--curve-glide);
-}
-/* A dragged panel follows the pointer. */
-body[data-resizing] .panel-slide {
-  transition: none;
-}
-.selection-pill {
-  transition: transform var(--motion-route) var(--curve-settle);
-}
-/* Fades only: nothing travels, scales or changes focus. */
 @media (prefers-reduced-motion: reduce) {
-  .animate-pop-in,
-  .animate-dialog-in,
   .animate-toast-in {
-    animation: fade-in var(--motion-fast) linear;
-  }
-  [data-leaving] > * {
     animation: none;
-  }
-  .press:not(:disabled):active {
-    transform: none;
-  }
-  .panel-slide,
-  .selection-pill,
-  .col,
-  .depth-stage {
-    transition: none;
-  }
-  body:has(.bg-scrim:not([data-leaving])) .depth-stage {
-    filter: none;
-    transform: none;
   }
 }
 

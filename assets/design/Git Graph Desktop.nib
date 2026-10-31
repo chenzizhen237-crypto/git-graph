@@ -15343,14 +15343,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -15374,15 +15367,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -15409,15 +15395,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -15440,15 +15419,8 @@
                           "to": "pr_history_full",
                           "transition": {
                             "type": "smart",
-                            "duration": 520,
-                            "easing": {
-                              "bezier": [
-                                0.62,
-                                0.02,
-                                0.16,
-                                1
-                              ]
-                            }
+                            "duration": 200,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -15473,14 +15445,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -15515,8 +15480,8 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -15536,8 +15501,8 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -15557,8 +15522,8 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -15578,8 +15543,8 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -15599,8 +15564,8 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -15620,8 +15585,8 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -15641,8 +15606,8 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -17079,7 +17044,18 @@
                             }
                           }
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 0,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -17705,7 +17681,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 40,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -17734,8 +17721,8 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -17755,8 +17742,8 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -17776,8 +17763,8 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -17797,8 +17784,8 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -17818,8 +17805,8 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -17839,8 +17826,8 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -17860,8 +17847,8 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -17886,15 +17873,8 @@
                   },
                   "transition": {
                     "type": "dissolve",
-                    "duration": 200,
-                    "easing": {
-                      "bezier": [
-                        0.16,
-                        0.84,
-                        0.24,
-                        1
-                      ]
-                    }
+                    "duration": 120,
+                    "easing": "ease_out"
                   }
                 }
               ]
@@ -17903,7 +17883,7 @@
               "id": "i9",
               "trigger": {
                 "type": "after_delay",
-                "ms": 300
+                "ms": 240
               },
               "actions": [
                 {
@@ -17927,14 +17907,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -17943,7 +17916,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 360
+          }
         },
         {
           "type": "frame",
@@ -17989,14 +17965,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -18020,15 +17989,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -18055,15 +18017,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -18090,8 +18045,8 @@
                           "type": "navigate",
                           "to": "pr_history",
                           "transition": {
-                            "type": "dissolve",
-                            "duration": 220,
+                            "type": "smart",
+                            "duration": 200,
                             "easing": "ease_out"
                           }
                         }
@@ -18117,14 +18072,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -18173,8 +18121,8 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -18210,8 +18158,8 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -18231,8 +18179,8 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -18252,8 +18200,8 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -18273,8 +18221,8 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -18294,8 +18242,8 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -18315,8 +18263,8 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -18996,7 +18944,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 0,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -19414,7 +19373,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 40,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -19443,8 +19413,8 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -19464,8 +19434,8 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -19485,8 +19455,8 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -19506,8 +19476,8 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -19527,8 +19497,8 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -19548,8 +19518,8 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -19569,8 +19539,8 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -19595,20 +19565,16 @@
                   },
                   "transition": {
                     "type": "dissolve",
-                    "duration": 200,
-                    "easing": {
-                      "bezier": [
-                        0.16,
-                        0.84,
-                        0.24,
-                        1
-                      ]
-                    }
+                    "duration": 120,
+                    "easing": "ease_out"
                   }
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 360
+          }
         },
         {
           "type": "frame",
@@ -19654,14 +19620,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -19685,15 +19644,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -19720,15 +19672,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -19756,14 +19701,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -19812,8 +19750,8 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -19849,8 +19787,8 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -19870,8 +19808,8 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -19891,8 +19829,8 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -19912,8 +19850,8 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -19933,8 +19871,8 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -19954,8 +19892,8 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -20114,7 +20052,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 0,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -20198,7 +20147,18 @@
                           "ref": "c_diff_ctx",
                           "width": "fill_container"
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 40,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -20227,8 +20187,8 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -20248,8 +20208,8 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -20269,8 +20229,8 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -20290,8 +20250,8 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -20311,8 +20271,8 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -20332,8 +20292,8 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -20353,8 +20313,8 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -20379,20 +20339,16 @@
                   },
                   "transition": {
                     "type": "dissolve",
-                    "duration": 200,
-                    "easing": {
-                      "bezier": [
-                        0.16,
-                        0.84,
-                        0.24,
-                        1
-                      ]
-                    }
+                    "duration": 120,
+                    "easing": "ease_out"
                   }
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 360
+          }
         },
         {
           "type": "frame",
@@ -20438,14 +20394,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -20469,15 +20418,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -20504,15 +20446,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -20540,14 +20475,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -20596,8 +20524,8 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -20633,8 +20561,8 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -20654,8 +20582,8 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -20675,8 +20603,8 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -20696,8 +20624,8 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -20717,8 +20645,8 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -20738,8 +20666,8 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -20898,7 +20826,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 0,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -20982,7 +20921,18 @@
                           "ref": "c_diff_ctx",
                           "width": "fill_container"
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 40,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -21011,8 +20961,8 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -21032,8 +20982,8 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -21053,8 +21003,8 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -21074,8 +21024,8 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -21095,8 +21045,8 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -21116,8 +21066,8 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -21137,8 +21087,8 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -21163,20 +21113,16 @@
                   },
                   "transition": {
                     "type": "dissolve",
-                    "duration": 200,
-                    "easing": {
-                      "bezier": [
-                        0.16,
-                        0.84,
-                        0.24,
-                        1
-                      ]
-                    }
+                    "duration": 120,
+                    "easing": "ease_out"
                   }
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 360
+          }
         },
         {
           "type": "frame",
@@ -21222,14 +21168,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -21253,15 +21192,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -21288,15 +21220,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -21324,14 +21249,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -21380,8 +21298,8 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -21418,8 +21336,8 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -21439,8 +21357,8 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -21460,8 +21378,8 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -21481,8 +21399,8 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -21502,8 +21420,8 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -21523,8 +21441,8 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -21897,7 +21815,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 0,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -22388,7 +22317,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 40,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -22417,8 +22357,8 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -22438,8 +22378,8 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -22459,8 +22399,8 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -22480,8 +22420,8 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -22501,8 +22441,8 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -22522,8 +22462,8 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -22543,8 +22483,8 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -22569,20 +22509,16 @@
                   },
                   "transition": {
                     "type": "dissolve",
-                    "duration": 200,
-                    "easing": {
-                      "bezier": [
-                        0.16,
-                        0.84,
-                        0.24,
-                        1
-                      ]
-                    }
+                    "duration": 120,
+                    "easing": "ease_out"
                   }
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 360
+          }
         },
         {
           "type": "frame",
@@ -22628,14 +22564,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -22659,15 +22588,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -22694,15 +22616,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -22730,14 +22645,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -22786,8 +22694,8 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -22823,8 +22731,8 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -22844,8 +22752,8 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -22865,8 +22773,8 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -22886,8 +22794,8 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -22907,8 +22815,8 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -22928,8 +22836,8 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -23342,7 +23250,18 @@
                           ],
                           "id": "pi_jHa2Z"
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 0,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -23371,8 +23290,8 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -23392,8 +23311,8 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -23413,8 +23332,8 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -23434,8 +23353,8 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -23455,8 +23374,8 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -23476,8 +23395,8 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -23497,8 +23416,8 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -23523,20 +23442,16 @@
                   },
                   "transition": {
                     "type": "dissolve",
-                    "duration": 200,
-                    "easing": {
-                      "bezier": [
-                        0.16,
-                        0.84,
-                        0.24,
-                        1
-                      ]
-                    }
+                    "duration": 120,
+                    "easing": "ease_out"
                   }
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 360
+          }
         },
         {
           "type": "frame",
@@ -23582,14 +23497,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -23613,15 +23521,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -23648,15 +23549,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -23684,14 +23578,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -23740,8 +23627,8 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -23777,8 +23664,8 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -23798,8 +23685,8 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -23819,8 +23706,8 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -23840,8 +23727,8 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -23861,8 +23748,8 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -23882,8 +23769,8 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -24303,7 +24190,18 @@
                           ],
                           "id": "pg_KXLDN"
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 0,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -24332,8 +24230,8 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -24353,8 +24251,8 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -24374,8 +24272,8 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -24395,8 +24293,8 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -24416,8 +24314,8 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -24437,8 +24335,8 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -24458,8 +24356,8 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -24484,20 +24382,16 @@
                   },
                   "transition": {
                     "type": "dissolve",
-                    "duration": 200,
-                    "easing": {
-                      "bezier": [
-                        0.16,
-                        0.84,
-                        0.24,
-                        1
-                      ]
-                    }
+                    "duration": 120,
+                    "easing": "ease_out"
                   }
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 360
+          }
         },
         {
           "type": "frame",
@@ -24543,14 +24437,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -24574,15 +24461,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -24609,15 +24489,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -24645,14 +24518,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -24701,8 +24567,8 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -24739,8 +24605,8 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -24760,8 +24626,8 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -24781,8 +24647,8 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -24802,8 +24668,8 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -24823,8 +24689,8 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -24844,8 +24710,8 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -25509,7 +25375,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 0,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -26328,7 +26205,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 40,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -26357,8 +26245,8 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -26378,8 +26266,8 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -26399,8 +26287,8 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -26420,8 +26308,8 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -26441,8 +26329,8 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -26462,8 +26350,8 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -26483,8 +26371,8 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -26509,20 +26397,16 @@
                   },
                   "transition": {
                     "type": "dissolve",
-                    "duration": 200,
-                    "easing": {
-                      "bezier": [
-                        0.16,
-                        0.84,
-                        0.24,
-                        1
-                      ]
-                    }
+                    "duration": 120,
+                    "easing": "ease_out"
                   }
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 360
+          }
         },
         {
           "type": "frame",
@@ -26565,15 +26449,8 @@
                           "to": "pr_history",
                           "transition": {
                             "type": "smart",
-                            "duration": 520,
-                            "easing": {
-                              "bezier": [
-                                0.62,
-                                0.02,
-                                0.16,
-                                1
-                              ]
-                            }
+                            "duration": 200,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -26598,14 +26475,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -26629,15 +26499,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -26664,15 +26527,8 @@
                           },
                           "transition": {
                             "type": "dissolve",
-                            "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "duration": 120,
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -26700,14 +26556,7 @@
                           "transition": {
                             "type": "dissolve",
                             "duration": 200,
-                            "easing": {
-                              "bezier": [
-                                0.16,
-                                0.84,
-                                0.24,
-                                1
-                              ]
-                            }
+                            "easing": "ease_out"
                           }
                         }
                       ]
@@ -26742,8 +26591,8 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -26763,8 +26612,8 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -26784,8 +26633,8 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -26805,8 +26654,8 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -26826,8 +26675,8 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -26847,8 +26696,8 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -26868,8 +26717,8 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
+                                "type": "smart",
+                                "duration": 200,
                                 "easing": "ease_out"
                               }
                             }
@@ -28306,7 +28155,18 @@
                             }
                           }
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs1",
+                            "start": 0,
+                            "duration": 200,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -28335,8 +28195,8 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -28356,8 +28216,8 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -28377,8 +28237,8 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -28398,8 +28258,8 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -28419,8 +28279,8 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -28440,8 +28300,8 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -28461,8 +28321,8 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -28482,8 +28342,8 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
+                    "type": "smart",
+                    "duration": 200,
                     "easing": "ease_out"
                   }
                 }
@@ -28508,20 +28368,16 @@
                   },
                   "transition": {
                     "type": "dissolve",
-                    "duration": 200,
-                    "easing": {
-                      "bezier": [
-                        0.16,
-                        0.84,
-                        0.24,
-                        1
-                      ]
-                    }
+                    "duration": 120,
+                    "easing": "ease_out"
                   }
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 360
+          }
         },
         {
           "type": "frame",
@@ -28545,9 +28401,9 @@
                 "styles": [
                   {
                     "id": "s1",
-                    "style": "fs6",
+                    "style": "fs2",
                     "start": 0,
-                    "duration": 420,
+                    "duration": 160,
                     "props": {}
                   }
                 ]
@@ -28571,7 +28427,7 @@
             }
           ],
           "timeline": {
-            "duration": 520
+            "duration": 300
           }
         },
         {
@@ -28596,9 +28452,9 @@
                 "styles": [
                   {
                     "id": "s1",
-                    "style": "fs6",
+                    "style": "fs2",
                     "start": 0,
-                    "duration": 420,
+                    "duration": 160,
                     "props": {}
                   }
                 ]
@@ -28622,7 +28478,7 @@
             }
           ],
           "timeline": {
-            "duration": 520
+            "duration": 300
           }
         },
         {
@@ -28643,21 +28499,21 @@
               "id": "ov_toast_p",
               "ref": "c_toast_ok",
               "name": "Toast",
-              "descendants": {
-                "c_toast_ok_tt": {
-                  "content": "Committed to claude/git-graph-mod"
-                }
-              },
               "motion": {
                 "styles": [
                   {
                     "id": "s1",
-                    "style": "fs7",
+                    "style": "fs4",
                     "start": 0,
-                    "duration": 560,
+                    "duration": 320,
                     "props": {}
                   }
                 ]
+              },
+              "descendants": {
+                "c_toast_ok_tt": {
+                  "content": "Committed to claude/git-graph-mod"
+                }
               }
             }
           ],
@@ -28676,7 +28532,7 @@
             }
           ],
           "timeline": {
-            "duration": 660
+            "duration": 500
           }
         },
         {
@@ -29005,9 +28861,9 @@
                 "styles": [
                   {
                     "id": "s1",
-                    "style": "fs6",
+                    "style": "fs3",
                     "start": 0,
-                    "duration": 420,
+                    "duration": 240,
                     "props": {}
                   }
                 ]
@@ -29031,7 +28887,7 @@
             }
           ],
           "timeline": {
-            "duration": 520
+            "duration": 400
           }
         },
         {
@@ -29064,1220 +28920,14 @@
             {
               "type": "text",
               "id": "ms_sub",
-              "name": "Everything here is a physical object with weight. Nothing appears or disappears: it arrives from somewhere and leaves to somewhere, moving through air, under gravity, and the light and focus change with it.",
-              "content": "Everything here is a physical object with weight. Nothing appears or disappears: it arrives from somewhere and leaves to somewhere, moving through air, under gravity, and the light and focus change with it.",
+              "name": "Motion follows the route: the app shell stays still, so only what changed moves. Tokens are motion/fast 120, base 200, slow 320, stagger 40 and shift 8.",
+              "content": "Motion follows the route: the app shell stays still, so only what changed moves. Tokens are motion/fast 120, base 200, slow 320, stagger 40 and shift 8.",
               "fontFamily": "$font/sans",
               "fontSize": "$text/md",
               "fontWeight": 400,
               "fill": "$text/secondary",
               "width": "fill_container",
               "textGrowth": "fixed-width"
-            },
-            {
-              "type": "frame",
-              "id": "mc_grid",
-              "name": "Curves",
-              "width": "fill_container",
-              "layout": "grid",
-              "gridColumns": 3,
-              "gap": 12,
-              "rowGap": 12,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "mc_settle",
-                  "name": "Curve Settle",
-                  "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 10,
-                  "padding": 16,
-                  "cornerRadius": "$radius/lg",
-                  "fill": "$bg/surface",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "mc_settle_h",
-                      "name": "Title",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "mc_settle_n",
-                          "name": "Settle",
-                          "content": "Settle",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/lg",
-                          "fontWeight": 700,
-                          "fill": "$text/primary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "mc_settle_w",
-                          "name": "A heavy sheet",
-                          "content": "A heavy sheet",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/sm",
-                          "fontWeight": 400,
-                          "fill": "$text/muted"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "mc_settle_g",
-                      "name": "Graph",
-                      "width": 120,
-                      "height": 180,
-                      "layout": "none",
-                      "children": [
-                        {
-                          "type": "rectangle",
-                          "id": "mc_settle_box",
-                          "name": "Bounds",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "cornerRadius": 2,
-                          "stroke": "$border/strong",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_settle_c",
-                          "name": "Curve",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120C19.2 19.2 28.8 0.0 120 0",
-                          "stroke": "$accent",
-                          "strokeWidth": 2
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_settle_h1",
-                          "name": "Handle 1",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120L19.2 19.2",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_settle_h2",
-                          "name": "Handle 2",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M120 0L28.8 0.0",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "ellipse",
-                          "id": "mc_settle_b",
-                          "name": "Ball",
-                          "x": 138,
-                          "y": 144,
-                          "width": 12,
-                          "height": 12,
-                          "fill": "$accent",
-                          "motion": {
-                            "tracks": {
-                              "translateY": [
-                                {
-                                  "id": "k1",
-                                  "t": 200,
-                                  "value": 0
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 760,
-                                  "value": -120,
-                                  "easing": {
-                                    "bezier": [
-                                      0.16,
-                                      0.84,
-                                      0.24,
-                                      1
-                                    ]
-                                  }
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": -120
-                                }
-                              ],
-                              "opacity": [
-                                {
-                                  "id": "k1",
-                                  "t": 0,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 1650,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": 0
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_settle_b2",
-                      "name": "cubic-bezier(0.16, 0.84, 0.24, 1) · 560 ms",
-                      "content": "cubic-bezier(0.16, 0.84, 0.24, 1) · 560 ms",
-                      "fontFamily": "$font/mono",
-                      "fontSize": "$text/xs",
-                      "fontWeight": 400,
-                      "fill": "$text/link",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_settle_d",
-                      "name": "Arrives with momentum, and air and friction bring it to rest. Used for route panes.",
-                      "content": "Arrives with momentum, and air and friction bring it to rest. Used for route panes.",
-                      "fontFamily": "$font/sans",
-                      "fontSize": "$text/sm",
-                      "fontWeight": 400,
-                      "fill": "$text/secondary",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "mc_fall",
-                  "name": "Curve Fall",
-                  "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 10,
-                  "padding": 16,
-                  "cornerRadius": "$radius/lg",
-                  "fill": "$bg/surface",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "mc_fall_h",
-                      "name": "Title",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "mc_fall_n",
-                          "name": "Fall",
-                          "content": "Fall",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/lg",
-                          "fontWeight": 700,
-                          "fill": "$text/primary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "mc_fall_w",
-                          "name": "Gravity",
-                          "content": "Gravity",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/sm",
-                          "fontWeight": 400,
-                          "fill": "$text/muted"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "mc_fall_g",
-                      "name": "Graph",
-                      "width": 120,
-                      "height": 180,
-                      "layout": "none",
-                      "children": [
-                        {
-                          "type": "rectangle",
-                          "id": "mc_fall_box",
-                          "name": "Bounds",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "cornerRadius": 2,
-                          "stroke": "$border/strong",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_fall_c",
-                          "name": "Curve",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120C72.0 117.6 108.0 72.0 120 0",
-                          "stroke": "$accent",
-                          "strokeWidth": 2
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_fall_h1",
-                          "name": "Handle 1",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120L72.0 117.6",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_fall_h2",
-                          "name": "Handle 2",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M120 0L108.0 72.0",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "ellipse",
-                          "id": "mc_fall_b",
-                          "name": "Ball",
-                          "x": 138,
-                          "y": 144,
-                          "width": 12,
-                          "height": 12,
-                          "fill": "$accent",
-                          "motion": {
-                            "tracks": {
-                              "translateY": [
-                                {
-                                  "id": "k1",
-                                  "t": 200,
-                                  "value": 0
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 480,
-                                  "value": -120,
-                                  "easing": {
-                                    "bezier": [
-                                      0.6,
-                                      0.02,
-                                      0.9,
-                                      0.4
-                                    ]
-                                  }
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": -120
-                                }
-                              ],
-                              "opacity": [
-                                {
-                                  "id": "k1",
-                                  "t": 0,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 1650,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": 0
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_fall_b2",
-                      "name": "cubic-bezier(0.6, 0.02, 0.9, 0.4) · 280 ms",
-                      "content": "cubic-bezier(0.6, 0.02, 0.9, 0.4) · 280 ms",
-                      "fontFamily": "$font/mono",
-                      "fontSize": "$text/xs",
-                      "fontWeight": 400,
-                      "fill": "$text/link",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_fall_d",
-                      "name": "Starts slowly and keeps accelerating, like something released. Used for anything leaving.",
-                      "content": "Starts slowly and keeps accelerating, like something released. Used for anything leaving.",
-                      "fontFamily": "$font/sans",
-                      "fontSize": "$text/sm",
-                      "fontWeight": 400,
-                      "fill": "$text/secondary",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "mc_glide",
-                  "name": "Curve Glide",
-                  "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 10,
-                  "padding": 16,
-                  "cornerRadius": "$radius/lg",
-                  "fill": "$bg/surface",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "mc_glide_h",
-                      "name": "Title",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "mc_glide_n",
-                          "name": "Glide",
-                          "content": "Glide",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/lg",
-                          "fontWeight": 700,
-                          "fill": "$text/primary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "mc_glide_w",
-                          "name": "A part on a rail",
-                          "content": "A part on a rail",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/sm",
-                          "fontWeight": 400,
-                          "fill": "$text/muted"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "mc_glide_g",
-                      "name": "Graph",
-                      "width": 120,
-                      "height": 180,
-                      "layout": "none",
-                      "children": [
-                        {
-                          "type": "rectangle",
-                          "id": "mc_glide_box",
-                          "name": "Bounds",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "cornerRadius": 2,
-                          "stroke": "$border/strong",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_glide_c",
-                          "name": "Curve",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120C74.4 117.6 19.2 0.0 120 0",
-                          "stroke": "$accent",
-                          "strokeWidth": 2
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_glide_h1",
-                          "name": "Handle 1",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120L74.4 117.6",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_glide_h2",
-                          "name": "Handle 2",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M120 0L19.2 0.0",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "ellipse",
-                          "id": "mc_glide_b",
-                          "name": "Ball",
-                          "x": 138,
-                          "y": 144,
-                          "width": 12,
-                          "height": 12,
-                          "fill": "$accent",
-                          "motion": {
-                            "tracks": {
-                              "translateY": [
-                                {
-                                  "id": "k1",
-                                  "t": 200,
-                                  "value": 0
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 720,
-                                  "value": -120,
-                                  "easing": {
-                                    "bezier": [
-                                      0.62,
-                                      0.02,
-                                      0.16,
-                                      1
-                                    ]
-                                  }
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": -120
-                                }
-                              ],
-                              "opacity": [
-                                {
-                                  "id": "k1",
-                                  "t": 0,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 1650,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": 0
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_glide_b2",
-                      "name": "cubic-bezier(0.62, 0.02, 0.16, 1) · 520 ms",
-                      "content": "cubic-bezier(0.62, 0.02, 0.16, 1) · 520 ms",
-                      "fontFamily": "$font/mono",
-                      "fontSize": "$text/xs",
-                      "fontWeight": 400,
-                      "fill": "$text/link",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_glide_d",
-                      "name": "Inertia on both ends: it takes effort to start, coasts, then brakes. Used for the selection and sidebars.",
-                      "content": "Inertia on both ends: it takes effort to start, coasts, then brakes. Used for the selection and sidebars.",
-                      "fontFamily": "$font/sans",
-                      "fontSize": "$text/sm",
-                      "fontWeight": 400,
-                      "fill": "$text/secondary",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "mc_float",
-                  "name": "Curve Float",
-                  "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 10,
-                  "padding": 16,
-                  "cornerRadius": "$radius/lg",
-                  "fill": "$bg/surface",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "mc_float_h",
-                      "name": "Title",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "mc_float_n",
-                          "name": "Float",
-                          "content": "Float",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/lg",
-                          "fontWeight": 700,
-                          "fill": "$text/primary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "mc_float_w",
-                          "name": "A light card",
-                          "content": "A light card",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/sm",
-                          "fontWeight": 400,
-                          "fill": "$text/muted"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "mc_float_g",
-                      "name": "Graph",
-                      "width": 120,
-                      "height": 180,
-                      "layout": "none",
-                      "children": [
-                        {
-                          "type": "rectangle",
-                          "id": "mc_float_box",
-                          "name": "Bounds",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "cornerRadius": 2,
-                          "stroke": "$border/strong",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_float_c",
-                          "name": "Curve",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120C24.0 -16.8 40.8 0.0 120 0",
-                          "stroke": "$accent",
-                          "strokeWidth": 2
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_float_h1",
-                          "name": "Handle 1",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120L24.0 -16.8",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_float_h2",
-                          "name": "Handle 2",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M120 0L40.8 0.0",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "ellipse",
-                          "id": "mc_float_b",
-                          "name": "Ball",
-                          "x": 138,
-                          "y": 144,
-                          "width": 12,
-                          "height": 12,
-                          "fill": "$accent",
-                          "motion": {
-                            "tracks": {
-                              "translateY": [
-                                {
-                                  "id": "k1",
-                                  "t": 200,
-                                  "value": 0
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 620,
-                                  "value": -120,
-                                  "easing": {
-                                    "bezier": [
-                                      0.2,
-                                      1.14,
-                                      0.34,
-                                      1
-                                    ]
-                                  }
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": -120
-                                }
-                              ],
-                              "opacity": [
-                                {
-                                  "id": "k1",
-                                  "t": 0,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 1650,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": 0
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_float_b2",
-                      "name": "cubic-bezier(0.2, 1.14, 0.34, 1) · 420 ms",
-                      "content": "cubic-bezier(0.2, 1.14, 0.34, 1) · 420 ms",
-                      "fontFamily": "$font/mono",
-                      "fontSize": "$text/xs",
-                      "fontWeight": 400,
-                      "fill": "$text/link",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_float_d",
-                      "name": "Too light to stop dead, so it passes its mark slightly and drops back. Used for menus, dialogs and toasts.",
-                      "content": "Too light to stop dead, so it passes its mark slightly and drops back. Used for menus, dialogs and toasts.",
-                      "fontFamily": "$font/sans",
-                      "fontSize": "$text/sm",
-                      "fontWeight": 400,
-                      "fill": "$text/secondary",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "mc_press",
-                  "name": "Curve Press",
-                  "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 10,
-                  "padding": 16,
-                  "cornerRadius": "$radius/lg",
-                  "fill": "$bg/surface",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "mc_press_h",
-                      "name": "Title",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "mc_press_n",
-                          "name": "Press",
-                          "content": "Press",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/lg",
-                          "fontWeight": 700,
-                          "fill": "$text/primary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "mc_press_w",
-                          "name": "A key going down",
-                          "content": "A key going down",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/sm",
-                          "fontWeight": 400,
-                          "fill": "$text/muted"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "mc_press_g",
-                      "name": "Graph",
-                      "width": 120,
-                      "height": 180,
-                      "layout": "none",
-                      "children": [
-                        {
-                          "type": "rectangle",
-                          "id": "mc_press_box",
-                          "name": "Bounds",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "cornerRadius": 2,
-                          "stroke": "$border/strong",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_press_c",
-                          "name": "Curve",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120C36.0 120.0 24.0 0.0 120 0",
-                          "stroke": "$accent",
-                          "strokeWidth": 2
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_press_h1",
-                          "name": "Handle 1",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120L36.0 120.0",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_press_h2",
-                          "name": "Handle 2",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M120 0L24.0 0.0",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "ellipse",
-                          "id": "mc_press_b",
-                          "name": "Ball",
-                          "x": 138,
-                          "y": 144,
-                          "width": 12,
-                          "height": 12,
-                          "fill": "$accent",
-                          "motion": {
-                            "tracks": {
-                              "translateY": [
-                                {
-                                  "id": "k1",
-                                  "t": 200,
-                                  "value": 0
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 360,
-                                  "value": -120,
-                                  "easing": {
-                                    "bezier": [
-                                      0.3,
-                                      0,
-                                      0.2,
-                                      1
-                                    ]
-                                  }
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": -120
-                                }
-                              ],
-                              "opacity": [
-                                {
-                                  "id": "k1",
-                                  "t": 0,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 1650,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": 0
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_press_b2",
-                      "name": "cubic-bezier(0.3, 0, 0.2, 1) · 160 ms",
-                      "content": "cubic-bezier(0.3, 0, 0.2, 1) · 160 ms",
-                      "fontFamily": "$font/mono",
-                      "fontSize": "$text/xs",
-                      "fontWeight": 400,
-                      "fill": "$text/link",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_press_d",
-                      "name": "Quick and firm under the finger, then stops at the bottom of its travel.",
-                      "content": "Quick and firm under the finger, then stops at the bottom of its travel.",
-                      "fontFamily": "$font/sans",
-                      "fontSize": "$text/sm",
-                      "fontWeight": 400,
-                      "fill": "$text/secondary",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "mc_rebound",
-                  "name": "Curve Rebound",
-                  "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 10,
-                  "padding": 16,
-                  "cornerRadius": "$radius/lg",
-                  "fill": "$bg/surface",
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "mc_rebound_h",
-                      "name": "Title",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "mc_rebound_n",
-                          "name": "Rebound",
-                          "content": "Rebound",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/lg",
-                          "fontWeight": 700,
-                          "fill": "$text/primary"
-                        },
-                        {
-                          "type": "text",
-                          "id": "mc_rebound_w",
-                          "name": "A key springing back",
-                          "content": "A key springing back",
-                          "fontFamily": "$font/sans",
-                          "fontSize": "$text/sm",
-                          "fontWeight": 400,
-                          "fill": "$text/muted"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "mc_rebound_g",
-                      "name": "Graph",
-                      "width": 120,
-                      "height": 180,
-                      "layout": "none",
-                      "children": [
-                        {
-                          "type": "rectangle",
-                          "id": "mc_rebound_box",
-                          "name": "Bounds",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "cornerRadius": 2,
-                          "stroke": "$border/strong",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_rebound_c",
-                          "name": "Curve",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120C21.6 -72.0 48.0 0.0 120 0",
-                          "stroke": "$accent",
-                          "strokeWidth": 2
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_rebound_h1",
-                          "name": "Handle 1",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M0 120L21.6 -72.0",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "path",
-                          "id": "mc_rebound_h2",
-                          "name": "Handle 2",
-                          "x": 0,
-                          "y": 30,
-                          "width": 120,
-                          "height": 120,
-                          "viewBox": [
-                            0,
-                            0,
-                            120,
-                            120
-                          ],
-                          "geometry": "M120 0L48.0 0.0",
-                          "stroke": "$text/faint",
-                          "strokeWidth": 1
-                        },
-                        {
-                          "type": "ellipse",
-                          "id": "mc_rebound_b",
-                          "name": "Ball",
-                          "x": 138,
-                          "y": 144,
-                          "width": 12,
-                          "height": 12,
-                          "fill": "$accent",
-                          "motion": {
-                            "tracks": {
-                              "translateY": [
-                                {
-                                  "id": "k1",
-                                  "t": 200,
-                                  "value": 0
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 560,
-                                  "value": -120,
-                                  "easing": {
-                                    "bezier": [
-                                      0.18,
-                                      1.6,
-                                      0.4,
-                                      1
-                                    ]
-                                  }
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": -120
-                                }
-                              ],
-                              "opacity": [
-                                {
-                                  "id": "k1",
-                                  "t": 0,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k2",
-                                  "t": 1650,
-                                  "value": 1
-                                },
-                                {
-                                  "id": "k3",
-                                  "t": 1800,
-                                  "value": 0
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_rebound_b2",
-                      "name": "cubic-bezier(0.18, 1.6, 0.4, 1) · 360 ms",
-                      "content": "cubic-bezier(0.18, 1.6, 0.4, 1) · 360 ms",
-                      "fontFamily": "$font/mono",
-                      "fontSize": "$text/xs",
-                      "fontWeight": 400,
-                      "fill": "$text/link",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    },
-                    {
-                      "type": "text",
-                      "id": "mc_rebound_d",
-                      "name": "Released energy pushes past the resting height, then returns.",
-                      "content": "Released energy pushes past the resting height, then returns.",
-                      "fontFamily": "$font/sans",
-                      "fontSize": "$text/sm",
-                      "fontWeight": 400,
-                      "fill": "$text/secondary",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    }
-                  ]
-                }
-              ]
             },
             {
               "type": "frame",
@@ -30288,7 +28938,7 @@
               "children": [
                 {
                   "type": "frame",
-                  "id": "ms2_r0",
+                  "id": "ms_r0",
                   "name": "Row Route change",
                   "width": "fill_container",
                   "padding": [
@@ -30304,33 +28954,33 @@
                   "children": [
                     {
                       "type": "text",
-                      "id": "ms2_r0a",
+                      "id": "ms_r0a",
                       "name": "Route change",
                       "content": "Route change",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 600,
                       "fill": "$text/primary",
-                      "width": 150,
+                      "width": 180,
                       "textGrowth": "fixed-width"
                     },
                     {
                       "type": "text",
-                      "id": "ms2_r0b",
-                      "name": "Fall + Settle",
-                      "content": "Crossfade, 220 ms",
+                      "id": "ms_r0b",
+                      "name": "200 ms · ease out",
+                      "content": "200 ms · ease out",
                       "fontFamily": "$font/mono",
                       "fontSize": "$text/sm",
                       "fontWeight": 400,
                       "fill": "$text/link",
-                      "width": 210,
+                      "width": 190,
                       "textGrowth": "fixed-width"
                     },
                     {
                       "type": "text",
-                      "id": "ms2_r0c",
-                      "name": "The old sheet drops 12 px and hazes out, and the new one arrives 28 px from the direction of travel. Going down the sidebar means travelling down. The two overlap, so the screen is never empty.",
-                      "content": "A plain crossfade over the old view. Nothing moves, so the app stays still. The title bar keeps every button in place in every view.",
+                      "id": "ms_r0c",
+                      "name": "Panes fade and rise 8 px, 40 ms apart. Title bar, sidebar and status bar stay still.",
+                      "content": "Panes fade and rise 8 px, 40 ms apart. Title bar, sidebar and status bar stay still.",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 400,
@@ -30342,8 +28992,8 @@
                 },
                 {
                   "type": "frame",
-                  "id": "ms3_r0",
-                  "name": "Row List change",
+                  "id": "ms_r1",
+                  "name": "Row Sidebar selection",
                   "width": "fill_container",
                   "padding": [
                     10,
@@ -30358,33 +29008,33 @@
                   "children": [
                     {
                       "type": "text",
-                      "id": "ms3_r0a",
-                      "name": "List change",
-                      "content": "List change",
+                      "id": "ms_r1a",
+                      "name": "Sidebar selection",
+                      "content": "Sidebar selection",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 600,
                       "fill": "$text/primary",
-                      "width": 150,
+                      "width": 180,
                       "textGrowth": "fixed-width"
                     },
                     {
                       "type": "text",
-                      "id": "ms3_r0b",
-                      "name": "Glide, 420 ms",
-                      "content": "Map, 800–1500 ms",
+                      "id": "ms_r1b",
+                      "name": "200 ms · ease out",
+                      "content": "200 ms · ease out",
                       "fontFamily": "$font/mono",
                       "fontSize": "$text/sm",
                       "fontWeight": 400,
                       "fill": "$text/link",
-                      "width": 210,
+                      "width": 190,
                       "textGrowth": "fixed-width"
                     },
                     {
                       "type": "text",
-                      "id": "ms3_r0c",
-                      "name": "The log keeps every commit that is in both lists. Those rows travel to their new place, and only the graph cells that changed redraw. Commits that leave fade where they are, and new ones fade in once the rest have started moving.",
-                      "content": "One list maps onto the other, and rows are opaque cards, so text never shows through. A commit in both lists travels on top along its path from A to B. A new commit wipes across its slot as a solid strip, staggered down the list, covering the old row. The time grows with distance, cubic-bezier(0.42, 0, 0.14, 1).",
+                      "id": "ms_r1c",
+                      "name": "The highlight moves to the new row.",
+                      "content": "The highlight moves to the new row.",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 400,
@@ -30396,8 +29046,8 @@
                 },
                 {
                   "type": "frame",
-                  "id": "ms3_r1",
-                  "name": "Row Column change",
+                  "id": "ms_r2",
+                  "name": "Row Panel hide or show",
                   "width": "fill_container",
                   "padding": [
                     10,
@@ -30412,33 +29062,33 @@
                   "children": [
                     {
                       "type": "text",
-                      "id": "ms3_r1a",
-                      "name": "Column change",
-                      "content": "Column change",
+                      "id": "ms_r2a",
+                      "name": "Panel hide or show",
+                      "content": "Panel hide or show",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 600,
                       "fill": "$text/primary",
-                      "width": 150,
+                      "width": 180,
                       "textGrowth": "fixed-width"
                     },
                     {
                       "type": "text",
-                      "id": "ms3_r1b",
-                      "name": "Glide, 320 ms",
-                      "content": "Glide, 520 ms",
+                      "id": "ms_r2b",
+                      "name": "200 ms · ease out",
+                      "content": "200 ms · ease out",
                       "fontFamily": "$font/mono",
                       "fontSize": "$text/sm",
                       "fontWeight": 400,
                       "fill": "$text/link",
-                      "width": 210,
+                      "width": 190,
                       "textGrowth": "fixed-width"
                     },
                     {
                       "type": "text",
-                      "id": "ms3_r1c",
-                      "name": "A column opens from zero width, and the description gives up or takes the room. Nothing jumps.",
-                      "content": "A column opens from zero width, and the description gives up or takes the room. Nothing jumps.",
+                      "id": "ms_r2c",
+                      "name": "The right or left sidebar slides, and the centre pane takes the room.",
+                      "content": "The right or left sidebar slides, and the centre pane takes the room.",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 400,
@@ -30450,8 +29100,8 @@
                 },
                 {
                   "type": "frame",
-                  "id": "ms2_r1",
-                  "name": "Row Atmosphere",
+                  "id": "ms_r3",
+                  "name": "Row Popover or menu",
                   "width": "fill_container",
                   "padding": [
                     10,
@@ -30466,143 +29116,33 @@
                   "children": [
                     {
                       "type": "text",
-                      "id": "ms2_r1a",
-                      "name": "Atmosphere",
-                      "content": "Atmosphere",
+                      "id": "ms_r3a",
+                      "name": "Popover or menu",
+                      "content": "Popover or menu",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 600,
                       "fill": "$text/primary",
-                      "width": 150,
+                      "width": 180,
                       "textGrowth": "fixed-width"
                     },
                     {
                       "type": "text",
-                      "id": "ms2_r1b",
-                      "name": "Ambient light, 900 ms",
-                      "content": "Ambient light, 900 ms",
+                      "id": "ms_r3b",
+                      "name": "160 ms · quick spring",
+                      "content": "160 ms · quick spring",
                       "fontFamily": "$font/mono",
                       "fontSize": "$text/sm",
                       "fontWeight": 400,
                       "fill": "$text/link",
-                      "width": 210,
+                      "width": 190,
                       "textGrowth": "fixed-width"
                     },
                     {
                       "type": "text",
-                      "id": "ms2_r1c",
-                      "name": "Each place has its own light. The glow changes colour slowly, after the sheets have moved.",
-                      "content": "Each place has its own light. The glow changes colour slowly, after the sheets have moved.",
-                      "fontFamily": "$font/sans",
-                      "fontSize": "$text/md",
-                      "fontWeight": 400,
-                      "fill": "$text/secondary",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    }
-                  ],
-                  "enabled": false
-                },
-                {
-                  "type": "frame",
-                  "id": "ms2_r2",
-                  "name": "Row Dust",
-                  "width": "fill_container",
-                  "padding": [
-                    10,
-                    0
-                  ],
-                  "gap": 16,
-                  "alignItems": "center",
-                  "stroke": "$border/subtle",
-                  "strokeWidth": {
-                    "bottom": 1
-                  },
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "ms2_r2a",
-                      "name": "Dust",
-                      "content": "Dust",
-                      "fontFamily": "$font/sans",
-                      "fontSize": "$text/md",
-                      "fontWeight": 600,
-                      "fill": "$text/primary",
-                      "width": 150,
-                      "textGrowth": "fixed-width"
-                    },
-                    {
-                      "type": "text",
-                      "id": "ms2_r2b",
-                      "name": "Air drag + gravity, 900 ms",
-                      "content": "Air drag + gravity, 900 ms",
-                      "fontFamily": "$font/mono",
-                      "fontSize": "$text/sm",
-                      "fontWeight": 400,
-                      "fill": "$text/link",
-                      "width": 210,
-                      "textGrowth": "fixed-width"
-                    },
-                    {
-                      "type": "text",
-                      "id": "ms2_r2c",
-                      "name": "A few faint motes are stirred by the move. They carry on in that direction, slow in the air and sink.",
-                      "content": "A few faint motes are stirred by the move. They carry on in that direction, slow in the air and sink.",
-                      "fontFamily": "$font/sans",
-                      "fontSize": "$text/md",
-                      "fontWeight": 400,
-                      "fill": "$text/secondary",
-                      "width": "fill_container",
-                      "textGrowth": "fixed-width"
-                    }
-                  ],
-                  "enabled": false
-                },
-                {
-                  "type": "frame",
-                  "id": "ms2_r3",
-                  "name": "Row Depth",
-                  "width": "fill_container",
-                  "padding": [
-                    10,
-                    0
-                  ],
-                  "gap": 16,
-                  "alignItems": "center",
-                  "stroke": "$border/subtle",
-                  "strokeWidth": {
-                    "bottom": 1
-                  },
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "ms2_r3a",
-                      "name": "Depth",
-                      "content": "Depth",
-                      "fontFamily": "$font/sans",
-                      "fontSize": "$text/md",
-                      "fontWeight": 600,
-                      "fill": "$text/primary",
-                      "width": 150,
-                      "textGrowth": "fixed-width"
-                    },
-                    {
-                      "type": "text",
-                      "id": "ms2_r3b",
-                      "name": "Glide",
-                      "content": "Glide",
-                      "fontFamily": "$font/mono",
-                      "fontSize": "$text/sm",
-                      "fontWeight": 400,
-                      "fill": "$text/link",
-                      "width": 210,
-                      "textGrowth": "fixed-width"
-                    },
-                    {
-                      "type": "text",
-                      "id": "ms2_r3c",
-                      "name": "Dialogs sit nearer to you: the app behind steps back to 98.6%, dims and goes slightly out of focus.",
-                      "content": "Dialogs sit nearer to you: the app behind steps back to 98.6%, dims and goes slightly out of focus.",
+                      "id": "ms_r3c",
+                      "name": "Fades in from 97% at its trigger. Closes in 100 ms with a fade.",
+                      "content": "Fades in from 97% at its trigger. Closes in 100 ms with a fade.",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 400,
@@ -30614,7 +29154,169 @@
                 },
                 {
                   "type": "frame",
-                  "id": "ms2_r4",
+                  "id": "ms_r4",
+                  "name": "Row Dialog",
+                  "width": "fill_container",
+                  "padding": [
+                    10,
+                    0
+                  ],
+                  "gap": 16,
+                  "alignItems": "center",
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ms_r4a",
+                      "name": "Dialog",
+                      "content": "Dialog",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": 180,
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ms_r4b",
+                      "name": "240 ms · quick spring",
+                      "content": "240 ms · quick spring",
+                      "fontFamily": "$font/mono",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/link",
+                      "width": 190,
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ms_r4c",
+                      "name": "Fades in from 96% over the scrim. Closes in 120 ms.",
+                      "content": "Fades in from 96% over the scrim. Closes in 120 ms.",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 400,
+                      "fill": "$text/secondary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ms_r5",
+                  "name": "Row Toast",
+                  "width": "fill_container",
+                  "padding": [
+                    10,
+                    0
+                  ],
+                  "gap": 16,
+                  "alignItems": "center",
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ms_r5a",
+                      "name": "Toast",
+                      "content": "Toast",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": 180,
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ms_r5b",
+                      "name": "320 ms · gentle spring",
+                      "content": "320 ms · gentle spring",
+                      "fontFamily": "$font/mono",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/link",
+                      "width": 190,
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ms_r5c",
+                      "name": "Slides 24 px in from the right, and leaves after 2.4 s.",
+                      "content": "Slides 24 px in from the right, and leaves after 2.4 s.",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 400,
+                      "fill": "$text/secondary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ms_r6",
+                  "name": "Row Button press",
+                  "width": "fill_container",
+                  "padding": [
+                    10,
+                    0
+                  ],
+                  "gap": 16,
+                  "alignItems": "center",
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ms_r6a",
+                      "name": "Button press",
+                      "content": "Button press",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": 180,
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ms_r6b",
+                      "name": "120 ms · ease out",
+                      "content": "120 ms · ease out",
+                      "fontFamily": "$font/mono",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/link",
+                      "width": 190,
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ms_r6c",
+                      "name": "Scales to 96% while held, then springs back.",
+                      "content": "Scales to 96% while held, then springs back.",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 400,
+                      "fill": "$text/secondary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ms_r7",
                   "name": "Row Reduced motion",
                   "width": "fill_container",
                   "padding": [
@@ -30630,33 +29332,33 @@
                   "children": [
                     {
                       "type": "text",
-                      "id": "ms2_r4a",
+                      "id": "ms_r7a",
                       "name": "Reduced motion",
                       "content": "Reduced motion",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 600,
                       "fill": "$text/primary",
-                      "width": 150,
+                      "width": 180,
                       "textGrowth": "fixed-width"
                     },
                     {
                       "type": "text",
-                      "id": "ms2_r4b",
-                      "name": "Fades only, 160 ms",
-                      "content": "Fades only, 160 ms",
+                      "id": "ms_r7b",
+                      "name": "0–120 ms",
+                      "content": "0–120 ms",
                       "fontFamily": "$font/mono",
                       "fontSize": "$text/sm",
                       "fontWeight": 400,
                       "fill": "$text/link",
-                      "width": 210,
+                      "width": 190,
                       "textGrowth": "fixed-width"
                     },
                     {
                       "type": "text",
-                      "id": "ms2_r4c",
-                      "name": "No travel, no scale, no dust, and no focus change.",
-                      "content": "No travel, no scale, no dust, and no focus change.",
+                      "id": "ms_r7c",
+                      "name": "Fades only: no movement or scaling.",
+                      "content": "Fades only: no movement or scaling.",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 400,
@@ -30667,10 +29369,375 @@
                   ]
                 }
               ]
+            },
+            {
+              "type": "frame",
+              "id": "ms_cards",
+              "name": "Examples",
+              "width": "fill_container",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ms_c1",
+                  "name": "Example Button press",
+                  "width": "fill_container",
+                  "height": 170,
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 16,
+                  "cornerRadius": "$radius/lg",
+                  "fill": "$bg/surface",
+                  "clip": true,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ms_c1_t",
+                      "name": "Button press",
+                      "content": "Button press",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 600,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ms_c1_s",
+                      "name": "Stage",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "ref",
+                          "id": "ms_btn",
+                          "ref": "c_btn_primary",
+                          "motion": {
+                            "tracks": {
+                              "scale": [
+                                {
+                                  "id": "k1",
+                                  "t": 0,
+                                  "value": 1
+                                },
+                                {
+                                  "id": "k2",
+                                  "t": 300,
+                                  "value": 1
+                                },
+                                {
+                                  "id": "k3",
+                                  "t": 420,
+                                  "value": 0.96
+                                },
+                                {
+                                  "id": "k4",
+                                  "t": 600,
+                                  "value": 0.96
+                                },
+                                {
+                                  "id": "k5",
+                                  "t": 760,
+                                  "value": 1,
+                                  "easing": "quick"
+                                },
+                                {
+                                  "id": "k6",
+                                  "t": 1600,
+                                  "value": 1
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ms_c2",
+                  "name": "Example Route change",
+                  "width": "fill_container",
+                  "height": 170,
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 16,
+                  "cornerRadius": "$radius/lg",
+                  "fill": "$bg/surface",
+                  "clip": true,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ms_c2_t",
+                      "name": "Route change",
+                      "content": "Route change",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 600,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ms_c2_s",
+                      "name": "Stage",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ms_rt",
+                          "name": "Pane",
+                          "width": 180,
+                          "height": 80,
+                          "cornerRadius": "$radius/md",
+                          "fill": "$bg/elevated",
+                          "stroke": "$border/strong",
+                          "strokeWidth": 1,
+                          "motion": {
+                            "tracks": {
+                              "opacity": [
+                                {
+                                  "id": "k1",
+                                  "t": 0,
+                                  "value": 0
+                                },
+                                {
+                                  "id": "k2",
+                                  "t": 160,
+                                  "value": 1
+                                },
+                                {
+                                  "id": "k3",
+                                  "t": 1300,
+                                  "value": 1
+                                },
+                                {
+                                  "id": "k4",
+                                  "t": 1600,
+                                  "value": 0
+                                }
+                              ],
+                              "translateY": [
+                                {
+                                  "id": "k1",
+                                  "t": 0,
+                                  "value": 8
+                                },
+                                {
+                                  "id": "k2",
+                                  "t": 200,
+                                  "value": 0
+                                },
+                                {
+                                  "id": "k3",
+                                  "t": 1600,
+                                  "value": 0
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ms_c3",
+                  "name": "Example Popover",
+                  "width": "fill_container",
+                  "height": 170,
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 16,
+                  "cornerRadius": "$radius/lg",
+                  "fill": "$bg/surface",
+                  "clip": true,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ms_c3_t",
+                      "name": "Popover",
+                      "content": "Popover",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 600,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ms_c3_s",
+                      "name": "Stage",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ms_pop",
+                          "name": "Popover",
+                          "width": 160,
+                          "height": 80,
+                          "cornerRadius": "$radius/lg",
+                          "fill": "$bg/elevated",
+                          "stroke": "$border/strong",
+                          "strokeWidth": 1,
+                          "effect": {
+                            "type": "shadow",
+                            "shadowType": "outer",
+                            "offset": {
+                              "x": 0,
+                              "y": 8
+                            },
+                            "blur": 20,
+                            "spread": 0,
+                            "color": "$shadow"
+                          },
+                          "motion": {
+                            "tracks": {
+                              "opacity": [
+                                {
+                                  "id": "k1",
+                                  "t": 0,
+                                  "value": 0
+                                },
+                                {
+                                  "id": "k2",
+                                  "t": 100,
+                                  "value": 1
+                                },
+                                {
+                                  "id": "k3",
+                                  "t": 1300,
+                                  "value": 1
+                                },
+                                {
+                                  "id": "k4",
+                                  "t": 1400,
+                                  "value": 0
+                                }
+                              ],
+                              "scale": [
+                                {
+                                  "id": "k1",
+                                  "t": 0,
+                                  "value": 0.97
+                                },
+                                {
+                                  "id": "k2",
+                                  "t": 160,
+                                  "value": 1,
+                                  "easing": "quick"
+                                },
+                                {
+                                  "id": "k3",
+                                  "t": 1600,
+                                  "value": 1
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ms_c4",
+                  "name": "Example Toast",
+                  "width": "fill_container",
+                  "height": 170,
+                  "layout": "vertical",
+                  "gap": 8,
+                  "padding": 16,
+                  "cornerRadius": "$radius/lg",
+                  "fill": "$bg/surface",
+                  "clip": true,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ms_c4_t",
+                      "name": "Toast",
+                      "content": "Toast",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 600,
+                      "fill": "$text/muted"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ms_c4_s",
+                      "name": "Stage",
+                      "width": "fill_container",
+                      "height": "fill_container",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "ref",
+                          "id": "ms_toast",
+                          "ref": "c_toast_ok",
+                          "width": "fill_container",
+                          "motion": {
+                            "tracks": {
+                              "opacity": [
+                                {
+                                  "id": "k1",
+                                  "t": 0,
+                                  "value": 0
+                                },
+                                {
+                                  "id": "k2",
+                                  "t": 160,
+                                  "value": 1
+                                },
+                                {
+                                  "id": "k3",
+                                  "t": 1300,
+                                  "value": 1
+                                },
+                                {
+                                  "id": "k4",
+                                  "t": 1500,
+                                  "value": 0
+                                }
+                              ],
+                              "translateX": [
+                                {
+                                  "id": "k1",
+                                  "t": 0,
+                                  "value": 24
+                                },
+                                {
+                                  "id": "k2",
+                                  "t": 320,
+                                  "value": 0,
+                                  "easing": "gentle"
+                                },
+                                {
+                                  "id": "k3",
+                                  "t": 1600,
+                                  "value": 0
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "timeline": {
-            "duration": 1800,
+            "duration": 1600,
             "playback": "loop"
           }
         },
@@ -30701,9 +29768,9 @@
                 "styles": [
                   {
                     "id": "s1",
-                    "style": "fs7",
+                    "style": "fs4",
                     "start": 0,
-                    "duration": 560,
+                    "duration": 320,
                     "props": {}
                   }
                 ]
@@ -30711,7 +29778,7 @@
             }
           ],
           "timeline": {
-            "duration": 660
+            "duration": 500
           },
           "interactions": [
             {
@@ -30725,58 +29792,6 @@
                   "type": "close_overlay"
                 }
               ]
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "rs_state",
-          "name": "Repository switching",
-          "width": 1440,
-          "x": 1540,
-          "y": 2800,
-          "layout": "vertical",
-          "gap": 12,
-          "padding": 24,
-          "fill": "$bg/app",
-          "theme": {
-            "Mode": "Light",
-            "Stage": "Clean"
-          },
-          "children": [
-            {
-              "type": "text",
-              "id": "rs_t",
-              "name": "Title",
-              "content": "Switching repository",
-              "fontFamily": "$font/sans",
-              "fontSize": "$text/lg",
-              "fontWeight": 700,
-              "fill": "$text/primary"
-            },
-            {
-              "type": "text",
-              "id": "rs_d",
-              "name": "Rule",
-              "content": "The current repository stays on screen while the next one loads, with a spinner in the picker. When its data is ready, the whole window crossfades in 260 ms, on the same view.",
-              "fontFamily": "$font/sans",
-              "fontSize": "$text/md",
-              "fill": "$text/secondary",
-              "width": "fill_container",
-              "textGrowth": "fixed-width"
-            },
-            {
-              "type": "ref",
-              "id": "rs_bar",
-              "ref": "c_titlebar",
-              "name": "Title bar while loading",
-              "width": "fill_container",
-              "descendants": {
-                "tl_repo_chev": {
-                  "icon": "loader-circle",
-                  "fill": "$accent"
-                }
-              }
             }
           ]
         }
@@ -59011,40 +58026,40 @@
     },
     "motion/fast": {
       "type": "number",
-      "value": 160,
-      "description": "A key going down, ms",
+      "value": 120,
+      "description": "Hover, press and toggles, ms",
       "codeSyntax": {
         "web": "--motion-fast"
       }
     },
     "motion/base": {
       "type": "number",
-      "value": 280,
-      "description": "Something falling away, ms",
+      "value": 200,
+      "description": "Route changes, panels and menus, ms",
       "codeSyntax": {
         "web": "--motion-base"
       }
     },
     "motion/slow": {
       "type": "number",
-      "value": 560,
-      "description": "A heavy sheet coming to rest, ms",
+      "value": 320,
+      "description": "Dialogs and toasts, ms",
       "codeSyntax": {
         "web": "--motion-slow"
       }
     },
     "motion/stagger": {
       "type": "number",
-      "value": 60,
-      "description": "The gap before the next sheet starts arriving, ms",
+      "value": 40,
+      "description": "Delay between a route's panes, ms",
       "codeSyntax": {
         "web": "--motion-stagger"
       }
     },
     "motion/shift": {
       "type": "number",
-      "value": 28,
-      "description": "How far a sheet travels as it arrives, px",
+      "value": 8,
+      "description": "Distance content rises as it enters, px",
       "codeSyntax": {
         "web": "--motion-shift"
       }
@@ -59054,38 +58069,6 @@
       "value": false,
       "description": "Prototype only: a commit just finished, so History shows the toast",
       "hidden": true
-    },
-    "motion/glide": {
-      "type": "number",
-      "value": 520,
-      "description": "A weighted part sliding on its rail, ms",
-      "codeSyntax": {
-        "web": "--motion-glide"
-      }
-    },
-    "motion/float": {
-      "type": "number",
-      "value": 420,
-      "description": "A light card landing, ms",
-      "codeSyntax": {
-        "web": "--motion-float"
-      }
-    },
-    "motion/route": {
-      "type": "number",
-      "value": 220,
-      "description": "Crossfade between sidebar routes, ms",
-      "codeSyntax": {
-        "web": "--motion-route"
-      }
-    },
-    "motion/window": {
-      "type": "number",
-      "value": 260,
-      "description": "Whole-window crossfade between repositories, ms",
-      "codeSyntax": {
-        "web": "--motion-window"
-      }
     }
   },
   "themes": {
@@ -59226,109 +58209,6 @@
             "from": "right",
             "distance": 24,
             "easing": "gentle"
-          }
-        }
-      ]
-    },
-    {
-      "id": "fs5",
-      "name": "Sheet settle",
-      "entries": [
-        {
-          "style": "fade",
-          "offset": 0,
-          "duration": 420,
-          "props": {
-            "direction": "in",
-            "easing": {
-              "bezier": [
-                0.16,
-                0.84,
-                0.24,
-                1
-              ]
-            }
-          }
-        },
-        {
-          "style": "move",
-          "offset": 0,
-          "duration": 560,
-          "props": {
-            "direction": "in",
-            "from": "bottom",
-            "distance": 28,
-            "easing": {
-              "bezier": [
-                0.16,
-                0.84,
-                0.24,
-                1
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": "fs6",
-      "name": "Card float",
-      "entries": [
-        {
-          "style": "fade",
-          "offset": 0,
-          "duration": 200,
-          "props": {
-            "direction": "in"
-          }
-        },
-        {
-          "style": "scale",
-          "offset": 0,
-          "duration": 420,
-          "props": {
-            "direction": "in",
-            "amount": 0.94,
-            "easing": {
-              "bezier": [
-                0.2,
-                1.14,
-                0.34,
-                1
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": "fs7",
-      "name": "Toast float",
-      "entries": [
-        {
-          "style": "fade",
-          "offset": 0,
-          "duration": 240,
-          "props": {
-            "direction": "in"
-          }
-        },
-        {
-          "style": "move",
-          "offset": 0,
-          "duration": 560,
-          "props": {
-            "direction": "in",
-            "from": "right",
-            "distance": 40,
-            "easing": {
-              "bezier": [
-                0.2,
-                1.14,
-                0.34,
-                1
-              ]
-            }
           }
         }
       ]

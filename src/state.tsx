@@ -4,13 +4,11 @@
  */
 import { listen } from '@tauri-apps/api/event'
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { flushSync } from 'react-dom'
 
 import type { MenuItem, MenuState } from './components/Menu'
 import { GitError, git, loadRepo, run, watchRepo } from './lib/git'
 import { GhError, gh } from './lib/github'
 import { t } from './lib/i18n'
-import { changeRoute } from './lib/motion'
 import { notify } from './lib/notify'
 import { isConflict } from './lib/parse'
 import { getSettings } from './lib/settings'
@@ -23,12 +21,6 @@ export type View = 'history' | 'changes' | 'stashes' | 'pulls' | 'actions' | 'ov
 
 /** The view the next repository opens in (the CI/CD view opens one straight in Actions). */
 let startView: View | null = null
-/** A repository loaded ahead of the switch, so its window opens already filled. */
-let preloaded: RepoData | null = null
-export const preloadRepo = (data: RepoData) => {
-  preloaded = data
-}
-
 export const openNextIn = (view: View) => {
   startView = view
 }
@@ -51,21 +43,14 @@ export function stageOf(repo: RepoData | null): Stage {
 }
 
 function useAppState(root: string) {
-  const [repo, setRepo] = useState<RepoData | null>(() => (preloaded?.root === root ? preloaded : null))
+  const [repo, setRepo] = useState<RepoData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [query, setQueryState] = useState<LogQuery>(defaultQuery)
-  const [view, setViewNow] = useState<View>(() => startView ?? 'history')
-  const viewRef = useRef(view)
-  const setView = useCallback((next: View) => {
-    if (next === viewRef.current) return
-    viewRef.current = next
-    if (!changeRoute(() => flushSync(() => setViewNow(next)))) setViewNow(next)
-  }, [])
+  const [view, setView] = useState<View>(() => startView ?? 'history')
   useEffect(() => {
     startView = null
-    preloaded = null
   }, [])
-  const [selected, setSelected] = useState<string | undefined>(() => (preloaded?.root === root ? preloaded.head : undefined))
+  const [selected, setSelected] = useState<string | undefined>()
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)
   const [dialog, setDialog] = useState<Dialog | null>(null)
@@ -124,6 +109,8 @@ function useAppState(root: string) {
 
   // Load, watch the repository, and refresh when it changes or the window comes back.
   useEffect(() => {
+    setRepo(null)
+    setSelected(undefined)
     void refresh()
     void watchRepo(root).catch(() => {})
     const un = listen<string>('repo-changed', () => void refresh())

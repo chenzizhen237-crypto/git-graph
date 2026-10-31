@@ -194,9 +194,9 @@ export function DiffView({
       {body}
       {open &&
         createPortal(
-          <div data-exit className="fixed inset-0 z-50 flex bg-scrim p-6" onMouseDown={() => setOpen(false)}>
+          <div className="fixed inset-0 z-50 flex bg-scrim p-6" onMouseDown={() => setOpen(false)}>
             <div
-              className="flex min-w-0 flex-1 animate-dialog-in flex-col overflow-hidden rounded-xl border border-strong bg-app shadow-[0_20px_50px_var(--shadow)]"
+              className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-strong bg-app shadow-[0_20px_50px_var(--shadow)]"
               onMouseDown={e => e.stopPropagation()}
             >
               <DiffView path={path} text={text} loading={loading} actions={actions} empty={empty} hunkTools={hunkTools} popped onClose={() => setOpen(false)} />
