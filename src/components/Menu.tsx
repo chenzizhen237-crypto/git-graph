@@ -32,6 +32,7 @@ export function ContextMenu({ menu, onClose }: { menu: NonNullable<MenuState>; o
 
   return (
     <div
+      data-exit
       className="fixed inset-0 z-[65]"
       onMouseDown={onClose}
       onContextMenu={e => {
@@ -42,7 +43,7 @@ export function ContextMenu({ menu, onClose }: { menu: NonNullable<MenuState>; o
       <div
         ref={box}
         role="menu"
-        className="absolute flex w-65 flex-col gap-px rounded-lg border border-strong bg-elevated p-1.25 shadow-[0_12px_32px_var(--shadow)]"
+        className="absolute flex w-65 origin-top-left animate-pop-in flex-col gap-px rounded-lg border border-strong bg-elevated p-1.25 shadow-[0_12px_32px_var(--shadow)]"
         style={{ left: pos.x, top: pos.y }}
         onMouseDown={e => e.stopPropagation()}
       >

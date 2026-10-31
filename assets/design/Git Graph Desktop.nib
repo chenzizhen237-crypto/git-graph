@@ -29250,7 +29250,7 @@
                       "type": "text",
                       "id": "ms_r5c",
                       "name": "Slides 24 px in from the right, and leaves after 2.4 s.",
-                      "content": "Slides 24 px in from the right, and leaves after 2.4 s.",
+                      "content": "Slides 24 px in from the right, and leaves after its 4 s lifetime.",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 400,

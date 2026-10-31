@@ -25,10 +25,13 @@ function Shell({ children, onClose, width }: { children: ReactNode; onClose: () 
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim" onMouseDown={onClose}>
+    <div data-exit className="fixed inset-0 z-50 flex items-center justify-center bg-scrim" onMouseDown={onClose}>
       <div
         role="dialog"
-        className={cx('flex max-h-[calc(100vh-48px)] flex-col overflow-hidden rounded-xl border border-strong bg-elevated shadow-[0_24px_60px_var(--shadow)]', width)}
+        className={cx(
+          'flex max-h-[calc(100vh-48px)] animate-dialog-in flex-col overflow-hidden rounded-xl border border-strong bg-elevated shadow-[0_24px_60px_var(--shadow)]',
+          width,
+        )}
         onMouseDown={e => e.stopPropagation()}
       >
         {children}
