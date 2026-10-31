@@ -83,7 +83,6 @@ export function Resizer({ panel, axis = 'x', side = 'before', className }: { pan
         start.current = { pos: horizontal ? e.clientX : e.clientY, size: panel.size }
         setDragging(true)
         document.body.style.cursor = horizontal ? 'col-resize' : 'row-resize'
-        document.body.dataset.resizing = ''
       }}
       onPointerMove={e => {
         if (!dragging) return
@@ -96,7 +95,6 @@ export function Resizer({ panel, axis = 'x', side = 'before', className }: { pan
         panel.set(start.current.size + sign * delta, true)
         setDragging(false)
         document.body.style.cursor = ''
-        delete document.body.dataset.resizing
       }}
     >
       <div

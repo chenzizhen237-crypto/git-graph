@@ -250,12 +250,14 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
       <TitleBar repos={repos} sidebar={showSidebar} onToggleSidebar={toggleSidebar} onSettings={() => setSettingsOpen(true)} />
       <Banner />
       <div className="flex min-h-0 flex-1">
-        <div className="panel-slide flex shrink-0 overflow-hidden" style={{ width: showSidebar ? sidebar.size : 0 }} inert={!showSidebar}>
-          <Sidebar width={sidebar.size} />
-        </div>
-        {showSidebar && <Resizer panel={sidebar} />}
+        {showSidebar && (
+          <>
+            <Sidebar width={sidebar.size} />
+            <Resizer panel={sidebar} />
+          </>
+        )}
         <div className="flex min-w-0 flex-1 flex-col">
-          <div key={view} className="route flex min-h-0 flex-1">
+          <div className="flex min-h-0 flex-1">
             {view === 'history' && <HistoryView />}
             {view === 'changes' && <ChangesView />}
             {view === 'stashes' && <StashesView />}

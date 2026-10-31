@@ -176,11 +176,11 @@ export function SettingsDialog({ onClose, initial = 'general' }: { onClose: () =
   }, [onClose])
 
   return (
-    <div data-exit className="fixed inset-0 z-50 flex items-center justify-center bg-scrim" onMouseDown={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim" onMouseDown={onClose}>
       <div
         role="dialog"
         aria-label={t('Settings')}
-        className="flex h-165 max-h-[calc(100vh-48px)] w-245 max-w-[calc(100vw-48px)] animate-dialog-in overflow-hidden rounded-xl border border-strong bg-app shadow-[0_24px_60px_var(--shadow)]"
+        className="flex h-165 max-h-[calc(100vh-48px)] w-245 max-w-[calc(100vw-48px)] overflow-hidden rounded-xl border border-strong bg-app shadow-[0_24px_60px_var(--shadow)]"
         onMouseDown={e => e.stopPropagation()}
       >
         <nav className="flex w-60 shrink-0 flex-col gap-0.5 border-r border-subtle bg-sidebar px-3 py-4">
