@@ -1,7 +1,7 @@
 import { invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import { open } from '@tauri-apps/plugin-dialog'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { type CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Banner, type RepoSwitch, Sidebar, StatusBar, TitleBar } from './components/Chrome'
 import { CloneDialog, PublishDialog } from './components/GitHubDialogs'
@@ -15,6 +15,7 @@ import { actions, findRoot } from './lib/git'
 import { t } from './lib/i18n'
 import { checkRuns } from './lib/notify'
 import { checkOnStartup } from './lib/update'
+import { ROUTE_TONE } from './lib/motion'
 import { getSettings, stepZoom, toggleInspector, useSettings } from './lib/settings'
 import { closeSheet } from './lib/sheets'
 import { closeTerminal, toggleTerminal } from './lib/terminal'
@@ -249,13 +250,14 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
     <div className="flex h-full flex-col bg-app">
       <TitleBar repos={repos} sidebar={showSidebar} onToggleSidebar={toggleSidebar} onSettings={() => setSettingsOpen(true)} />
       <Banner />
-      <div className="flex min-h-0 flex-1">
+      <div className="depth-stage relative flex min-h-0 flex-1">
+        <div className="ambient" style={{ '--route-tone': ROUTE_TONE[view] } as CSSProperties} />
         <div className="panel-slide flex shrink-0 overflow-hidden" style={{ width: showSidebar ? sidebar.size : 0 }} inert={!showSidebar}>
           <Sidebar width={sidebar.size} />
         </div>
         {showSidebar && <Resizer panel={sidebar} />}
         <div className="flex min-w-0 flex-1 flex-col">
-          <div key={view} className="route flex min-h-0 flex-1">
+          <div key={view} className="route flex min-h-0 flex-1 bg-app">
             {view === 'history' && <HistoryView />}
             {view === 'changes' && <ChangesView />}
             {view === 'stashes' && <StashesView />}

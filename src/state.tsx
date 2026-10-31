@@ -4,11 +4,13 @@
  */
 import { listen } from '@tauri-apps/api/event'
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 import type { MenuItem, MenuState } from './components/Menu'
 import { GitError, git, loadRepo, run, watchRepo } from './lib/git'
 import { GhError, gh } from './lib/github'
 import { t } from './lib/i18n'
+import { changeRoute } from './lib/motion'
 import { notify } from './lib/notify'
 import { isConflict } from './lib/parse'
 import { getSettings } from './lib/settings'
@@ -46,7 +48,14 @@ function useAppState(root: string) {
   const [repo, setRepo] = useState<RepoData | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [query, setQueryState] = useState<LogQuery>(defaultQuery)
-  const [view, setView] = useState<View>(() => startView ?? 'history')
+  const [view, setViewNow] = useState<View>(() => startView ?? 'history')
+  const viewRef = useRef(view)
+  const setView = useCallback((next: View) => {
+    const from = viewRef.current
+    if (next === from) return
+    viewRef.current = next
+    if (!changeRoute(from, next, () => flushSync(() => setViewNow(next)))) setViewNow(next)
+  }, [])
   useEffect(() => {
     startView = null
   }, [])

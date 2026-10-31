@@ -243,11 +243,13 @@
   --avatar-lucas: var(--blue-500);
   --avatar-claude: #D97757;
   --ref-tag-text: var(--amber-600);
-  --motion-fast: 120ms;
-  --motion-base: 200ms;
-  --motion-slow: 320ms;
-  --motion-stagger: 40ms;
-  --motion-shift: 8px;
+  --motion-fast: 160ms;
+  --motion-base: 280ms;
+  --motion-slow: 560ms;
+  --motion-stagger: 60ms;
+  --motion-shift: 28px;
+  --motion-glide: 520ms;
+  --motion-float: 420ms;
 }
 
 :root[data-theme='dark'] {
