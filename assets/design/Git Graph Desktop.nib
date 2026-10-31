@@ -30342,6 +30342,114 @@
                 },
                 {
                   "type": "frame",
+                  "id": "ms3_r0",
+                  "name": "Row List change",
+                  "width": "fill_container",
+                  "padding": [
+                    10,
+                    0
+                  ],
+                  "gap": 16,
+                  "alignItems": "center",
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ms3_r0a",
+                      "name": "List change",
+                      "content": "List change",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": 150,
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ms3_r0b",
+                      "name": "Glide, 420 ms",
+                      "content": "Glide, 420 ms",
+                      "fontFamily": "$font/mono",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/link",
+                      "width": 210,
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ms3_r0c",
+                      "name": "The log keeps every commit that is in both lists. Those rows travel to their new place, and only the graph cells that changed redraw. Commits that leave fade where they are, and new ones fade in once the rest have started moving.",
+                      "content": "The log keeps every commit that is in both lists. Those rows travel to their new place, and only the graph cells that changed redraw. Commits that leave fade where they are, and new ones fade in once the rest have started moving.",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 400,
+                      "fill": "$text/secondary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ms3_r1",
+                  "name": "Row Column change",
+                  "width": "fill_container",
+                  "padding": [
+                    10,
+                    0
+                  ],
+                  "gap": 16,
+                  "alignItems": "center",
+                  "stroke": "$border/subtle",
+                  "strokeWidth": {
+                    "bottom": 1
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ms3_r1a",
+                      "name": "Column change",
+                      "content": "Column change",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 600,
+                      "fill": "$text/primary",
+                      "width": 150,
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ms3_r1b",
+                      "name": "Glide, 320 ms",
+                      "content": "Glide, 320 ms",
+                      "fontFamily": "$font/mono",
+                      "fontSize": "$text/sm",
+                      "fontWeight": 400,
+                      "fill": "$text/link",
+                      "width": 210,
+                      "textGrowth": "fixed-width"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ms3_r1c",
+                      "name": "A column opens from zero width, and the description gives up or takes the room. Nothing jumps.",
+                      "content": "A column opens from zero width, and the description gives up or takes the room. Nothing jumps.",
+                      "fontFamily": "$font/sans",
+                      "fontSize": "$text/md",
+                      "fontWeight": 400,
+                      "fill": "$text/secondary",
+                      "width": "fill_container",
+                      "textGrowth": "fixed-width"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
                   "id": "ms2_r1",
                   "name": "Row Atmosphere",
                   "width": "fill_container",

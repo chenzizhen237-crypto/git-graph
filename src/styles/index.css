@@ -102,6 +102,47 @@
   animation: fade-in var(--motion-window) ease-out;
 }
 
+/* List change: lib/listMorph moves the rows; these are the parts that change inside them. */
+@keyframes row-leave {
+  to {
+    opacity: 0;
+  }
+}
+.row-ghost {
+  pointer-events: none;
+  animation: row-leave var(--motion-base) var(--curve-settle) forwards;
+}
+.graph-out {
+  animation: row-leave 420ms var(--curve-settle) forwards;
+}
+.graph-in {
+  animation: fade-in 420ms var(--curve-settle);
+}
+@keyframes node-slide {
+  from {
+    transform: translateX(var(--slide));
+  }
+}
+.node-slide {
+  animation: node-slide 420ms var(--curve-settle);
+}
+/* A column opens from zero width, and the description gives up or takes the room. */
+.col {
+  transition:
+    width 320ms var(--curve-glide),
+    margin-left 320ms var(--curve-glide),
+    opacity 200ms var(--curve-settle);
+}
+.col-hidden {
+  margin-left: -8px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+body[data-resizing] .col {
+  transition: none;
+}
+
 /* Depth: a dialog is nearer to you, so the app behind steps back and goes slightly out of focus. */
 .depth-stage {
   transition:
@@ -208,6 +249,7 @@ body[data-resizing] .panel-slide {
   }
   .panel-slide,
   .selection-pill,
+  .col,
   .depth-stage {
     transition: none;
   }

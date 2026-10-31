@@ -38,6 +38,7 @@ import { Avatar, Chip, CiIcon, Count, caps, Empty, FilePath, fileRowClass, IconB
 import { cachedCi, type CiState, commitStates } from '../lib/actions'
 import { cx } from '../lib/cx'
 import { commitDate } from '../lib/dates'
+import { useListMorph } from '../lib/listMorph'
 import { actions, commitDetail, commitFileDiff, run } from '../lib/git'
 import { t } from '../lib/i18n'
 import { compactAgo, matchItems, nameParts, type PickItem, pickSections, QUICK_SCOPES, scopeLabel } from '../lib/picker'
@@ -374,6 +375,10 @@ function nodeKind(row: LogRow, head: string): NodeKind {
   return row.parents.length > 1 ? 'merge' : 'commit'
 }
 
+/** A column that opens and closes by width, so it can animate. */
+const colClass = (shown: boolean, rest: string) => cx('col', !shown && 'col-hidden', rest)
+const colWidth = (shown: boolean, width: number) => ({ width: shown ? width : 0 })
+
 const rowClass = 'absolute inset-x-0 flex h-row items-center gap-2 pr-3 pl-1'
 
 function LogList({ showGraph }: { showGraph: boolean }) {
@@ -410,6 +415,9 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   const total = rows.length + offset
   const first = Math.max(0, Math.floor(scroll / ROW_H) - 10)
   const last = Math.min(total, Math.ceil((scroll + height) / ROW_H) + 10)
+  const rowKeys = useMemo(() => [...(repo?.work ? ['work'] : []), ...(repo?.rows ?? []).map(r => r.hash)], [repo?.work, repo?.rows])
+  const renderedRows = useRef(new Map<string, ReactNode>())
+  const ghosts = useListMorph(box, rowKeys, renderedRows, ROW_H)
   // Absolute dates need room for the date and the time.
   const graphCol = useColumnSize('col-graph', repo ? graphWidth(repo.laneCount) : 56, 56, 800)
   const authorCol = useColumnSize('col-author', 130, 60, 400)
@@ -465,17 +473,17 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   if (repo && !rows.length && !repo.work) return <Empty>{t(repo.head ? 'No commits match these filters.' : 'No commits yet.')}</Empty>
 
   const showCi = cols.ci && !ciOff
-  const items = []
+  const items = new Map<string, ReactNode>()
+  renderedRows.current = items
   for (let i = first; i < last; i++) {
     const top = i * ROW_H
     if (repo?.work && i === 0) {
-      items.push(
-        <div key="work" className={cx(rowClass, 'hover:bg-hover')} style={{ top }} onClick={() => setView('changes')}>
-          {showGraph && (
-            <div className="h-full min-w-14 overflow-hidden" style={{ width: graphCol.size }}>
-              <GraphCell g={repo.work} laneCount={repo.laneCount} kind="work" />
-            </div>
-          )}
+      items.set(
+        'work',
+        <div key="work" data-row="work" className={cx(rowClass, 'hover:bg-hover')} style={{ top }} onClick={() => setView('changes')}>
+          <div className={colClass(showGraph, cx('h-full overflow-hidden', showGraph && 'min-w-14'))} style={colWidth(showGraph, graphCol.size)}>
+            <GraphCell g={repo.work} laneCount={repo.laneCount} kind="work" />
+          </div>
           <div className="flex min-w-40 flex-1 items-center gap-1.5 italic">
             <StageDot />
             <span className="font-medium text-secondary">{t(repo.changes.length === 1 ? '{n} uncommitted change' : '{n} uncommitted changes', { n: repo.changes.length })}</span>
@@ -491,9 +499,11 @@ function LogList({ showGraph }: { showGraph: boolean }) {
     const chips = refChips(r.refs, remotes).filter(c => cols.tags || c.kind !== 'tag')
     const on = r.hash === selected
     const message = r.body ? `${r.subject}\n\n${r.body}` : r.subject
-    items.push(
+    items.set(
+      r.hash,
       <div
         key={r.hash}
+        data-row={r.hash}
         className={cx(rowClass, on ? 'bg-selected group-focus:shadow-[inset_2px_0_0_var(--accent)]' : 'hover:bg-hover')}
         style={{ top }}
         onClick={() => setSelected(r.hash)}
@@ -502,11 +512,9 @@ function LogList({ showGraph }: { showGraph: boolean }) {
           openMenu(e, menus.commit(r))
         }}
       >
-        {showGraph && (
-          <div className="h-full min-w-14 overflow-hidden" style={{ width: graphCol.size }}>
-            <GraphCell g={r.graph} laneCount={repo!.laneCount} kind={kind} />
-          </div>
-        )}
+        <div className={colClass(showGraph, cx('h-full overflow-hidden', showGraph && 'min-w-14'))} style={colWidth(showGraph, graphCol.size)}>
+          <GraphCell g={r.graph} laneCount={repo!.laneCount} kind={kind} />
+        </div>
         <div className="flex min-w-40 flex-1 items-center gap-1.5 overflow-hidden">
           {chips.map(c => (
             <Chip key={c.kind + c.name} kind={c.kind} name={c.name} synced={c.synced} />
@@ -520,25 +528,25 @@ function LogList({ showGraph }: { showGraph: boolean }) {
             </span>
           )}
         </div>
-        {cols.author && (
-          <div className="flex shrink-0 items-center gap-1.5 text-sm text-secondary" style={{ width: authorCol.size }}>
-            <Avatar name={r.author} />
-            <span className="truncate" title={r.author}>
-              {r.author}
-            </span>
-          </div>
-        )}
-        {cols.date && (
-          <span className="shrink-0 truncate text-sm whitespace-nowrap text-muted" style={{ width: dateCol.size }} title={new Date(r.time * 1000).toLocaleString()}>
-            {commitDate(r.time * 1000)}
+        <div className={colClass(cols.author, 'flex shrink-0 items-center gap-1.5 overflow-hidden text-sm text-secondary')} style={colWidth(cols.author, authorCol.size)}>
+          <Avatar name={r.author} />
+          <span className="truncate" title={r.author}>
+            {r.author}
           </span>
-        )}
-        {showCi && <CiIcon state={ci.get(r.hash)} />}
-        {cols.sha && (
-          <span className="shrink-0 truncate text-right font-mono text-sm font-medium text-link" style={{ width: shaCol.size }} title={r.hash}>
-            {r.short}
-          </span>
-        )}
+        </div>
+        <span
+          className={colClass(cols.date, 'shrink-0 truncate text-sm whitespace-nowrap text-muted')}
+          style={colWidth(cols.date, dateCol.size)}
+          title={new Date(r.time * 1000).toLocaleString()}
+        >
+          {commitDate(r.time * 1000)}
+        </span>
+        <span className={colClass(showCi, 'flex shrink-0 overflow-hidden')} style={colWidth(showCi, 14)}>
+          <CiIcon state={ci.get(r.hash)} />
+        </span>
+        <span className={colClass(cols.sha, 'shrink-0 truncate text-right font-mono text-sm font-medium text-link')} style={colWidth(cols.sha, shaCol.size)} title={r.hash}>
+          {r.short}
+        </span>
       </div>,
     )
   }
@@ -546,32 +554,24 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   return (
     <>
       <div className={cx('flex h-6.5 shrink-0 items-center gap-2 border-b border-subtle pr-3 tracking-[0.6px]', showGraph ? 'pl-1' : 'pl-4', caps, 'font-semibold')}>
-        {showGraph && (
-          <span className="relative min-w-14 pl-3" style={{ width: graphCol.size }}>
-            {t('GRAPH')}
-            <Resizer panel={graphCol} className={edge('before')} />
-          </span>
-        )}
+        <span className={colClass(showGraph, cx('relative', showGraph && 'min-w-14 pl-3'))} style={colWidth(showGraph, graphCol.size)}>
+          {t('GRAPH')}
+          {showGraph && <Resizer panel={graphCol} className={edge('before')} />}
+        </span>
         <span className="min-w-40 flex-1 truncate">{t('DESCRIPTION')}</span>
-        {cols.author && (
-          <span className="relative shrink-0" style={{ width: authorCol.size }}>
-            {t('AUTHOR')}
-            <Resizer panel={authorCol} side="after" className={edge('after')} />
-          </span>
-        )}
-        {cols.date && (
-          <span className="relative shrink-0" style={{ width: dateCol.size }}>
-            {t('DATE')}
-            <Resizer panel={dateCol} side="after" className={edge('after')} />
-          </span>
-        )}
-        {showCi && <span className="w-3.5 shrink-0" />}
-        {cols.sha && (
-          <span className="relative shrink-0 text-right" style={{ width: shaCol.size }}>
-            {t('SHA')}
-            <Resizer panel={shaCol} side="after" className={edge('after')} />
-          </span>
-        )}
+        <span className={colClass(cols.author, 'relative shrink-0')} style={colWidth(cols.author, authorCol.size)}>
+          {t('AUTHOR')}
+          {cols.author && <Resizer panel={authorCol} side="after" className={edge('after')} />}
+        </span>
+        <span className={colClass(cols.date, 'relative shrink-0')} style={colWidth(cols.date, dateCol.size)}>
+          {t('DATE')}
+          {cols.date && <Resizer panel={dateCol} side="after" className={edge('after')} />}
+        </span>
+        <span className={colClass(showCi, 'shrink-0')} style={colWidth(showCi, 14)} />
+        <span className={colClass(cols.sha, 'relative shrink-0 text-right')} style={colWidth(cols.sha, shaCol.size)}>
+          {t('SHA')}
+          {cols.sha && <Resizer panel={shaCol} side="after" className={edge('after')} />}
+        </span>
       </div>
       <div
         className="group relative flex-1 overflow-y-auto outline-none"
@@ -600,7 +600,12 @@ function LogList({ showGraph }: { showGraph: boolean }) {
         }}
       >
         <div className="relative" style={{ height: total * ROW_H + (repo?.hasMore ? 40 : 0) }}>
-          {items}
+          {ghosts.map(g => (
+            <div key={`ghost-${g.key}`} className="row-ghost absolute inset-0">
+              {g.node}
+            </div>
+          ))}
+          {[...items.values()]}
           {repo?.hasMore && (
             <div className="absolute inset-x-0 flex h-10 items-center justify-center text-sm text-muted" style={{ top: total * ROW_H }}>
               {t('Loading older commits…')}
