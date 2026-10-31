@@ -6608,6 +6608,16 @@
               "type": "ref",
               "id": "tl_primary",
               "ref": "c_btn_primary"
+            },
+            {
+              "type": "ref",
+              "id": "tl_right_panel",
+              "ref": "c_btn_icon",
+              "descendants": {
+                "bi_icon": {
+                  "icon": "panel-right-close"
+                }
+              }
             }
           ]
         },

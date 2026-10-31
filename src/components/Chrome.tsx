@@ -28,6 +28,8 @@ import {
   Moon,
   PanelLeftClose,
   PanelLeftOpen,
+  PanelRightClose,
+  PanelRightOpen,
   Plus,
   RefreshCcw,
   Redo2,
@@ -53,7 +55,7 @@ import { t } from '../lib/i18n'
 import { repoState, useOverview } from '../lib/overview'
 import { isConflict } from '../lib/parse'
 import { useMenus } from './menus'
-import { type Settings, updateSettings, useSettings } from '../lib/settings'
+import { type Settings, toggleInspector, updateSettings, useSettings } from '../lib/settings'
 import { forgetRepo, type Recent, readRecents, useApp } from '../state'
 import { Button, Chip, caps, IconButton, Kbd, StageDot, ToolButton } from './ui'
 import { UpdatePill } from './Update'
@@ -74,6 +76,7 @@ export function TitleBar({ repos, sidebar, onToggleSidebar, onSettings }: { repo
   const app = useApp()
   const { repo, act, busy, prompt, setPaletteOpen } = app
   const terminalOpen = useTerminal().open
+  const { inspector } = useSettings()
   // Leaves room on the left for the native traffic lights.
   const bar = 'flex h-titlebar shrink-0 items-center gap-2.5 border-b border-subtle bg-titlebar pr-3.5 pl-22'
   if (!repo) return <div className={bar} data-tauri-drag-region />
@@ -178,6 +181,10 @@ export function TitleBar({ repos, sidebar, onToggleSidebar, onSettings }: { repo
       <Button kind="primary" className="shrink-0" icon={primary.icon} onClick={primary.run} disabled={primary.disabled || !!busy}>
         {primary.label}
       </Button>
+      {/* Only History has a right sidebar. */}
+      {app.view === 'history' && (
+        <IconButton icon={inspector ? PanelRightClose : PanelRightOpen} onClick={toggleInspector} title={t(inspector ? 'Hide details (⇧⌘\\)' : 'Show details (⇧⌘\\)')} />
+      )}
     </div>
   )
 }

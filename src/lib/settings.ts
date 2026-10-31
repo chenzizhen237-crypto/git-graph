@@ -48,6 +48,8 @@ export type Settings = {
   /** '' = the system default app / git's own config. */
   tools: Tools
   notify: Notify
+  /** History's right sidebar: the selected commit's details. */
+  inspector: boolean
 }
 
 export type Graph = {
@@ -87,6 +89,7 @@ export const DEFAULTS: Settings = {
   commit: { subjectGuide: 72, template: '', skipHooks: false },
   diffWhitespace: 'all',
   tools: { editor: '', diffTool: '', mergeTool: '' },
+  inspector: true,
   notify: { enabled: true, ci: true, fetch: true, long: false, backgroundOnly: true, updates: true, sound: true },
 }
 
@@ -113,6 +116,8 @@ let current = load()
 const listeners = new Set<() => void>()
 
 export const getSettings = () => current
+
+export const toggleInspector = () => updateSettings({ inspector: !current.inspector })
 
 export function updateSettings(patch: Partial<Settings>) {
   current = merge(current, patch)

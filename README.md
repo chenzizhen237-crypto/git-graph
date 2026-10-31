@@ -82,7 +82,7 @@ src/views/         History, Changes, Stashes, Pull requests, Welcome
 
 ## Keys
 
-⌘K palette · ⌘1–5 History / Changes / Stashes / Pull requests / Actions · ⌘, settings · ⌘\ sidebar · ⌘R refresh · ⌘O switch repository · ⌘⇧F fetch · ⌘⇧P push · ↑↓ / j k move · ⌘↩ commit
+⌘K palette · ⌘1–5 History / Changes / Stashes / Pull requests / Actions · ⌘, settings · ⌘\ sidebar · ⇧⌘\ details · ⌘R refresh · ⌘O switch repository · ⌘⇧F fetch · ⌘⇧P push · ↑↓ / j k move · ⌘↩ commit
 
 ## License
 

@@ -66,17 +66,17 @@ const edge = (side: 'before' | 'after') => cx('absolute! inset-y-0', side === 'b
 const popover = 'absolute z-40 flex flex-col overflow-hidden rounded-lg border border-strong bg-elevated shadow-[0_12px_32px_var(--shadow)]'
 
 export function HistoryView() {
-  const [layout, setLayout] = useState<'list' | 'split'>('split')
+  const { inspector: showInspector } = useSettings()
   const [showGraph, setShowGraph] = useState(true)
   const inspector = usePanelSize('inspector', 420, 300, 1200)
   return (
     <>
       <div className="flex min-w-0 flex-1 flex-col">
-        <FilterBar layout={layout} setLayout={setLayout} showGraph={showGraph} setShowGraph={setShowGraph} />
+        <FilterBar showGraph={showGraph} setShowGraph={setShowGraph} />
         <LogList showGraph={showGraph} />
         <TerminalSlot />
       </div>
-      {layout === 'split' && (
+      {showInspector && (
         <>
           <Resizer panel={inspector} side="after" />
           <Inspector width={inspector.size} />
@@ -169,18 +169,9 @@ function FilterInput({ placeholder, value, onCommit, onClose }: { placeholder: s
   )
 }
 
-function FilterBar({
-  layout,
-  setLayout,
-  showGraph,
-  setShowGraph,
-}: {
-  layout: 'list' | 'split'
-  setLayout: (v: 'list' | 'split') => void
-  showGraph: boolean
-  setShowGraph: (v: boolean) => void
-}) {
+function FilterBar({ showGraph, setShowGraph }: { showGraph: boolean; setShowGraph: (v: boolean) => void }) {
   const { repo, query, setQuery } = useApp()
+  const { inspector } = useSettings()
   const [picker, setPicker] = useState(false)
   const [dateMenu, setDateMenu] = useState(false)
   const [editing, setEditing] = useState<'author' | 'query' | null>(null)
@@ -257,8 +248,8 @@ function FilterBar({
         </span>
       )}
       <Segmented
-        value={layout}
-        onChange={setLayout}
+        value={inspector ? 'split' : 'list'}
+        onChange={v => updateSettings({ inspector: v === 'split' })}
         options={[
           { value: 'list', icon: Rows3, title: t('List only') },
           { value: 'split', icon: Columns3, title: t('List and details') },
