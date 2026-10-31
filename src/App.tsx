@@ -1,7 +1,8 @@
 import { invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import { open } from '@tauri-apps/plugin-dialog'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 import { Banner, type RepoSwitch, Sidebar, StatusBar, TitleBar } from './components/Chrome'
 import { CloneDialog, PublishDialog } from './components/GitHubDialogs'
@@ -11,14 +12,15 @@ import { SettingsDialog } from './components/Settings'
 import { Sheets } from './components/Sheets'
 import { Resizer, usePanelSize } from './components/Split'
 import { TerminalPanel, TerminalSlot } from './components/Terminal'
-import { actions, findRoot } from './lib/git'
+import { actions, findRoot, loadRepo } from './lib/git'
+import { crossfadeWindow } from './lib/motion'
 import { t } from './lib/i18n'
 import { checkRuns } from './lib/notify'
 import { checkOnStartup } from './lib/update'
 import { getSettings, stepZoom, toggleInspector, useSettings } from './lib/settings'
 import { closeSheet } from './lib/sheets'
 import { closeTerminal, toggleTerminal } from './lib/terminal'
-import { AppProvider, openNextIn, readRecents, rememberRepo, useApp, type View } from './state'
+import { AppProvider, defaultQuery, openNextIn, preloadRepo, readRecents, rememberRepo, useApp, type View } from './state'
 import { ChangesView } from './views/Changes'
 import { ActionsView } from './views/Actions'
 import { AgentsView } from './views/Agents'
@@ -31,6 +33,22 @@ import { Welcome } from './views/Welcome'
 
 export function App() {
   const [root, setRoot] = useState<string | null>(null)
+  const [switching, setSwitching] = useState(false)
+  const switchTicket = useRef(0)
+  // The current repository stays on screen until the next one has loaded, then the window crossfades to it.
+  const switchRepo = useCallback(async (path: string, view?: View) => {
+    const ticket = ++switchTicket.current
+    setSwitching(true)
+    const data = await loadRepo(path, defaultQuery()).catch(() => null)
+    if (ticket !== switchTicket.current) return
+    if (data) preloadRepo(data)
+    if (view) openNextIn(view)
+    const show = () => {
+      setSwitching(false)
+      setRoot(path)
+    }
+    if (!crossfadeWindow(() => flushSync(show))) show()
+  }, [])
   // Subscribing here re-renders the whole tree when the language changes, so every t() call updates.
   useSettings()
   // A newer release, once per launch: the title bar pill and a toast that stays until answered.
@@ -77,20 +95,14 @@ export function App() {
     <>
       {/* Keyed by the repository, so switching straight from one to another starts afresh. */}
       <AppProvider key={root} root={root}>
-        <Workspace
-          onOpen={(path, view) => {
-            if (view) openNextIn(view)
-            setRoot(path)
-          }}
-          onHome={() => setRoot(null)}
-        />
+        <Workspace onOpen={(path, view) => void switchRepo(path, view)} switching={switching} onHome={() => setRoot(null)} />
       </AppProvider>
       <Toasts />
     </>
   )
 }
 
-function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => void; onHome: () => void }) {
+function Workspace({ onOpen, onHome, switching }: { onOpen: (root: string, view?: View) => void; onHome: () => void; switching: boolean }) {
   const app = useApp()
   const { repo, view, setView, paletteOpen, setPaletteOpen, refresh, act, toast } = app
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -99,7 +111,8 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
   // The title bar's repository dropdown switches repositories in this window.
   const repos = useMemo<RepoSwitch>(
     () => ({
-      open: path => onOpen(path),
+      open: path => onOpen(path, view),
+      switching,
       openFolder: async () => {
         const dir = await open({ directory: true, title: t('Open repository') })
         if (typeof dir !== 'string') return
@@ -110,7 +123,7 @@ function Workspace({ onOpen, onHome }: { onOpen: (root: string, view?: View) => 
       clone: () => setCloning(true),
       all: onHome,
     }),
-    [onOpen, onHome, toast],
+    [onOpen, onHome, toast, view, switching],
   )
   const { autoFetchMinutes } = useSettings()
 
