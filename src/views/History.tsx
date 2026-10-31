@@ -483,11 +483,11 @@ function LogList({ showGraph }: { showGraph: boolean }) {
       items.push(
         <div key="work" className={cx(rowClass, 'hover:bg-hover')} style={{ top }} onClick={() => setView('changes')}>
           {showGraph && (
-            <div className="h-full shrink-0 overflow-hidden" style={{ width: graphCol.size }}>
+            <div className="h-full min-w-14 overflow-hidden" style={{ width: graphCol.size }}>
               <GraphCell g={repo.work} laneCount={repo.laneCount} kind="work" />
             </div>
           )}
-          <div className="flex min-w-0 flex-1 items-center gap-1.5 italic">
+          <div className="flex min-w-40 flex-1 items-center gap-1.5 italic">
             <StageDot />
             <span className="font-medium text-secondary">{t(repo.changes.length === 1 ? '{n} uncommitted change' : '{n} uncommitted changes', { n: repo.changes.length })}</span>
             <span className="text-muted">· {t('open Changes')}</span>
@@ -514,11 +514,11 @@ function LogList({ showGraph }: { showGraph: boolean }) {
         }}
       >
         {showGraph && (
-          <div className="h-full shrink-0 overflow-hidden" style={{ width: graphCol.size }}>
+          <div className="h-full min-w-14 overflow-hidden" style={{ width: graphCol.size }}>
             <GraphCell g={r.graph} laneCount={repo!.laneCount} kind={kind} />
           </div>
         )}
-        <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden">
+        <div className="flex min-w-40 flex-1 items-center gap-1.5 overflow-hidden">
           {chips.map(c => (
             <Chip key={c.kind + c.name} kind={c.kind} name={c.name} synced={c.synced} />
           ))}
@@ -556,14 +556,14 @@ function LogList({ showGraph }: { showGraph: boolean }) {
 
   return (
     <>
-      <div className={cx('flex h-6.5 shrink-0 items-center gap-2 border-b border-subtle pr-3 pl-4 tracking-[0.6px]', caps, 'font-semibold')}>
+      <div className={cx('flex h-6.5 shrink-0 items-center gap-2 border-b border-subtle pr-3 tracking-[0.6px]', showGraph ? 'pl-1' : 'pl-4', caps, 'font-semibold')}>
         {showGraph && (
-          <span className="relative" style={{ width: graphCol.size - 12 }}>
+          <span className="relative min-w-14 pl-3" style={{ width: graphCol.size }}>
             {t('GRAPH')}
             <Resizer panel={graphCol} className={edge('before')} />
           </span>
         )}
-        <span className="min-w-0 flex-1 truncate">{t('DESCRIPTION')}</span>
+        <span className="min-w-40 flex-1 truncate">{t('DESCRIPTION')}</span>
         {cols.author && (
           <span className="relative shrink-0" style={{ width: authorCol.size }}>
             {t('AUTHOR')}
