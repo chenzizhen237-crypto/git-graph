@@ -51,9 +51,10 @@ function useAppState(root: string) {
   const [view, setViewNow] = useState<View>(() => startView ?? 'history')
   const viewRef = useRef(view)
   const setView = useCallback((next: View) => {
-    if (next === viewRef.current) return
+    const from = viewRef.current
+    if (next === from) return
     viewRef.current = next
-    if (!changeRoute(() => flushSync(() => setViewNow(next)))) setViewNow(next)
+    if (!changeRoute(from, next, () => flushSync(() => setViewNow(next)))) setViewNow(next)
   }, [])
   useEffect(() => {
     startView = null

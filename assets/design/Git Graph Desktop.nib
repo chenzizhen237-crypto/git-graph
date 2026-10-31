@@ -15515,9 +15515,16 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -15536,9 +15543,16 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -15557,9 +15571,16 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -15578,9 +15599,16 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -15599,9 +15627,16 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -15620,9 +15655,16 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -15641,9 +15683,16 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -17079,7 +17128,18 @@
                             }
                           }
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 60,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -17705,7 +17765,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 120,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -17734,9 +17805,16 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -17755,9 +17833,16 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -17776,9 +17861,16 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -17797,9 +17889,16 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -17818,9 +17917,16 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -17839,9 +17945,16 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -17860,9 +17973,16 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -17903,7 +18023,7 @@
               "id": "i9",
               "trigger": {
                 "type": "after_delay",
-                "ms": 300
+                "ms": 620
               },
               "actions": [
                 {
@@ -17943,7 +18063,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 720
+          }
         },
         {
           "type": "frame",
@@ -18090,9 +18213,16 @@
                           "type": "navigate",
                           "to": "pr_history",
                           "transition": {
-                            "type": "dissolve",
-                            "duration": 220,
-                            "easing": "ease_out"
+                            "type": "smart",
+                            "duration": 560,
+                            "easing": {
+                              "bezier": [
+                                0.16,
+                                0.84,
+                                0.24,
+                                1
+                              ]
+                            }
                           }
                         }
                       ]
@@ -18173,9 +18303,16 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -18210,9 +18347,16 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -18231,9 +18375,16 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -18252,9 +18403,16 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -18273,9 +18431,16 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -18294,9 +18459,16 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -18315,9 +18487,16 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -18996,7 +19175,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 60,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -19414,7 +19604,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 120,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -19443,9 +19644,16 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -19464,9 +19672,16 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -19485,9 +19700,16 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -19506,9 +19728,16 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -19527,9 +19756,16 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -19548,9 +19784,16 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -19569,9 +19812,16 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -19608,7 +19858,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 720
+          }
         },
         {
           "type": "frame",
@@ -19812,9 +20065,16 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -19849,9 +20109,16 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -19870,9 +20137,16 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -19891,9 +20165,16 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -19912,9 +20193,16 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -19933,9 +20221,16 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -19954,9 +20249,16 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -20114,7 +20416,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 60,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -20198,7 +20511,18 @@
                           "ref": "c_diff_ctx",
                           "width": "fill_container"
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 120,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -20227,9 +20551,16 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -20248,9 +20579,16 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -20269,9 +20607,16 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -20290,9 +20635,16 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -20311,9 +20663,16 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -20332,9 +20691,16 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -20353,9 +20719,16 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -20392,7 +20765,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 720
+          }
         },
         {
           "type": "frame",
@@ -20596,9 +20972,16 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -20633,9 +21016,16 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -20654,9 +21044,16 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -20675,9 +21072,16 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -20696,9 +21100,16 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -20717,9 +21128,16 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -20738,9 +21156,16 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -20898,7 +21323,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 60,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -20982,7 +21418,18 @@
                           "ref": "c_diff_ctx",
                           "width": "fill_container"
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 120,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -21011,9 +21458,16 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -21032,9 +21486,16 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -21053,9 +21514,16 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -21074,9 +21542,16 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -21095,9 +21570,16 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -21116,9 +21598,16 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -21137,9 +21626,16 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -21176,7 +21672,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 720
+          }
         },
         {
           "type": "frame",
@@ -21380,9 +21879,16 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -21418,9 +21924,16 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -21439,9 +21952,16 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -21460,9 +21980,16 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -21481,9 +22008,16 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -21502,9 +22036,16 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -21523,9 +22064,16 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -21897,7 +22445,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 60,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -22388,7 +22947,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 120,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -22417,9 +22987,16 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -22438,9 +23015,16 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -22459,9 +23043,16 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -22480,9 +23071,16 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -22501,9 +23099,16 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -22522,9 +23127,16 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -22543,9 +23155,16 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -22582,7 +23201,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 720
+          }
         },
         {
           "type": "frame",
@@ -22786,9 +23408,16 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -22823,9 +23452,16 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -22844,9 +23480,16 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -22865,9 +23508,16 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -22886,9 +23536,16 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -22907,9 +23564,16 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -22928,9 +23592,16 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -23342,7 +24013,18 @@
                           ],
                           "id": "pi_jHa2Z"
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 60,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -23371,9 +24053,16 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -23392,9 +24081,16 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -23413,9 +24109,16 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -23434,9 +24137,16 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -23455,9 +24165,16 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -23476,9 +24193,16 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -23497,9 +24221,16 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -23536,7 +24267,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 720
+          }
         },
         {
           "type": "frame",
@@ -23740,9 +24474,16 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -23777,9 +24518,16 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -23798,9 +24546,16 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -23819,9 +24574,16 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -23840,9 +24602,16 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -23861,9 +24630,16 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -23882,9 +24658,16 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -24303,7 +25086,18 @@
                           ],
                           "id": "pg_KXLDN"
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 60,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -24332,9 +25126,16 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -24353,9 +25154,16 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -24374,9 +25182,16 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -24395,9 +25210,16 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -24416,9 +25238,16 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -24437,9 +25266,16 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -24458,9 +25294,16 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -24497,7 +25340,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 720
+          }
         },
         {
           "type": "frame",
@@ -24701,9 +25547,16 @@
                               "type": "navigate",
                               "to": "pr_history",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -24739,9 +25592,16 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -24760,9 +25620,16 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -24781,9 +25648,16 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -24802,9 +25676,16 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -24823,9 +25704,16 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -24844,9 +25732,16 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -25509,7 +26404,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 60,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     },
                     {
                       "type": "frame",
@@ -26328,7 +27234,18 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 120,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -26357,9 +27274,16 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -26378,9 +27302,16 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -26399,9 +27330,16 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -26420,9 +27358,16 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -26441,9 +27386,16 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -26462,9 +27414,16 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -26483,9 +27442,16 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -26522,7 +27488,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 720
+          }
         },
         {
           "type": "frame",
@@ -26742,9 +27711,16 @@
                               "type": "navigate",
                               "to": "pr_changes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -26763,9 +27739,16 @@
                               "type": "navigate",
                               "to": "pr_stashes",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -26784,9 +27767,16 @@
                               "type": "navigate",
                               "to": "pr_pulls",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -26805,9 +27795,16 @@
                               "type": "navigate",
                               "to": "pr_actions",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -26826,9 +27823,16 @@
                               "type": "navigate",
                               "to": "pr_issues",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -26847,9 +27851,16 @@
                               "type": "navigate",
                               "to": "pr_agents",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -26868,9 +27879,16 @@
                               "type": "navigate",
                               "to": "pr_overview",
                               "transition": {
-                                "type": "dissolve",
-                                "duration": 220,
-                                "easing": "ease_out"
+                                "type": "smart",
+                                "duration": 560,
+                                "easing": {
+                                  "bezier": [
+                                    0.16,
+                                    0.84,
+                                    0.24,
+                                    1
+                                  ]
+                                }
                               }
                             }
                           ]
@@ -28306,7 +29324,18 @@
                             }
                           }
                         }
-                      ]
+                      ],
+                      "motion": {
+                        "styles": [
+                          {
+                            "id": "s1",
+                            "style": "fs5",
+                            "start": 60,
+                            "duration": 560,
+                            "props": {}
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
@@ -28335,9 +29364,16 @@
                   "type": "navigate",
                   "to": "pr_history",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -28356,9 +29392,16 @@
                   "type": "navigate",
                   "to": "pr_changes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -28377,9 +29420,16 @@
                   "type": "navigate",
                   "to": "pr_stashes",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -28398,9 +29448,16 @@
                   "type": "navigate",
                   "to": "pr_pulls",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -28419,9 +29476,16 @@
                   "type": "navigate",
                   "to": "pr_actions",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -28440,9 +29504,16 @@
                   "type": "navigate",
                   "to": "pr_overview",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -28461,9 +29532,16 @@
                   "type": "navigate",
                   "to": "pr_issues",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -28482,9 +29560,16 @@
                   "type": "navigate",
                   "to": "pr_agents",
                   "transition": {
-                    "type": "dissolve",
-                    "duration": 220,
-                    "easing": "ease_out"
+                    "type": "smart",
+                    "duration": 560,
+                    "easing": {
+                      "bezier": [
+                        0.16,
+                        0.84,
+                        0.24,
+                        1
+                      ]
+                    }
                   }
                 }
               ]
@@ -28521,7 +29606,10 @@
                 }
               ]
             }
-          ]
+          ],
+          "timeline": {
+            "duration": 720
+          }
         },
         {
           "type": "frame",
@@ -30318,7 +31406,7 @@
                       "type": "text",
                       "id": "ms2_r0b",
                       "name": "Fall + Settle",
-                      "content": "Crossfade, 220 ms",
+                      "content": "Fall + Settle",
                       "fontFamily": "$font/mono",
                       "fontSize": "$text/sm",
                       "fontWeight": 400,
@@ -30330,7 +31418,7 @@
                       "type": "text",
                       "id": "ms2_r0c",
                       "name": "The old sheet drops 12 px and hazes out, and the new one arrives 28 px from the direction of travel. Going down the sidebar means travelling down. The two overlap, so the screen is never empty.",
-                      "content": "A plain crossfade over the old view. Nothing moves, so the app stays still. The title bar keeps every button in place in every view.",
+                      "content": "The old sheet drops 12 px and hazes out, and the new one arrives 28 px from the direction of travel. Going down the sidebar means travelling down. The two overlap, so the screen is never empty.",
                       "fontFamily": "$font/sans",
                       "fontSize": "$text/md",
                       "fontWeight": 400,
@@ -30392,8 +31480,7 @@
                       "width": "fill_container",
                       "textGrowth": "fixed-width"
                     }
-                  ],
-                  "enabled": false
+                  ]
                 },
                 {
                   "type": "frame",
@@ -30447,8 +31534,7 @@
                       "width": "fill_container",
                       "textGrowth": "fixed-width"
                     }
-                  ],
-                  "enabled": false
+                  ]
                 },
                 {
                   "type": "frame",
@@ -58909,14 +59995,6 @@
       "description": "A light card landing, ms",
       "codeSyntax": {
         "web": "--motion-float"
-      }
-    },
-    "motion/route": {
-      "type": "number",
-      "value": 220,
-      "description": "Crossfade between sidebar routes, ms",
-      "codeSyntax": {
-        "web": "--motion-route"
       }
     }
   },
