@@ -3,7 +3,7 @@
 # Nib does not follow symlinks, so the workspace copy is the one you edit.
 set -euo pipefail
 
-src="$HOME/Library/Application Support/Nib/workspace/project/git-graph/Git Graph Desktop.nib"
+src="$HOME/Library/Application Support/Nib/workspace/project/Git Graph Desktop.nib"
 dest="$(cd "$(dirname "$0")" && pwd)/design/Git Graph Desktop.nib"
 
 if [[ ! -f "$src" ]]; then

@@ -139,6 +139,8 @@ const zh: Record<string, string> = {
   'List only': '仅列表',
   'List and details': '列表和详情',
   'Show the graph': '显示图谱',
+  'Choose columns': '选择列',
+  'CI status': 'CI 状态',
   'Loading older commits…': '正在加载更早的提交…',
   'Loading…': '加载中…',
   'Select a commit': '选择一个提交',

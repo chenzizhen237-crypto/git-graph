@@ -8,6 +8,7 @@
     "build": "pnpm tokens && tsc --noEmit && vite build",
     "tokens": "node --experimental-strip-types scripts/tokens.ts",
     "test": "vitest run",
+    "land": "bash scripts/land.sh",
     "tauri": "tauri",
     "app": "tauri dev",
     "bundle": "tauri build",

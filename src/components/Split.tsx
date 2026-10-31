@@ -36,11 +36,34 @@ export function usePanelSize(key: string, initial: number, min: number, max: num
 
 export type PanelSize = ReturnType<typeof usePanelSize>
 
+/** A size that follows `auto` until the user drags it. Double-click goes back to `auto`. */
+export function useColumnSize(key: string, auto: number, min: number, max: number): PanelSize {
+  const [own, setOwn] = useState(() => read(key, 0))
+  const set = useCallback(
+    (next: number, save = false) => {
+      const v = Math.round(Math.min(max, Math.max(min, next)))
+      setOwn(v)
+      if (save)
+        try {
+          localStorage.setItem(`size:${key}`, String(v))
+        } catch {}
+    },
+    [key, min, max],
+  )
+  const reset = useCallback(() => {
+    setOwn(0)
+    try {
+      localStorage.removeItem(`size:${key}`)
+    } catch {}
+  }, [key])
+  return { size: own || auto, set, reset }
+}
+
 /**
  * A drag handle between two panels. `side: 'before'` resizes the panel to
  * its left (or above), `'after'` the one to its right (or below).
  */
-export function Resizer({ panel, axis = 'x', side = 'before' }: { panel: PanelSize; axis?: 'x' | 'y'; side?: 'before' | 'after' }) {
+export function Resizer({ panel, axis = 'x', side = 'before', className }: { panel: PanelSize; axis?: 'x' | 'y'; side?: 'before' | 'after'; className?: string }) {
   const [dragging, setDragging] = useState(false)
   const start = useRef({ pos: 0, size: 0 })
   const sign = side === 'before' ? 1 : -1
@@ -52,7 +75,7 @@ export function Resizer({ panel, axis = 'x', side = 'before' }: { panel: PanelSi
       role="separator"
       aria-orientation={horizontal ? 'vertical' : 'horizontal'}
       title="Drag to resize · double-click to reset"
-      className={cx('group relative z-20 shrink-0', horizontal ? '-mx-[3px] w-1.5 cursor-col-resize' : '-my-[3px] h-1.5 cursor-row-resize')}
+      className={cx('group relative z-20 shrink-0', horizontal ? '-mx-[3px] w-1.5 cursor-col-resize' : '-my-[3px] h-1.5 cursor-row-resize', className)}
       onDoubleClick={panel.reset}
       onPointerDown={e => {
         e.preventDefault()

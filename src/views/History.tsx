@@ -7,6 +7,7 @@ import {
   ChevronsDownUp,
   ChevronsUpDown,
   Columns3,
+  Columns3Cog,
   Copy,
   FileText,
   FolderTree,
@@ -31,7 +32,7 @@ import { Fragment, type ReactNode, useCallback, useEffect, useMemo, useRef, useS
 import { DiffView } from '../components/Diff'
 import { useMenus } from '../components/menus'
 import { GraphCell, graphWidth, type NodeKind, ROW_H } from '../components/GraphCell'
-import { Resizer, usePanelSize } from '../components/Split'
+import { Resizer, useColumnSize, usePanelSize } from '../components/Split'
 import { TerminalSlot } from '../components/Terminal'
 import { Avatar, Chip, CiIcon, Count, caps, Empty, FilePath, fileRowClass, IconButton, LineStats, refChips, Segmented, StageDot, StatusBadge, splitPath } from '../components/ui'
 import { cachedCi, type CiState, commitStates } from '../lib/actions'
@@ -40,7 +41,7 @@ import { commitDate } from '../lib/dates'
 import { actions, commitDetail, commitFileDiff, run } from '../lib/git'
 import { t } from '../lib/i18n'
 import { compactAgo, matchItems, nameParts, type PickItem, pickSections, QUICK_SCOPES, scopeLabel } from '../lib/picker'
-import { useSettings } from '../lib/settings'
+import { type Graph, updateSettings, useSettings } from '../lib/settings'
 import type { CommitDetail, CommitFile, LogRow } from '../lib/types'
 import { useApp, useRemoteNames } from '../state'
 
@@ -51,6 +52,16 @@ const DATES = [
   { value: '1 month ago', label: 'Last 30 days' },
   { value: '1 year ago', label: 'Last year' },
 ]
+
+const COLUMNS: { key: 'author' | 'date' | 'ci' | 'sha'; label: string }[] = [
+  { key: 'author', label: 'Author' },
+  { key: 'date', label: 'Date' },
+  { key: 'ci', label: 'CI status' },
+  { key: 'sha', label: 'SHA' },
+]
+
+/** Drag handle on a column header's edge; `side: 'after'` means the column is to the right of its handle. */
+const edge = (side: 'before' | 'after') => cx('absolute! inset-y-0', side === 'before' ? '-right-1' : '-left-1')
 
 const popover = 'absolute z-40 flex flex-col overflow-hidden rounded-lg border border-strong bg-elevated shadow-[0_12px_32px_var(--shadow)]'
 
@@ -105,6 +116,37 @@ function FilterButton({
       <Icon size={13} />
       {children}
     </button>
+  )
+}
+
+function ColumnPicker() {
+  const { graph } = useSettings()
+  const [open, setOpen] = useState(false)
+  const toggle = (patch: Partial<Graph>) => updateSettings({ graph: { ...graph, ...patch } })
+  return (
+    <div className="relative">
+      <IconButton icon={Columns3Cog} active={open} onClick={() => setOpen(!open)} title={t('Choose columns')} />
+      {open && (
+        <>
+          <div className="fixed inset-0 z-39" onClick={() => setOpen(false)} />
+          <div className={cx(popover, 'top-8 right-0 w-45 p-1.5')}>
+            {COLUMNS.map(c => (
+              <button
+                key={c.key}
+                type="button"
+                role="menuitemcheckbox"
+                aria-checked={graph[c.key]}
+                className="flex h-7 items-center gap-2 rounded-md px-2 text-left hover:bg-hover"
+                onClick={() => toggle({ [c.key]: !graph[c.key] })}
+              >
+                <span className="flex-1">{t(c.label)}</span>
+                {graph[c.key] && <Check size={13} className="text-accent" />}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
   )
 }
 
@@ -222,6 +264,7 @@ function FilterBar({
           { value: 'split', icon: Columns3, title: t('List and details') },
         ]}
       />
+      <ColumnPicker />
       <IconButton icon={GitGraph} active={showGraph} onClick={() => setShowGraph(!showGraph)} title={t('Show the graph')} />
     </div>
   )
@@ -378,7 +421,11 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   const total = rows.length + offset
   const first = Math.max(0, Math.floor(scroll / ROW_H) - 10)
   const last = Math.min(total, Math.ceil((scroll + height) / ROW_H) + 10)
-  const gw = repo ? graphWidth(repo.laneCount) : 56
+  // Absolute dates need room for the date and the time.
+  const graphCol = useColumnSize('col-graph', repo ? graphWidth(repo.laneCount) : 56, 56, 800)
+  const authorCol = useColumnSize('col-author', 130, 60, 400)
+  const dateCol = useColumnSize('col-date', cols.dates === 'relative' ? 84 : cols.dateFormat === 'locale' ? 144 : 132, 56, 300)
+  const shaCol = useColumnSize('col-sha', 62, 44, 300)
 
   // CI state for the rows on screen: one batched request after scrolling settles,
   // then again every 30s while any of them is still running.
@@ -428,15 +475,18 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   if (error && !repo) return <Empty>{error}</Empty>
   if (repo && !rows.length && !repo.work) return <Empty>{t(repo.head ? 'No commits match these filters.' : 'No commits yet.')}</Empty>
 
-  // Absolute dates need room for the date and the time.
-  const dateW = cols.dates === 'relative' ? 'w-21' : cols.dateFormat === 'locale' ? 'w-36' : 'w-33'
+  const showCi = cols.ci && !ciOff
   const items = []
   for (let i = first; i < last; i++) {
     const top = i * ROW_H
     if (repo?.work && i === 0) {
       items.push(
         <div key="work" className={cx(rowClass, 'hover:bg-hover')} style={{ top }} onClick={() => setView('changes')}>
-          {showGraph && <GraphCell g={repo.work} laneCount={repo.laneCount} kind="work" />}
+          {showGraph && (
+            <div className="h-full shrink-0 overflow-hidden" style={{ width: graphCol.size }}>
+              <GraphCell g={repo.work} laneCount={repo.laneCount} kind="work" />
+            </div>
+          )}
           <div className="flex min-w-0 flex-1 items-center gap-1.5 italic">
             <StageDot />
             <span className="font-medium text-secondary">{t(repo.changes.length === 1 ? '{n} uncommitted change' : '{n} uncommitted changes', { n: repo.changes.length })}</span>
@@ -463,7 +513,11 @@ function LogList({ showGraph }: { showGraph: boolean }) {
           openMenu(e, menus.commit(r))
         }}
       >
-        {showGraph && <GraphCell g={r.graph} laneCount={repo!.laneCount} kind={kind} />}
+        {showGraph && (
+          <div className="h-full shrink-0 overflow-hidden" style={{ width: graphCol.size }}>
+            <GraphCell g={r.graph} laneCount={repo!.laneCount} kind={kind} />
+          </div>
+        )}
         <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden">
           {chips.map(c => (
             <Chip key={c.kind + c.name} kind={c.kind} name={c.name} synced={c.synced} />
@@ -478,7 +532,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
           )}
         </div>
         {cols.author && (
-          <div className="flex w-32.5 shrink-0 items-center gap-1.5 text-sm text-secondary">
+          <div className="flex shrink-0 items-center gap-1.5 text-sm text-secondary" style={{ width: authorCol.size }}>
             <Avatar name={r.author} />
             <span className="truncate" title={r.author}>
               {r.author}
@@ -486,12 +540,16 @@ function LogList({ showGraph }: { showGraph: boolean }) {
           </div>
         )}
         {cols.date && (
-          <span className={cx('shrink-0 truncate text-sm whitespace-nowrap text-muted', dateW)} title={new Date(r.time * 1000).toLocaleString()}>
+          <span className="shrink-0 truncate text-sm whitespace-nowrap text-muted" style={{ width: dateCol.size }} title={new Date(r.time * 1000).toLocaleString()}>
             {commitDate(r.time * 1000)}
           </span>
         )}
-        {!ciOff && <CiIcon state={ci.get(r.hash)} />}
-        {cols.sha && <span className="w-15.5 shrink-0 text-right font-mono text-sm font-medium text-link">{r.short}</span>}
+        {showCi && <CiIcon state={ci.get(r.hash)} />}
+        {cols.sha && (
+          <span className="shrink-0 truncate text-right font-mono text-sm font-medium text-link" style={{ width: shaCol.size }} title={r.hash}>
+            {r.short}
+          </span>
+        )}
       </div>,
     )
   }
@@ -499,12 +557,32 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   return (
     <>
       <div className={cx('flex h-6.5 shrink-0 items-center gap-2 border-b border-subtle pr-3 pl-4 tracking-[0.6px]', caps, 'font-semibold')}>
-        {showGraph && <span style={{ width: gw - 12 }}>{t('GRAPH')}</span>}
-        <span className="flex-1">{t('DESCRIPTION')}</span>
-        {cols.author && <span className="w-32.5">{t('AUTHOR')}</span>}
-        {cols.date && <span className={dateW}>{t('DATE')}</span>}
-        {!ciOff && <span className="w-3.5" />}
-        {cols.sha && <span className="w-15.5 text-right">{t('SHA')}</span>}
+        {showGraph && (
+          <span className="relative" style={{ width: graphCol.size - 12 }}>
+            {t('GRAPH')}
+            <Resizer panel={graphCol} className={edge('before')} />
+          </span>
+        )}
+        <span className="min-w-0 flex-1 truncate">{t('DESCRIPTION')}</span>
+        {cols.author && (
+          <span className="relative shrink-0" style={{ width: authorCol.size }}>
+            {t('AUTHOR')}
+            <Resizer panel={authorCol} side="after" className={edge('after')} />
+          </span>
+        )}
+        {cols.date && (
+          <span className="relative shrink-0" style={{ width: dateCol.size }}>
+            {t('DATE')}
+            <Resizer panel={dateCol} side="after" className={edge('after')} />
+          </span>
+        )}
+        {showCi && <span className="w-3.5 shrink-0" />}
+        {cols.sha && (
+          <span className="relative shrink-0 text-right" style={{ width: shaCol.size }}>
+            {t('SHA')}
+            <Resizer panel={shaCol} side="after" className={edge('after')} />
+          </span>
+        )}
       </div>
       <div
         className="group relative flex-1 overflow-y-auto outline-none"

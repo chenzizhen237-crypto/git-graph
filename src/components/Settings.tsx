@@ -558,6 +558,9 @@ function CommitsGraph() {
           <Check checked={g.sha} onChange={sha => setG({ sha })}>
             SHA
           </Check>
+          <Check checked={g.ci} onChange={ci => setG({ ci })}>
+            {t('CI status')}
+          </Check>
           <Check checked={g.tags} onChange={tags => setG({ tags })}>
             {t('Tags on commits')}
           </Check>

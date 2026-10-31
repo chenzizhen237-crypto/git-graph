@@ -13,18 +13,26 @@ const SIZE = 6
 type Axis = 'y' | 'x'
 type Bar = { el: Element; thumbs: Record<Axis, HTMLDivElement>; timer?: number; hover: boolean; dragging: boolean }
 
-const THUMB_CLASS =
-  'pointer-events-auto absolute rounded-full bg-strong opacity-0 transition-[opacity,background-color] duration-300 hover:bg-muted data-[on]:opacity-100 data-[on]:duration-100'
+const THUMB_CLASS = 'fixed rounded-full bg-strong opacity-0 transition-[opacity,background-color] duration-300 hover:bg-muted data-[on]:opacity-100 data-[on]:duration-100'
+
+/** The element's level in the page's stacking order: its outermost ancestor with a z-index. */
+function stackLevel(el: Element) {
+  let level = 0
+  for (let node: Element | null = el; node && node !== document.body; node = node.parentElement) {
+    const z = Number(getComputedStyle(node).zIndex)
+    if (Number.isFinite(z)) level = z
+  }
+  return level
+}
 
 export function autoHideScrollbars() {
-  const layer = document.createElement('div')
-  layer.className = 'pointer-events-none fixed inset-0 z-[70]'
-  document.body.append(layer)
   const bars = new WeakMap<Element, Bar>()
 
   const place = (bar: Bar) => {
     const el = bar.el
     const r = el.getBoundingClientRect()
+    // One level above its own scroller, so menus and dialogs opened over that scroller cover the thumb.
+    const z = String(stackLevel(el) + 1)
     for (const axis of ['y', 'x'] as const) {
       const t = bar.thumbs[axis]
       const view = axis === 'y' ? el.clientHeight : el.clientWidth
@@ -35,6 +43,7 @@ export function autoHideScrollbars() {
         continue
       }
       t.hidden = false
+      t.style.zIndex = z
       const len = Math.max(MIN_THUMB, (view * view) / full)
       const at = (pos / (full - view)) * (view - len - INSET * 2) + INSET
       // clientLeft/Top skip the element's border, so the thumb sits inside it.
@@ -105,7 +114,7 @@ export function autoHideScrollbars() {
       t.addEventListener('pointerup', up, { once: true })
       t.addEventListener('pointercancel', up, { once: true })
     })
-    layer.append(t)
+    document.body.append(t)
     return t
   }
 

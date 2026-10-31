@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# main only moves through `pnpm land`, which tests the merge on Jimmy first.
+# scripts/land.sh installs this into .git/hooks, where every worktree shares it.
+[ -z "${GIT_GRAPH_LANDING:-}" ] || exit 0
+while read -r _ _ remote_ref _; do
+  if [ "$remote_ref" = refs/heads/main ]; then
+    echo "pre-push: main only moves through 'pnpm land <branch>'" >&2
+    exit 1
+  fi
+done

@@ -54,6 +54,7 @@ export type Graph = {
   author: boolean
   date: boolean
   sha: boolean
+  ci: boolean
   tags: boolean
   dates: 'relative' | 'absolute'
   dateFormat: 'locale' | 'iso' | 'dmy' | 'mdy'
@@ -82,7 +83,7 @@ export const DEFAULTS: Settings = {
   fonts: DEFAULT_FONTS,
   autoStash: true,
   cloneDir: '',
-  graph: { author: true, date: true, sha: true, tags: true, dates: 'relative', dateFormat: 'locale', hour24: true },
+  graph: { author: true, date: true, sha: true, ci: true, tags: true, dates: 'relative', dateFormat: 'locale', hour24: true },
   commit: { subjectGuide: 72, template: '', skipHooks: false },
   diffWhitespace: 'all',
   tools: { editor: '', diffTool: '', mergeTool: '' },
