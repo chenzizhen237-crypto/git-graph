@@ -15,7 +15,7 @@ export function ToolButton({ icon: Icon, label, busy, badge, active, ...rest }: 
     <button
       type="button"
       className={cx(
-        'relative flex min-w-10.5 shrink-0 flex-col items-center gap-0.5 rounded-md px-2 py-1 text-xs font-medium whitespace-nowrap disabled:opacity-40',
+        'press relative flex min-w-10.5 shrink-0 flex-col items-center gap-0.5 rounded-md px-2 py-1 text-xs font-medium whitespace-nowrap disabled:opacity-40',
         active ? 'bg-selected text-ref-head' : 'text-secondary enabled:hover:bg-hover',
       )}
       {...rest}
@@ -42,7 +42,7 @@ export function Button({
     <button
       type="button"
       className={cx(
-        'inline-flex items-center justify-center gap-1.5 rounded-md px-2.5 text-md whitespace-nowrap disabled:opacity-50',
+        'press inline-flex items-center justify-center gap-1.5 rounded-md px-2.5 text-md whitespace-nowrap disabled:opacity-50',
         small ? 'h-6.5' : 'h-7',
         kind === 'primary'
           ? cx('font-semibold text-on-accent enabled:hover:brightness-110', danger ? 'bg-status-deleted' : 'bg-accent')
@@ -70,7 +70,7 @@ export function IconButton({
     <button
       type="button"
       className={cx(
-        'inline-flex shrink-0 items-center justify-center rounded-md enabled:hover:bg-hover disabled:opacity-40',
+        'press inline-flex shrink-0 items-center justify-center rounded-md enabled:hover:bg-hover disabled:opacity-40',
         small ? 'size-6' : 'size-7',
         active ? 'bg-selected text-ref-head' : 'text-secondary',
         className,
@@ -256,7 +256,10 @@ export function Segmented<T extends string>({ value, options, onChange }: { valu
           type="button"
           title={o.title}
           onClick={() => onChange(o.value)}
-          className={cx('flex h-6 w-6.5 items-center justify-center rounded-sm', value === o.value ? 'bg-elevated text-primary shadow-[0_1px_2px_var(--shadow)]' : 'text-muted')}
+          className={cx(
+            'press flex h-6 w-6.5 items-center justify-center rounded-sm',
+            value === o.value ? 'bg-elevated text-primary shadow-[0_1px_2px_var(--shadow)]' : 'text-muted',
+          )}
         >
           <o.icon size={13} />
         </button>

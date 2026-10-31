@@ -33,9 +33,9 @@ export function Sheet({
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
   return createPortal(
-    <div className="fixed inset-0 z-50 flex bg-scrim p-6" onMouseDown={onClose}>
+    <div data-exit className="fixed inset-0 z-50 flex bg-scrim p-6" onMouseDown={onClose}>
       <div
-        className="flex min-w-0 flex-1 animate-toast-in flex-col overflow-hidden rounded-xl border border-strong bg-app shadow-[0_20px_50px_var(--shadow)]"
+        className="flex min-w-0 flex-1 animate-dialog-in flex-col overflow-hidden rounded-xl border border-strong bg-app shadow-[0_20px_50px_var(--shadow)]"
         onMouseDown={e => e.stopPropagation()}
       >
         <div className="flex h-12 shrink-0 items-center gap-2.5 border-b border-subtle pr-2.5 pl-4">

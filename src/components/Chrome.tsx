@@ -276,10 +276,10 @@ function RepoMenu({ anchor, repos, onClose }: { anchor: DOMRect; repos: RepoSwit
   }
 
   return (
-    <div className="fixed inset-0 z-[65]" onMouseDown={onClose}>
+    <div data-exit className="fixed inset-0 z-[65]" onMouseDown={onClose}>
       <div
         role="menu"
-        className="absolute flex w-85 flex-col gap-px rounded-lg border border-strong bg-elevated p-1.25 shadow-[0_12px_32px_var(--shadow)]"
+        className="absolute flex w-85 origin-top-left animate-pop-in flex-col gap-px rounded-lg border border-strong bg-elevated p-1.25 shadow-[0_12px_32px_var(--shadow)]"
         style={{ left: anchor.left, top: anchor.bottom + 4 }}
         onMouseDown={e => e.stopPropagation()}
         onKeyDown={onKey}
@@ -392,6 +392,7 @@ function Section({ label, count, children, onAdd, defaultOpen = true }: { label:
 }
 
 function Item({
+  pill,
   icon: Icon,
   color,
   label,
@@ -405,6 +406,8 @@ function Item({
   onDoubleClick,
   onContextMenu,
 }: {
+  /** The section's selection pill shows the selection, not the row. */
+  pill?: boolean
   icon: typeof GitBranch
   color: string
   label: string
@@ -422,7 +425,11 @@ function Item({
     <button
       type="button"
       // shrink-0: the sidebar scrolls, so rows must not squeeze when it overflows.
-      className={cx('flex h-6.5 w-full shrink-0 items-center gap-1.75 rounded-md pr-2 text-left', indent ? 'pl-6.5' : 'pl-2.5', selected ? 'bg-selected' : 'hover:bg-hover')}
+      className={cx(
+        'flex h-6.5 w-full shrink-0 items-center gap-1.75 rounded-md pr-2 text-left',
+        indent ? 'pl-6.5' : 'pl-2.5',
+        selected ? (pill ? 'relative' : 'bg-selected') : 'relative hover:bg-hover',
+      )}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu}
@@ -438,6 +445,11 @@ function Item({
     </button>
   )
 }
+
+/** The Workspace rows in order, for the selection pill that moves between them. */
+const WORKSPACE_VIEWS = ['changes', 'history', 'stashes', 'pulls', 'actions', 'issues', 'agents', 'overview']
+/** A row's 26 px and the 1 px gap. */
+const WORKSPACE_ROW = 27
 
 const trackMeta = (track?: string) => ({
   ahead: /ahead (\d+)/.exec(track ?? '')?.[1],
@@ -461,6 +473,7 @@ export function Sidebar({ width }: { width: number }) {
     return groups
   }, [repo?.refs])
   const [openRemotes, setOpenRemotes] = useState<Set<string>>(new Set(['origin']))
+  const workspaceRow = WORKSPACE_VIEWS.indexOf(view)
   const shell = 'flex shrink-0 flex-col gap-px overflow-y-auto border-r border-subtle bg-sidebar px-2 py-2.5'
   if (!repo) return <nav className={shell} style={{ width }} />
   const locals = repo.refs.filter(r => r.kind === 'local').sort((a, b) => Number(b.isHead) - Number(a.isHead))
@@ -484,72 +497,84 @@ export function Sidebar({ width }: { width: number }) {
   return (
     <nav className={shell} style={{ width }}>
       <Section label={t('WORKSPACE')}>
-        <Item
-          icon={FileDiff}
-          color="var(--status-modified)"
-          label={t('Changes')}
-          meta={repo.changes.length}
-          selected={view === 'changes'}
-          onClick={() => setView('changes')}
-          title={t('Changes (⌘2)')}
-        />
-        <Item icon={GitGraph} color="var(--ref-head)" label={t('History')} selected={view === 'history'} onClick={() => setView('history')} title={t('History (⌘1)')} />
-        <Item
-          icon={Archive}
-          color="var(--text-muted)"
-          label={t('Stashes')}
-          meta={repo.stashes.length}
-          selected={view === 'stashes'}
-          onClick={() => setView('stashes')}
-          title={t('Stashes (⌘3)')}
-        />
-        <Item
-          icon={GitPullRequest}
-          color="var(--status-added)"
-          label={t('Pull requests')}
-          meta={counts.pulls}
-          selected={view === 'pulls'}
-          onClick={() => setView('pulls')}
-          title={t('Pull requests (⌘4)')}
-        />
-        <Item
-          icon={CirclePlay}
-          color="var(--status-renamed)"
-          label={t('Actions')}
-          meta={counts.failing || ''}
-          metaColor="var(--status-deleted)"
-          selected={view === 'actions'}
-          onClick={() => setView('actions')}
-          title={t('Actions (⌘5)')}
-        />
-        <Item
-          icon={CircleDot}
-          color="var(--status-added)"
-          label={t('Issues')}
-          meta={counts.issues}
-          selected={view === 'issues'}
-          onClick={() => setView('issues')}
-          title={t('Issues (⌘7)')}
-        />
-        <Item
-          icon={Bot}
-          color="var(--accent)"
-          label={t('Agents')}
-          meta={repo.worktrees.length}
-          selected={view === 'agents'}
-          onClick={() => setView('agents')}
-          title={t('Agents (⌘8)')}
-        />
-        <Item
-          icon={LayoutDashboard}
-          color="var(--status-renamed)"
-          label={t('CI/CD')}
-          meta={failing || ''}
-          metaColor="var(--status-deleted)"
-          selected={view === 'overview'}
-          onClick={() => setView('overview')}
-          title={t('CI/CD (⌘6)')}
-        />
+        <div className="relative flex flex-col gap-px">
+          {workspaceRow >= 0 && (
+            <div className="selection-pill absolute inset-x-0 top-0 h-6.5 rounded-md bg-selected" style={{ transform: `translateY(${workspaceRow * WORKSPACE_ROW}px)` }} />
+          )}
+          <Item
+            pill
+            icon={FileDiff}
+            color="var(--status-modified)"
+            label={t('Changes')}
+            meta={repo.changes.length}
+            selected={view === 'changes'}
+            onClick={() => setView('changes')}
+            title={t('Changes (⌘2)')}
+          />
+          <Item pill icon={GitGraph} color="var(--ref-head)" label={t('History')} selected={view === 'history'} onClick={() => setView('history')} title={t('History (⌘1)')} />
+          <Item
+            pill
+            icon={Archive}
+            color="var(--text-muted)"
+            label={t('Stashes')}
+            meta={repo.stashes.length}
+            selected={view === 'stashes'}
+            onClick={() => setView('stashes')}
+            title={t('Stashes (⌘3)')}
+          />
+          <Item
+            pill
+            icon={GitPullRequest}
+            color="var(--status-added)"
+            label={t('Pull requests')}
+            meta={counts.pulls}
+            selected={view === 'pulls'}
+            onClick={() => setView('pulls')}
+            title={t('Pull requests (⌘4)')}
+          />
+          <Item
+            pill
+            icon={CirclePlay}
+            color="var(--status-renamed)"
+            label={t('Actions')}
+            meta={counts.failing || ''}
+            metaColor="var(--status-deleted)"
+            selected={view === 'actions'}
+            onClick={() => setView('actions')}
+            title={t('Actions (⌘5)')}
+          />
+          <Item
+            pill
+            icon={CircleDot}
+            color="var(--status-added)"
+            label={t('Issues')}
+            meta={counts.issues}
+            selected={view === 'issues'}
+            onClick={() => setView('issues')}
+            title={t('Issues (⌘7)')}
+          />
+          <Item
+            pill
+            icon={Bot}
+            color="var(--accent)"
+            label={t('Agents')}
+            meta={repo.worktrees.length}
+            selected={view === 'agents'}
+            onClick={() => setView('agents')}
+            title={t('Agents (⌘8)')}
+          />
+          <Item
+            pill
+            icon={LayoutDashboard}
+            color="var(--status-renamed)"
+            label={t('CI/CD')}
+            meta={failing || ''}
+            metaColor="var(--status-deleted)"
+            selected={view === 'overview'}
+            onClick={() => setView('overview')}
+            title={t('CI/CD (⌘6)')}
+          />
+        </div>
       </Section>
       <Section label={t('BRANCHES')} count={locals.length} onAdd={() => void newBranch()}>
         {locals.map(b => {

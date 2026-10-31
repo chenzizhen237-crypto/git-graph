@@ -63,7 +63,7 @@ const COLUMNS: { key: 'author' | 'date' | 'ci' | 'sha'; label: string }[] = [
 /** Drag handle on a column header's edge; `side: 'after'` means the column is to the right of its handle. */
 const edge = (side: 'before' | 'after') => cx('absolute! inset-y-0', side === 'before' ? '-right-1' : '-left-1')
 
-const popover = 'absolute z-40 flex flex-col overflow-hidden rounded-lg border border-strong bg-elevated shadow-[0_12px_32px_var(--shadow)]'
+const popover = 'absolute z-40 flex animate-pop-in origin-top flex-col overflow-hidden rounded-lg border border-strong bg-elevated shadow-[0_12px_32px_var(--shadow)]'
 
 export function HistoryView() {
   const { inspector: showInspector } = useSettings()
@@ -76,12 +76,10 @@ export function HistoryView() {
         <LogList showGraph={showGraph} />
         <TerminalSlot />
       </div>
-      {showInspector && (
-        <>
-          <Resizer panel={inspector} side="after" />
-          <Inspector width={inspector.size} />
-        </>
-      )}
+      {showInspector && <Resizer panel={inspector} side="after" />}
+      <div className="panel-slide flex shrink-0 justify-start overflow-hidden" style={{ width: showInspector ? inspector.size : 0 }} inert={!showInspector}>
+        <Inspector width={inspector.size} />
+      </div>
     </>
   )
 }
