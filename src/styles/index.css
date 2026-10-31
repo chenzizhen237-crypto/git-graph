@@ -89,19 +89,6 @@
   animation: fade-in var(--motion-route) ease-out;
 }
 
-/* Repository change: the new repository fades in over the whole window, on top of the old one. */
-.window-fade .route {
-  view-transition-name: none;
-}
-.window-fade::view-transition-old(root) {
-  display: block;
-  animation: none;
-}
-.window-fade::view-transition-new(root) {
-  mix-blend-mode: normal;
-  animation: fade-in var(--motion-window) ease-out;
-}
-
 /* Depth: a dialog is nearer to you, so the app behind steps back and goes slightly out of focus. */
 .depth-stage {
   transition:

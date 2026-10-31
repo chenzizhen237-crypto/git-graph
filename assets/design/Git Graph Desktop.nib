@@ -30619,58 +30619,6 @@
               ]
             }
           ]
-        },
-        {
-          "type": "frame",
-          "id": "rs_state",
-          "name": "Repository switching",
-          "width": 1440,
-          "x": 1540,
-          "y": 2800,
-          "layout": "vertical",
-          "gap": 12,
-          "padding": 24,
-          "fill": "$bg/app",
-          "theme": {
-            "Mode": "Light",
-            "Stage": "Clean"
-          },
-          "children": [
-            {
-              "type": "text",
-              "id": "rs_t",
-              "name": "Title",
-              "content": "Switching repository",
-              "fontFamily": "$font/sans",
-              "fontSize": "$text/lg",
-              "fontWeight": 700,
-              "fill": "$text/primary"
-            },
-            {
-              "type": "text",
-              "id": "rs_d",
-              "name": "Rule",
-              "content": "The current repository stays on screen while the next one loads, with a spinner in the picker. When its data is ready, the whole window crossfades in 260 ms, on the same view.",
-              "fontFamily": "$font/sans",
-              "fontSize": "$text/md",
-              "fill": "$text/secondary",
-              "width": "fill_container",
-              "textGrowth": "fixed-width"
-            },
-            {
-              "type": "ref",
-              "id": "rs_bar",
-              "ref": "c_titlebar",
-              "name": "Title bar while loading",
-              "width": "fill_container",
-              "descendants": {
-                "tl_repo_chev": {
-                  "icon": "loader-circle",
-                  "fill": "$accent"
-                }
-              }
-            }
-          ]
         }
       ],
       "x": 0,
@@ -58969,14 +58917,6 @@
       "description": "Crossfade between sidebar routes, ms",
       "codeSyntax": {
         "web": "--motion-route"
-      }
-    },
-    "motion/window": {
-      "type": "number",
-      "value": 260,
-      "description": "Whole-window crossfade between repositories, ms",
-      "codeSyntax": {
-        "web": "--motion-window"
       }
     }
   },

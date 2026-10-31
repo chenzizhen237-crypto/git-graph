@@ -251,7 +251,6 @@
   --motion-glide: 520ms;
   --motion-float: 420ms;
   --motion-route: 220ms;
-  --motion-window: 260ms;
 }
 
 :root[data-theme='dark'] {

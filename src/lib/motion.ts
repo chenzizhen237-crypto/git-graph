@@ -20,21 +20,6 @@ export function changeRoute(update: () => void) {
   return true
 }
 
-/** Runs `update` while the whole window crossfades, for a change of repository. False when it can't. */
-export function crossfadeWindow(update: () => void) {
-  if (!document.startViewTransition || calm()) return false
-  running?.skipTransition()
-  const html = document.documentElement
-  html.classList.add('window-fade')
-  const transition = document.startViewTransition(update)
-  running = transition
-  void transition.finished.finally(() => {
-    html.classList.remove('window-fade')
-    if (running === transition) running = null
-  })
-  return true
-}
-
 /**
  * WebKit swallows clicks while a view transition covers the page. A click ends
  * the transition and goes to whatever is under it, so nothing waits for motion.
