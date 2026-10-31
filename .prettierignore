@@ -4,3 +4,4 @@ assets
 pnpm-lock.yaml
 src/styles/tokens.css
 src/lib/tokens.ts
+.claude
