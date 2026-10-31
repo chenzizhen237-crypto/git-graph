@@ -219,6 +219,174 @@
               ]
             }
           ]
+        },
+        {
+          "type": "frame",
+          "id": "wh_colmenu",
+          "name": "History/Column picker",
+          "width": 180,
+          "layout": "vertical",
+          "padding": 6,
+          "cornerRadius": 8,
+          "fill": "$bg/elevated",
+          "stroke": "$border/strong",
+          "strokeWidth": 1,
+          "children": [
+            {
+              "type": "frame",
+              "id": "wcm_a",
+              "name": "Item Author",
+              "width": "fill_container",
+              "height": 28,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 8,
+              "cornerRadius": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "wcm_a_t",
+                  "name": "Author",
+                  "content": "Author",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/md",
+                  "fill": "$text/primary",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                },
+                {
+                  "type": "icon",
+                  "id": "wcm_a_c",
+                  "name": "icon check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 13,
+                  "height": 13,
+                  "fill": "$accent",
+                  "enabled": true
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "wcm_d",
+              "name": "Item Date",
+              "width": "fill_container",
+              "height": 28,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 8,
+              "cornerRadius": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "wcm_d_t",
+                  "name": "Date",
+                  "content": "Date",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/md",
+                  "fill": "$text/primary",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                },
+                {
+                  "type": "icon",
+                  "id": "wcm_d_c",
+                  "name": "icon check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 13,
+                  "height": 13,
+                  "fill": "$accent",
+                  "enabled": true
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "wcm_ci",
+              "name": "Item CI status",
+              "width": "fill_container",
+              "height": 28,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 8,
+              "cornerRadius": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "wcm_ci_t",
+                  "name": "CI status",
+                  "content": "CI status",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/md",
+                  "fill": "$text/primary",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                },
+                {
+                  "type": "icon",
+                  "id": "wcm_ci_c",
+                  "name": "icon check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 13,
+                  "height": 13,
+                  "fill": "$accent",
+                  "enabled": true
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "wcm_s",
+              "name": "Item SHA",
+              "width": "fill_container",
+              "height": 28,
+              "padding": [
+                0,
+                8
+              ],
+              "gap": 8,
+              "cornerRadius": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "wcm_s_t",
+                  "name": "SHA",
+                  "content": "SHA",
+                  "fontFamily": "$font/sans",
+                  "fontSize": "$text/md",
+                  "fill": "$text/primary",
+                  "width": "fill_container",
+                  "textGrowth": "fixed-width"
+                },
+                {
+                  "type": "icon",
+                  "id": "wcm_s_c",
+                  "name": "icon check",
+                  "library": "lucide",
+                  "icon": "check",
+                  "width": 13,
+                  "height": 13,
+                  "fill": "$accent",
+                  "enabled": false
+                }
+              ]
+            }
+          ],
+          "x": 3840,
+          "y": -180
         }
       ],
       "x": 2120,
@@ -7022,6 +7190,16 @@
                           "id": "wh_seg",
                           "ref": "c_segmented",
                           "descendants": {}
+                        },
+                        {
+                          "type": "ref",
+                          "id": "wh_cols",
+                          "ref": "c_btn_icon",
+                          "descendants": {
+                            "bi_icon": {
+                              "icon": "columns-3-cog"
+                            }
+                          }
                         },
                         {
                           "type": "ref",
