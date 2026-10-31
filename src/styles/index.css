@@ -57,8 +57,6 @@
   --curve-glide: cubic-bezier(0.62, 0.02, 0.16, 1);
   /* A light card: passes its mark slightly and drops back. */
   --curve-float: cubic-bezier(0.2, 1.14, 0.34, 1);
-  /* One list mapping onto another: eases away, travels, then lands softly. */
-  --curve-map: cubic-bezier(0.42, 0, 0.14, 1);
   /* A key going down, then springing back. */
   --curve-press: cubic-bezier(0.3, 0, 0.2, 1);
   --curve-rebound: cubic-bezier(0.18, 1.6, 0.4, 1);
@@ -110,11 +108,15 @@
     opacity: 0;
   }
 }
+.row-ghost {
+  pointer-events: none;
+  animation: row-leave var(--motion-base) var(--curve-settle) forwards;
+}
 .graph-out {
-  animation: row-leave var(--morph-ms, 800ms) var(--curve-map) forwards;
+  animation: row-leave 420ms var(--curve-settle) forwards;
 }
 .graph-in {
-  animation: fade-in var(--morph-ms, 800ms) var(--curve-map);
+  animation: fade-in 420ms var(--curve-settle);
 }
 @keyframes node-slide {
   from {
@@ -122,14 +124,14 @@
   }
 }
 .node-slide {
-  animation: node-slide var(--morph-ms, 800ms) var(--curve-map);
+  animation: node-slide 420ms var(--curve-settle);
 }
 /* A column opens from zero width, and the description gives up or takes the room. */
 .col {
   transition:
-    width var(--motion-glide) var(--curve-glide),
-    margin-left var(--motion-glide) var(--curve-glide),
-    opacity var(--motion-glide) var(--curve-settle);
+    width 320ms var(--curve-glide),
+    margin-left 320ms var(--curve-glide),
+    opacity 200ms var(--curve-settle);
 }
 .col-hidden {
   margin-left: -8px;

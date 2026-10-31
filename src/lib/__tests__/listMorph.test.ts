@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { clampTravel, morphDuration, planMorph } from '../listMorph'
+import { clampTravel, planMorph } from '../listMorph'
 
 describe('planMorph', () => {
   it('keeps shared keys and reports how far they moved', () => {
@@ -23,10 +23,4 @@ it('keeps long travel near the list', () => {
   expect(clampTravel(9000, 600)).toBe(600)
   expect(clampTravel(-9000, 600)).toBe(-600)
   expect(clampTravel(28, 600)).toBe(28)
-})
-
-it('takes longer the further rows travel, within limits', () => {
-  expect(morphDuration(0)).toBe(800)
-  expect(morphDuration(500)).toBe(1000)
-  expect(morphDuration(5000)).toBe(1500)
 })

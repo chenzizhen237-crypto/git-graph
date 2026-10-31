@@ -6,7 +6,7 @@
 import { type CSSProperties, useEffect, useRef, useState } from 'react'
 
 import { cx } from '../lib/cx'
-import { currentMorphMs } from '../lib/listMorph'
+import { MORPH_MS } from '../lib/listMorph'
 import type { GraphRow } from '../lib/types'
 
 export const ROW_H = 28
@@ -31,7 +31,7 @@ export function GraphCell({ g, laneCount, kind }: { g: GraphRow; laneCount: numb
     if (drawn.current.sig === sig) return
     setOld(drawn.current)
     drawn.current = { g, kind, sig }
-    const id = window.setTimeout(() => setOld(null), currentMorphMs())
+    const id = window.setTimeout(() => setOld(null), MORPH_MS)
     return () => window.clearTimeout(id)
   }, [g, kind, sig])
   return (

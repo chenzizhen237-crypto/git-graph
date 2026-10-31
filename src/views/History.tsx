@@ -38,7 +38,7 @@ import { Avatar, Chip, CiIcon, Count, caps, Empty, FilePath, fileRowClass, IconB
 import { cachedCi, type CiState, commitStates } from '../lib/actions'
 import { cx } from '../lib/cx'
 import { commitDate } from '../lib/dates'
-import { launchGhost, useListMorph } from '../lib/listMorph'
+import { useListMorph } from '../lib/listMorph'
 import { actions, commitDetail, commitFileDiff, run } from '../lib/git'
 import { t } from '../lib/i18n'
 import { compactAgo, matchItems, nameParts, type PickItem, pickSections, QUICK_SCOPES, scopeLabel } from '../lib/picker'
@@ -405,9 +405,9 @@ function LogList({ showGraph }: { showGraph: boolean }) {
     asking.current = false
   }, [repo?.rows.length])
 
-  // Select HEAD when nothing is selected, or the selected commit left the list.
+  // Select HEAD when nothing is selected yet.
   useEffect(() => {
-    if (repo?.rows.length && !repo.rows.some(r => r.hash === selected)) setSelected(repo.rows.find(r => r.hash === repo.head)?.hash ?? repo.rows[0]!.hash)
+    if (repo && !selected && repo.rows.length) setSelected(repo.rows.find(r => r.hash === repo.head)?.hash ?? repo.rows[0]!.hash)
   }, [repo, selected, setSelected])
 
   const rows = repo?.rows ?? []
@@ -601,7 +601,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
       >
         <div className="relative" style={{ height: total * ROW_H + (repo?.hasMore ? 40 : 0) }}>
           {ghosts.map(g => (
-            <div key={`ghost-${g.key}`} ref={el => launchGhost(el, g)} className="pointer-events-none absolute inset-0">
+            <div key={`ghost-${g.key}`} className="row-ghost absolute inset-0">
               {g.node}
             </div>
           ))}
@@ -698,8 +698,7 @@ function Inspector({ width }: { width: number }) {
   }, [root, selected, file, diffWhitespace])
 
   const shell = 'flex min-h-0 shrink-0 flex-col border-l border-subtle'
-  // The last commit stays up until the next one has loaded, so the panel never flashes empty.
-  if (!row || !detail)
+  if (!row || !detail || detail.hash !== row.hash)
     return (
       <aside className={shell} style={{ width }}>
         <Empty>{row ? t('Loading…') : t('Select a commit')}</Empty>
