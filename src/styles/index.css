@@ -60,10 +60,9 @@
   /* A key going down, then springing back. */
   --curve-press: cubic-bezier(0.3, 0, 0.2, 1);
   --curve-rebound: cubic-bezier(0.18, 1.6, 0.4, 1);
-  --route-dir: 1;
 }
 
-/* Route change: the old sheet stays and falls away while the new one settles, so the screen is never empty. */
+/* Route change: a plain crossfade. Nothing moves, and the old view stays solid underneath, so nothing flashes. */
 .route {
   view-transition-name: route;
 }
@@ -77,7 +76,6 @@
   animation: none;
 }
 ::view-transition-group(route) {
-  overflow: clip;
   animation: none;
 }
 ::view-transition-old(route),
@@ -85,63 +83,10 @@
   mix-blend-mode: normal;
 }
 ::view-transition-old(route) {
-  animation: sheet-out var(--motion-base) var(--curve-fall) forwards;
+  animation: none;
 }
 ::view-transition-new(route) {
-  animation: sheet-in var(--motion-slow) var(--curve-settle) var(--motion-stagger) backwards;
-}
-@keyframes sheet-out {
-  to {
-    opacity: 0;
-    filter: blur(3px);
-    transform: translateY(calc(var(--route-dir) * -12px)) scale(0.992);
-  }
-}
-@keyframes sheet-in {
-  from {
-    opacity: 0;
-    filter: blur(6px);
-    transform: translateY(calc(var(--route-dir) * var(--motion-shift)));
-  }
-}
-
-/* Atmosphere: each place has its own light, which changes after the sheets have moved. */
-@property --route-tone {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: transparent;
-}
-.ambient {
-  view-transition-name: ambient;
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  pointer-events: none;
-  background: radial-gradient(70% 55% at 72% -8%, color-mix(in srgb, var(--route-tone) 9%, transparent), transparent);
-  transition: --route-tone 900ms var(--curve-glide);
-}
-::view-transition-group(ambient),
-::view-transition-new(ambient) {
-  animation: none;
-}
-::view-transition-old(ambient) {
-  display: none;
-}
-.dust {
-  view-transition-name: dust;
-  position: fixed;
-  inset: 0;
-  z-index: 45;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-::view-transition-group(dust),
-::view-transition-new(dust) {
-  animation: none;
-}
-::view-transition-old(dust) {
-  display: none;
+  animation: fade-in var(--motion-route) ease-out;
 }
 
 /* Depth: a dialog is nearer to you, so the app behind steps back and goes slightly out of focus. */
@@ -233,7 +178,7 @@ body[data-resizing] .panel-slide {
   transition: none;
 }
 .selection-pill {
-  transition: transform var(--motion-glide) var(--curve-glide);
+  transition: transform var(--motion-route) var(--curve-settle);
 }
 /* Fades only: nothing travels, scales or changes focus. */
 @media (prefers-reduced-motion: reduce) {
@@ -250,8 +195,7 @@ body[data-resizing] .panel-slide {
   }
   .panel-slide,
   .selection-pill,
-  .depth-stage,
-  .ambient {
+  .depth-stage {
     transition: none;
   }
   body:has(.bg-scrim:not([data-leaving])) .depth-stage {
