@@ -410,8 +410,12 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   const rows = repo?.rows ?? []
   const offset = repo?.work ? 1 : 0
   const total = rows.length + offset
+  // The observed height can be stale: measured as 0 while the list was hidden
+  // or squeezed, it would render only the overscan rows and leave the rest of
+  // the graph blank. The window height is a safe floor (a few extra rows).
+  const view = Math.max(height, window.innerHeight)
   const first = Math.max(0, Math.floor(scroll / ROW_H) - 10)
-  const last = Math.min(total, Math.ceil((scroll + height) / ROW_H) + 10)
+  const last = Math.min(total, Math.ceil((scroll + view) / ROW_H) + 10)
   // Absolute dates need room for the date and the time.
   const graphCol = useColumnSize('col-graph', repo ? graphWidth(repo.laneCount) : 56, 56, 800)
   const authorCol = useColumnSize('col-author', 130, 60, 400)
@@ -444,6 +448,7 @@ function LogList({ showGraph }: { showGraph: boolean }) {
   const onScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const el = e.currentTarget
     setScroll(el.scrollTop)
+    setHeight(el.clientHeight)
     if (repo?.hasMore && !asking.current && el.scrollTop + el.clientHeight > el.scrollHeight - 600) {
       asking.current = true
       loadMore()
