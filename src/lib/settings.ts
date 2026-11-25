@@ -128,13 +128,15 @@ export function updateSettings(patch: Partial<Settings>) {
   for (const l of listeners) l()
 }
 
-export function useSettings() {
+export function useSettings(): Settings
+export function useSettings<T>(select: (s: Settings) => T): T
+export function useSettings<T>(select?: (s: Settings) => T) {
   return useSyncExternalStore(
     cb => {
       listeners.add(cb)
       return () => listeners.delete(cb)
     },
-    () => current,
+    () => (select ? select(current) : current),
   )
 }
 

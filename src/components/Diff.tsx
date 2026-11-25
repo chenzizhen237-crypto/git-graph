@@ -1,16 +1,17 @@
 /**
  * Diff/File header, Diff/Hunk and the line kinds, unified or side by side,
- * with conflict markers called out. Any diff pops out to fill the window.
+ * with word-level inline highlights, large-diff protection, split-view line
+ * picking, and conflict markers called out. Any diff pops out to fill the window.
  */
-import { Columns2, FileCode2, Maximize2, Minimize2, Rows2, WrapText, X } from 'lucide-react'
+import { Columns2, FileCode2, FileWarning, Maximize2, Minimize2, Rows2, WrapText, X } from 'lucide-react'
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 import { cx } from '../lib/cx'
-import { type DiffLine, diffStats, type Hunk, pairLines, parseDiff } from '../lib/diff'
+import { countDiffLines, type DiffLine, diffStats, type Hunk, type InlineSpan, inlineDiff, LARGE_DIFF_LINES, pairLinesIndexed, parseDiff } from '../lib/diff'
 import { t, t as t_ } from '../lib/i18n'
 import { updateSettings, useSettings } from '../lib/settings'
-import { Empty, IconButton, Segmented } from './ui'
+import { Button, Empty, IconButton, Segmented } from './ui'
 
 type Side = 'ours' | 'theirs' | null
 type Marked = DiffLine & { marker?: 'ours' | 'mid' | 'theirs'; side?: Side }
@@ -36,11 +37,11 @@ function markConflicts(lines: DiffLine[]): Marked[] {
   })
 }
 
-const TONE: Record<DiffLine['kind'], { row: string; num: string; sign: string }> = {
-  ctx: { row: '', num: '', sign: '' },
-  meta: { row: '', num: '', sign: '' },
-  add: { row: 'bg-diff-add-bg', num: 'bg-diff-add-gutter', sign: 'text-status-added' },
-  del: { row: 'bg-diff-del-bg', num: 'bg-diff-del-gutter', sign: 'text-status-deleted' },
+const TONE: Record<DiffLine['kind'], { row: string; num: string; sign: string; inline: string }> = {
+  ctx: { row: '', num: '', sign: '', inline: '' },
+  meta: { row: '', num: '', sign: '', inline: '' },
+  add: { row: 'bg-diff-add-bg', num: 'bg-diff-add-gutter', sign: 'text-status-added', inline: 'rounded-[2px] bg-diff-add-gutter' },
+  del: { row: 'bg-diff-del-bg', num: 'bg-diff-del-gutter', sign: 'text-status-deleted', inline: 'rounded-[2px] bg-diff-del-gutter' },
 }
 const numCell = 'w-10 min-w-10 pr-1.5 text-right align-top text-xs text-faint select-none'
 const signFor = (k: DiffLine['kind']) => (k === 'add' ? '+' : k === 'del' ? '−' : '')
@@ -50,10 +51,25 @@ type Mode = 'unified' | 'split'
 /** Narrower than this, two columns of code are unreadable. */
 const SPLIT_MIN = 760
 
+function renderSpans(text: string, spans: InlineSpan[] | undefined, highlightClass: string) {
+  if (!spans) return text || ' '
+  if (!text) return ' '
+  return spans.map((sp, i) =>
+    sp.changed ? (
+      <span key={i} className={highlightClass}>
+        {sp.text}
+      </span>
+    ) : (
+      sp.text
+    ),
+  )
+}
+
 export function DiffView({
   path,
   text,
   loading,
+  truncated,
   actions,
   empty,
   popped,
@@ -63,6 +79,7 @@ export function DiffView({
   path: string
   text: string
   loading?: boolean
+  truncated?: boolean
   actions?: ReactNode
   empty?: string
   popped?: boolean
@@ -71,6 +88,11 @@ export function DiffView({
   hunkTools?: (hunk: Hunk, lines: Set<number> | null, done: () => void) => ReactNode
 }) {
   const hunks = useMemo(() => parseDiff(text), [text])
+  const totalLines = useMemo(() => countDiffLines(hunks), [hunks])
+  const [forceShow, setForceShow] = useState(false)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reset large-diff override when switching files/diffs
+  useEffect(() => setForceShow(false), [path, text])
+
   // Lines picked for staging: one hunk at a time, click to toggle, shift-click for a range.
   const [pick, setPick] = useState<{ hunk: number; lines: Set<number>; anchor: number } | null>(null)
   // biome-ignore lint/correctness/useExhaustiveDependencies: a new diff clears the picked lines
@@ -87,7 +109,8 @@ export function DiffView({
     })
   const tools = hunkTools && ((h: Hunk, hi: number) => hunkTools(h, pick?.hunk === hi ? pick.lines : null, () => setPick(null)))
   const stats = useMemo(() => diffStats(hunks), [hunks])
-  const { diffMode: mode, diffWrap: wrap } = useSettings()
+  const mode = useSettings(s => s.diffMode)
+  const wrap = useSettings(s => s.diffWrap)
   const [open, setOpen] = useState(false)
   const box = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(Infinity)
@@ -113,6 +136,8 @@ export function DiffView({
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [popped, onClose])
+
+  const collapsed = totalLines > LARGE_DIFF_LINES && !forceShow
 
   const body = (
     <div ref={box} className={cx('flex min-h-0 flex-1 flex-col', !popped && 'border-t border-subtle')}>
@@ -142,9 +167,21 @@ export function DiffView({
           <IconButton icon={Maximize2} size={14} small title={t('Pop out to fill the window')} onClick={() => setOpen(true)} />
         )}
       </div>
+      {truncated && (
+        <div className="flex shrink-0 items-center gap-2 border-b border-subtle bg-surface px-3 py-1.5 text-xs text-muted">
+          <FileWarning size={13} className="shrink-0 text-status-modified" />
+          <span>{t('Diff output was truncated at 1.5 MB')}</span>
+        </div>
+      )}
       <div className="flex-1 overflow-auto font-mono text-code select-text">
         {!hunks.length ? (
           <Empty>{loading ? t('Loading…') : (empty ?? t('No textual changes (binary file or mode change)'))}</Empty>
+        ) : collapsed ? (
+          <div className="flex h-full flex-col items-center justify-center gap-2.5 p-6 text-center font-sans">
+            <FileWarning size={22} className="text-muted" />
+            <div className="text-md font-medium text-secondary">{t('Large diff ({n} lines) — collapsed to keep the editor responsive', { n: totalLines.toLocaleString() })}</div>
+            <Button onClick={() => setForceShow(true)}>{t('Show diff anyway')}</Button>
+          </div>
         ) : (
           // Fixed columns: wrapped lines take the pane's width, not the width of the longest hunk header.
           <table className={cx('min-w-full border-collapse', fit && 'w-full table-fixed')}>
@@ -168,7 +205,15 @@ export function DiffView({
             <tbody>
               {hunks.map((h, hi) =>
                 shown === 'split' ? (
-                  <SplitHunk key={hi} hunk={h} wrap={wrap} fit={fit} tools={tools?.(h, hi)} />
+                  <SplitHunk
+                    key={hi}
+                    hunk={h}
+                    wrap={wrap}
+                    fit={fit}
+                    tools={tools?.(h, hi)}
+                    picked={pick?.hunk === hi ? pick.lines : undefined}
+                    onLine={hunkTools ? (line, shift) => onLine(hi, line, shift) : undefined}
+                  />
                 ) : (
                   <UnifiedHunk
                     key={hi}
@@ -199,7 +244,17 @@ export function DiffView({
               className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-strong bg-app shadow-[0_20px_50px_var(--shadow)]"
               onMouseDown={e => e.stopPropagation()}
             >
-              <DiffView path={path} text={text} loading={loading} actions={actions} empty={empty} hunkTools={hunkTools} popped onClose={() => setOpen(false)} />
+              <DiffView
+                path={path}
+                text={text}
+                loading={loading}
+                truncated={truncated}
+                actions={actions}
+                empty={empty}
+                hunkTools={hunkTools}
+                popped
+                onClose={() => setOpen(false)}
+              />
             </div>
           </div>,
           document.body,
@@ -241,6 +296,19 @@ function codeClass(l: Marked, wrap: boolean) {
   )
 }
 
+/** Computes word-level inline diff spans for paired del/add lines within a hunk. */
+function computeUnifiedInline(lines: DiffLine[]): Map<number, InlineSpan[]> {
+  const map = new Map<number, InlineSpan[]>()
+  for (const [a, b] of pairLinesIndexed(lines)) {
+    if (a && b && a.line.kind === 'del' && b.line.kind === 'add') {
+      const [oldSpans, newSpans] = inlineDiff(a.line.text, b.line.text)
+      map.set(a.index, oldSpans)
+      map.set(b.index, newSpans)
+    }
+  }
+  return map
+}
+
 function UnifiedHunk({
   hunk,
   wrap,
@@ -257,18 +325,19 @@ function UnifiedHunk({
   onLine?: (line: number, shift: boolean) => void
 }) {
   const lines = useMemo(() => markConflicts(hunk.lines), [hunk])
+  const inlineMap = useMemo(() => computeUnifiedInline(hunk.lines), [hunk])
   return (
     <>
       <HunkHeader header={hunk.header} span={4} fit={fit} tools={tools} />
       {lines.map((l, i) => {
-        const t = TONE[l.kind]
+        const tone = TONE[l.kind]
         const pickable = onLine && (l.kind === 'add' || l.kind === 'del')
         return (
           <tr
             key={i}
             className={cx(
               'leading-5',
-              t.row,
+              tone.row,
               (l.marker === 'theirs' || l.side === 'theirs') && 'bg-diff-hunk-bg',
               pickable && 'cursor-pointer',
               picked?.has(i) && 'shadow-[inset_3px_0_0_var(--accent)] outline outline-1 -outline-offset-1 outline-(--accent)',
@@ -276,10 +345,10 @@ function UnifiedHunk({
             onClick={pickable ? e => onLine(i, e.shiftKey) : undefined}
             title={pickable ? t_('Click to pick this line, shift-click for a range') : undefined}
           >
-            <td className={cx(numCell, t.num)}>{l.old ?? ''}</td>
-            <td className={cx(numCell, t.num)}>{l.new ?? ''}</td>
-            <td className={cx('w-4.5 text-center align-top font-semibold select-none', t.sign)}>{signFor(l.kind)}</td>
-            <td className={cx('w-full', codeClass(l, wrap))}>{l.text || ' '}</td>
+            <td className={cx(numCell, tone.num)}>{l.old ?? ''}</td>
+            <td className={cx(numCell, tone.num)}>{l.new ?? ''}</td>
+            <td className={cx('w-4.5 text-center align-top font-semibold select-none', tone.sign)}>{signFor(l.kind)}</td>
+            <td className={cx('w-full', codeClass(l, wrap))}>{renderSpans(l.text, inlineMap.get(i), tone.inline)}</td>
           </tr>
         )
       })}
@@ -287,28 +356,64 @@ function UnifiedHunk({
   )
 }
 
-function SplitHunk({ hunk, wrap, fit, tools }: { hunk: Hunk; wrap: boolean; fit: boolean; tools?: ReactNode }) {
-  const rows = useMemo(() => pairLines(hunk.lines), [hunk])
-  const half = (l: DiffLine | null, side: 'old' | 'new', key: string) => {
-    if (!l) return [<td key={`${key}n`} className={cx(numCell, 'bg-surface')} />, <td key={`${key}c`} className="bg-surface" />]
-    const t = TONE[l.kind]
+function SplitHunk({
+  hunk,
+  wrap,
+  fit,
+  tools,
+  picked,
+  onLine,
+}: {
+  hunk: Hunk
+  wrap: boolean
+  fit: boolean
+  tools?: ReactNode
+  picked?: Set<number>
+  onLine?: (line: number, shift: boolean) => void
+}) {
+  const rows = useMemo(() => {
+    return pairLinesIndexed(hunk.lines).map(([a, b]) => {
+      if (a && b && a.line.kind === 'del' && b.line.kind === 'add') {
+        const [oldSpans, newSpans] = inlineDiff(a.line.text, b.line.text)
+        return { a, b, oldSpans, newSpans }
+      }
+      return { a, b, oldSpans: undefined, newSpans: undefined }
+    })
+  }, [hunk])
+
+  const half = (item: { line: DiffLine; index: number } | null, spans: InlineSpan[] | undefined, side: 'old' | 'new', key: string) => {
+    if (!item) return [<td key={`${key}n`} className={cx(numCell, 'bg-surface')} />, <td key={`${key}c`} className="bg-surface" />]
+    const l = item.line
+    const tone = TONE[l.kind]
+    const pickable = onLine && (l.kind === 'add' || l.kind === 'del')
+    const isPicked = picked?.has(item.index)
+    const clickProps = pickable
+      ? {
+          onClick: (e: React.MouseEvent) => onLine(item.index, e.shiftKey),
+          title: t_('Click to pick this line, shift-click for a range'),
+        }
+      : {}
     return [
-      <td key={`${key}n`} className={cx(numCell, t.num)}>
+      <td key={`${key}n`} {...clickProps} className={cx(numCell, tone.num, pickable && 'cursor-pointer', isPicked && 'shadow-[inset_3px_0_0_var(--accent)]')}>
         {(side === 'old' ? l.old : l.new) ?? ''}
       </td>,
-      <td key={`${key}c`} className={cx('overflow-hidden pl-1.5', t.row, codeClass(l, wrap))}>
-        <span className={cx('mr-1 font-semibold select-none', t.sign)}>{signFor(l.kind) || ' '}</span>
-        {l.text || ' '}
+      <td
+        key={`${key}c`}
+        {...clickProps}
+        className={cx('overflow-hidden pl-1.5', tone.row, codeClass(l, wrap), pickable && 'cursor-pointer', isPicked && 'outline outline-1 -outline-offset-1 outline-(--accent)')}
+      >
+        <span className={cx('mr-1 font-semibold select-none', tone.sign)}>{signFor(l.kind) || ' '}</span>
+        {renderSpans(l.text, spans, tone.inline)}
       </td>,
     ]
   }
   return (
     <>
       <HunkHeader header={hunk.header} span={4} fit={fit} tools={tools} />
-      {rows.map(([a, b], i) => (
+      {rows.map(({ a, b, oldSpans, newSpans }, i) => (
         <tr key={i} className="leading-5">
-          {half(a, 'old', 'a')}
-          {half(b, 'new', 'b')}
+          {half(a, oldSpans, 'old', 'a')}
+          {half(b, newSpans, 'new', 'b')}
         </tr>
       ))}
     </>

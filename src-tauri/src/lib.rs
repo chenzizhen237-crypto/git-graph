@@ -11,6 +11,8 @@ mod tools;
 use notify::{RecursiveMode, Watcher};
 use serde::Deserialize;
 use serde::Serialize;
+use std::collections::HashMap;
+use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::sync::mpsc;
@@ -84,6 +86,7 @@ pub struct GitOutput {
     stdout: String,
     stderr: String,
     code: i32,
+    truncated: bool,
 }
 
 /// Apps started from Finder get a bare PATH; add the usual install places so
@@ -131,7 +134,14 @@ pub(crate) fn gh_binary() -> &'static PathBuf {
 }
 
 /// Spawns a tool with the app's environment, feeds `stdin`, collects output.
-fn run_tool(mut cmd: Command, name: &str, stdin: Option<&str>) -> Result<GitOutput, String> {
+/// When `max_bytes` is set, stdout is capped at that many bytes and the child
+/// is terminated early so huge diffs cannot exhaust memory or stall IPC.
+fn run_tool(
+    mut cmd: Command,
+    name: &str,
+    stdin: Option<&str>,
+    max_bytes: Option<usize>,
+) -> Result<GitOutput, String> {
     proxy_env(&mut cmd, if name == "gh" { Tool::Gh } else { Tool::Git });
     cmd.env("PATH", search_path())
         .env("GIT_TERMINAL_PROMPT", "0")
@@ -153,22 +163,72 @@ fn run_tool(mut cmd: Command, name: &str, stdin: Option<&str>) -> Result<GitOutp
                 .map_err(|e| e.to_string())?;
         }
     }
+    if let Some(limit) = max_bytes {
+        let mut out_pipe = child.stdout.take();
+        let mut err_pipe = child.stderr.take();
+        let err_thread = std::thread::spawn(move || {
+            let mut buf = Vec::new();
+            if let Some(ref mut p) = err_pipe {
+                let _ = p.read_to_end(&mut buf);
+            }
+            buf
+        });
+        let mut stdout_buf = Vec::new();
+        let mut truncated = false;
+        if let Some(ref mut p) = out_pipe {
+            let mut chunk = [0u8; 16 * 1024];
+            loop {
+                let n = p.read(&mut chunk).map_err(|e| e.to_string())?;
+                if n == 0 {
+                    break;
+                }
+                if stdout_buf.len() + n > limit {
+                    let take = limit.saturating_sub(stdout_buf.len());
+                    stdout_buf.extend_from_slice(&chunk[..take]);
+                    truncated = true;
+                    break;
+                }
+                stdout_buf.extend_from_slice(&chunk[..n]);
+            }
+        }
+        if truncated {
+            let _ = child.kill();
+        }
+        let status = child.wait().map_err(|e| e.to_string())?;
+        let stderr_buf = err_thread.join().unwrap_or_default();
+        return Ok(GitOutput {
+            stdout: String::from_utf8_lossy(&stdout_buf).into_owned(),
+            stderr: String::from_utf8_lossy(&stderr_buf).into_owned(),
+            code: if truncated {
+                0
+            } else {
+                status.code().unwrap_or(-1)
+            },
+            truncated,
+        });
+    }
     let out = child.wait_with_output().map_err(|e| e.to_string())?;
     Ok(GitOutput {
         stdout: String::from_utf8_lossy(&out.stdout).into_owned(),
         stderr: String::from_utf8_lossy(&out.stderr).into_owned(),
         code: out.status.code().unwrap_or(-1),
+        truncated: false,
     })
 }
 
-fn run_git(repo: &str, args: &[String], stdin: Option<&str>) -> Result<GitOutput, String> {
+fn run_git(
+    repo: &str,
+    args: &[String],
+    stdin: Option<&str>,
+    max_bytes: Option<usize>,
+) -> Result<GitOutput, String> {
     let mut cmd = Command::new(git_binary());
     cmd.arg("-C")
         .arg(repo)
         .args(["-c", "color.ui=false", "-c", "core.quotepath=false"])
         .args(args)
         .env("GIT_OPTIONAL_LOCKS", "0");
-    run_tool(cmd, "git", stdin)
+    run_tool(cmd, "git", stdin, max_bytes)
 }
 
 /// Runs the GitHub CLI in `repo`, never prompting. Only gh is ever spawned.
@@ -181,7 +241,7 @@ async fn gh(repo: String, args: Vec<String>, stdin: Option<String>) -> Result<Gi
             .env("GH_PROMPT_DISABLED", "1")
             .env("GH_NO_UPDATE_NOTIFIER", "1")
             .env("NO_COLOR", "1");
-        run_tool(cmd, "gh", stdin.as_deref())
+        run_tool(cmd, "gh", stdin.as_deref(), None)
     })
     .await
     .map_err(|e| e.to_string())?
@@ -198,8 +258,13 @@ fn open_url(url: String) -> Result<(), String> {
 
 /// Runs `git -C <repo> <args…>`. Only git is ever spawned.
 #[tauri::command]
-async fn git(repo: String, args: Vec<String>, stdin: Option<String>) -> Result<GitOutput, String> {
-    tauri::async_runtime::spawn_blocking(move || run_git(&repo, &args, stdin.as_deref()))
+async fn git(
+    repo: String,
+    args: Vec<String>,
+    stdin: Option<String>,
+    max_bytes: Option<usize>,
+) -> Result<GitOutput, String> {
+    tauri::async_runtime::spawn_blocking(move || run_git(&repo, &args, stdin.as_deref(), max_bytes))
         .await
         .map_err(|e| e.to_string())?
 }
@@ -215,6 +280,7 @@ async fn read_git_file(repo: String, name: String) -> Result<Option<String>, Str
         let out = run_git(
             &repo,
             &["rev-parse".into(), "--git-path".into(), name],
+            None,
             None,
         )?;
         let path = Path::new(&repo).join(out.stdout.trim());
@@ -272,6 +338,7 @@ async fn repo_state(repo: String) -> Result<RepoState, String> {
             &repo,
             &["rev-parse".into(), "--absolute-git-dir".into()],
             None,
+            None,
         )?;
         if out.code != 0 {
             return Ok(RepoState::default());
@@ -300,26 +367,47 @@ async fn repo_state(repo: String) -> Result<RepoState, String> {
 }
 
 #[derive(Default)]
-struct WatchState(Mutex<Option<notify::RecommendedWatcher>>);
+struct WatchState(Mutex<HashMap<String, notify::RecommendedWatcher>>);
 
-/// Noise that changes on every git command and says nothing about the repo.
+#[derive(Serialize, Clone)]
+struct RepoChanged {
+    repo: String,
+    scope: &'static str,
+}
+
+/// Noise that changes on every git command or build and says nothing about the repo.
 fn is_noise(path: &Path) -> bool {
     let s = path.to_string_lossy();
     s.contains("/.git/objects/")
         || s.ends_with(".lock")
         || s.contains("/node_modules/")
         || s.contains("/target/")
+        || s.contains("/dist/")
+        || s.contains("/.next/")
+        || s.contains("/.nuxt/")
+        || s.contains("/.venv/")
+        || s.contains("/__pycache__/")
+        || s.contains("/.cache/")
+        || s.contains("/.turbo/")
         || s.ends_with("/.git/FETCH_HEAD")
+}
+
+/// Changes inside `.git` other than the staging index affect history, refs or operations.
+fn is_history_path(path: &Path) -> bool {
+    let s = path.to_string_lossy();
+    s.contains("/.git/") && !s.ends_with("/.git/index")
 }
 
 /// Watches the work tree and `.git`, and emits `repo-changed` once things settle.
 #[tauri::command]
 fn watch_repo(app: AppHandle, state: State<WatchState>, repo: String) -> Result<(), String> {
-    let (tx, rx) = mpsc::channel::<()>();
+    let (tx, rx) = mpsc::channel::<bool>();
     let mut watcher = notify::recommended_watcher(move |res: notify::Result<notify::Event>| {
         if let Ok(ev) = res {
-            if ev.paths.iter().any(|p| !is_noise(p)) {
-                let _ = tx.send(());
+            let relevant: Vec<&PathBuf> = ev.paths.iter().filter(|p| !is_noise(p)).collect();
+            if !relevant.is_empty() {
+                let full = relevant.iter().any(|p| is_history_path(p));
+                let _ = tx.send(full);
             }
         }
     })
@@ -331,15 +419,32 @@ fn watch_repo(app: AppHandle, state: State<WatchState>, repo: String) -> Result<
     let emit_repo = repo.clone();
     std::thread::spawn(move || {
         // Debounce: wait for a quiet 250ms after the first event, then emit once.
-        while rx.recv().is_ok() {
-            while rx.recv_timeout(Duration::from_millis(250)).is_ok() {}
-            if app.emit("repo-changed", &emit_repo).is_err() {
+        while let Ok(mut full) = rx.recv() {
+            while let Ok(more) = rx.recv_timeout(Duration::from_millis(250)) {
+                full |= more;
+            }
+            let payload = RepoChanged {
+                repo: emit_repo.clone(),
+                scope: if full { "full" } else { "worktree" },
+            };
+            if app.emit("repo-changed", payload).is_err() {
                 break;
             }
         }
     });
-    // Replacing the old watcher drops it, which closes its channel and ends its thread.
-    *state.0.lock().map_err(|e| e.to_string())? = Some(watcher);
+    // Replacing an existing watcher for this repo drops it, closing its channel and thread.
+    state
+        .0
+        .lock()
+        .map_err(|e| e.to_string())?
+        .insert(repo, watcher);
+    Ok(())
+}
+
+/// Stops watching a repository when its tab closes.
+#[tauri::command]
+fn unwatch_repo(state: State<WatchState>, repo: String) -> Result<(), String> {
+    state.0.lock().map_err(|e| e.to_string())?.remove(&repo);
     Ok(())
 }
 
@@ -460,6 +565,7 @@ pub fn run() {
             write_work_file,
             term::installed_commands,
             watch_repo,
+            unwatch_repo,
             open_terminal,
             term::term_open,
             term::term_write,
