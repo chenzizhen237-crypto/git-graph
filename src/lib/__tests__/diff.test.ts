@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import { diffStats, pairLines, parseDiff } from '../diff'
+import { countDiffLines, diffStats, inlineDiff, pairLines, pairLinesIndexed, parseDiff } from '../diff'
 import { splitPatch } from '../github'
 
 test('hunks number old and new lines apart', () => {
@@ -32,4 +32,21 @@ test('a PR patch splits per file by its new path', () => {
   const files = splitPatch(patch)
   expect([...files.keys()]).toEqual(['x.ts', 'new.ts'])
   expect(parseDiff(files.get('new.ts')!)[0]!.lines.map(l => l.text)).toEqual(['c', 'd'])
+})
+
+test('inlineDiff highlights only changed tokens on modified lines', () => {
+  const [oldSpans, newSpans] = inlineDiff("const mode = 'legacy'", "const mode = 'pro'")
+  expect(oldSpans).toEqual([{ text: "const mode = '" }, { text: 'legacy', changed: true }, { text: "'" }])
+  expect(newSpans).toEqual([{ text: "const mode = '" }, { text: 'pro', changed: true }, { text: "'" }])
+})
+
+test('pairLinesIndexed preserves original hunk line indexes and countDiffLines totals lines', () => {
+  const hunks = parseDiff(['@@ -1,3 +1,3 @@', ' a', '-b', '+c', ' d'].join('\n'))
+  expect(countDiffLines(hunks)).toBe(4)
+  const paired = pairLinesIndexed(hunks[0]!.lines)
+  expect(paired.map(([l, r]) => [l?.index ?? null, r?.index ?? null])).toEqual([
+    [0, 0],
+    [1, 2],
+    [3, 3],
+  ])
 })

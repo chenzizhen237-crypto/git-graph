@@ -31,6 +31,7 @@ import {
   toggleTerminal,
   useTerminal,
 } from '../lib/terminal'
+import { useApp } from '../state'
 import { type PanelSize, Resizer } from './Split'
 import { IconButton } from './ui'
 
@@ -64,28 +65,38 @@ function theme(): ITheme {
 }
 
 /**
- * The panel's own element. It is rendered into once (a portal) and moved between
- * slots as views change, so the xterm instances and their shells live on.
+ * One portal host per open repository, moved between slots as views change
+ * so xterm instances and their shells live on across view and tab switches.
  */
-const host = document.createElement('div')
-host.style.display = 'contents'
+const hosts = new Map<string, HTMLDivElement>()
+function hostFor(repo: string) {
+  let el = hosts.get(repo)
+  if (!el) {
+    el = document.createElement('div')
+    el.style.display = 'contents'
+    hosts.set(repo, el)
+  }
+  return el
+}
 
 /** Where the terminal docks: put it at the bottom of a flex column. */
 export function TerminalSlot() {
+  const { root } = useApp()
   const ref = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
     const slot = ref.current
+    const host = hostFor(root)
     slot?.appendChild(host)
     return () => {
       if (host.parentElement === slot) host.remove()
     }
-  }, [])
+  }, [root])
   return <div ref={ref} className="contents" />
 }
 
-/** Mounted once per window; shows up in whichever TerminalSlot is on screen. */
+/** Mounted once per repository; shows up in whichever TerminalSlot is on screen. */
 export function TerminalPanel({ cwd, panel }: { cwd: string; panel: PanelSize }) {
-  const { open, tabs, active } = useTerminal()
+  const { open, tabs, active } = useTerminal(cwd)
   if (!tabs.length) return null
   return createPortal(
     <>
@@ -100,21 +111,21 @@ export function TerminalPanel({ cwd, panel }: { cwd: string; panel: PanelSize })
                 tab.key === active ? 'bg-selected font-medium text-primary' : 'text-secondary hover:bg-hover',
               )}
             >
-              <button type="button" className="flex min-w-0 items-center gap-1.5" onClick={() => selectTab(tab.key)} title={tab.title}>
+              <button type="button" className="flex min-w-0 items-center gap-1.5" onClick={() => selectTab(tab.key, cwd)} title={tab.title}>
                 <SquareTerminal size={13} className="shrink-0 text-muted" />
                 <span className="truncate">{tab.title}</span>
               </button>
-              <button type="button" className="rounded-sm p-0.5 text-muted hover:bg-hover hover:text-primary" title={t('Close tab')} onClick={() => closeTab(tab.key)}>
+              <button type="button" className="rounded-sm p-0.5 text-muted hover:bg-hover hover:text-primary" title={t('Close tab')} onClick={() => closeTab(tab.key, cwd)}>
                 <X size={12} />
               </button>
             </div>
           ))}
-          <IconButton icon={Plus} size={14} small title={t('New terminal tab')} onClick={() => newTab()} />
+          <IconButton icon={Plus} size={14} small title={t('New terminal tab')} onClick={() => newTab({ repo: cwd })} />
           <span className="min-w-2 flex-1" />
           <IconButton icon={ExternalLink} size={14} small title={t('Open in external terminal')} onClick={() => void openTerminal(cwd)} />
           <IconButton icon={Trash2} size={14} small title={t('Clear')} onClick={() => window.dispatchEvent(new CustomEvent('term:clear', { detail: active }))} />
-          <IconButton icon={ChevronDown} size={14} small title={t('Hide terminal (⌃`)')} onClick={toggleTerminal} />
-          <IconButton icon={X} size={14} small title={t('Close terminal')} onClick={closeTerminal} />
+          <IconButton icon={ChevronDown} size={14} small title={t('Hide terminal (⌃`)')} onClick={() => toggleTerminal(cwd)} />
+          <IconButton icon={X} size={14} small title={t('Close terminal')} onClick={() => closeTerminal(cwd)} />
         </div>
         <div className="relative min-h-0 flex-1">
           {tabs.map(tab => (
@@ -123,7 +134,7 @@ export function TerminalPanel({ cwd, panel }: { cwd: string; panel: PanelSize })
         </div>
       </section>
     </>,
-    host,
+    hostFor(cwd),
   )
 }
 

@@ -88,15 +88,15 @@ function HistoryTab({
   onGraph: (h: string) => void
 }) {
   const { root } = useApp()
-  const [diff, setDiff] = useState({ text: '', loading: false })
+  const [diff, setDiff] = useState({ text: '', truncated: false, loading: false })
   const commit = commits?.find(c => c.hash === pick)
   useEffect(() => {
     if (!commit) return
     let live = true
     setDiff(d => ({ ...d, loading: true }))
     commitFileDiff(root, commit.hash, commit.path)
-      .then(text => live && setDiff({ text, loading: false }))
-      .catch(() => live && setDiff({ text: '', loading: false }))
+      .then(res => live && setDiff({ text: res.text, truncated: res.truncated, loading: false }))
+      .catch(() => live && setDiff({ text: '', truncated: false, loading: false }))
     return () => {
       live = false
     }
@@ -132,6 +132,7 @@ function HistoryTab({
             path={`${commit.short} · ${commit.path}`}
             text={diff.text}
             loading={diff.loading}
+            truncated={diff.truncated}
             actions={
               <Button small icon={GitGraph} onClick={() => onGraph(commit.hash)}>
                 {t('Show in graph')}

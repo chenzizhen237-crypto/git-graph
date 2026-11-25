@@ -45,7 +45,7 @@ export function ChangesView() {
   const { root, repo, act, ask, busy, openMenu } = useApp()
   const menus = useMenus()
   const [sel, setSel] = useState<Sel | null>(null)
-  const [diff, setDiff] = useState({ text: '', loading: false })
+  const [diff, setDiff] = useState({ text: '', truncated: false, loading: false })
   const [counts, setCounts] = useState<{ staged: Counts; unstaged: Counts }>({ staged: new Map(), unstaged: new Map() })
   const list = usePanelSize('changes-list', 380, 260, 900)
   const composer = usePanelSize('composer', 84, 36, 520)
@@ -69,19 +69,20 @@ export function ChangesView() {
     setSel(s => (s && all.some(a => a.path === s.path && a.kind === s.kind) ? s : (all.find(a => a.path === s?.path) ?? all[0] ?? null)))
   }, [root, groups])
 
-  const { diffWhitespace } = useSettings()
+  const selOrig = sel?.kind === 'staged' ? repo?.changes.find(c => c.path === sel.path)?.orig : undefined
+  const diffWhitespace = useSettings(s => s.diffWhitespace)
   // biome-ignore lint/correctness/useExhaustiveDependencies: reload the diff when the repo changes on disk or the whitespace setting does
   useEffect(() => {
-    if (!sel) return setDiff({ text: '', loading: false })
+    if (!sel) return setDiff({ text: '', truncated: false, loading: false })
     let live = true
     setDiff(d => ({ ...d, loading: true }))
-    workFileDiff(root, sel.path, sel.kind)
-      .then(text => live && setDiff({ text, loading: false }))
-      .catch(() => live && setDiff({ text: '', loading: false }))
+    workFileDiff(root, sel.path, sel.kind, selOrig)
+      .then(res => live && setDiff({ text: res.text, truncated: res.truncated, loading: false }))
+      .catch(() => live && setDiff({ text: '', truncated: false, loading: false }))
     return () => {
       live = false
     }
-  }, [root, sel, repo, diffWhitespace])
+  }, [root, sel, selOrig, repo, diffWhitespace])
 
   if (!repo) return null
   const total = repo.changes.length
@@ -153,7 +154,10 @@ export function ChangesView() {
           <IconButton icon={Check} small title={t('Mark resolved (stage)')} onClick={() => void act('Mark resolved', actions.stage([c.path]))} />
         </>
       )
-    if (kind === 'staged') return <IconButton icon={Minus} small title={t('Unstage')} onClick={() => void act('Unstage', actions.unstage([c.path]))} />
+    if (kind === 'staged') {
+      const paths = c.orig ? [c.orig, c.path] : [c.path]
+      return <IconButton icon={Minus} small title={t('Unstage')} onClick={() => void act('Unstage', actions.unstage(paths))} />
+    }
     return (
       <>
         <IconButton icon={Undo2} small title={t('Discard')} onClick={() => void discard(c, kind)} />
@@ -170,7 +174,7 @@ export function ChangesView() {
         {files.map(c => {
           const { name, dir } = splitPath(c.path)
           const n = (kind === 'staged' ? counts.staged : counts.unstaged).get(c.path)
-          const toggle = kind === 'staged' ? actions.unstage([c.path]) : actions.stage([c.path])
+          const toggle = kind === 'staged' ? actions.unstage(c.orig ? [c.orig, c.path] : [c.path]) : actions.stage([c.path])
           return (
             <div
               key={kind + c.path}
@@ -219,7 +223,14 @@ export function ChangesView() {
       <Resizer panel={list} />
       <div className="flex min-w-0 flex-1 flex-col">
         {sel ? (
-          <DiffView path={sel.path} text={diff.text} loading={diff.loading} empty={sel.kind === 'untracked' ? t('Empty file') : undefined} hunkTools={hunkTools} />
+          <DiffView
+            path={selOrig ? `${selOrig} → ${sel.path}` : sel.path}
+            text={diff.text}
+            loading={diff.loading}
+            truncated={diff.truncated}
+            empty={sel.kind === 'untracked' ? t('Empty file') : selOrig ? t('Renamed without changes') : undefined}
+            hunkTools={hunkTools}
+          />
         ) : (
           <Empty>{t('Select a file to see its changes')}</Empty>
         )}

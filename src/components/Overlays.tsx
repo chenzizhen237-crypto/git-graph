@@ -42,6 +42,7 @@ import { openUrl } from '../lib/github'
 import { t } from '../lib/i18n'
 import { getSettings, updateSettings } from '../lib/settings'
 import { dismissToast, isSticky, LIFETIME, type Toast, type ToastAction, useToasts } from '../lib/toasts'
+import { closeDialog, useDialog } from '../lib/ui-state'
 import { useApp } from '../state'
 import { Button, caps, Empty, Kbd } from './ui'
 
@@ -323,7 +324,7 @@ export function CommandPalette({ onSwitchRepo, onSettings }: { onSwitchRepo: () 
 }
 
 export function DialogHost() {
-  const { dialog, closeDialog } = useApp()
+  const dialog = useDialog()
   const [value, setValue] = useState('')
   useEffect(() => setValue(dialog?.kind === 'prompt' ? (dialog.initial ?? '') : ''), [dialog])
   if (!dialog) return null

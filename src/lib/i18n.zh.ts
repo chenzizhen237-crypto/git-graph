@@ -180,6 +180,10 @@ const zh: Record<string, string> = {
   'Close (esc)': '关闭 (esc)',
   'No textual changes (binary file or mode change)': '没有文本更改（二进制文件或权限变更）',
   'Empty file': '空文件',
+  'Renamed without changes': '已重命名，无内容更改',
+  'Large diff ({n} lines) — collapsed to keep the editor responsive': '大差异（{n} 行）— 已折叠以保持界面流畅',
+  'Show diff anyway': '仍要展开差异',
+  'Diff output was truncated at 1.5 MB': '差异输出已截断（超过 1.5 MB）',
 
   // Changes
   Discard: '放弃',

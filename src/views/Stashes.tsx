@@ -14,7 +14,7 @@ import { listColumn, PaneHead } from './Changes'
 export function StashesView() {
   const { root, repo, act, ask } = useApp()
   const [sel, setSel] = useState<string | null>(null)
-  const [text, setText] = useState('')
+  const [diff, setDiff] = useState({ text: '', truncated: false })
   const stashes = repo?.stashes ?? []
   const list = usePanelSize('stash-list', 380, 260, 900)
 
@@ -23,11 +23,11 @@ export function StashesView() {
   }, [stashes, sel])
 
   useEffect(() => {
-    if (!sel) return setText('')
+    if (!sel) return setDiff({ text: '', truncated: false })
     let live = true
     stashDiff(root, sel)
-      .then(t => live && setText(t))
-      .catch(() => live && setText(''))
+      .then(res => live && setDiff(res))
+      .catch(() => live && setDiff({ text: '', truncated: false }))
     return () => {
       live = false
     }
@@ -72,7 +72,7 @@ export function StashesView() {
         </div>
       </div>
       <Resizer panel={list} />
-      <div className="flex min-w-0 flex-1 flex-col">{sel ? <DiffView path={sel} text={text} /> : <Empty>{t('Select a stash')}</Empty>}</div>
+      <div className="flex min-w-0 flex-1 flex-col">{sel ? <DiffView path={sel} text={diff.text} truncated={diff.truncated} /> : <Empty>{t('Select a stash')}</Empty>}</div>
     </>
   )
 }

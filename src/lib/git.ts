@@ -9,7 +9,7 @@ import { hunksOnly, isFiltered, logArgs, mergeNumstat, parseLog, parseNameStatus
 import { getSettings } from './settings'
 import type { CommitDetail, LogQuery, LogRow, Operation, RepoData, Worktree } from './types'
 
-export type GitOutput = { stdout: string; stderr: string; code: number }
+export type GitOutput = { stdout: string; stderr: string; code: number; truncated?: boolean }
 
 export class GitError extends Error {
   constructor(
@@ -21,16 +21,17 @@ export class GitError extends Error {
 }
 
 /** Runs git and returns its output whatever the exit code. */
-export const run = (repo: string, args: string[], stdin?: string) => invoke<GitOutput>('git', { repo, args, stdin: stdin ?? null })
+export const run = (repo: string, args: string[], stdin?: string, maxBytes?: number) => invoke<GitOutput>('git', { repo, args, stdin: stdin ?? null, maxBytes: maxBytes ?? null })
 
 /** Runs git and throws a GitError when it fails. */
-export async function git(repo: string, args: string[], stdin?: string) {
-  const out = await run(repo, args, stdin)
+export async function git(repo: string, args: string[], stdin?: string, maxBytes?: number) {
+  const out = await run(repo, args, stdin, maxBytes)
   if (out.code !== 0) throw new GitError(args, out)
   return out.stdout
 }
 
 export const watchRepo = (repo: string) => invoke<void>('watch_repo', { repo })
+export const unwatchRepo = (repo: string) => invoke<void>('unwatch_repo', { repo })
 export const openTerminal = (path: string) => invoke<void>('open_terminal', { path, app: getSettings().terminal })
 export const reveal = (path: string) => invoke<void>('reveal', { path })
 
@@ -134,6 +135,41 @@ export async function loadRepo(root: string, q: LogQuery): Promise<RepoData> {
   }
 }
 
+/**
+ * Lightweight refresh for worktree/index-only changes (file edits, stage, unstage):
+ * skips `git log`, `for-each-ref`, `stash list`, `worktree list` and `rev-list --count`.
+ */
+export async function loadWorkStatus(root: string, prev: RepoData, q: LogQuery): Promise<RepoData> {
+  const [status, op] = await Promise.all([git(root, ['status', '--porcelain=v1', '-b', '-z', '--untracked-files=all']), detectOperation(root)])
+  const st = parseStatus(status)
+  const showsHead = ['--all', '--branches', 'HEAD', st.branch].includes(q.branch)
+  const withWork = !isFiltered(q) && showsHead && st.changes.length > 0 && !!prev.head
+  let work = prev.work
+  let rows = prev.rows
+  let laneCount = prev.laneCount
+  if (withWork !== Boolean(prev.work)) {
+    const laid = layoutGraph([...(withWork ? [{ hash: WORK, parents: [prev.head] }] : []), ...prev.rows.map(r => ({ hash: r.hash, parents: r.parents }))], !isFiltered(q))
+    const graphs = withWork ? laid.rows.slice(1) : laid.rows
+    work = withWork ? laid.rows[0] : undefined
+    rows = prev.rows.map((r, i) => ({ ...r, graph: graphs[i]! }))
+    laneCount = laid.laneCount
+  }
+  return {
+    ...prev,
+    branch: st.branch,
+    upstream: st.upstream,
+    ahead: st.ahead,
+    behind: st.behind,
+    changes: st.changes,
+    work,
+    rows,
+    laneCount,
+    operation: op.operation,
+    operationStep: op.step,
+    operationTitle: op.title,
+  }
+}
+
 /** Message, author, parents and changed files of one commit (against its first parent). */
 export async function commitDetail(root: string, hash: string): Promise<CommitDetail> {
   // Merges against their first parent only: `-m` alone lists each file once per parent it differs from.
@@ -149,24 +185,35 @@ export async function commitDetail(root: string, hash: string): Promise<CommitDe
 /** Settings → Diff & editor: how whitespace-only changes show. */
 const ws = () => ({ all: [], eol: ['--ignore-space-at-eol', '--ignore-cr-at-eol'], ignore: ['-w'] })[getSettings().diffWhitespace]
 
+/** Cap single-file diff output at 1.5 MB so generated files or lockfiles never exhaust memory. */
+export const DIFF_MAX_BYTES = 1_500_000
+
+export type DiffOutput = { text: string; truncated: boolean }
+
 /** The patch of one file in a commit, from its first hunk. */
-export async function commitFileDiff(root: string, hash: string, path: string, orig?: string) {
+export async function commitFileDiff(root: string, hash: string, path: string, orig?: string): Promise<DiffOutput> {
   const paths = orig ? [orig, path] : [path]
-  const out = await git(root, ['show', '--format=', '-M', '--first-parent', '--root', ...ws(), hash, '--', ...paths])
-  return hunksOnly(out)
+  const out = await run(root, ['show', '--format=', '-M', '--first-parent', '--root', ...ws(), hash, '--', ...paths], undefined, DIFF_MAX_BYTES)
+  if (out.code !== 0) throw new GitError(['show'], out)
+  return { text: hunksOnly(out.stdout), truncated: !!out.truncated }
 }
 
 /** The patch of a working-tree file: staged, unstaged, or new. */
-export async function workFileDiff(root: string, path: string, kind: 'staged' | 'unstaged' | 'untracked' | 'conflict') {
+export async function workFileDiff(root: string, path: string, kind: 'staged' | 'unstaged' | 'untracked' | 'conflict', orig?: string): Promise<DiffOutput> {
   // Against our side (stage 2), so the conflict markers show as plain added lines.
-  if (kind === 'conflict') return hunksOnly((await run(root, ['diff', '-2', '--', path])).stdout)
+  if (kind === 'conflict') {
+    const out = await run(root, ['diff', '-2', '--', path], undefined, DIFF_MAX_BYTES)
+    return { text: hunksOnly(out.stdout), truncated: !!out.truncated }
+  }
   if (kind === 'untracked') {
     // --no-index exits 1 when the files differ, which they always do here.
-    const out = await run(root, ['diff', '--no-index', '--', '/dev/null', path])
-    return hunksOnly(out.stdout)
+    const out = await run(root, ['diff', '--no-index', '--', '/dev/null', path], undefined, DIFF_MAX_BYTES)
+    return { text: hunksOnly(out.stdout), truncated: !!out.truncated }
   }
-  const out = await git(root, ['diff', ...(kind === 'staged' ? ['--cached'] : []), '-M', ...ws(), '--', path])
-  return hunksOnly(out)
+  const paths = kind === 'staged' && orig ? [orig, path] : [path]
+  const out = await run(root, ['diff', ...(kind === 'staged' ? ['--cached'] : []), '-M', ...ws(), '--', ...paths], undefined, DIFF_MAX_BYTES)
+  if (out.code !== 0) throw new GitError(['diff'], out)
+  return { text: hunksOnly(out.stdout), truncated: !!out.truncated }
 }
 
 /** Line counts of working-tree changes by path, staged and unstaged apart. */
@@ -188,8 +235,10 @@ export async function workStats(root: string) {
   return { staged: read(staged), unstaged: read(unstaged) }
 }
 
-export async function stashDiff(root: string, ref: string) {
-  return hunksOnly(await git(root, ['stash', 'show', '-p', '--include-untracked', ref]))
+export async function stashDiff(root: string, ref: string): Promise<DiffOutput> {
+  const out = await run(root, ['stash', 'show', '-p', '--include-untracked', ref], undefined, DIFF_MAX_BYTES)
+  if (out.code !== 0) throw new GitError(['stash'], out)
+  return { text: hunksOnly(out.stdout), truncated: !!out.truncated }
 }
 
 /** The arguments of each action, so the UI and the palette share them. */
